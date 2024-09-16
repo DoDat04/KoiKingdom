@@ -1,0 +1,271 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Sep 12, 2024, 11:39:50 PM
+    Author     : Do Dat
+*/
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    box-shadow: 0 0 15px #0003;
+    border: 1px solid #0000001a;
+    border-radius: 8px;
+    flex-direction: row;
+    height: 93%;
+    align-items: center;
+    margin: auto; /* Centers the container horizontally */
+}
+.login-form, .image-container {
+    flex: 1; /* Each takes up 50% of the container */
+    box-sizing: border-box; 
+}
+
+.login-form, .image-container {
+    flex-basis: 50%;
+}
+
+.login-form {
+    padding: 2rem;
+    padding-right: 5rem;
+}
+/*IMAGE-CONTAINER*/
+.image-container .swiper-pagination-bullet-active {
+    opacity: var(--swiper-pagination-bullet-opacity, 1);
+    background: white;
+}
+
+.image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.image-container .swiper-slide img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.swiper.carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-wrapper {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.swiper-wrapper img {
+    height: 890px;
+}
+
+.swiper-button-prev, .swiper-button-next {
+    transform: translateY(-50%);
+}
+
+a.swiper-button-prev, a.swiper-button-next {
+   color: white; 
+}
+/*FORM SIGNUP*/
+.name-section {
+    display: flex;
+    gap: 100px;
+}
+
+.name-section .last-name-wrapper {
+    margin-left: 40px
+}
+
+.login-form .name-section [type="text"] {
+    width: 156%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-form h2 {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.login-form label {
+    display: block;
+    margin: 0.5rem 0 0.5rem;
+    font-weight: 700;
+}
+
+.login-form input[type="email"],
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: 105%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-form input[type="checkbox"] {
+    margin-right: 0.5rem;
+    transform: scale(1.2);
+}
+
+.login-form .btn {
+    display: block;
+    width: 108.5%;
+    padding: 0.75rem;
+    border: none;
+    background-color: black;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+.login-form .btn:hover {
+    background-color: #333;
+}
+
+.already-account {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.sign-in-link {
+    font-weight: bold;
+    color: black;
+}
+
+.sign-in-link:hover {
+    text-decoration: underline;
+}
+
+.terms {
+    display: flex;
+    align-items: center;
+}
+
+.terms a {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.image-container {
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+/* Modal styles */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    padding-top: 60px; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 0px auto; /* Căn giữa modal */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    border-radius: 10px;
+    position: relative; 
+}
+
+.close-button {
+    position: absolute;
+    top: 3px; 
+    right: 10px; 
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.password-section, .confirm-password-section {
+    position: relative; /* Make the parent container relative */
+}
+
+/* Tắt biểu tượng mắt mặc định của trình duyệt */
+input[type="password"]::-ms-reveal, 
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
+input[type="password"] {
+    position: relative;
+    z-index: 10;
+}
+
+.toggle-password, .toggle-confirm-password {
+    position: absolute;
+    top: 55%;
+    right: -7%; 
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 20;
+}
+
+#togglePasswordIcon, #toggleConfirmPasswordIcon {
+    color: #000;
+}
+
+/* Đảm bảo biểu tượng Font Awesome hiển thị đúng */
+.fa-eye:before {
+    content: "\f06e"; /* Mã Unicode cho biểu tượng fa-eye */
+}
+
+.fa-eye-slash:before {
+    content: "\f070"; /* Mã Unicode cho biểu tượng fa-eye-slash */
+}
+
+@media screen and (min-width: 768px) and (max-width: 1599px) {
+    .container {
+        max-width: 1235px; 
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .container {
+        max-width: 1400px; 
+    }   
+}

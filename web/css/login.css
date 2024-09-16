@@ -1,0 +1,366 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Sep 10, 2024, 2:00:36 PM
+    Author     : Do Dat
+*/
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;   
+}
+
+.container {
+    display: flex;
+    box-shadow: 0 0 15px #0003;
+    border: 1px solid #0000001a;
+    border-radius: 8px;
+    flex-direction: row;
+    height: 93%;
+    align-items: center;
+    margin: auto; /* Centers the container horizontally */
+}
+
+.fp_sub_title {
+    color: gray;
+    font-size: 13px;
+    text-align: center;
+}
+
+.login-form, .image-container {
+    flex: 1; /* Each takes up 50% of the container */
+    box-sizing: border-box; 
+}
+
+.login-form, .image-container {
+    flex-basis: 50%;
+}
+
+.login-form {
+    padding: 2rem;
+    padding-right: 5rem;
+}
+
+.login-form h2 {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+.login-form .email, .password, .otp {
+    display: block;
+    margin: 0.5rem 0 0.5rem;
+    font-weight: 700;
+}
+.login-form .remember {
+    display: block;
+    margin: 0 0 0 -2px;
+}
+.login-form input[type="email"],
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: 101%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.login-form input[type="checkbox"] {
+    margin-right: 0.5rem;
+    transform: scale(1.2);
+}
+.login-form .btn {
+    display: block;
+    width: 105%;
+    padding: 0.75rem;
+    border: none;
+    background-color: black;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.login-form .btn:hover {
+    background-color: #333;
+}
+.login-form .remember_forgot {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+    width: 105%;
+}
+.login-form .remember {
+    font-size: 0.8rem;
+}
+.login-form .forgot-password {
+    font-size: 0.8rem;
+    color: black;
+    text-decoration: none;
+    margin-left: auto;
+}
+.login-form .forgot-password:hover {
+    text-decoration: underline;
+}
+.login-form .google-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    text-decoration: none;
+    background-color: white;
+}
+.login-form .google-login:hover {
+    background-color: #f0f0f0; 
+    border-color: #a0a0a0; 
+    color: black; 
+    box-shadow: 0 0 5px #a0a0a0; 
+}
+.login-section {
+    display: flex;
+}
+
+.back_to_login {
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-left: 20px;
+    font-size: 15px;
+    color: black;
+}
+
+.back_to_login:hover {
+    color: grey;
+}
+
+/*IMAGE-CONTAINER*/
+.image-container .swiper-pagination-bullet-active {
+    opacity: var(--swiper-pagination-bullet-opacity, 1);
+    background: white;
+}
+
+.image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.image-container .swiper-slide img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.swiper.carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-wrapper {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.swiper-wrapper img {
+    height: 890px;
+}
+
+.swiper-button-prev, .swiper-button-next {
+    transform: translateY(-50%);
+}
+
+a.swiper-button-prev, a.swiper-button-next {
+   color: white; 
+}
+
+/*GUEST-BUTTON*/
+.guest-section {
+    margin-top: 1rem; 
+    text-align: center;
+}
+
+.guest-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 151%; 
+    text-decoration: none;
+    background-color: white; 
+    color: black; 
+    margin-left: 40px;
+    margin-top: -15px;
+}
+
+.guest-btn:hover {
+    background-color: #f0f0f0; 
+    border-color: #a0a0a0; 
+    color: black; 
+    box-shadow: 0 0 5px #a0a0a0; 
+}
+
+.sign-up-section {
+    text-align: center;
+    font-size: 13px;
+}
+.sign-up-link {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+.sign-up-link:hover {
+    text-decoration: underline;
+    color: black;
+    font-weight: bold;
+}
+.sign-in-with-google {
+    color: black;
+    font-family: "Google Sans", arial, sans-serif;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    text-decoration: none;
+}
+.or-divider {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+    text-align: center;
+    width: 105%;
+}
+.or-divider hr {
+    flex: 1;
+    border: none;
+    border-top: 1px solid #ccc;
+}
+.or-divider span {
+    margin: 0 1rem;
+    font-weight: bold;
+    color: #555;
+    font-size: 20px
+}
+.image-container {
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.password-container {
+    position: relative;
+}
+
+/*countdown*/
+#countdown {
+    color: red;
+    margin-top: 20px
+}
+
+/* Tắt biểu tượng mắt mặc định của trình duyệt */
+input[type="password"]::-ms-reveal, 
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
+input[type="password"] {
+    position: relative;
+    z-index: 10;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 36%;
+    right: -14px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 20;
+}
+
+#togglePasswordIcon {
+    color: #000;
+}
+
+/* Đảm bảo biểu tượng Font Awesome hiển thị đúng */
+.fa-eye:before {
+    content: "\f06e"; /* Mã Unicode cho biểu tượng fa-eye */
+}
+
+.fa-eye-slash:before {
+    content: "\f070"; /* Mã Unicode cho biểu tượng fa-eye-slash */
+}
+
+/* Modal styles */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    padding-top: 60px; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 0px auto; /* Căn giữa modal */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    border-radius: 10px;
+    position: relative; /* Để dấu "close" nằm trong khung */
+}
+
+.close-button {
+    position: absolute;
+    top: 3px; 
+    right: 10px; 
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1599px) {
+    .container {
+        max-width: 1235px; 
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .container {
+        max-width: 1400px; 
+    }
+    .google-login {
+        margin-right: 86px;
+    }
+}
