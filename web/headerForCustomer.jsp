@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -18,7 +19,7 @@
         <link rel="stylesheet" href="css/header.css">
     </head>
     <body>
-        <header class="text-black py-4" style="background-color: antiquewhite;">
+        <header class="text-black py-4" style="background-color: #fdf4f0;">
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center">
                     <!-- Logo -->
@@ -69,15 +70,23 @@
                             <i class="fas fa-user"></i>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#">Order History</a></li>
-                            <li><a class="dropdown-item" href="#">Notification</a></li>
-                            <li><a class="dropdown-item" href="#">Setting</a></li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
+                            <c:choose>
+                                <c:when test="${sessionScope.LOGIN_USER == null and sessionScope.LOGIN_GMAIL == null}">
+                                <li><a class="dropdown-item" href="login"><i class="adm_icon fas fa-sign-in-alt"></i> Sign in</a></li>
+                                </c:when>
+                                <c:otherwise>
+                                <li><a class="dropdown-item" href="#">Order History</a></li>
+                                <li><a class="dropdown-item" href="#">Notification</a></li>
+                                <li><a class="dropdown-item" href="#">Setting</a></li>
+                                <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
+                                </c:otherwise>
+                            </c:choose>
                         </ul>
                     </div>
                 </div>
             </div>
-
         </header>
     </body>
 </html>
+

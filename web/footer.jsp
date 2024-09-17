@@ -17,62 +17,84 @@
         <link rel="stylesheet" href="css/footer.css"/>
     </head>
     <body>
-        <footer class="text-black py-4 mt-4" style="background-color: antiquewhite">
+        <footer style="background-color: #fdf4f0;">
             <div class="container">
-                <div class="logo">
-                    <a href="MainController?action=homePage">
-                        <img src="img/logo.png" alt="logo" class="img-fluid mb-2 logo-size">
-                    </a>
-                </div>
-                <div class="row d-flex justify-content-center text-center">
-                    <div class="col-md-3 mb-4">
-                        <h5>Contact Us for Support</h5>
+                <div class="row">
+                    <!-- Logo and Contact Information -->
+                    <div class="col-md-3 footer_first_column">
+                        <img src="img/logo.png" alt="logo" class="img-fluid logo-size" style="max-width: 150px;">
+                        <h6>Contact us for support</h6>
                         <ul class="list-unstyled">
-                            <li><i class="fas fa-phone"></i> 0393.447.831</li>
-                            <li><i class="fas fa-envelope"></i> KoiKingdomService@gmail.com</li>
-                            <li><i class="fas fa-map"></i><a href="https://maps.app.goo.gl/sWhZrkhg6J2VgfV77" style="text-decoration: none">    Google Map</a></li>
+                            <li><i class="fas fa-phone"></i> 0931 339 228</li>
+                            <li><i class="fas fa-envelope"></i> koikingdomsystem@gmail.com</li>
                         </ul>
                     </div>
+
                     <!-- Categories Section -->
-                    <div class="col-md-3 mb-4">
-                        <h5>Categories</h5>
+                    <div class="col-md-2">
+                        <h6>Categories</h6>
                         <ul class="list-unstyled">
-                            <li><i class="fas fa-ticket-alt"></i><a class="text-footer" href="#"> Tour Booking</a></li>
-                            <li><i class="fas fa-map-signs"></i><a class="text-footer" href="#"> Custom Tour Booking</a></li>
-                            <li><i class=""></i>
+                            <li><a href="#">Famous Tours</a></li>
+                            <li><a href="#">Available Tours</a></li>
+                            <li><a href="#">Custom Tour</a></li>
+                            <li><a href="#">Farm Tour</a></li>
+                            <li><a href="#">Koi Species</a></li>
                         </ul>
                     </div>
+
                     <!-- Services Section -->
-                    <div class="col-md-3 mb-4">
-                        <h5>Services</h5>
+                    <div class="col-md-2">
+                        <h6>Services</h6>
                         <ul class="list-unstyled">
-                            <li><a href="#" class="text-black text-footer">My Profile</a></li>
-                            <li><a href="#" class="text-black text-footer">Order History</a></li>
-                            <li><a href="#" class="text-black text-footer">Notification</a></li>
-                            <li><a href="#" class="text-black text-footer">Shopping cart</a></li>
-                            <li><a href="#" class="text-black text-footer">Chat with us</a></li>
+                            <li><a href="#">My profile</a></li>
+                            <li><a href="#">Order history</a></li>
+                            <li><a href="#">Notifications</a></li>
+                            <li><a href="#">Shopping cart</a></li>
+                            <li><a href="#">Chat with us</a></li>
                         </ul>
                     </div>
-                    <!-- Optional Section: Links or Social Media -->
-                    <div class="col-md-3 mb-4">
-                        <h5>Follow Us</h5>
+
+                    <!-- Information Section -->
+                    <div class="col-md-2">
+                        <h6>Information</h6>
                         <ul class="list-unstyled">
-                            <li><a href="#" class="text-black text-footer"><i class="fab fa-facebook"></i> Facebook</a></li>
-                            <li><a href="#" class="text-black text-footer"><i class="fab fa-instagram"></i> Instagram</a></li>
-                            <li><a href="#" class="text-black text-footer"><i class="fab fa-twitter"></i> Twitter</a></li>
+                            <li><a href="#">FAQs</a></li>
+                            <li><a href="#">Articles</a></li>
+                            <li><a href="#">About us</a></li>
+                            <li><a href="#">Contact us</a></li>
+                            <li><a href="#">Tour price</a></li>
                         </ul>
+                    </div>
+
+                    <!-- Social Media and Payment -->
+                    <div class="col-md-3">
+                        <h6>Connect with us</h6>
+                        <ul class="list-inline">
+                            <li class="list-inline-item"><a href="#"><i class="fab fa-facebook fa-2x"></i></a></li>
+                            <li class="list-inline-item"><a href="#"><i class="fab fa-instagram fa-2x"></i></a></li>
+                            <li class="list-inline-item"><a href="#"><i class="fab fa-tiktok fa-2x"></i></a></li>
+                            <li class="list-inline-item"><a href="#"><i class="fab fa-google fa-2x"></i></a></li>
+                        </ul>
+                        <h6>Secure payment</h6>
+                        <ul class="list-inline">
+                            <li class="list-inline-item"><img src="img/Icon-VNPAY-QR.webp" alt="Visa" style="max-width: 45px;"></li>
+                            <li class="list-inline-item"><img src="img/mastercard.png" alt="Bank" style="max-width: 45px;"></li>
+                            <li class="list-inline-item"><img src="img/visa.jpg" alt="Cash" style="max-width: 50px;"></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <hr class="hr_footer">
+
+                <!-- Bottom Copyright -->
+                <div class="row copyright">
+                    <div class="col-md-12">
+                        <p>&copy; Copyright 2024 by Koi Kingdom | 
+                            <a href="#" class="text-decoration-none">Terms of Service & Privacy Policy</a>
+                        </p>
                     </div>
                 </div>
             </div>
-            <div class="container d-flex justify-content-center mt-3 ">
-                <div class="col-md-6 text-center" style="border-right: 2px solid black ">
-                    <strong class="text-center">&copy; 2024 KoiKingdom. All rights reserved.</strong>
-                </div>
-                <div class="col-md-6 text-center" >
-                    <a   href="#" style="text-decoration: none;"><strong > Privacy </strong></a>
-                </div>
-            </div>
-        </div>
-    </footer>
-</body>
+        </footer>
+    </body>
 </html>
