@@ -1,0 +1,41 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Sep 14, 2024, 5:41:22 PM
+    Author     : ADMIN LAM
+*/
+
+.welcome-text{
+    font-family: 'Rokkitt', sans-serif;
+    text-align: center;
+    display: block;
+    padding-top: 100px;
+    padding-bottom: 50px;
+}
+
+.koifarm-image img {
+    width: 100%;
+    height: auto; 
+    border-radius: 20px;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 250px; /* Chiều cao cố định cho các ảnh */
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.carousel-item.banner img{
+    width: 100%;
+    height: 500px; 
+    object-fit: cover;
+    border-radius: 0px;
+}
+
+.text-sub{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}

@@ -1,0 +1,30 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Sep 14, 2024, 2:38:34 PM
+    Author     : ADMIN LAM
+*/
+
+footer{
+    font-family: 'Montserrat', sans-serif;
+}
+
+footer .logo {
+    display: flex;
+    justify-content: center;  /* Center the logo horizontally */
+}
+footer .row {
+    display: flex;
+    justify-content: space-around; /* Distribute sections evenly */
+}
+.text-footer {
+    text-decoration: none;
+}
+.logo img{
+    width: 150px;
+    height: 150px;
+}
+
+
