@@ -16,7 +16,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <!-- Font Awesome for Icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="css/header.css">
+        <link rel="stylesheet" href="css/header.css">       
     </head>
     <body>
         <header class="text-black py-4" style="background-color: #fdf4f0;">
@@ -69,24 +69,98 @@
                         <a href="#" class="text-black icon-size nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user"></i>
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">      
                             <c:choose>
                                 <c:when test="${sessionScope.LOGIN_USER == null and sessionScope.LOGIN_GMAIL == null}">
-                                <li><a class="dropdown-item" href="login"><i class="adm_icon fas fa-sign-in-alt"></i> Sign in</a></li>
-                                </c:when>
-                                <c:otherwise>
-                                <li><a class="dropdown-item" href="#">Order History</a></li>
-                                <li><a class="dropdown-item" href="#">Notification</a></li>
-                                <li><a class="dropdown-item" href="#">Setting</a></li>
-                                <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
-                                </c:otherwise>
-                            </c:choose>
+                                    <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
+                                    <li><a class="dropdown-item" href="login"><i class="adm_icon fas fa-sign-in-alt"></i> Sign in</a></li>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:choose>
+                                            <c:when test="${sessionScope.LOGIN_USER != null}">
+                                            <li class="dropdown-item" style="color: red"> ${sessionScope.LOGIN_USER.firstName} ${sessionScope.LOGIN_USER.lastName}</li>
+                                            </c:when>
+                                            <c:when test="${sessionScope.LOGIN_GMAIL != null}">
+                                            <li class="dropdown-item" style="color: red"> ${sessionScope.LOGIN_GMAIL.given_name} ${sessionScope.LOGIN_GMAIL.family_name}</li>
+                                            </c:when>
+                                        </c:choose>
+                                    <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
+                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fa fa-history"></i> My Order</a></li>
+                                    <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
+                                    </c:otherwise>
+                                </c:choose>
                         </ul>
+
+                        <!-- Update Profile Modal -->
+                        <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="updateProfileModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="updateProfileModalLabel">Update Profile</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="UpdateProfileController" method="post" enctype="multipart/form-data">
+                                            <!-- Avatar Section -->
+                                            <div class="text-center mb-4">
+                                                <div class="avatar-container">
+                                                    <img id="avatarPreview" src="${sessionScope.AVATAR}" alt="">
+                                                </div>
+                                                <input type="file" id="avatar" name="profileImage" class="form-control mt-2" accept="image/*" onchange="previewAvatar()">
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Email:</label>
+                                                <input type="email" class="form-control" id="email" name="email" 
+                                                       value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.LOGIN_GMAIL.email : sessionScope.LOGIN_USER.email}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="firstName" class="form-label">First Name:</label>
+                                                <input type="text" class="form-control" id="firstName" name="firstName" 
+                                                       value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.LOGIN_GMAIL.family_name : sessionScope.LOGIN_USER.firstName}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="lastName" class="form-label">Last Name:</label>
+                                                <input type="text" class="form-control" id="lastName" name="lastName" 
+                                                       value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.LOGIN_GMAIL.given_name : sessionScope.LOGIN_USER.lastName}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="address" class="form-label">Address:</label>
+                                                <input type="text" class="form-control" id="address" name="address" value="">
+                                            </div>
+                                            <div class="text-center">
+                                                <button type="submit" class="btn btn-primary" name="action">Update</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </header>
+        <script>
+            function previewAvatar() {
+                const file = document.getElementById('avatar').files[0];
+                const preview = document.getElementById('avatarPreview');
+                const reader = new FileReader();
+
+                reader.onloadend = function () {
+                    preview.src = reader.result;
+                };
+
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = "";
+                }
+            }
+        </script>
+
     </body>
 </html>
 

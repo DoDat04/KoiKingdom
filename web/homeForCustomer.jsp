@@ -47,7 +47,7 @@
             </div>
 
         <!-- Welcome -->
-        <h1><strong class="welcome-text">Welcome to Koi Kingdom VIP!</strong></h1>
+        <h1><strong class="welcome-text">Welcome to Koi Kingdom</strong></h1>
         <div class="container">
             <div class="row">
                 <div class="col-md-6">

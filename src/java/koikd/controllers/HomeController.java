@@ -38,7 +38,7 @@ public class HomeController extends HttpServlet {
                 url = HOME_PAGE;
             } else if (action.equals("Logout")) {
                 url = LOGOUT_CONTROLLER;
-            }    
+            }   
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

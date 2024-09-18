@@ -19,7 +19,6 @@ import org.mindrot.jbcrypt.BCrypt;
  * @author Do Dat
  */
 public class CustomerDAO implements Serializable {
-
     public CustomerDTO checkLogin(String email, String password) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -203,7 +202,6 @@ public class CustomerDAO implements Serializable {
                 }
             }
         } finally {
-            // Close resources
             if (rs != null) {
                 rs.close();
             }
@@ -218,7 +216,34 @@ public class CustomerDAO implements Serializable {
     }
 
     private String hashToken(String token) {
-        // Generate a BCrypt hash of the token
         return BCrypt.hashpw(token, BCrypt.gensalt());
+    }
+    
+    public boolean updateUserProfile(String userId, String firstName, String lastName) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        boolean result = false;
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "UPDATE CUSTOMER SET FirstName = ?, Lastname = ? WHERE Email = ?";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, firstName);
+                stm.setString(2, lastName);
+                stm.setString(3, userId);
+                
+                int rowsUpdated = stm.executeUpdate();
+                result = rowsUpdated > 0; 
+            }
+        } finally {
+            if (stm != null) {
+                stm.close(); 
+            }
+            if (con != null) {
+                con.close(); 
+            }
+        }
+        return result;
     }
 }

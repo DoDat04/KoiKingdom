@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,6 +52,19 @@ public class LoginController extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.removeAttribute("LOGIN_GMAIL"); 
                     session.setAttribute("LOGIN_USER", result);
+                    String emailPrefix = getUserIdBeforeAt(email);
+                    
+                    // Lấy đường dẫn đến thư mục images
+                    String uploadPath = getServletContext().getRealPath("/images");
+                    // Tạo file ảnh người dùng cùng tên lúc update
+                    String userImageFileName = emailPrefix + "user_picture.png";
+                    File userImageFile = new File(uploadPath + File.separator + userImageFileName);
+
+                    // Kiểm tra xem ảnh có không
+                    if (userImageFile.exists()) {
+                        // Có thì set vào attribute
+                        session.setAttribute("AVATAR", "images/" + userImageFileName);
+                    } 
 
                     url = HOME_PAGE; 
                 } else {
@@ -68,6 +82,14 @@ public class LoginController extends HttpServlet {
                 request.getRequestDispatcher(url).forward(request, response);
             }
         }
+    }
+    
+    private String getUserIdBeforeAt(String email) {
+        int atIndex = email.indexOf('@');
+        if (atIndex > 0) {
+            return email.substring(0, atIndex);
+        }
+        return email; // Nếu không có dấu '@', trả về toàn bộ chuỗi
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

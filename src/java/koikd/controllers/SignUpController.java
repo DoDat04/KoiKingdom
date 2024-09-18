@@ -53,7 +53,7 @@ public class SignUpController extends HttpServlet {
             if (!password.trim().matches(passwordPattern)) {
                 foundErr = true;
                 errors.setPasswordLengthErr("Password must be 6 to 50 characters, include at least one uppercase letter, one digit, and one special character.");
-            } else if (!confirmPassword.trim().equals(password.trim())) {
+            } else if (!confirmPassword.trim().equals(password)) {
                 foundErr = true;
                 errors.setConfirmNotMacthed("Confirm password does not match the password");
             }

@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.File;
 import koikd.customer.CustomerDAO;
 import koikd.google.GooglePojo;
 import koikd.utils.GoogleUtils;
@@ -22,8 +23,10 @@ import koikd.utils.GoogleUtils;
  */
 @WebServlet(name = "LoginGoogleController", urlPatterns = {"/LoginGoogleController"})
 public class LoginGoogleController extends HttpServlet {
+
     private static final String LOGIN_PAGE = "login.jsp";
     private static final String HOME_PAGE = "home";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -47,12 +50,24 @@ public class LoginGoogleController extends HttpServlet {
                 GooglePojo googlePojo = GoogleUtils.getUserInfo(accessToken);
 
                 if (googlePojo != null) {
+                    url = HOME_PAGE;
                     CustomerDAO dao = new CustomerDAO();
                     HttpSession session = request.getSession();
                     session.removeAttribute("LOGIN_USER"); // Clear regular login user info
-                    session.setAttribute("LOGIN_GMAIL", googlePojo);    
-                    dao.createEmailUser(googlePojo, accessToken);                
-                    url = HOME_PAGE;
+                    session.setAttribute("LOGIN_GMAIL", googlePojo);
+                    String emailPrefix = getUserIdBeforeAt(googlePojo.getEmail());
+                    String avatarUrl = googlePojo.getPicture();
+                    dao.createEmailUser(googlePojo, accessToken);
+
+                    String uploadPath = getServletContext().getRealPath("/images");
+                    String userImageFileName = emailPrefix + "gmail_picture.png";
+                    File userImageFile = new File(uploadPath + File.separator + userImageFileName);
+                    
+                    if (userImageFile.exists()) {
+                        session.setAttribute("AVATAR", "images/" + userImageFileName); 
+                    } else {
+                        session.setAttribute("AVATAR", avatarUrl);
+                    }                                      
                 }
             }
         } catch (Exception e) {
@@ -60,6 +75,14 @@ public class LoginGoogleController extends HttpServlet {
         } finally {
             response.sendRedirect(url);
         }
+    }
+
+    private String getUserIdBeforeAt(String email) {
+        int atIndex = email.indexOf('@');
+        if (atIndex > 0) {
+            return email.substring(0, atIndex);
+        }
+        return email; // Nếu không có dấu '@', trả về toàn bộ chuỗi
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

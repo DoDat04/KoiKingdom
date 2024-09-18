@@ -82,7 +82,7 @@ a.swiper-button-prev, a.swiper-button-next {
 /*FORM SIGNUP*/
 .name-section {
     display: flex;
-    gap: 100px;
+    gap: 65px;
 }
 
 .name-section .last-name-wrapper {
@@ -90,7 +90,7 @@ a.swiper-button-prev, a.swiper-button-next {
 }
 
 .login-form .name-section [type="text"] {
-    width: 156%;
+    width: 137%;
     padding: 0.5rem;
     margin-bottom: 1rem;
     border: 1px solid #ccc;
