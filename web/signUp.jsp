@@ -24,7 +24,7 @@
         <div class="container">
             <div class="login-form">
                 <h2>Sign Up</h2>
-                <form action="signup" method="post">
+                <form action="signup" method="post" id="form">
                     <div class="name-section">
                         <div class="first-name-wrapper">
                             <label for="fullName">First Name</label>
@@ -52,13 +52,18 @@
                         <span class="toggle-confirm-password">
                             <i id="toggleConfirmPasswordIcon" class="fa-regular fa-eye"></i>
                         </span>
-                    </div>                    
-
+                    </div>       
+                    
+                    <div class="g-recaptcha" data-sitekey="6LeaJEgqAAAAAFXJKJaU9KqiJL1lXQQjY2HmEr1z"></div>
+                        <div id="error">
+                            
+                        </div>
+                    
                     <div class="terms">
                         <input type="checkbox" id="terms" name="terms" required>
                         <label for="terms">I agree with the <a onclick="openTermsModal()">Terms of Service & Privacy Policy</a></label>
                     </div>
-
+                    
                     <button type="submit" class="btn" name="action" value="Sign up">Sign Up</button>
                 </form>
 
@@ -140,6 +145,25 @@
         </c:choose>
 
         <!-- SWIPER JS -->
-        <script src="js/swiper-bundle.min.js"></script>              
+        <script src="js/swiper-bundle.min.js"></script>   
+        <!-- reCAPTCHA -->
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                    <script>
+                        window.onload = function (){
+                            let isValid = false;
+                            const form = document.getElementById("form");
+                            const error = document.getElementById("error");
+                            
+                            form.addEventListener("submit", function (event){
+                                event.preventDefault();
+                                const response = grecaptcha.getResponse();
+                                if(response){
+                                    form.submit();
+                                } else{
+                                    error.innerHTML = "Please check";
+                                }
+                            }
+                        });
+                    </script>
     </body>
 </html>
