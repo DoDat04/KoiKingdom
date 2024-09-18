@@ -25,7 +25,7 @@
                 <p class="fp_sub_title">Enter your account's email so that we can send a verify email to confirm for reset password</p>
                 <form action="forgot-password" method="post">
                     <label for="email" class="email">Email</label>
-                    <input type="email" id="email" name="email" value="${param.email}" placeholder="Enter email" required>
+                    <input type="email" id="email" name="email" value="${param.email}" placeholder="Enter gooogle" required>
                     <button type="submit" class="btn" name="action" style="width: 104.5%">Send OTP</button>
                 </form>
                 <a class="back_to_login" href="login">&lt; Back to login</a>
