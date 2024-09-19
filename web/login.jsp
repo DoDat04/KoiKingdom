@@ -62,7 +62,7 @@
                     </div>                  
                     <!-- Guest Button -->
                     <div class="guest-section">
-                        <a href="index.html" class="guest-btn">Continue as Guest</a>
+                        <a href="home" class="guest-btn">Continue as Guest</a>
                     </div>
                 </div>             
             </div>

@@ -19,6 +19,7 @@ import org.mindrot.jbcrypt.BCrypt;
  * @author Do Dat
  */
 public class CustomerDAO implements Serializable {
+
     public CustomerDTO checkLogin(String email, String password) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -198,7 +199,7 @@ public class CustomerDAO implements Serializable {
                     int rowsInserted = stm.executeUpdate();
                     result = rowsInserted > 0;
                 } else {
-                    result = true; 
+                    result = true;
                 }
             }
         } finally {
@@ -218,7 +219,7 @@ public class CustomerDAO implements Serializable {
     private String hashToken(String token) {
         return BCrypt.hashpw(token, BCrypt.gensalt());
     }
-    
+
     public boolean updateUserProfile(String userId, String firstName, String lastName) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -232,18 +233,55 @@ public class CustomerDAO implements Serializable {
                 stm.setString(1, firstName);
                 stm.setString(2, lastName);
                 stm.setString(3, userId);
-                
+
                 int rowsUpdated = stm.executeUpdate();
-                result = rowsUpdated > 0; 
+                result = rowsUpdated > 0;
             }
         } finally {
             if (stm != null) {
-                stm.close(); 
+                stm.close();
             }
             if (con != null) {
-                con.close(); 
+                con.close();
             }
         }
         return result;
+    }
+
+    public CustomerDTO findCustomerByEmailAndAccountType(String email, String accountType) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        CustomerDTO customer = null;
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT Email, AccountType, Status FROM CUSTOMER WHERE Email = ? AND AccountType = ?";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, email);
+                stm.setString(2, accountType);
+
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    String customerEmail = rs.getString("Email");
+                    String accType = rs.getString("AccountType");
+                    boolean status = rs.getBoolean("Status");
+
+                    customer = new CustomerDTO(customerEmail, "", "", "", "", accType, status);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return customer;
     }
 }

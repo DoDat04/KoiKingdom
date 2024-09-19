@@ -4,6 +4,7 @@
  */
 // Function to open the Terms of Service & Privacy Policy modal
 function openTermsModal() {
+    event.preventDefault(); 
     document.getElementById("terms-modal").style.display = "block";
 }
 

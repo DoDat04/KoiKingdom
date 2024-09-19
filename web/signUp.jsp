@@ -61,15 +61,14 @@
 
                     <div class="terms">
                         <input type="checkbox" id="terms" name="terms" required>
-                        <label for="terms">I agree with the <a onclick="openTermsModal()">Terms of Service & Privacy Policy</a></label>
+                        <label for="terms" class="tos-agree">I agree with the <a onclick="openTermsModal()" class="tos-link">Terms of Service & Privacy Policy</a></label>
                     </div>
-
                     <button type="submit" class="btn" name="action" value="Sign up">Sign Up</button>
                 </form>
 
                 <!-- Already have an account? -->
                 <div class="already-account">
-                    <span>Already have an account? <a href="login.jsp" class="sign-in-link">Sign in</a></span>
+                    <span>Already have an account? <a href="login" class="sign-in-link">Sign in</a></span>
                 </div>
             </div>
 
@@ -97,9 +96,34 @@
                 <!-- Close Button (X) -->
                 <span class="close-button" onclick="closeTermsModal()">&times;</span>
                 <h2>Terms of Service & Privacy Policy</h2>
-                <p>Here you can include the content of your Terms of Service & Privacy Policy.</p>
+                <p class="tos-introduce">Welcome to Koi Kingdom! By signing up and creating an account on our website, you agree to the following terms, conditions, and privacy policy. You acknowledge that you have read and agree to our Terms of Service & Privacy Policy. Thank you for your visit.</p>
+
+                <h3>1. Introduction</h3>
+                <p>We value your privacy and are committed to protecting your personal information. This Privacy Policy outlines how we collect, use, and protect your data.</p>
+
+                <h3>2. Information We Collect</h3>
+                <p>We collect information that you provide to us directly, such as when you create an account, make a purchase, or contact us. This may include your name, email address, phone number, shipping address, and payment information. We also collect information automatically as you navigate our site, including IP address, browser type, and usage data.</p>
+
+                <h3>3. How We Use Your Information</h3>
+                <p>We use your information to provide and improve our services, process transactions, communicate with you, and for marketing purposes. We may also use your information to comply with legal obligations and protect our rights.</p>
+
+                <h3>4. Sharing Your Information</h3>
+                <p>We do not sell your personal information. We may share your information with third parties to facilitate our services, such as payment processors, shipping companies, and marketing partners. These third parties are obligated to protect your information and use it only for the purposes we specify.</p>
+
+                <h3>5. Data Security</h3>
+                <p>We implement various security measures to protect your personal information. However, no method of transmission over the internet or electronic storage is 100% secure. We strive to use commercially acceptable means to protect your data but cannot guarantee absolute security.</p>
+
+                <h3>6. Your Choices</h3>
+                <p>You have the right to access, update, and delete your personal information. You can manage your account settings or contact us to make changes. You can also opt out of receiving promotional emails by following the unsubscribe instructions in the emails.</p>
+
+                <h3>7. Changes to This Policy</h3>
+                <p>We may update this Privacy Policy periodically. Any changes will be posted on our website, and your continued use of our services constitutes acceptance of the updated policy.</p>
+
+                <h3>8. Contact Us</h3>
+                <p>If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at <a href="home">Koi Kingdom</a>.</p>
             </div>
-        </div> 
+        </div>
+
 
         <!-- Error Modal HTML -->
         <div id="error-modal" class="modal">
@@ -132,6 +156,16 @@
                     showModal('${errors.lastNameLengthErr}');
                 </script>
             </c:when>
+            <c:when test="${not empty errors.firstNameInvalidErr}">
+                <script>
+                    showModal('${errors.firstNameInvalidErr}');
+                </script>
+            </c:when>
+            <c:when test="${not empty errors.lastNameInvalidErr}">
+                <script>
+                    showModal('${errors.lastNameInvalidErr}');
+                </script>
+            </c:when>
             <c:when test="${not empty errors.confirmNotMacthed}">
                 <script>
                     showModal('${errors.confirmNotMacthed}');
@@ -146,23 +180,16 @@
 
         <!-- SWIPER JS -->
         <script src="js/swiper-bundle.min.js"></script>   
-        <!-- reCAPTCHA GOOGLE -->
+        <!-- reCAPTCHA -->
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
-                    window.onload = function (){
-                    let isValid = false;
-                            const form = document.getElementById("form");
-                            const error = document.getElementById("error");
-                            form.addEventListener("submit", function (event){
-                            event.preventDefault();
-                                    const response = grecaptcha.getResponse();
-                                    if (response){
-                            form.submit();
-                            } else{
-                            error.innerHTML = "Please check";
-                            }
-                            }
-                            });
+            document.getElementById('form').addEventListener('submit', function (event) {
+                var recaptchaResponse = grecaptcha.getResponse();
+                if (recaptchaResponse.length === 0) {
+                    event.preventDefault(); // Ngăn gửi biểu mẫu
+                    showModal('Please complete the reCAPTCHA.');
+                }
+            });
         </script>
     </body>
 </html>

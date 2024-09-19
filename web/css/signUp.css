@@ -108,6 +108,14 @@ a.swiper-button-prev, a.swiper-button-next {
     font-weight: 700;
 }
 
+.login-form .tos-agree {
+    font-weight: normal;
+}
+
+.login-form .tos-link {
+    font-weight: bold;
+}
+
 .login-form input[type="email"],
 .login-form input[type="text"],
 .login-form input[type="password"] {
@@ -160,9 +168,13 @@ a.swiper-button-prev, a.swiper-button-next {
 }
 
 .terms a {
-    color: blue;
-    text-decoration: underline;
+    color: black;
+    text-decoration: none;
     cursor: pointer;
+}
+
+.terms a:hover {
+    text-decoration: underline;
 }
 
 .image-container {
@@ -179,29 +191,39 @@ a.swiper-button-prev, a.swiper-button-next {
     object-fit: cover;
 }
 
+.modal-content h2{
+    text-align: center;
+}
+
+.modal-content h2,h3{
+    font-weight: bold;
+}
+
 /* Modal styles */
 .modal {
     display: none; 
     position: fixed; 
-    z-index: 1; 
+    z-index: 1000; 
     padding-top: 60px; 
     left: 0;
     top: 0;
     width: 100%; 
     height: 100%; 
     overflow: auto; 
+    background-color: rgba(0, 0, 0, 0.5); 
 }
 
 .modal-content {
     background-color: #fefefe;
-    margin: 0px auto; /* Căn giữa modal */
+    margin: 0px auto; 
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    text-align: center;
+    max-width: 870px; 
+    text-align: left;
     border-radius: 10px;
     position: relative; 
+    overflow-y: auto; 
+    max-height: 80vh; 
 }
 
 .close-button {
@@ -222,7 +244,13 @@ a.swiper-button-prev, a.swiper-button-next {
 }
 
 .password-section, .confirm-password-section {
-    position: relative; /* Make the parent container relative */
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px; 
+}
+
+.tos-introduce {
+    text-align: center;
 }
 
 /* Tắt biểu tượng mắt mặc định của trình duyệt */
@@ -231,9 +259,10 @@ input[type="password"]::-ms-clear {
     display: none;
 }
 
-input[type="password"] {
-    position: relative;
-    z-index: 10;
+.container .login-form input[type="password"] {
+    width: 108%; 
+    padding: 10px; 
+    box-sizing: border-box;
 }
 
 .toggle-password, .toggle-confirm-password {

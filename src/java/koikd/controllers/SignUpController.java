@@ -49,40 +49,63 @@ public class SignUpController extends HttpServlet {
         boolean foundErr = false;
         RegistrationCreateError errors = new RegistrationCreateError();
         String passwordPattern = "^(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d]).{6,50}$";
+        String namePattern = "^[a-zA-Z\\s]+$"; // Chỉ cho phép chữ cái và dấu cách
+        String accountType = "default";
         try {
-            if (!password.trim().matches(passwordPattern)) {
-                foundErr = true;
-                errors.setPasswordLengthErr("Password must be 6 to 50 characters, include at least one uppercase letter, one digit, and one special character.");
-            } else if (!confirmPassword.trim().equals(password)) {
-                foundErr = true;
-                errors.setConfirmNotMacthed("Confirm password does not match the password");
-            }
-            if (firstName.trim().length() < 2 || firstName.trim().length() > 50) {
-                foundErr = true;
-                errors.setPasswordLengthErr("Firstname is required from 2 to 50 characters");
-            }
-            if (lastName.trim().length() < 2 || lastName.trim().length() > 50) {
-                foundErr = true;
-                errors.setPasswordLengthErr("Lastname is required from 2 to 50 characters");
-            }
-            if (foundErr) { //errors occur
-                request.setAttribute("CREATE_ERROR", errors);
-            } else {
-                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-                CustomerDAO dao = new CustomerDAO();
-                CustomerDTO dto = new CustomerDTO(email, hashedPassword, lastName, firstName, "", "default", true);
-                boolean result = dao.createCustomerAccount(dto);
-                if (result) {
-                    url = SIGN_UP_PAGE;
-                    request.setAttribute("CREATE_SUCCESS", "Your account was created successfully");
+            if (firstName != null && lastName != null && password != null && confirmPassword != null) {
+                // Kiểm tra password
+                if (!password.trim().matches(passwordPattern)) {
+                    foundErr = true;
+                    errors.setPasswordLengthErr("Password must be 6 to 50 characters, include at least one uppercase letter, one digit, and one special character.");
+                } else if (!confirmPassword.trim().equals(password.trim())) {
+                    foundErr = true;
+                    errors.setConfirmNotMacthed("Confirm password does not match the password.");
                 }
+
+                // Kiểm tra ký tự đặc biệt cho firstName và lastName
+                if (!firstName.trim().matches(namePattern)) {
+                    foundErr = true;
+                    errors.setFirstNameInvalidErr("First name is not allowed to contain special characters.");
+                }
+                if (!lastName.trim().matches(namePattern)) {
+                    foundErr = true;
+                    errors.setLastNameInvalidErr("Last name is not allowed to contain special characters.");
+                }
+
+                // Kiểm tra độ dài firstName và lastName
+                if (firstName.trim().length() < 2 || firstName.trim().length() > 50) {
+                    foundErr = true;
+                    errors.setFirstNameLengthErr("First name is required to be between 2 and 50 characters.");
+                }
+                if (lastName.trim().length() < 2 || lastName.trim().length() > 50) {
+                    foundErr = true;
+                    errors.setLastNameLengthErr("Last name is required to be between 2 and 50 characters.");
+                }
+
+                // Kiểm tra xem email đã tồn tại chưa
+                CustomerDAO dao = new CustomerDAO();
+                CustomerDTO existingUser = dao.findCustomerByEmailAndAccountType(email, accountType);
+                if (existingUser != null) {
+                    foundErr = true;
+                    errors.setEmailIsExisted(email + " is already registered.");
+                }
+
+                if (foundErr) { // Nếu có lỗi
+                    request.setAttribute("CREATE_ERROR", errors);
+                } else {
+                    String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+                    CustomerDTO dto = new CustomerDTO(email, hashedPassword, lastName, firstName, "", accountType, true);
+                    boolean result = dao.createCustomerAccount(dto);
+                    if (result) {
+                        url = SIGN_UP_PAGE;
+                        request.setAttribute("CREATE_SUCCESS", "Your account was created successfully.");
+                    }
+                }
+            } else {
+                url = SIGN_UP_PAGE;
             }
         } catch (SQLException ex) {
-            String msg = ex.getMessage();            
-            if (msg.contains("duplicate")) {
-                errors.setEmailIsExisted(email + " is existed");
-                request.setAttribute("CREATE_ERROR", errors);
-            }
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);           
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -90,7 +113,7 @@ public class SignUpController extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

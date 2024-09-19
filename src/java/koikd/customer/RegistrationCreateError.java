@@ -16,16 +16,36 @@ public class RegistrationCreateError implements Serializable{
     private String lastNameLengthErr;
     private String confirmNotMacthed;
     private String emailIsExisted;
+    private String firstNameInvalidErr;
+    private String lastNameInvalidErr;
 
     public RegistrationCreateError() {
     }
 
-    public RegistrationCreateError(String passwordLengthErr, String firstNameLengthErr, String lastNameLengthErr, String confirmNotMacthed, String emailIsExisted) {
+    public RegistrationCreateError(String passwordLengthErr, String firstNameLengthErr, String lastNameLengthErr, String confirmNotMacthed, String emailIsExisted, String firstNameInvalidErr, String lastNameInvalidErr) {
         this.passwordLengthErr = passwordLengthErr;
         this.firstNameLengthErr = firstNameLengthErr;
         this.lastNameLengthErr = lastNameLengthErr;
         this.confirmNotMacthed = confirmNotMacthed;
         this.emailIsExisted = emailIsExisted;
+        this.firstNameInvalidErr = firstNameInvalidErr;
+        this.lastNameInvalidErr = lastNameInvalidErr;
+    }
+
+    public String getFirstNameInvalidErr() {
+        return firstNameInvalidErr;
+    }
+
+    public void setFirstNameInvalidErr(String firstNameInvalidErr) {
+        this.firstNameInvalidErr = firstNameInvalidErr;
+    }
+
+    public String getLastNameInvalidErr() {
+        return lastNameInvalidErr;
+    }
+
+    public void setLastNameInvalidErr(String lastNameInvalidErr) {
+        this.lastNameInvalidErr = lastNameInvalidErr;
     }
 
     public String getPasswordLengthErr() {
