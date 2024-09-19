@@ -24,7 +24,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <!-- Logo -->
                     <div class="logo">
-                        <a href="MainController?action=homePage">
+                        <a href="home?action=homePage">
                             <img src="img/logo.png" style="width: 150px; height: 150px;">
                         </a>
                     </div>
@@ -69,7 +69,7 @@
                         <a href="#" class="text-black icon-size nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user"></i>
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="userDropdown">      
+                         <ul class="dropdown-menu" aria-labelledby="userDropdown">      
                             <c:choose>
                                 <c:when test="${sessionScope.LOGIN_USER == null and sessionScope.LOGIN_GMAIL == null}">
                                     <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
