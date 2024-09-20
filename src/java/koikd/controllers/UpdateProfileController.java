@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package koikd.customer;
+package koikd.controllers;
 
+import koikd.customer.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -17,7 +18,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Paths;
 import koikd.google.GooglePojo;
 
 /**
@@ -47,80 +47,79 @@ public class UpdateProfileController extends HttpServlet {
             // Lấy thông tin từ form
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
-            Part filePart = request.getPart("profileImage"); // Lấy phần file upload từ form
+            Part filePart = request.getPart("profileImage");
+            HttpSession session = request.getSession();
+            CustomerDTO user = (CustomerDTO) session.getAttribute("LOGIN_USER");
+            GooglePojo userGmail = (GooglePojo) session.getAttribute("LOGIN_GMAIL");
 
-            // Kiểm tra nếu file upload không trống
-            if (filePart != null && filePart.getSize() > 0) {
-                // Đường dẫn lưu file upload
-                HttpSession session = request.getSession();
-                CustomerDTO user = (CustomerDTO) session.getAttribute("LOGIN_USER");
-                GooglePojo userGmail = (GooglePojo) session.getAttribute("LOGIN_GMAIL");
+            String email = null, emailPrefix = null, newFileName = null;
+            boolean isUser = false;
 
-                if (user != null) {
-                    // Người dùng đăng nhập bằng tài khoản thường
-                    String email = user.getEmail();
-                    String emailPrefix = getUserIdBeforeAt(email);
-                    String newFileName = emailPrefix + "user_picture.png";
-                    String uploadPath = getServletContext().getRealPath("images");
+            // Xác định kiểu người dùng (user thường hay Gmail)
+            if (user != null) {
+                email = user.getEmail();
+                isUser = true;
+            } else if (userGmail != null) {
+                email = userGmail.getEmail();
+            }
 
-                    File uploadDir = new File(uploadPath);
-                    if (!uploadDir.exists()) {
-                        uploadDir.mkdir(); // Tạo thư mục nếu chưa tồn tại
-                    }
+            // Nếu email tồn tại
+            if (email != null) {
+                emailPrefix = getUserIdBeforeAt(email);
+                newFileName = emailPrefix + (isUser ? "user_picture.png" : "gmail_picture.png");
+                String uploadPath = getServletContext().getRealPath("images");
 
-                    String userFilePath = uploadPath + File.separator + newFileName;
-                    try (InputStream input = filePart.getInputStream(); OutputStream output = new FileOutputStream(userFilePath)) {
+                File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdir(); // Tạo thư mục nếu chưa tồn tại
+                }
+
+                String filePath = uploadPath + File.separator + newFileName;
+
+                // Nếu có file upload
+                if (filePart != null && filePart.getSize() > 0) {
+                    try (InputStream input = filePart.getInputStream(); OutputStream output = new FileOutputStream(filePath)) {
                         byte[] buffer = new byte[1024];
                         int bytesRead;
                         while ((bytesRead = input.read(buffer)) != -1) {
                             output.write(buffer, 0, bytesRead);
                         }
                     }
+                    session.setAttribute("AVATAR", "images/" + newFileName); 
+                } else {
+                    // Nếu không có ảnh upload, giữ nguyên ảnh hiện tại
+                    String currentAvatar = (String) session.getAttribute("AVATAR");
+                    if (currentAvatar == null) {
+                        // Nếu chưa có ảnh trong session, dùng ảnh Google avatar nếu là tài khoản Google
+                        currentAvatar = userGmail.getPicture(); 
+                    }
+                    session.setAttribute("AVATAR", currentAvatar);  
+                }
 
-                    // Cập nhật thông tin người dùng trong session
+                // Cập nhật thông tin người dùng
+                if (isUser) {
                     user.setFirstName(firstName);
                     user.setLastName(lastName);
-                    CustomerDAO dao = new CustomerDAO();
-                    boolean updateResult = dao.updateUserProfile(user.getEmail(), firstName, lastName);
-
-                    if (updateResult) {
-                        session.setAttribute("LOGIN_USER", user);
-                        session.setAttribute("AVATAR", "images/" + newFileName);
-                    } else {
-                        request.setAttribute("updateError", "Failed to update profile.");
-                    }
-
-                } else if (userGmail != null) {
-                    // Người dùng đăng nhập bằng Gmail
-                    String email = userGmail.getEmail();
-                    String emailPrefix = getUserIdBeforeAt(email);
-                    String gmailFileName = emailPrefix + "gmail_picture.png";
-                    String uploadPath = getServletContext().getRealPath("images");
-
-                    File uploadDir = new File(uploadPath);
-                    if (!uploadDir.exists()) {
-                        uploadDir.mkdir(); // Tạo thư mục nếu chưa tồn tại
-                    }
-
-                    String gmailFilePath = uploadPath + File.separator + gmailFileName;
-                    try (InputStream input = filePart.getInputStream(); OutputStream output = new FileOutputStream(gmailFilePath)) {
-                        byte[] buffer = new byte[1024];
-                        int bytesRead;
-                        while ((bytesRead = input.read(buffer)) != -1) {
-                            output.write(buffer, 0, bytesRead);
-                        }
-                    }
-
-                    // Cập nhật thông tin gmail 
+                } else {
                     userGmail.setGiven_name(lastName);
                     userGmail.setFamily_name(firstName);
-                    session.setAttribute("LOGIN_GMAIL", userGmail);
-                    session.setAttribute("AVATAR", "images/" + gmailFileName);
+                    session.setAttribute("firstName", firstName);  
+                    session.setAttribute("lastName", lastName);     
+                }
+
+                CustomerDAO dao = new CustomerDAO();
+                boolean updateResult = dao.updateUserProfile(email, firstName, lastName, isUser ? "default" : "google");
+
+                if (updateResult) {
+                    session.setAttribute(isUser ? "LOGIN_USER" : "LOGIN_GMAIL", isUser ? user : userGmail);
+                    session.setAttribute("updateSuccess", "Update successfully!");
+                } else {
+                    request.setAttribute("updateError", "Failed to update profile.");
                 }
             }
             response.sendRedirect(url);
         } catch (Exception e) {
-            e.printStackTrace();
+            log("Error at ProfileUpdateServlet: " + e.toString());
         }
     }
 

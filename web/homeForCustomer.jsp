@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,6 +18,7 @@
         <!-- Font Awesome for Icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <link rel="stylesheet" href="css/home.css">
+        <script src="js/login.js"></script>       
     </head>
     <body>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
@@ -207,6 +209,20 @@
                 </div>
             </div>
         </div>
+        
+        <div id="error-modal" class="modall">
+                <div class="modal-contentt">
+                    <span class="close-button" onclick="closeModal()">&times;</span>
+                    <p id="error-message"></p>
+                </div>
+        </div>
+        
+        <c:set var="success" value="${sessionScope.updateSuccess}"/>
+        <c:if test="${not empty success and success != null}">
+            <script>
+                showModal('${success}');
+            </script>
+        </c:if> 
         <jsp:include page="footer.jsp" flush="true"/>
     </body>
 </html>

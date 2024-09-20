@@ -69,7 +69,7 @@
                         <a href="#" class="text-black icon-size nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user"></i>
                         </a>
-                         <ul class="dropdown-menu" aria-labelledby="userDropdown">      
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">      
                             <c:choose>
                                 <c:when test="${sessionScope.LOGIN_USER == null and sessionScope.LOGIN_GMAIL == null}">
                                     <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
@@ -81,7 +81,7 @@
                                             <li class="dropdown-item" style="color: red"> ${sessionScope.LOGIN_USER.firstName} ${sessionScope.LOGIN_USER.lastName}</li>
                                             </c:when>
                                             <c:when test="${sessionScope.LOGIN_GMAIL != null}">
-                                            <li class="dropdown-item" style="color: red"> ${sessionScope.LOGIN_GMAIL.given_name} ${sessionScope.LOGIN_GMAIL.family_name}</li>
+                                            <li class="dropdown-item" style="color: red"> ${sessionScope.lastName} ${sessionScope.firstName}</li>
                                             </c:when>
                                         </c:choose>
                                     <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
@@ -119,12 +119,12 @@
                                             <div class="mb-3">
                                                 <label for="firstName" class="form-label">First Name:</label>
                                                 <input type="text" class="form-control" id="firstName" name="firstName" 
-                                                       value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.LOGIN_GMAIL.family_name : sessionScope.LOGIN_USER.firstName}">
+                                                       value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.firstName : sessionScope.LOGIN_USER.firstName}">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="lastName" class="form-label">Last Name:</label>
                                                 <input type="text" class="form-control" id="lastName" name="lastName" 
-                                                       value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.LOGIN_GMAIL.given_name : sessionScope.LOGIN_USER.lastName}">
+                                                       value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.lastName : sessionScope.LOGIN_USER.lastName}">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="address" class="form-label">Address:</label>
@@ -132,6 +132,7 @@
                                             </div>
                                             <div class="text-center">
                                                 <button type="submit" class="btn btn-primary" name="action">Update</button>
+<!--                                                <span id="updateMessage" class="text-success" style="margin-left: 10px; display: none;">Update successfully</span>-->
                                             </div>
                                         </form>
                                     </div>
@@ -143,6 +144,7 @@
                 </div>
             </div>
         </header>
+        
         <script>
             function previewAvatar() {
                 const file = document.getElementById('avatar').files[0];

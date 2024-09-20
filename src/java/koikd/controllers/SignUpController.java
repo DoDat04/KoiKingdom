@@ -49,7 +49,7 @@ public class SignUpController extends HttpServlet {
         boolean foundErr = false;
         RegistrationCreateError errors = new RegistrationCreateError();
         String passwordPattern = "^(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d]).{6,50}$";
-        String namePattern = "^[a-zA-Z\\s]+$"; // Chỉ cho phép chữ cái và dấu cách
+        String namePattern = "^[\\p{L}\\s]+$"; // Cho phép tất cả các ký tự chữ cái và dấu cách
         String accountType = "default";
         try {
             if (firstName != null && lastName != null && password != null && confirmPassword != null) {

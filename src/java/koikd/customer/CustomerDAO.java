@@ -170,6 +170,45 @@ public class CustomerDAO implements Serializable {
         return success;
     }
 
+    public CustomerDTO getUserByEmail(String email) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        CustomerDTO result = null;
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT Email, LastName, FirstName, Address, AccountType, Status "
+                        + "FROM CUSTOMER "
+                        + "WHERE Email = ? AND Status = 1";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, email);
+                rs = stm.executeQuery();
+
+                if (rs.next()) {
+                    String lastName = rs.getString("LastName");
+                    String firstName = rs.getString("FirstName");
+                    String address = rs.getString("Address");
+                    String accountType = rs.getString("AccountType");
+                    boolean status = rs.getBoolean("Status");
+                    result = new CustomerDTO(email, "", lastName, firstName, address, accountType, status);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
+
     public boolean createEmailUser(GooglePojo googlePojo, String accessToken) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -180,7 +219,9 @@ public class CustomerDAO implements Serializable {
             con = DBUtils.getConnection();
             if (con != null) {
                 // Check if the user already exists
-                String checkSql = "SELECT Email FROM CUSTOMER WHERE Email = ?";
+                String checkSql = "SELECT Email FROM CUSTOMER "
+                        + "WHERE Email = ? "
+                        + "AND AccountType = 'google'";
                 stm = con.prepareStatement(checkSql);
                 stm.setString(1, googlePojo.getEmail());
                 rs = stm.executeQuery();
@@ -220,7 +261,7 @@ public class CustomerDAO implements Serializable {
         return BCrypt.hashpw(token, BCrypt.gensalt());
     }
 
-    public boolean updateUserProfile(String userId, String firstName, String lastName) throws SQLException, ClassNotFoundException {
+    public boolean updateUserProfile(String userId, String firstName, String lastName, String accountType) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         boolean result = false;
@@ -228,11 +269,12 @@ public class CustomerDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "UPDATE CUSTOMER SET FirstName = ?, Lastname = ? WHERE Email = ?";
+                String sql = "UPDATE CUSTOMER SET FirstName = ?, Lastname = ? WHERE Email = ? AND AccountType = ?";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, firstName);
                 stm.setString(2, lastName);
                 stm.setString(3, userId);
+                stm.setString(4, accountType); // Thêm accountType vào điều kiện
 
                 int rowsUpdated = stm.executeUpdate();
                 result = rowsUpdated > 0;
@@ -257,7 +299,8 @@ public class CustomerDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT Email, AccountType, Status FROM CUSTOMER WHERE Email = ? AND AccountType = ?";
+                // Cập nhật truy vấn SQL để lấy lastName và firstName
+                String sql = "SELECT Email, FirstName, LastName, AccountType, Status FROM CUSTOMER WHERE Email = ? AND AccountType = ?";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, email);
                 stm.setString(2, accountType);
@@ -265,10 +308,13 @@ public class CustomerDAO implements Serializable {
                 rs = stm.executeQuery();
                 if (rs.next()) {
                     String customerEmail = rs.getString("Email");
+                    String firstName = rs.getString("FirstName"); 
+                    String lastName = rs.getString("LastName");   
                     String accType = rs.getString("AccountType");
                     boolean status = rs.getBoolean("Status");
 
-                    customer = new CustomerDTO(customerEmail, "", "", "", "", accType, status);
+                    // Cập nhật CustomerDTO để chứa firstName và lastName
+                    customer = new CustomerDTO(customerEmail, "", lastName, firstName, "", accType, status);
                 }
             }
         } finally {

@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.File;
 import koikd.customer.CustomerDAO;
+import koikd.customer.CustomerDTO;
 import koikd.google.GooglePojo;
 import koikd.utils.GoogleUtils;
 
@@ -54,7 +55,20 @@ public class LoginGoogleController extends HttpServlet {
                     CustomerDAO dao = new CustomerDAO();
                     HttpSession session = request.getSession();
                     session.removeAttribute("LOGIN_USER"); // Clear regular login user info
+                    
+                    //Kiểm tra trong database có tài khoản google đó chưa
+                    CustomerDTO dto = dao.findCustomerByEmailAndAccountType(googlePojo.getEmail(), "google");
+                    if (dto != null) {
+                        String firstName = dto.getFirstName();
+                        String lastName = dto.getLastName();
+                        session.setAttribute("firstName", firstName);
+                        session.setAttribute("lastName", lastName);
+                    } else {
+                        session.setAttribute("firstName", googlePojo.getFamily_name());
+                        session.setAttribute("lastName", googlePojo.getGiven_name());
+                    }
                     session.setAttribute("LOGIN_GMAIL", googlePojo);
+
                     String emailPrefix = getUserIdBeforeAt(googlePojo.getEmail());
                     String avatarUrl = googlePojo.getPicture();
                     dao.createEmailUser(googlePojo, accessToken);
@@ -62,12 +76,12 @@ public class LoginGoogleController extends HttpServlet {
                     String uploadPath = getServletContext().getRealPath("/images");
                     String userImageFileName = emailPrefix + "gmail_picture.png";
                     File userImageFile = new File(uploadPath + File.separator + userImageFileName);
-                    
+
                     if (userImageFile.exists()) {
-                        session.setAttribute("AVATAR", "images/" + userImageFileName); 
+                        session.setAttribute("AVATAR", "images/" + userImageFileName);
                     } else {
                         session.setAttribute("AVATAR", avatarUrl);
-                    }                                      
+                    }
                 }
             }
         } catch (Exception e) {
