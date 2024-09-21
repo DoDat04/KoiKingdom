@@ -11,7 +11,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Footer</title>
+        <title>Footer</title>       
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <!-- Font Awesome for Icons -->
@@ -23,12 +23,12 @@
     </head>
     <body>
         <header class="text-black py-4" style="background-color: #fdf4f0;">
-            <div class="container">
+            <div class="header-content">
                 <div class="d-flex justify-content-between align-items-center">
                     <!-- Logo -->
                     <div class="logo">
                         <a href="home?action=homePage">
-                            <img src="img/logo.png" style="width: 150px; height: 150px;">
+                            <img src="img/logo.png" style="width: 185px; height: 150px;">
                         </a>
                     </div>
 
@@ -69,32 +69,43 @@
                         <a href="#" class="text-black me-3 icon-size">
                             <i class="fa-solid fa-heart"></i>
                         </a>
-                        <a href="#" class="text-black icon-size nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">      
-                            <c:choose>
-                                <c:when test="${sessionScope.LOGIN_USER == null and sessionScope.LOGIN_GMAIL == null}">
-                                    <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
-                                    <li><a class="dropdown-item" href="login"><i class="adm_icon fas fa-sign-in-alt"></i> Sign in</a></li>
+
+                        <!-- User Info with Name and Icon -->
+                        <div class="user-info d-flex align-items-center">
+                            <!-- Display Name -->
+                            <span class="user-name text-black">
+                                <c:choose>                                   
+                                    <c:when test="${sessionScope.LOGIN_USER != null}">                                       
+                                        ${sessionScope.LOGIN_USER.firstName} ${sessionScope.LOGIN_USER.lastName}
+                                        <span class="separator mx-2">|</span>
                                     </c:when>
-                                    <c:otherwise>
-                                        <c:choose>
-                                            <c:when test="${sessionScope.LOGIN_USER != null}">
-                                            <li class="dropdown-item" style="color: red"> ${sessionScope.LOGIN_USER.firstName} ${sessionScope.LOGIN_USER.lastName}</li>
-                                            </c:when>
-                                            <c:when test="${sessionScope.LOGIN_GMAIL != null}">
-                                            <li class="dropdown-item" style="color: red"> ${sessionScope.lastName} ${sessionScope.firstName}</li>
-                                            </c:when>
-                                        </c:choose>
-                                    <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
-                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fa fa-history"></i> My Order</a></li>
-                                    <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
-                                    </c:otherwise>
+                                    <c:when test="${sessionScope.LOGIN_GMAIL != null}">
+                                        ${sessionScope.lastName} ${sessionScope.firstName}
+                                        <span class="separator mx-2">|</span>
+                                    </c:when>
                                 </c:choose>
-                        </ul>
+                            </span>                          
+
+                            <!-- User Icon -->
+                            <a href="#" class="text-black icon-size nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">      
+                                <c:choose>
+                                    <c:when test="${sessionScope.LOGIN_USER == null and sessionScope.LOGIN_GMAIL == null}">
+                                        <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
+                                        <li><a class="dropdown-item" href="login"><i class="adm_icon fas fa-sign-in-alt"></i> Sign in</a></li>
+                                        </c:when>
+                                        <c:otherwise>                                       
+                                        <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
+                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fa fa-history"></i> My Order</a></li>
+                                        <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
+                                        </c:otherwise>
+                                    </c:choose>
+                            </ul>
+                        </div>                       
 
                         <!-- Update Profile Modal -->
                         <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="updateProfileModalLabel" aria-hidden="true">

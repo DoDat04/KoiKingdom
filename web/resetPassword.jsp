@@ -10,7 +10,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Reset Password</title>
+        <title>Reset Password - Koi Kingdom</title>
+        <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link rel="stylesheet" href="css/resetPassword.css">
         <script src="js/resetPassword.js"></script> 

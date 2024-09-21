@@ -10,7 +10,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sign Up</title>
+        <title>Sign Up - Koi Kingdom</title>
+        <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
         <!--=============== FONT AWESOME ===============-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <!--=============== MAIN CSS ===============-->

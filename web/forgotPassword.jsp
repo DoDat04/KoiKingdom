@@ -10,7 +10,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Forgot Password</title>
+        <title>Forgot Password - Koi Kingdom</title>
+        <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
         <!--=============== MAIN CSS ===============-->
         <link rel="stylesheet" href="css/login.css">  
         <!--=============== SWIPER CSS ===============-->

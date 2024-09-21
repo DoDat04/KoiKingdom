@@ -10,7 +10,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Verify OTP</title>
+        <title>Verify OTP - Koi Kingdom</title>
+        <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
         <link rel="stylesheet" href="css/login.css">
         <script src="js/otpVerification.js"></script>
         <!--=============== SWIPER CSS ===============-->

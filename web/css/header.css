@@ -9,7 +9,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 header{
     font-family: 'Montserrat', sans-serif;
 }
-.icon-size i{
+
+.header-content {
+    margin: 0px 50px;
+}
+
+.icon-size i {
     font-size: 30px;
     padding-left: 20px;
 }
@@ -22,6 +27,16 @@ header{
 .modal-body .text-center button {
     border: black;
     background-color: black;
+}
+
+.user-info .user-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.menu-center ul {
+    font-size: 20px;
+    margin-left: 95px;
 }
 
 .modal-content .modal-body .avatar-container {
