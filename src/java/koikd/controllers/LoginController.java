@@ -18,6 +18,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import koikd.customer.CustomerDAO;
 import koikd.customer.CustomerDTO;
+import koikd.employees.DeliveryDAO;
+import koikd.employees.EmployeesDTO;
 
 /**
  *
@@ -25,8 +27,11 @@ import koikd.customer.CustomerDTO;
  */
 @WebServlet(name = "LoginController", urlPatterns = {"/login"})
 public class LoginController extends HttpServlet {
+
     private static final String LOGIN_PAGE = "login.jsp";
     private static final String HOME_PAGE = "home";
+    private static final String DELIVERY_PAGE = "deliveryFolder/homeForDelivery.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,7 +44,7 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = LOGIN_PAGE; 
+        String url = LOGIN_PAGE;
         try {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
@@ -48,12 +53,16 @@ public class LoginController extends HttpServlet {
             } else {
                 CustomerDAO dao = new CustomerDAO();
                 CustomerDTO result = dao.checkLogin(email, password);
+                DeliveryDAO deliveryDao = new DeliveryDAO();
+                EmployeesDTO employee = new EmployeesDTO();
+                EmployeesDTO deliveryResult = deliveryDao.checkLogin(email, password);
+
                 if (result != null) {
                     HttpSession session = request.getSession();
-                    session.removeAttribute("LOGIN_GMAIL"); 
+                    session.removeAttribute("LOGIN_GMAIL");
                     session.setAttribute("LOGIN_USER", result);
                     String emailPrefix = getUserIdBeforeAt(email);
-                    
+
                     // Lấy đường dẫn đến thư mục images
                     String uploadPath = getServletContext().getRealPath("/images");
                     // Tạo file ảnh người dùng cùng tên lúc update
@@ -64,9 +73,26 @@ public class LoginController extends HttpServlet {
                     if (userImageFile.exists()) {
                         // Có thì set vào attribute
                         session.setAttribute("AVATAR", "images/" + userImageFileName);
-                    } 
+                    }
 
-                    url = HOME_PAGE; 
+                    url = HOME_PAGE;
+                } else if (deliveryResult != null) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("LOGIN_USER", result);
+                    String emailPrefix = getUserIdBeforeAt(email);
+                    // Lấy đường dẫn đến thư mục images
+                    String uploadPath = getServletContext().getRealPath("/images");
+                    // Tạo file ảnh người dùng cùng tên lúc update
+                    String userImageFileName = emailPrefix + "user_picture.png";
+                    File userImageFile = new File(uploadPath + File.separator + userImageFileName);
+
+                    // Kiểm tra xem ảnh có không
+                    if (userImageFile.exists()) {
+                        // Có thì set vào attribute
+                        session.setAttribute("AVATAR", "images/" + userImageFileName);
+                    }
+                    url = DELIVERY_PAGE;
+
                 } else {
                     request.setAttribute("ERROR", "Your email or password is wrong!");
                 }
@@ -83,7 +109,7 @@ public class LoginController extends HttpServlet {
             }
         }
     }
-    
+
     private String getUserIdBeforeAt(String email) {
         int atIndex = email.indexOf('@');
         if (atIndex > 0) {
