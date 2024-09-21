@@ -25,8 +25,8 @@ public class DeliveryDAO {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT Role\n"
-                        + "FROM DBO.EMPLOYEE\n"
+                String sql = "SELECT Role "
+                        + "FROM DBO.EMPLOYEE "
                         + "WHERE Role = 'Delivery'";
                 stm = con.prepareStatement(sql);
 
@@ -59,8 +59,8 @@ public class DeliveryDAO {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT [EmployeeID], [Email], [Password], [Role], [LastName], [FirstName], [Address], [Status]\n"
-                        + "FROM DBO.EMPLOYEE\n"
+                String sql = "SELECT [EmployeeID], [Email], [Password], [Role], [LastName], [FirstName], [Address], [Status] "
+                        + "FROM DBO.EMPLOYEE "
                         + "WHERE Email = ? and Status = 1;";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, email);
