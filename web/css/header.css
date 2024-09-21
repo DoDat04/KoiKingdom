@@ -48,3 +48,23 @@ header{
     margin-bottom: 16px; /* Khoảng cách dưới */
 }
 
+.dropdown-menu {
+    position: absolute !important;  /* Thiết lập lại vị trí tuyệt đối */
+    inset: 0px 0px auto auto !important;  /* Thiết lập inset (vị trí) theo yêu cầu */
+    margin: 0px !important;  /* Gỡ bỏ margin */
+    transform: translate3d(-108.8px, 116.8px, 0px) !important;  /* Thiết lập transform theo yêu cầu */
+    opacity: 1 !important;  /* Đảm bảo menu không bị mờ */
+    display: none !important;  /* Ẩn mặc định menu */
+}
+
+/* Khi menu được hiển thị */
+.dropdown-menu.show {
+    display: block !important;  /* Hiển thị menu khi có class .show */
+}
+
+
+/* Show the dropdown when 'show' class is added */
+.dropdown-menu.show {
+    display: block !important;  /* Display menu */
+}
+
