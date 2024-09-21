@@ -51,11 +51,13 @@ public class UpdateProfileController extends HttpServlet {
             String city = request.getParameter("city");
             String district = request.getParameter("district");
             String ward = request.getParameter("ward");
-            String custAddress = homeAddress + ", " + ward + ", " + district + ", " + city;      
             Part filePart = request.getPart("profileImage");
             HttpSession session = request.getSession();
             CustomerDTO user = (CustomerDTO) session.getAttribute("LOGIN_USER");
             GooglePojo userGmail = (GooglePojo) session.getAttribute("LOGIN_GMAIL");
+            // kiểm tra đăng nhập bằng user lấy address từ database hiển thị vào
+            // còn nếu là gmail kiểm tra tương tự, nếu không có address thì sẽ là null
+            String custAddress = user != null ? user.getAddress() : (userGmail != null ? (String) session.getAttribute("address") : null);
 
             String email = null, emailPrefix = null, newFileName = null;
             boolean isUser = false;
@@ -90,29 +92,44 @@ public class UpdateProfileController extends HttpServlet {
                             output.write(buffer, 0, bytesRead);
                         }
                     }
-                    session.setAttribute("AVATAR", "images/" + newFileName); 
+                    session.setAttribute("AVATAR", "images/" + newFileName);
                 } else {
                     // Nếu không có ảnh upload, giữ nguyên ảnh hiện tại
                     String currentAvatar = (String) session.getAttribute("AVATAR");
                     if (currentAvatar == null) {
                         // Nếu chưa có ảnh trong session, dùng ảnh Google avatar nếu là tài khoản Google
-                        currentAvatar = userGmail.getPicture(); 
+                        if (userGmail != null) {
+                            currentAvatar = userGmail.getPicture();
+                        } 
                     }
-                    session.setAttribute("AVATAR", currentAvatar);  
+                    session.setAttribute("AVATAR", currentAvatar);
                 }
 
                 // Cập nhật thông tin người dùng
                 if (isUser) {
                     user.setFirstName(firstName);
                     user.setLastName(lastName);
-                    user.setAddress(custAddress);
+                    if (homeAddress != null && !homeAddress.isEmpty()
+                            && city != null && !city.isEmpty()
+                            && district != null && !district.isEmpty()
+                            && ward != null && !ward.isEmpty()) {
+                        custAddress = homeAddress + ", " + ward + ", " + district + ", " + city;
+                        System.out.println(custAddress);
+                        user.setAddress(custAddress);
+                    }
                 } else {
                     userGmail.setGiven_name(lastName);
                     userGmail.setFamily_name(firstName);
-                    
-                    session.setAttribute("firstName", firstName);  
-                    session.setAttribute("lastName", lastName);  
-                    session.setAttribute("address", custAddress);
+
+                    session.setAttribute("firstName", firstName);
+                    session.setAttribute("lastName", lastName);
+                    if (homeAddress != null && !homeAddress.isEmpty()
+                            && city != null && !city.isEmpty()
+                            && district != null && !district.isEmpty()
+                            && ward != null && !ward.isEmpty()) {
+                        custAddress = homeAddress + ", " + ward + ", " + district + ", " + city;
+                        session.setAttribute("address", custAddress);
+                    }
                 }
 
                 CustomerDAO dao = new CustomerDAO();

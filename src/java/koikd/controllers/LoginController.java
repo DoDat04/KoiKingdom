@@ -61,6 +61,8 @@ public class LoginController extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.removeAttribute("LOGIN_GMAIL");
                     session.setAttribute("LOGIN_USER", result);
+                    // sau khi login lấy address từ db bỏ vào attribute
+                    session.setAttribute("address", result.getAddress());
                     String emailPrefix = getUserIdBeforeAt(email);
 
                     // Lấy đường dẫn đến thư mục images
@@ -78,6 +80,7 @@ public class LoginController extends HttpServlet {
                     url = HOME_PAGE;
                 } else if (deliveryResult != null) {
                     HttpSession session = request.getSession();
+                    session.removeAttribute("LOGIN_GMAIL");
                     session.setAttribute("LOGIN_USER", result);
                     String emailPrefix = getUserIdBeforeAt(email);
                     // Lấy đường dẫn đến thư mục images

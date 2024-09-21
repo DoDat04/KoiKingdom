@@ -109,7 +109,9 @@
                                             <!-- Avatar Section -->
                                             <div class="text-center mb-4">
                                                 <div class="avatar-container">
-                                                    <img id="avatarPreview" src="${sessionScope.AVATAR}" alt="">
+                                                    <img id="avatarPreview" 
+                                                         src="${sessionScope.AVATAR != null ? sessionScope.AVATAR : 'images/default_avatar.png'}" 
+                                                         alt="">
                                                 </div>
                                                 <input type="file" id="avatar" name="profileImage" class="form-control mt-2" accept="image/*" onchange="previewAvatar()">
                                             </div>
@@ -132,7 +134,7 @@
                                             <div class="mb-3">
                                                 <label for="address" class="form-label">Default Address:</label>
                                                 <div class="d-flex align-items-center">
-                                                    <input type="text" class="form-control" id="address" name="address"
+                                                    <input type="text" class="form-control" id="address" name="address" placeholder="Your address will appear here"
                                                            value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.address : sessionScope.LOGIN_USER.address}" readonly="">
                                                     <button class="btn btn-outline-secondary ms-2" type="button" id="editAddressBtn">
                                                         <i class="fa-solid fa-pen-to-square"></i>
@@ -142,7 +144,7 @@
 
                                             <div class="mb-3" id="homeAddressDiv" style="display: none;">
                                                 <label for="homeAddress" class="form-label">Home Address:</label>
-                                                <input type="text" class="form-control" id="homeAddress" name="homeAddress" placeholder="Example: 123 Lê Văn Việt">
+                                                <input type="text" class="form-control" id="homeAddress" name="homeAddress" placeholder="Số nhà, tên đường">
                                             </div>
 
                                             <div class="mb-3 select-group" id="addressSelectDiv" style="display: none;">
