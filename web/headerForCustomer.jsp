@@ -16,7 +16,10 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <!-- Font Awesome for Icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="css/header.css">       
+        <link rel="stylesheet" href="css/header.css">  
+        <!-- Script get api province -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
     <body>
         <header class="text-black py-4" style="background-color: #fdf4f0;">
@@ -37,7 +40,7 @@
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-black" id="bookingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Booking</a>
-                                <ul class="dropdown-menu" aria-labelledby="bookingDropdown">
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bookingDropdown">
                                     <li><a class="dropdown-item" href="#">Tour</a></li>
                                     <li><a class="dropdown-item" href="#">Custom Tour</a></li>
                                 </ul>
@@ -45,13 +48,13 @@
                             <li class="nav-item">
                                 <a class="nav-link text-black" href="#">Services</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-black dropdown-toggle" id="informationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Information</a>
-                                <ul class="dropdown-menu" aria-labelledby="informationDropdown">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-black" id="bookingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Information</a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bookingDropdown">
                                     <li><a class="dropdown-item" href="#">Koi Fish</a></li>
                                     <li><a class="dropdown-item" href="#">Farms</a></li>
                                 </ul>
-                            </li>
+                            </li>                           
                             <li class="nav-item">
                                 <a class="nav-link text-black" href="#">Contact</a>
                             </li>
@@ -69,7 +72,7 @@
                         <a href="#" class="text-black icon-size nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user"></i>
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="userDropdown">      
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">      
                             <c:choose>
                                 <c:when test="${sessionScope.LOGIN_USER == null and sessionScope.LOGIN_GMAIL == null}">
                                     <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
@@ -125,15 +128,44 @@
                                                 <label for="lastName" class="form-label">Last Name:</label>
                                                 <input type="text" class="form-control" id="lastName" name="lastName" 
                                                        value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.lastName : sessionScope.LOGIN_USER.lastName}">
-                                            </div>
+                                            </div>                                           
                                             <div class="mb-3">
-                                                <label for="address" class="form-label">Address:</label>
-                                                <input type="text" class="form-control" id="address" name="address" value="">
+                                                <label for="address" class="form-label">Default Address:</label>
+                                                <div class="d-flex align-items-center">
+                                                    <input type="text" class="form-control" id="address" name="address"
+                                                           value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.address : sessionScope.LOGIN_USER.address}" readonly="">
+                                                    <button class="btn btn-outline-secondary ms-2" type="button" id="editAddressBtn">
+                                                        <i class="fa-solid fa-pen-to-square"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3" id="homeAddressDiv" style="display: none;">
+                                                <label for="homeAddress" class="form-label">Home Address:</label>
+                                                <input type="text" class="form-control" id="homeAddress" name="homeAddress" placeholder="Example: 123 Lê Văn Việt">
+                                            </div>
+
+                                            <div class="mb-3 select-group" id="addressSelectDiv" style="display: none;">
+                                                <div class="select-container">
+                                                    <select id="city" name="city">
+                                                        <option value="">Chọn tỉnh / thành</option>
+                                                    </select>
+                                                </div>
+                                                <div class="select-container">
+                                                    <select id="district" name="district">
+                                                        <option value="">Chọn quận / huyện</option>
+                                                    </select>
+                                                </div>
+                                                <div class="select-container">
+                                                    <select id="ward" name="ward">
+                                                        <option value="">Chọn phường / xã</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div class="text-center">
                                                 <button type="submit" class="btn btn-primary" name="action">Update</button>
-<!--                                                <span id="updateMessage" class="text-success" style="margin-left: 10px; display: none;">Update successfully</span>-->
                                             </div>
+                                            <script src="js/address.js"></script>
                                         </form>
                                     </div>
                                 </div>
@@ -144,7 +176,7 @@
                 </div>
             </div>
         </header>
-        
+
         <script>
             function previewAvatar() {
                 const file = document.getElementById('avatar').files[0];

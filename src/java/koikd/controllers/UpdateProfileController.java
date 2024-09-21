@@ -47,6 +47,11 @@ public class UpdateProfileController extends HttpServlet {
             // Lấy thông tin từ form
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
+            String homeAddress = request.getParameter("homeAddress");
+            String city = request.getParameter("city");
+            String district = request.getParameter("district");
+            String ward = request.getParameter("ward");
+            String custAddress = homeAddress + ", " + ward + ", " + district + ", " + city;      
             Part filePart = request.getPart("profileImage");
             HttpSession session = request.getSession();
             CustomerDTO user = (CustomerDTO) session.getAttribute("LOGIN_USER");
@@ -100,15 +105,18 @@ public class UpdateProfileController extends HttpServlet {
                 if (isUser) {
                     user.setFirstName(firstName);
                     user.setLastName(lastName);
+                    user.setAddress(custAddress);
                 } else {
                     userGmail.setGiven_name(lastName);
                     userGmail.setFamily_name(firstName);
+                    
                     session.setAttribute("firstName", firstName);  
-                    session.setAttribute("lastName", lastName);     
+                    session.setAttribute("lastName", lastName);  
+                    session.setAttribute("address", custAddress);
                 }
 
                 CustomerDAO dao = new CustomerDAO();
-                boolean updateResult = dao.updateUserProfile(email, firstName, lastName, isUser ? "default" : "google");
+                boolean updateResult = dao.updateUserProfile(email, firstName, lastName, custAddress, isUser ? "default" : "google");
 
                 if (updateResult) {
                     session.setAttribute(isUser ? "LOGIN_USER" : "LOGIN_GMAIL", isUser ? user : userGmail);
