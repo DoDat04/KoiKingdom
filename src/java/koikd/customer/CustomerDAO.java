@@ -179,7 +179,7 @@ public class CustomerDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT Email, LastName, FirstName, Address, AccountType, Status "
+                String sql = "SELECT Email, Password, LastName, FirstName, Address, AccountType, Status "
                         + "FROM CUSTOMER "
                         + "WHERE Email = ? AND Status = 1";
                 stm = con.prepareStatement(sql);
@@ -187,18 +187,48 @@ public class CustomerDAO implements Serializable {
                 rs = stm.executeQuery();
 
                 if (rs.next()) {
+                    String password = rs.getString("Password");
                     String lastName = rs.getString("LastName");
                     String firstName = rs.getString("FirstName");
                     String address = rs.getString("Address");
                     String accountType = rs.getString("AccountType");
                     boolean status = rs.getBoolean("Status");
-                    result = new CustomerDTO(email, "", lastName, firstName, address, accountType, status);
+                    result = new CustomerDTO(email, password, lastName, firstName, address, accountType, status);
                 }
             }
         } finally {
             if (rs != null) {
                 rs.close();
             }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
+
+    public boolean updatePassword(String email, String newPassword) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        boolean result = false;
+
+        try {
+            con = DBUtils.getConnection(); 
+            if (con != null) {
+                String sql = "UPDATE CUSTOMER SET Password = ? WHERE Email = ? AND Status = 1";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, newPassword);
+                stm.setString(2, email);
+
+                int rowsUpdated = stm.executeUpdate();
+                if (rowsUpdated > 0) {
+                    result = true; 
+                }
+            }
+        } finally {
             if (stm != null) {
                 stm.close();
             }
@@ -275,7 +305,7 @@ public class CustomerDAO implements Serializable {
                         + "AND AccountType = ?";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, firstName);
-                stm.setString(2, lastName);               
+                stm.setString(2, lastName);
                 stm.setString(3, address);
                 stm.setString(4, userId);
                 stm.setString(5, accountType); // Thêm accountType vào điều kiện
@@ -315,8 +345,8 @@ public class CustomerDAO implements Serializable {
                 rs = stm.executeQuery();
                 if (rs.next()) {
                     String customerEmail = rs.getString("Email");
-                    String firstName = rs.getString("FirstName"); 
-                    String lastName = rs.getString("LastName");   
+                    String firstName = rs.getString("FirstName");
+                    String lastName = rs.getString("LastName");
                     String accType = rs.getString("AccountType");
                     String address = rs.getString("Address");
                     boolean status = rs.getBoolean("Status");

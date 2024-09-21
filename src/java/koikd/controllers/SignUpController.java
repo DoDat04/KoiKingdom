@@ -48,7 +48,7 @@ public class SignUpController extends HttpServlet {
         String confirmPassword = request.getParameter("confirmPassword");
         boolean foundErr = false;
         RegistrationCreateError errors = new RegistrationCreateError();
-        String passwordPattern = "^(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d]).{6,50}$";
+        String passwordPattern = "^(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d]).{8,50}$";
         String namePattern = "^[\\p{L}\\s]+$"; // Cho phép tất cả các ký tự chữ cái và dấu cách
         String accountType = "default";
         try {
@@ -56,7 +56,7 @@ public class SignUpController extends HttpServlet {
                 // Kiểm tra password
                 if (!password.trim().matches(passwordPattern)) {
                     foundErr = true;
-                    errors.setPasswordLengthErr("Password must be 6 to 50 characters, include at least one uppercase letter, one digit, and one special character.");
+                    errors.setPasswordLengthErr("Password must be 8 to 50 characters, include at least one uppercase letter, one digit, and one special character.");
                 } else if (!confirmPassword.trim().equals(password.trim())) {
                     foundErr = true;
                     errors.setConfirmNotMacthed("Confirm password does not match the password.");

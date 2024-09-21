@@ -23,31 +23,31 @@
     </head>
     <body>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
-        
-            <!-- Banner Carousel -->
-            <div id="singleImageCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-                <div class="carousel-inner">
-                    <div class="carousel-item banner active">
-                        <img src="img/1.jpg" class="d-block w-100" alt="Slide 1">
-                    </div>
-                    <div class="carousel-item banner">
-                        <img src="img/2.jpg" class="d-block w-100" alt="Slide 2">
-                    </div>
-                    <div class="carousel-item banner">
-                        <img src="img/4.jpg" class="d-block w-100" alt="Slide 3">
-                    </div>
-                </div>
 
-                <!-- Nút điều hướng Carousel -->
-                <button class="carousel-control-prev" type="button" data-bs-target="#singleImageCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#singleImageCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+        <!-- Banner Carousel -->
+        <div id="singleImageCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+            <div class="carousel-inner">
+                <div class="carousel-item banner active">
+                    <img src="img/1.jpg" class="d-block w-100" alt="Slide 1">
+                </div>
+                <div class="carousel-item banner">
+                    <img src="img/2.jpg" class="d-block w-100" alt="Slide 2">
+                </div>
+                <div class="carousel-item banner">
+                    <img src="img/4.jpg" class="d-block w-100" alt="Slide 3">
+                </div>
             </div>
+
+            <!-- Nút điều hướng Carousel -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#singleImageCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#singleImageCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
 
         <!-- Welcome -->
         <h1><strong class="welcome-text">Welcome to Koi Kingdom</strong></h1>
@@ -210,20 +210,34 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="error-modal" class="modall">
-                <div class="modal-contentt">
-                    <span class="close-button" onclick="closeModal()">&times;</span>
-                    <p id="error-message"></p>
-                </div>
+            <div class="modal-contentt">
+                <span class="close-button" onclick="closeModal()">&times;</span>
+                <p id="error-message"></p>
+            </div>
         </div>
-        
+
         <c:set var="success" value="${sessionScope.updateSuccess}"/>
         <c:if test="${not empty success and success != null}">
             <script>
                 showModal('${success}');
             </script>
         </c:if> 
+        <c:set var="success" value="${sessionScope.CHANGE_PASS_SUCCESS}"/>
+        <c:set var="error" value="${sessionScope.CHANGE_PASS_ERROR}"/>
+
+        <c:if test="${not empty success}">
+            <script>
+        showModal('${success}');  
+            </script>
+        </c:if>
+
+        <c:if test="${not empty error}">
+            <script>
+        showModal('${error}');  
+            </script>
+        </c:if>
         <jsp:include page="footer.jsp" flush="true"/>
     </body>
 </html>

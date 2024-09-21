@@ -75,13 +75,13 @@
                             <!-- Display Name -->
                             <span class="user-name text-black">
                                 <c:choose>                                   
-                                    <c:when test="${sessionScope.LOGIN_USER != null}">                                       
-                                        ${sessionScope.LOGIN_USER.firstName} ${sessionScope.LOGIN_USER.lastName}
+                                    <c:when test="${sessionScope.LOGIN_USER != null}">  
                                         <span class="separator mx-2">|</span>
+                                        ${sessionScope.LOGIN_USER.firstName} ${sessionScope.LOGIN_USER.lastName}                                       
                                     </c:when>
                                     <c:when test="${sessionScope.LOGIN_GMAIL != null}">
-                                        ${sessionScope.lastName} ${sessionScope.firstName}
                                         <span class="separator mx-2">|</span>
+                                        ${sessionScope.lastName} ${sessionScope.firstName}                                        
                                     </c:when>
                                 </c:choose>
                             </span>                          
@@ -95,14 +95,22 @@
                                     <c:when test="${sessionScope.LOGIN_USER == null and sessionScope.LOGIN_GMAIL == null}">
                                         <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
                                         <li><a class="dropdown-item" href="login"><i class="adm_icon fas fa-sign-in-alt"></i> Sign in</a></li>
-                                        </c:when>
-                                        <c:otherwise>                                       
+                                    </c:when>
+                                    <c:when test="${sessionScope.LOGIN_USER != null}">
+                                        <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
+                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal"><i class="fa-solid fa-key"></i> Change Password</a></li>
+                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fa fa-history"></i> My Order</a></li>
+                                        <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
+                                    </c:when>
+                                    <c:otherwise>                                       
                                         <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
                                         <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
                                         <li><a class="dropdown-item" href="#"><i class="fa fa-history"></i> My Order</a></li>
                                         <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
-                                        </c:otherwise>
+                                    </c:otherwise>
                                     </c:choose>
                             </ul>
                         </div>                       
@@ -185,6 +193,43 @@
                             </div>
                         </div>
 
+                        <!-- Modal for Changing Password -->
+                        <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="ChangePasswordController" method="post">
+                                            <!-- Old Password Field -->
+                                            <div class="mb-3">
+                                                <label for="oldPassword" class="form-label">Old Password:</label>
+                                                <input type="password" class="form-control" id="oldPassword" name="oldPassword" placeholder="Enter your old password" required>
+                                            </div>
+
+                                            <!-- New Password Field -->
+                                            <div class="mb-3">
+                                                <label for="newPassword" class="form-label">New Password:</label>
+                                                <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Enter your new password" required>
+                                            </div>
+
+                                            <!-- Confirm New Password Field (Optional) -->
+                                            <div class="mb-3">
+                                                <label for="confirmPassword" class="form-label">Confirm New Password:</label>
+                                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your new password" required>
+                                            </div>
+
+                                            <!-- Submit Button -->
+                                            <div class="text-center">
+                                                <button type="submit" class="btn btn-primary">Update Password</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -207,7 +252,6 @@
                 }
             }
         </script>
-
     </body>
 </html>
 
