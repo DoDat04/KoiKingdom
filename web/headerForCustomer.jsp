@@ -22,12 +22,13 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
     <body>
+        <div class="colorlib-loader"></div>
         <header class="text-black py-4" style="background-color: #fdf4f0;">
             <div class="header-content">
                 <div class="d-flex justify-content-between align-items-center">
                     <!-- Logo -->
                     <div class="logo">
-                        <a href="home?action=homePage">
+                        <a href="home">
                             <img src="img/logo.png" style="width: 185px; height: 150px;">
                         </a>
                     </div>
@@ -51,7 +52,7 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-black" id="bookingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Information</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bookingDropdown">
-                                    <li><a class="dropdown-item" href="#">Koi Fish</a></li>
+                                    <li><a class="dropdown-item" href="listkoitype">Koi Fish</a></li>
                                     <li><a class="dropdown-item" href="#">Farms</a></li>
                                 </ul>
                             </li>                           
@@ -252,6 +253,7 @@
                 }
             }
         </script>
+        <script src="js/load.js"></script>
     </body>
 </html>
 
