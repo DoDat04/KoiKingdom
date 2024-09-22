@@ -13,12 +13,16 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Do Dat
+ * @author Do Dat, Minhngo
  */
 @WebServlet(name = "HomeController", urlPatterns = {"/home"})
 public class HomeController extends HttpServlet {
+
     private static final String HOME_PAGE = "homeForCustomer.jsp";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
+    private static final String DELIVERY_PAGE = "homeForDelivery.jsp";
+    private static final String PROFILE_PAGE = "DeliveryProfileController";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,7 +42,9 @@ public class HomeController extends HttpServlet {
                 url = HOME_PAGE;
             } else if (action.equals("Logout")) {
                 url = LOGOUT_CONTROLLER;
-            }   
+            } else if (action.equals("Delivery")) {
+                url = DELIVERY_PAGE;
+            }
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

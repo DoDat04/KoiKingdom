@@ -23,14 +23,14 @@ import koikd.employees.EmployeesDTO;
 
 /**
  *
- * @author Do Dat
+ * @author Do Dat, Minhngo
  */
 @WebServlet(name = "LoginController", urlPatterns = {"/login"})
 public class LoginController extends HttpServlet {
 
     private static final String LOGIN_PAGE = "login.jsp";
     private static final String HOME_PAGE = "home";
-    private static final String DELIVERY_PAGE = "deliveryFolder/homeForDelivery.jsp";
+    private static final String DELIVERY_PAGE = "homeForDelivery.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,77 +41,62 @@ public class LoginController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String url = LOGIN_PAGE;
-        try {
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
+protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    response.setContentType("text/html;charset=UTF-8");
+    String url = LOGIN_PAGE;
+    try {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
 
-            if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+        if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+        } else {
+            CustomerDAO dao = new CustomerDAO();
+            CustomerDTO customerResult = dao.checkLogin(email, password);
+            DeliveryDAO deliveryDao = new DeliveryDAO();
+            EmployeesDTO deliveryResult = deliveryDao.checkLoginDelivery(email, password);
+
+            HttpSession session = request.getSession();
+            if (customerResult != null) {
+                session.setAttribute("LOGIN_USER", customerResult);
+                setUserImage(session, email);
+                url = HOME_PAGE;
+            } else if (deliveryResult != null) {
+                session.setAttribute("LOGIN_DELIVERY", deliveryResult);
+                setUserImage(session, email);
+                url = DELIVERY_PAGE;
             } else {
-                CustomerDAO dao = new CustomerDAO();
-                CustomerDTO result = dao.checkLogin(email, password);
-                DeliveryDAO deliveryDao = new DeliveryDAO();
-                EmployeesDTO employee = new EmployeesDTO();
-                EmployeesDTO deliveryResult = deliveryDao.checkLogin(email, password);
-
-                if (result != null) {
-                    HttpSession session = request.getSession();
-                    session.removeAttribute("LOGIN_GMAIL");
-                    session.setAttribute("LOGIN_USER", result);
-                    // sau khi login lấy address từ db bỏ vào attribute
-                    session.setAttribute("address", result.getAddress());
-                    String emailPrefix = getUserIdBeforeAt(email);
-
-                    // Lấy đường dẫn đến thư mục images
-                    String uploadPath = getServletContext().getRealPath("/images");
-                    // Tạo file ảnh người dùng cùng tên lúc update
-                    String userImageFileName = emailPrefix + "user_picture.png";
-                    File userImageFile = new File(uploadPath + File.separator + userImageFileName);
-
-                    // Kiểm tra xem ảnh có không
-                    if (userImageFile.exists()) {
-                        // Có thì set vào attribute
-                        session.setAttribute("AVATAR", "images/" + userImageFileName);
-                    }
-
-                    url = HOME_PAGE;
-                } else if (deliveryResult != null) {
-                    HttpSession session = request.getSession();
-                    session.removeAttribute("LOGIN_GMAIL");
-                    session.setAttribute("LOGIN_USER", result);
-                    String emailPrefix = getUserIdBeforeAt(email);
-                    // Lấy đường dẫn đến thư mục images
-                    String uploadPath = getServletContext().getRealPath("/images");
-                    // Tạo file ảnh người dùng cùng tên lúc update
-                    String userImageFileName = emailPrefix + "user_picture.png";
-                    File userImageFile = new File(uploadPath + File.separator + userImageFileName);
-
-                    // Kiểm tra xem ảnh có không
-                    if (userImageFile.exists()) {
-                        // Có thì set vào attribute
-                        session.setAttribute("AVATAR", "images/" + userImageFileName);
-                    }
-                    url = DELIVERY_PAGE;
-
-                } else {
-                    request.setAttribute("ERROR", "Your email or password is wrong!");
-                }
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (HOME_PAGE.equals(url)) {
-                response.sendRedirect("home");
-            } else {
-                request.getRequestDispatcher(url).forward(request, response);
+                request.setAttribute("ERROR", "Your email or password is wrong!");
             }
         }
+    } catch (SQLException | ClassNotFoundException ex) {
+        Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        request.setAttribute("ERROR", "An error occurred during login. Please try again.");
+    } finally {
+        if (HOME_PAGE.equals(url)) {
+            response.sendRedirect("home");
+        } else if (DELIVERY_PAGE.equals(url)) {
+            response.sendRedirect("home?action=Delivery");
+        } else {
+            request.getRequestDispatcher(url).forward(request, response);
+        }
     }
+}
+
+private void setUserImage(HttpSession session, String email) {
+    String emailPrefix = getUserIdBeforeAt(email);
+    String uploadPath = getServletContext().getRealPath("/images");
+    String userImageFileName = emailPrefix + "user_picture.png";
+    File userImageFile = new File(uploadPath + File.separator + userImageFileName);
+
+    if (userImageFile.exists()) {
+        session.setAttribute("AVATAR", "images/" + userImageFileName);
+    }
+        String appPath = getServletContext().getRealPath("/");
+        System.out.println("Application Path: " + appPath);
+}
+
+
 
     private String getUserIdBeforeAt(String email) {
         int atIndex = email.indexOf('@');

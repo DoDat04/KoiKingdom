@@ -8,10 +8,13 @@ import java.io.Serializable;
 
 /**
  *
- * @author Admin
+ * @author Minhngo
  */
 public class EmployeesDTO implements Serializable {
 
+    /**
+     * Common properties of employees
+     */
     private String customerID;
     private String email;
     private String password;
@@ -21,9 +24,15 @@ public class EmployeesDTO implements Serializable {
     private String address;
     private boolean status;
 
+    /**
+     * Default Constructor
+     */
     public EmployeesDTO() {
     }
 
+    /**
+     * Parameterized Constructor
+     */
     public EmployeesDTO(String email, String password, String role, String lastName, String firstName, String address, boolean status) {
         this.email = email;
         this.password = password;
@@ -34,6 +43,9 @@ public class EmployeesDTO implements Serializable {
         this.status = status;
     }
 
+    /**
+     * Getter / Setter* @return
+     */
     public String getCustomerID() {
         return customerID;
     }

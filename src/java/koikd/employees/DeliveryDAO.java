@@ -13,44 +13,19 @@ import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
- * @author Admin
+ * @author Minhngo
  */
 public class DeliveryDAO {
-
-    public boolean isDeliveryRole(String role) throws SQLException, ClassNotFoundException {
-        Connection con = null;
-        PreparedStatement stm = null;
-        ResultSet rs = null;
-        boolean isDelivery = false;
-        try {
-            con = DBUtils.getConnection();
-            if (con != null) {
-                String sql = "SELECT Role "
-                        + "FROM DBO.EMPLOYEE "
-                        + "WHERE Role = 'Delivery'";
-                stm = con.prepareStatement(sql);
-
-                rs = stm.executeQuery();
-                if (rs.next()) {
-                    isDelivery = true;
-                }
-
-            }
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (stm != null) {
-                stm.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
-        return isDelivery;
-    }
-
-    public EmployeesDTO checkLogin(String email, String password) throws SQLException, ClassNotFoundException {
+    /**
+     * Check if the user account is already in the database
+     *
+     * @param email
+     * @param password
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public EmployeesDTO checkLoginDelivery(String email, String password) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -59,9 +34,9 @@ public class DeliveryDAO {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT [EmployeeID], [Email], [Password], [Role], [LastName], [FirstName], [Address], [Status] "
-                        + "FROM DBO.EMPLOYEE "
-                        + "WHERE Email = ? and Status = 1;";
+                String sql = "SELECT [EmployeeID], [Email], [Password], [Role], [LastName], [FirstName], [Address], [Status]\n"
+                        + "FROM DBO.EMPLOYEE\n"
+                        + "WHERE Email = ? and Status = 1 and Role = 'Delivery';";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, email);
                 rs = stm.executeQuery();
@@ -91,5 +66,51 @@ public class DeliveryDAO {
         }
         return result;
     }
-    
+
+    /**
+     * Get User Information
+     *
+     * @param email
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public EmployeesDTO getProfile(String email) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        EmployeesDTO result = null;
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT [EmployeeID], [Email], [Password], [Role], [LastName], [FirstName], [Address], [Status]\n"
+                        + "FROM DBO.EMPLOYEE\n"
+                        + "WHERE Email = ? and Status = 1;";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, email);
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    String role = rs.getString("role");
+                    String lastName = rs.getString("LastName");
+                    String firstName = rs.getString("FirstName");
+                    String address = rs.getString("Address");
+                    boolean status = rs.getBoolean("Status");
+                    result = new EmployeesDTO(email, "", role, lastName, firstName, address, status);
+                }
+            }
+
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
 }
