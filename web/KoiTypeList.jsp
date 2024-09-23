@@ -17,9 +17,15 @@
         <link rel="stylesheet" href="css/header.css">
     </head>
     <body>
+        <div class="colorlib-loader"></div>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
         <h1 class="welcome-text">All Koi Types</h1>
         
+        <!-- Search form -->
+        <form action="listkoitype" method="GET" class="search-koitype-form" style="text-align: center; align-items: center; padding-bottom: 50px;">
+            <input type="text" name="txtNameKoiType" placeholder="Search Koi Type..." style="border-radius: 10px;"/>
+            <button type="submit"><i class="fa-solid fa-magnifying-glass">Search</i></button>
+        </form>
         <div class="container">
             <div class="row">
                 <c:forEach var="koiType" items="${requestScope.LIST_KOITYPE}">

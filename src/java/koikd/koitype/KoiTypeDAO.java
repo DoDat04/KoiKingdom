@@ -16,78 +16,84 @@ import koikd.utils.DBUtils;
  * @author ADMIN LAM
  */
 public class KoiTypeDAO {
+
     /**
      *
-     * @param Customer can see the koi type list, whether a name koi type is null.
+     * @param Customer can see the koi type list, whether a name koi type is
+     * null.
      * @return a list of koi type
      * @throws ClassNotFoundException
      * @throws SQLException
      */
     public ArrayList<KoiTypeDTO> getKoiTypeList(String nameKoiType) throws ClassNotFoundException, SQLException {
-        ArrayList<KoiTypeDTO> list = new ArrayList<>();
-        Connection conn = DBUtils.getConnection();
-        PreparedStatement pst = null;
-        ResultSet rs = null;
-        try {
-            conn = DBUtils.getConnection();
-            if (conn != null) {
-                String sql = "SELECT [KoiTypeID], [TypeName], [Description], [KoiImageURL], [KoiTypeStatus]\n"
-                        + "FROM [dbo].[KOITYPE]\n"
-                        + "WHERE [KoiTypeStatus] = 'TRUE'";
-                if (nameKoiType != null && !nameKoiType.isEmpty()) {
-                    sql += "WHERE [TypeName] LIKE ?";
-                }
-                pst = conn.prepareStatement(sql);
-                if (nameKoiType != null && !nameKoiType.isEmpty()) {
-                    pst.setString(1, "%" + nameKoiType + "%");
-                }
-                rs = pst.executeQuery();
-                if (rs != null) {
-                    while (rs.next()) {
-                        int koiTypeID = rs.getInt("koiTypeID");
-                        String typeName = rs.getString("typeName");
-                        String description = rs.getString("description");
-                        String koiImageURL = rs.getString("koiImageURL");
-                        boolean koiTypeStatus = rs.getBoolean("koiTypeStatus");
-                        KoiTypeDTO dto = new KoiTypeDTO(koiTypeID, typeName, description, koiImageURL, koiTypeStatus);
-                        list.add(dto);
-                    }
-                }
-                conn.close();
+    ArrayList<KoiTypeDTO> list = new ArrayList<>();
+    Connection conn = DBUtils.getConnection();
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    try {
+        conn = DBUtils.getConnection();
+        if (conn != null) {
+            String sql = "SELECT [KoiTypeID], [TypeName], [Description], [KoiImageURL], [KoiTypeStatus] "
+                    + "FROM [dbo].[KOITYPE] "
+                    + "WHERE [KoiTypeStatus] = 'TRUE' ";
+            // Chỉ thêm điều kiện tìm kiếm nếu nameKoiType có giá trị
+            if (nameKoiType != null && !nameKoiType.isEmpty()) {
+                sql += "AND [TypeName] LIKE ?";
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
+            pst = conn.prepareStatement(sql);
+
+            // Gán giá trị tìm kiếm nếu có
+            if (nameKoiType != null && !nameKoiType.isEmpty()) {
+                pst.setString(1, "%" + nameKoiType + "%");
+            }
+
+            rs = pst.executeQuery();
             if (rs != null) {
-                rs.close();
-            }
-            if (pst != null) {
-                pst.close();
-            }
-            if (conn != null) {
-                conn.close();
+                while (rs.next()) {
+                    int koiTypeID = rs.getInt("KoiTypeID");
+                    String typeName = rs.getString("TypeName");
+                    String description = rs.getString("Description");
+                    String koiImageURL = rs.getString("KoiImageURL");
+                    boolean koiTypeStatus = rs.getBoolean("KoiTypeStatus");
+                    KoiTypeDTO dto = new KoiTypeDTO(koiTypeID, typeName, description, koiImageURL, koiTypeStatus);
+                    list.add(dto);
+                }
             }
         }
-        return list;
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        if (rs != null) {
+            rs.close();
+        }
+        if (pst != null) {
+            pst.close();
+        }
+        if (conn != null) {
+            conn.close();
+        }
     }
+    return list;
+}
+
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        String nameKoiType = "";
+        String nameKoiType = "Chagoi";
         KoiTypeDAO services = new KoiTypeDAO();
         ArrayList<KoiTypeDTO> dto = services.getKoiTypeList(nameKoiType);
         for (KoiTypeDTO koiTypeDTO : dto) {
-            if(koiTypeDTO!=null){
+            if (koiTypeDTO != null) {
                 System.out.println(koiTypeDTO);
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @param Delete the koi type
      * @return the list of koi type before a manager deleted it.
      * @throws ClassNotFoundException
-     * @throws SQLException 
+     * @throws SQLException
      */
     public boolean deleteKoiType(int id) throws ClassNotFoundException, SQLException {
         Connection conn = null;
@@ -120,11 +126,13 @@ public class KoiTypeDAO {
     }
 
     /**
-     * 
-     * @param Update status koi type, manager can update status koi type. If a manager want to change a status of koi type (block/active), they can do it through a button.
+     *
+     * @param Update status koi type, manager can update status koi type. If a
+     * manager want to change a status of koi type (block/active), they can do
+     * it through a button.
      * @param update status of koi type.
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
     public boolean updateStatusKoiType(int id, boolean status) throws SQLException {
         Connection conn = null;

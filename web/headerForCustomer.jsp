@@ -22,7 +22,6 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
     <body>
-        <div class="colorlib-loader"></div>
         <header class="text-black py-4" style="background-color: #fdf4f0;">
             <div class="header-content">
                 <div class="d-flex justify-content-between align-items-center">

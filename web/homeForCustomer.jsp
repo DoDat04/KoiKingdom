@@ -19,9 +19,11 @@
         <!-- Font Awesome for Icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <link rel="stylesheet" href="css/home.css">
+        <link rel="stylesheet" href="css/style.css">
         <script src="js/login.js"></script>       
     </head>
     <body>
+        <div class="colorlib-loader"></div>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
 
         <!-- Banner Carousel -->
