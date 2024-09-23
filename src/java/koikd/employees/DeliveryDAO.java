@@ -16,6 +16,7 @@ import org.mindrot.jbcrypt.BCrypt;
  * @author Minhngo
  */
 public class DeliveryDAO {
+
     /**
      * Check if the user account is already in the database
      *
@@ -112,5 +113,49 @@ public class DeliveryDAO {
             }
         }
         return result;
+    }
+
+    /**
+     * Update information of delivery
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param address
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException 
+     */
+    public boolean updateDeliveryProfile(String firstName, String lastName, String email, String address) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        boolean result = false;
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                // Câu lệnh SQL sửa lại từ 'SUPDATE' thành 'UPDATE'
+                String sql = "UPDATE DBO.EMPLOYEE "
+                        + "SET firstname = ?, lastname = ?, address = ? "
+                        + "WHERE Email = ? "
+                        + "AND Role = 'Delivery';";  // Kiểm tra vai trò là 'Delivery'
+                stm = con.prepareStatement(sql);
+                stm.setString(1, firstName);
+                stm.setString(2, lastName);
+                stm.setString(3, address);
+                stm.setString(4, email);  // Đặt giá trị cho email
+
+                int rowsUpdated = stm.executeUpdate();
+                result = rowsUpdated > 0;  // Kiểm tra nếu có hàng nào được cập nhật
+            }
+
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;  // Trả về kết quả
     }
 }
