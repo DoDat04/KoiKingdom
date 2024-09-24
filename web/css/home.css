@@ -81,3 +81,27 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     padding-bottom: 15px;
 }
 
+#backToTop {
+    position: fixed;
+    bottom: 50px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background-color: white;
+    color: black;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease; /* Thêm hiệu ứng chuyển tiếp */
+}
+
+#backToTop:hover {
+    background-color: #D3D3D3; 
+    transform: translateY(-5px); /* Di chuyển lên 5px */
+}
+

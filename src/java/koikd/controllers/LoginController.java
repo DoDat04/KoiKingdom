@@ -5,7 +5,6 @@
 package koikd.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,6 +19,7 @@ import koikd.customer.CustomerDAO;
 import koikd.customer.CustomerDTO;
 import koikd.employees.DeliveryDAO;
 import koikd.employees.EmployeesDTO;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -31,6 +31,7 @@ public class LoginController extends HttpServlet {
     private static final String LOGIN_PAGE = "login.jsp";
     private static final String HOME_PAGE = "home";
     private static final String DELIVERY_PAGE = "homeForDelivery.jsp";
+    private static final String MANAGER_PAGE = "managerDashboard.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,62 +42,71 @@ public class LoginController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    response.setContentType("text/html;charset=UTF-8");
-    String url = LOGIN_PAGE;
-    try {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        String url = LOGIN_PAGE;
+        try {
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
 
-        if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-        } else {
-            CustomerDAO dao = new CustomerDAO();
-            CustomerDTO customerResult = dao.checkLogin(email, password);
-            DeliveryDAO deliveryDao = new DeliveryDAO();
-            EmployeesDTO deliveryResult = deliveryDao.checkLoginDelivery(email, password);
-
-            HttpSession session = request.getSession();
-            if (customerResult != null) {
-                session.setAttribute("LOGIN_USER", customerResult);
-                setUserImage(session, email);
-                url = HOME_PAGE;
-            } else if (deliveryResult != null) {
-                session.setAttribute("LOGIN_DELIVERY", deliveryResult);
-                setUserImage(session, email);
-                url = DELIVERY_PAGE;
+            if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             } else {
-                request.setAttribute("ERROR", "Your email or password is wrong!");
+                CustomerDAO customerDao = new CustomerDAO();
+                CustomerDTO customerResult = customerDao.checkLogin(email, password);
+                DeliveryDAO deliveryDao = new DeliveryDAO();
+                EmployeesDTO employeeResult = deliveryDao.checkLoginEmployee(email, password);
+
+                HttpSession session = request.getSession();
+
+                if (customerResult != null) {
+                    session.setAttribute("LOGIN_USER", customerResult);
+                    setUserImage(session, email);
+                    url = HOME_PAGE;
+                } else if (employeeResult != null) {
+                    
+                    setUserImage(session, email);
+
+                    String role = employeeResult.getRole(); 
+
+                    if ("Delivery".equals(role)) {
+                        session.setAttribute("LOGIN_DELIVERY", employeeResult);
+                        url = DELIVERY_PAGE;
+                    } else if ("Manager".equals(role)) {
+                        url = MANAGER_PAGE;
+                    } else {
+                        request.setAttribute("ERROR", "Invalid role for this employee!");
+                    }
+                } else {
+                    request.setAttribute("ERROR", "Your email or password is wrong!");
+                }
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            request.setAttribute("ERROR", "An error occurred during login. Please try again.");
+        } finally {
+            if (HOME_PAGE.equals(url)) {
+                response.sendRedirect("home");
+            } else if (DELIVERY_PAGE.equals(url)) {
+                response.sendRedirect("home?action=Delivery");
+            } else {
+                request.getRequestDispatcher(url).forward(request, response);
             }
         }
-    } catch (SQLException | ClassNotFoundException ex) {
-        Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-        request.setAttribute("ERROR", "An error occurred during login. Please try again.");
-    } finally {
-        if (HOME_PAGE.equals(url)) {
-            response.sendRedirect("home");
-        } else if (DELIVERY_PAGE.equals(url)) {
-            response.sendRedirect("home?action=Delivery");
-        } else {
-            request.getRequestDispatcher(url).forward(request, response);
+    }
+
+    private void setUserImage(HttpSession session, String email) {
+        String emailPrefix = getUserIdBeforeAt(email);
+        String uploadPath = getServletContext().getRealPath("/images");
+        String userImageFileName = emailPrefix + "user_picture.png";
+        File userImageFile = new File(uploadPath + File.separator + userImageFileName);
+
+        if (userImageFile.exists()) {
+            session.setAttribute("AVATAR", "images/" + userImageFileName);
         }
-    }
-}
-
-private void setUserImage(HttpSession session, String email) {
-    String emailPrefix = getUserIdBeforeAt(email);
-    String uploadPath = getServletContext().getRealPath("/images");
-    String userImageFileName = emailPrefix + "user_picture.png";
-    File userImageFile = new File(uploadPath + File.separator + userImageFileName);
-
-    if (userImageFile.exists()) {
-        session.setAttribute("AVATAR", "images/" + userImageFileName);
-    }
         String appPath = getServletContext().getRealPath("/");
         System.out.println("Application Path: " + appPath);
-}
-
-
+    }
 
     private String getUserIdBeforeAt(String email) {
         int atIndex = email.indexOf('@');

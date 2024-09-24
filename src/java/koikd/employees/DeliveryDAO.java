@@ -26,7 +26,7 @@ public class DeliveryDAO {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public EmployeesDTO checkLoginDelivery(String email, String password) throws SQLException, ClassNotFoundException {
+    public EmployeesDTO checkLoginEmployee(String email, String password) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -37,12 +37,12 @@ public class DeliveryDAO {
             if (con != null) {
                 String sql = "SELECT [EmployeeID], [Email], [Password], [Role], [LastName], [FirstName], [Address], [Status]\n"
                         + "FROM DBO.EMPLOYEE\n"
-                        + "WHERE Email = ? and Status = 1 and Role = 'Delivery';";
+                        + "WHERE Email = ? and Status = 1 ";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, email);
                 rs = stm.executeQuery();
                 if (rs.next()) {
-                    String hashedPassword = rs.getString("Password");
+                    String hashedPassword = rs.getString("Password");                     
                     if (BCrypt.checkpw(password, hashedPassword)) {
                         String role = rs.getString("role");
                         String lastName = rs.getString("LastName");
@@ -157,5 +157,5 @@ public class DeliveryDAO {
             }
         }
         return result;  // Trả về kết quả
-    }
+    }       
 }

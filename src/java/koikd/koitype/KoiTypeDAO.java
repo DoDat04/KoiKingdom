@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import koikd.utils.DBUtils;
 
 /**
@@ -16,7 +17,6 @@ import koikd.utils.DBUtils;
  * @author ADMIN LAM
  */
 public class KoiTypeDAO {
-
     /**
      *
      * @param nameKoiType
@@ -32,7 +32,7 @@ public class KoiTypeDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT [KoiTypeID], [TypeName], [Description], [KoiImageURL], [KoiTypeStatus] "
+                String sql = "SELECT [KoiTypeID], [TypeName], [Description], [Image], [KoiTypeStatus] "
                         + "FROM [dbo].[KOITYPE] "
                         + "WHERE [KoiTypeStatus] = 'TRUE' ";
                 if (nameKoiType != null && !nameKoiType.isEmpty()) {
@@ -50,7 +50,7 @@ public class KoiTypeDAO {
                         int koiTypeID = rs.getInt("KoiTypeID");
                         String typeName = rs.getString("TypeName");
                         String description = rs.getString("Description");
-                        String koiImageURL = rs.getString("KoiImageURL");
+                        String koiImageURL = rs.getString("Image");
                         boolean koiTypeStatus = rs.getBoolean("KoiTypeStatus");
                         KoiTypeDTO dto = new KoiTypeDTO(koiTypeID, typeName, description, koiImageURL, koiTypeStatus);
                         list.add(dto);
@@ -154,21 +154,40 @@ public class KoiTypeDAO {
         return false;
     }
 
-//    public static void main(String[] args) {
-//        KoiTypeDAO dao = new KoiTypeDAO();
-//
-//        int koiTypeID = 2;
-//        boolean newStatus = false;
-//
-//        try {
-//            boolean isUpdated = dao.updateStatusKoiType(koiTypeID, newStatus);
-//            if (isUpdated) {
-//                System.out.println("Update status successfully.");
-//            } else {
-//                System.out.println("No data is updated.");
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public List<KoiTypeDTO> getKoiTypeList() throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<KoiTypeDTO> koiTypeList = new ArrayList<>();
+        
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT KoiTypeID, TypeName, Description, Image, KoiTypeStatus "
+                        + "FROM KOITYPE";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    int koiTypeID = rs.getInt("KoiTypeID");
+                    String typeName = rs.getString("TypeName");
+                    String description = rs.getString("Description");
+                    String koiImageURL = rs.getString("Image");
+                    boolean koiTypeStatus = rs.getBoolean("KoiTypeStatus");
+                    KoiTypeDTO dto = new KoiTypeDTO(koiTypeID, typeName, description, koiImageURL, koiTypeStatus);
+                    koiTypeList.add(dto);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return koiTypeList;
+    }
 }

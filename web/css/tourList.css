@@ -1,0 +1,113 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Sep 23, 2024, 7:42:43 PM
+    Author     : Do Dat
+*/
+.colorlib-loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url(../img/loadPage.gif) center no-repeat #fff;
+    transition: opacity 4.5s ease;
+}
+.banner-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f8d8cc; 
+    padding: 40px; 
+}
+
+.banner-text {
+    flex: 1;
+    padding: 20px;
+}
+
+.banner-text h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 4em; 
+    color: #d18b73;
+    text-align: center; 
+    margin-bottom: 0.2em; 
+}
+
+.banner-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 6em; 
+    color: #000;
+    text-align: center; 
+}
+
+.banner-images {
+    display: flex;
+    flex: 2;
+    justify-content: space-around;
+}
+
+.banner-images img {
+    width: 30%;
+    height: 350px; /* Tăng chiều cao của hình ảnh để banner lớn hơn */
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.text-center {
+    margin: 40px 0px;
+}
+.description p {
+    white-space: pre-wrap;
+}
+.rating {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.5rem; /* Khoảng cách giữa tên tour và đánh giá */
+}
+
+.rating-number {
+    margin-left: 0.2rem; /* Khoảng cách giữa ngôi sao và số đánh giá */
+}
+#backToTop {
+    position: fixed;
+    bottom: 50px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background-color: white;
+    color: black;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease; /* Thêm hiệu ứng chuyển tiếp */
+}
+
+#backToTop:hover {
+    background-color: #D3D3D3;
+    transform: translateY(-5px); /* Di chuyển lên 5px */
+}
+
+.alert {
+    background-color: #fff3cd; 
+    border-color: #ffeeba; 
+}
+
+.alert strong {
+    color: #856404; 
+}
+
+
+
+
+
+
+

@@ -34,10 +34,10 @@
                     <div class="col-md-2">
                         <h6>Categories</h6>
                         <ul class="list-unstyled">
-                            <li><a href="#">Famous Tours</a></li>
-                            <li><a href="#">Available Tours</a></li>
+                            <li><a href="#popularTour">Famous Tours</a></li>
+                            <li><a href="tour-list">Available Tours</a></li>
                             <li><a href="#">Custom Tour</a></li>
-                            <li><a href="#">Farm Tour</a></li>
+                            <li><a href="#popularKoi">Popular Koi Breeds</a></li>
                             <li><a href="#">Koi Species</a></li>
                         </ul>
                     </div>
@@ -46,7 +46,11 @@
                     <div class="col-md-2">
                         <h6>Services</h6>
                         <ul class="list-unstyled">
-                            <li><a href="#">My profile</a></li>
+                            <li>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal">
+                                    My Profile
+                                </a>
+                            </li>
                             <li><a href="#">Order history</a></li>
                             <li><a href="#">Notifications</a></li>
                             <li><a href="#">Shopping cart</a></li>
@@ -83,7 +87,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <hr class="hr_footer">
 
                 <!-- Bottom Copyright -->

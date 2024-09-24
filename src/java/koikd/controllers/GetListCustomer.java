@@ -6,7 +6,6 @@ package koikd.controllers;
 
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,7 +15,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.NamingException;
 import koikd.customer.CustomerDAO;
 import koikd.customer.CustomerDTO;
 
@@ -42,8 +40,7 @@ public class GetListCustomer extends HttpServlet {
         String url = MANAGE_CUSTOMER;
         try {
             CustomerDAO dao = new CustomerDAO();
-            List<CustomerDTO> cus = dao.getAllCustomer();
-            System.out.println(cus);
+            List<CustomerDTO> cus = dao.getAllCustomers();
             request.setAttribute("customer", cus);
         } catch (SQLException ex) {
             ex.printStackTrace();

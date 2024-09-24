@@ -36,12 +36,12 @@
                     <div class="menu-center">
                         <ul class="nav justify-content-center">
                             <li class="nav-item">
-                                <a class="nav-link text-black" href="#">Home</a>
+                                <a class="nav-link text-black" href="home">Home</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-black" id="bookingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Booking</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bookingDropdown">
-                                    <li><a class="dropdown-item" href="#">Tour</a></li>
+                                    <li><a class="dropdown-item" href="tour-list">Tour</a></li>
                                     <li><a class="dropdown-item" href="#">Custom Tour</a></li>
                                 </ul>
                             </li>

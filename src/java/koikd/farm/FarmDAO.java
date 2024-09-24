@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import koikd.utils.DBUtils;
 
 /**
@@ -32,7 +33,7 @@ public class FarmDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT [farmID], [farmName], [farmLocation], [description], [farmImageURL], [farmStatus]\n"
+                String sql = "SELECT [farmID], [farmName], [farmLocation], [description], [Image], [Status]\n"
                         + " FROM [dbo].[FARM]\n"
                         + " WHERE [farmStatus] = 'TRUE'";
                 if (nameFarm != null && !nameFarm.isEmpty()) {
@@ -49,8 +50,8 @@ public class FarmDAO {
                         String farmName = rs.getString("farmName");
                         String farmLocation = rs.getString("farmLocation");
                         String description = rs.getString("description");
-                        String farmImageURL = rs.getString("farmImageURL");
-                        boolean farmStatus = rs.getBoolean("farmStatus");
+                        String farmImageURL = rs.getString("Image");
+                        boolean farmStatus = rs.getBoolean("Status");
                         FarmDTO dao = new FarmDTO(farmID, farmName, farmLocation, description, farmImageURL, farmStatus);
                         list.add(dao);
                     }
@@ -132,7 +133,7 @@ public class FarmDAO {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 String sql = "UPDATE [dbo].[FARM]\n"
-                        + "SET [FarmStatus] = ?\n"
+                        + "SET [Status] = ?\n"
                         + "WHERE [FarmID] = ?";
                 pst = conn.prepareStatement(sql);
                 pst.setBoolean(1, !status);
@@ -153,21 +154,42 @@ public class FarmDAO {
         return false;
     }
 
-//    public static void main(String[] args) {
-//        FarmDAO dao = new FarmDAO();
-//
-//        int farmID = 1;
-//        boolean newStatus = false;
-//
-//        try {
-//            boolean isUpdated = dao.updateStatusFarm(farmID, newStatus);
-//            if (isUpdated) {
-//                System.out.println("Update status successfully.");
-//            } else {
-//                System.out.println("No data is updated.");
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public List<FarmDTO> getFarmList() throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<FarmDTO> farmList = new ArrayList<>();
+        
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT FarmID, FarmName, Location, Description, Image, Status "
+                        + "FROM FARM";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    int farmID = rs.getInt("FarmID");
+                    String farmName = rs.getString("FarmName");
+                    String location = rs.getString("Location");
+                    String description = rs.getString("Description");
+                    String image = rs.getString("Image");
+                    boolean status = rs.getBoolean("Status");
+                    
+                    FarmDTO dto = new FarmDTO(farmID, farmName, location, description, image, status);
+                    farmList.add(dto);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return farmList;
+    }
 }

@@ -114,7 +114,6 @@ public class UpdateProfileController extends HttpServlet {
                             && district != null && !district.isEmpty()
                             && ward != null && !ward.isEmpty()) {
                         custAddress = homeAddress + ", " + ward + ", " + district + ", " + city;
-                        System.out.println(custAddress);
                         user.setAddress(custAddress);
                     }
                 } else {

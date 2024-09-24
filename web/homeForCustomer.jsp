@@ -25,7 +25,7 @@
     <body>
         <div class="colorlib-loader"></div>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
-        <a href="managerDashboard.jsp">click here </a>
+
         <!-- Banner Carousel -->
         <div id="singleImageCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
             <div class="carousel-inner">
@@ -36,7 +36,7 @@
                     <img src="img/2.jpg" class="d-block w-100" alt="Slide 2">
                 </div>
                 <div class="carousel-item banner">
-                    <img src="img/koibanner.gif" class="d-block w-100" alt="Slide 3">
+                    <img src="img/4.jpg" class="d-block w-100" alt="Slide 3">
                 </div>
             </div>
 
@@ -112,7 +112,7 @@
             </div>
 
             <!-- Popular Tour -->
-            <h1><strong class="welcome-text">Popular Tour</strong></h1>
+            <h1><strong class="welcome-text" id="popularTour">Popular Tour</strong></h1>
             <div id="popularTourCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
@@ -154,7 +154,7 @@
             </div>
 
             <!-- Popular Koi Fish Breeds -->
-            <h1><strong class="welcome-text">Popular Koi Fish Breeds</strong></h1>
+            <h1><strong class="welcome-text" id="popularKoi">Popular Koi Fish Breeds</strong></h1>
             <div id="koiFIshBreeds" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
@@ -221,25 +221,36 @@
         </div>
 
         <c:set var="success" value="${sessionScope.updateSuccess}"/>
-        <c:if test="${not empty success and success != null}">
+        <c:if test="${not empty success}">
             <script>
                 showModal('${success}');
+                <% session.removeAttribute("updateSuccess"); %>
             </script>
-        </c:if> 
+        </c:if>
+
         <c:set var="success" value="${sessionScope.CHANGE_PASS_SUCCESS}"/>
         <c:set var="error" value="${sessionScope.CHANGE_PASS_ERROR}"/>
 
         <c:if test="${not empty success}">
             <script>
-        showModal('${success}');  
+                showModal('${success}');
+                <% session.removeAttribute("CHANGE_PASS_SUCCESS"); %>
             </script>
         </c:if>
 
         <c:if test="${not empty error}">
             <script>
-        showModal('${error}');  
+                showModal('${error}');
+                <% session.removeAttribute("CHANGE_PASS_ERROR");%>
             </script>
         </c:if>
+
+        <!-- Back to Top Button -->
+        <button id="backToTop" class="btn btn-primary" style="display: none;">
+            <i class="fas fa-angle-up"></i>
+        </button>
+
+        <script src="js/backToTop.js"></script> 
         <jsp:include page="footer.jsp" flush="true"/>
     </body>
 </html>

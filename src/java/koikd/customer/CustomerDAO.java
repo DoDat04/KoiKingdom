@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import koikd.google.GooglePojo;
 import koikd.utils.DBUtils;
@@ -19,6 +21,45 @@ import org.mindrot.jbcrypt.BCrypt;
  * @author Do Dat
  */
 public class CustomerDAO implements Serializable {
+
+    public List<CustomerDTO> getAllCustomers() throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<CustomerDTO> customerList = new ArrayList<>();
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
+                        + "FROM CUSTOMER";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    String email = rs.getString("Email");
+                    String lastName = rs.getString("LastName");
+                    String firstName = rs.getString("FirstName");
+                    String address = rs.getString("Address");
+                    String accountType = rs.getString("AccountType");
+                    boolean status = rs.getBoolean("Status");
+
+                    CustomerDTO customer = new CustomerDTO(email, "",lastName, firstName, address, accountType, status);
+                    customerList.add(customer);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return customerList;
+    }
 
     public CustomerDTO checkLogin(String email, String password) throws SQLException, ClassNotFoundException {
         Connection con = null;
@@ -31,7 +72,7 @@ public class CustomerDAO implements Serializable {
             if (con != null) {
                 String sql = "SELECT CustomerID, Password, LastName, FirstName, Address, AccountType, Status "
                         + "FROM CUSTOMER "
-                        + "WHERE Email = ? and Status = 1 ";
+                        + "WHERE Email = ? and Status = 1 and AccountType = 'default' ";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, email);
                 rs = stm.executeQuery();
@@ -216,7 +257,7 @@ public class CustomerDAO implements Serializable {
         boolean result = false;
 
         try {
-            con = DBUtils.getConnection(); 
+            con = DBUtils.getConnection();
             if (con != null) {
                 String sql = "UPDATE CUSTOMER SET Password = ? WHERE Email = ? AND Status = 1";
                 stm = con.prepareStatement(sql);
@@ -225,7 +266,7 @@ public class CustomerDAO implements Serializable {
 
                 int rowsUpdated = stm.executeUpdate();
                 if (rowsUpdated > 0) {
-                    result = true; 
+                    result = true;
                 }
             }
         } finally {
