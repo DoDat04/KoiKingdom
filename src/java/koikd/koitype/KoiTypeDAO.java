@@ -77,16 +77,16 @@ public class KoiTypeDAO {
 }
 
 
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        String nameKoiType = "Chagoi";
-        KoiTypeDAO services = new KoiTypeDAO();
-        ArrayList<KoiTypeDTO> dto = services.getKoiTypeList(nameKoiType);
-        for (KoiTypeDTO koiTypeDTO : dto) {
-            if (koiTypeDTO != null) {
-                System.out.println(koiTypeDTO);
-            }
-        }
-    }
+//    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+//        String nameKoiType = "Chagoi";
+//        KoiTypeDAO services = new KoiTypeDAO();
+//        ArrayList<KoiTypeDTO> dto = services.getKoiTypeList(nameKoiType);
+//        for (KoiTypeDTO koiTypeDTO : dto) {
+//            if (koiTypeDTO != null) {
+//                System.out.println(koiTypeDTO);
+//            }
+//        }
+//    }
 
     /**
      *
@@ -102,8 +102,8 @@ public class KoiTypeDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "DELETE FROM [dbo].[KOITYPE]\n"
-                        + "WHERE [KoiTypeID] = ?";
+                String sql = "DELETE FROM [dbo].[KOITYPE]"
+                        + " WHERE [KoiTypeID] = ?";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, id);
                 int affectedRows = pst.executeUpdate();
@@ -166,7 +166,7 @@ public class KoiTypeDAO {
 //        KoiTypeDAO dao = new KoiTypeDAO();
 //
 //        int koiTypeID = 2;
-//        boolean newStatus = true;
+//        boolean newStatus = false;
 //
 //        try {
 //            boolean isUpdated = dao.updateStatusKoiType(koiTypeID, newStatus);

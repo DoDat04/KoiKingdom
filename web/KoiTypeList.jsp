@@ -23,7 +23,7 @@
         <div class="colorlib-loader"></div>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
         <h1 class="welcome-text">All Koi Types</h1>
-        
+
         <!-- Search form -->
         <form action="listkoitype" method="GET" class="search-koitype-form" style="text-align: center; align-items: center; padding-bottom: 50px;">
             <input type="text" name="txtNameKoiType" placeholder="Search Koi Type..." style="border-radius: 10px;"/>
@@ -36,6 +36,33 @@
                         <div class="koi-type-card">
                             <h2 class="koi-text"><strong>${koiType.typeName}</strong></h2>
                             <img src="${koiType.koiImageURL}" alt="${koiType.typeName}" class="koi-image"/>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop${koiType.koiTypeID}">
+                                Details
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop${koiType.koiTypeID}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">${koiType.typeName}</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <img src="${koiType.koiImageURL}" class="koi-image" alt="${koiType.typeName}" style="height: 100%; width: 100%;"/>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <p>${koiType.description}</p>
+                                                </div></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </c:forEach>

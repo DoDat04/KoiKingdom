@@ -36,7 +36,7 @@
                     <img src="img/2.jpg" class="d-block w-100" alt="Slide 2">
                 </div>
                 <div class="carousel-item banner">
-                    <img src="img/4.jpg" class="d-block w-100" alt="Slide 3">
+                    <img src="img/koibanner.gif" class="d-block w-100" alt="Slide 3">
                 </div>
             </div>
 
