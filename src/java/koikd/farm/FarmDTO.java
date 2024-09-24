@@ -11,15 +11,15 @@ package koikd.farm;
 public class FarmDTO {
     private int farmID;
     private String farmName;
-    private String location;
+    private String farmLocation;
     private String description;
     private String farmImageURL;
     private boolean farmStatus;
 
-    public FarmDTO(int farmID, String farmName, String location, String description, String farmImageURL, boolean farmStatus) {
+    public FarmDTO(int farmID, String farmName, String farmLocation, String description, String farmImageURL, boolean farmStatus) {
         this.farmID = farmID;
         this.farmName = farmName;
-        this.location = location;
+        this.farmLocation = farmLocation;
         this.description = description;
         this.farmImageURL = farmImageURL;
         this.farmStatus = farmStatus;
@@ -41,12 +41,12 @@ public class FarmDTO {
         this.farmName = farmName;
     }
 
-    public String getLocation() {
-        return location;
+    public String getFarmLocation() {
+        return farmLocation;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLFarmocation(String farmLocation) {
+        this.farmLocation = farmLocation;
     }
 
     public String getDescription() {
@@ -75,7 +75,7 @@ public class FarmDTO {
 
     @Override
     public String toString() {
-        return "FarmDTO{" + "farmID=" + farmID + ", farmName=" + farmName + ", location=" + location + ", description=" + description + ", farmImageURL=" + farmImageURL + ", farmStatus=" + farmStatus + '}';
+        return "FarmDTO{" + "farmID=" + farmID + ", farmName=" + farmName + ", farmLocation=" + farmLocation + ", description=" + description + ", farmImageURL=" + farmImageURL + ", farmStatus=" + farmStatus + '}';
     }
     
 }

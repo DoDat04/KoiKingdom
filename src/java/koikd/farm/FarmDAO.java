@@ -32,9 +32,9 @@ public class FarmDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT [FarmID], [FarmName], [Location], [Description], [Image], [FarmStatus]\n"
+                String sql = "SELECT [farmID], [farmName], [farmLocation], [description], [farmImageURL], [farmStatus]\n"
                         + " FROM [dbo].[FARM]\n"
-                        + " WHERE [FarmStatus] = 'TRUE'";
+                        + " WHERE [farmStatus] = 'TRUE'";
                 if (nameFarm != null && !nameFarm.isEmpty()) {
                     sql += " AND [FarmName] LIKE ?";
                 }
@@ -47,11 +47,11 @@ public class FarmDAO {
                     while (rs.next()) {
                         int farmID = rs.getInt("farmID");
                         String farmName = rs.getString("farmName");
-                        String location = rs.getString("location");
+                        String farmLocation = rs.getString("farmLocation");
                         String description = rs.getString("description");
-                        String farmImageURL = rs.getString("image");
+                        String farmImageURL = rs.getString("farmImageURL");
                         boolean farmStatus = rs.getBoolean("farmStatus");
-                        FarmDTO dao = new FarmDTO(farmID, farmName, location, description, farmImageURL, farmStatus);
+                        FarmDTO dao = new FarmDTO(farmID, farmName, farmLocation, description, farmImageURL, farmStatus);
                         list.add(dao);
                     }
                 }

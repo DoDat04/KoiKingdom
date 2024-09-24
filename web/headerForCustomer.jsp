@@ -52,7 +52,7 @@
                                 <a class="nav-link dropdown-toggle text-black" id="bookingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Information</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bookingDropdown">
                                     <li><a class="dropdown-item" href="listkoitype">Koi Fish</a></li>
-                                    <li><a class="dropdown-item" href="#">Farms</a></li>
+                                    <li><a class="dropdown-item" href="listfarm">Farms</a></li>
                                 </ul>
                             </li>                           
                             <li class="nav-item">
