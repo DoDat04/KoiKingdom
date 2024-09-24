@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package koikd.koitype;
+package koikd.farm;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,45 +15,44 @@ import koikd.utils.DBUtils;
  *
  * @author ADMIN LAM
  */
-public class KoiTypeDAO {
+public class FarmDAO {
 
     /**
      *
-     * @param nameKoiType
-     * @return a list of koi type
-     * @throws ClassNotFoundException
+     * @param nameFarm
+     * @return farm list if nameFarm is null. If nameFarm is not null, return a
+     * list with nameFarm keyword.
      * @throws SQLException
      */
-    public ArrayList<KoiTypeDTO> getKoiTypeList(String nameKoiType) throws ClassNotFoundException, SQLException {
-        ArrayList<KoiTypeDTO> list = new ArrayList<>();
-        Connection conn = DBUtils.getConnection();
+    public ArrayList<FarmDTO> getFarmList(String nameFarm) throws SQLException {
+        ArrayList<FarmDTO> list = new ArrayList<>();
+        Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT [KoiTypeID], [TypeName], [Description], [KoiImageURL], [KoiTypeStatus] "
-                        + "FROM [dbo].[KOITYPE] "
-                        + "WHERE [KoiTypeStatus] = 'TRUE' ";
-                if (nameKoiType != null && !nameKoiType.isEmpty()) {
-                    sql += "AND [TypeName] LIKE ?";
+                String sql = "SELECT [FarmID], [FarmName], [Location], [Description], [Image], [FarmStatus]\n"
+                        + " FROM [dbo].[FARM]\n"
+                        + " WHERE [FarmStatus] = 'TRUE'";
+                if (nameFarm != null && !nameFarm.isEmpty()) {
+                    sql += " AND [FarmName] LIKE ?";
                 }
                 pst = conn.prepareStatement(sql);
-
-                if (nameKoiType != null && !nameKoiType.isEmpty()) {
-                    pst.setString(1, "%" + nameKoiType + "%");
+                if (nameFarm != null && !nameFarm.isEmpty()) {
+                    pst.setString(1, "%" + nameFarm + "%");
                 }
-
                 rs = pst.executeQuery();
                 if (rs != null) {
                     while (rs.next()) {
-                        int koiTypeID = rs.getInt("KoiTypeID");
-                        String typeName = rs.getString("TypeName");
-                        String description = rs.getString("Description");
-                        String koiImageURL = rs.getString("KoiImageURL");
-                        boolean koiTypeStatus = rs.getBoolean("KoiTypeStatus");
-                        KoiTypeDTO dto = new KoiTypeDTO(koiTypeID, typeName, description, koiImageURL, koiTypeStatus);
-                        list.add(dto);
+                        int farmID = rs.getInt("farmID");
+                        String farmName = rs.getString("farmName");
+                        String location = rs.getString("location");
+                        String description = rs.getString("description");
+                        String farmImageURL = rs.getString("image");
+                        boolean farmStatus = rs.getBoolean("farmStatus");
+                        FarmDTO dao = new FarmDTO(farmID, farmName, location, description, farmImageURL, farmStatus);
+                        list.add(dao);
                     }
                 }
             }
@@ -72,33 +71,32 @@ public class KoiTypeDAO {
         }
         return list;
     }
-
-//    public static void main(String[] args) throws ClassNotFoundException, SQLException {
-//        String nameKoiType = "Chagoi";
-//        KoiTypeDAO services = new KoiTypeDAO();
-//        ArrayList<KoiTypeDTO> dto = services.getKoiTypeList(nameKoiType);
-//        for (KoiTypeDTO koiTypeDTO : dto) {
-//            if (koiTypeDTO != null) {
-//                System.out.println(koiTypeDTO);
+//    public static void main(String[] args) throws SQLException {
+//        String nameFarm = "Sakura";
+//        FarmDAO services = new FarmDAO();
+//        ArrayList<FarmDTO> dto = services.getFarmList(nameFarm);
+//        for (FarmDTO farmDTO : dto) {
+//            if(farmDTO!=null){
+//                System.out.println(farmDTO);
 //            }
 //        }
 //    }
+
     /**
      *
      * @param id
-     * @return the list of koi type before a manager deleted it.
-     * @throws ClassNotFoundException
+     * @return list of farm with without the deleted farm.
      * @throws SQLException
      */
-    public boolean deleteKoiType(int id) throws ClassNotFoundException, SQLException {
+    public boolean deleteFarm(int id) throws SQLException {
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "DELETE FROM [dbo].[KOITYPE]"
-                        + " WHERE [KoiTypeID] = ?";
+                String sql = "DELETE FROM [dbo].[FARM]"
+                        + " WHERE [FarmID] = ?";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, id);
                 int affectedRows = pst.executeUpdate();
@@ -121,20 +119,21 @@ public class KoiTypeDAO {
     }
 
     /**
-     *
-     * @param id,status
+     * 
+     * @param id
+     * @param update status farm
      * @return
-     * @throws SQLException
+     * @throws SQLException 
      */
-    public boolean updateStatusKoiType(int id, boolean status) throws SQLException {
+    public boolean updateStatusFarm(int id, boolean status) throws SQLException {
         Connection conn = null;
         PreparedStatement pst = null;
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "UPDATE [dbo].[KOITYPE] \n"
-                        + "SET [KoiTypeStatus] = ? \n"
-                        + "WHERE [KoiTypeID] = ?";
+                String sql = "UPDATE [dbo].[FARM]\n"
+                        + "SET [FarmStatus] = ?\n"
+                        + "WHERE [FarmID] = ?";
                 pst = conn.prepareStatement(sql);
                 pst.setBoolean(1, !status);
                 pst.setInt(2, id);
@@ -155,13 +154,13 @@ public class KoiTypeDAO {
     }
 
 //    public static void main(String[] args) {
-//        KoiTypeDAO dao = new KoiTypeDAO();
+//        FarmDAO dao = new FarmDAO();
 //
-//        int koiTypeID = 2;
+//        int farmID = 1;
 //        boolean newStatus = false;
 //
 //        try {
-//            boolean isUpdated = dao.updateStatusKoiType(koiTypeID, newStatus);
+//            boolean isUpdated = dao.updateStatusFarm(farmID, newStatus);
 //            if (isUpdated) {
 //                System.out.println("Update status successfully.");
 //            } else {
