@@ -25,7 +25,7 @@
     <body>
         <div class="colorlib-loader"></div>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
-
+        <a href="managerDashboard.jsp">click here </a>
         <!-- Banner Carousel -->
         <div id="singleImageCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
             <div class="carousel-inner">
