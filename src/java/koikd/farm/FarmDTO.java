@@ -11,18 +11,18 @@ package koikd.farm;
 public class FarmDTO {
     private int farmID;
     private String farmName;
-    private String farmLocation;
+    private String Location;
     private String description;
-    private String farmImageURL;
-    private boolean farmStatus;
+    private String Image;
+    private boolean Status;
 
-    public FarmDTO(int farmID, String farmName, String farmLocation, String description, String farmImageURL, boolean farmStatus) {
+    public FarmDTO(int farmID, String farmName, String Location, String description, String Image, boolean Status) {
         this.farmID = farmID;
         this.farmName = farmName;
-        this.farmLocation = farmLocation;
+        this.Location = Location;
         this.description = description;
-        this.farmImageURL = farmImageURL;
-        this.farmStatus = farmStatus;
+        this.Image = Image;
+        this.Status = Status;
     }
 
     public int getFarmID() {
@@ -41,12 +41,12 @@ public class FarmDTO {
         this.farmName = farmName;
     }
 
-    public String getFarmLocation() {
-        return farmLocation;
+    public String getLocation() {
+        return Location;
     }
 
-    public void setLFarmocation(String farmLocation) {
-        this.farmLocation = farmLocation;
+    public void setLocation(String Location) {
+        this.Location = Location;
     }
 
     public String getDescription() {
@@ -57,25 +57,24 @@ public class FarmDTO {
         this.description = description;
     }
 
-    public String getFarmImageURL() {
-        return farmImageURL;
+    public String getImage() {
+        return Image;
     }
 
-    public void setFarmImageURL(String farmImageURL) {
-        this.farmImageURL = farmImageURL;
+    public void setImage(String Image) {
+        this.Image = Image;
     }
 
-    public boolean isFarmStatus() {
-        return farmStatus;
+    public boolean isStatus() {
+        return Status;
     }
 
-    public void setFarmStatus(boolean farmStatus) {
-        this.farmStatus = farmStatus;
-    }
+    public void setStatus(boolean Status) {
+        this.Status = Status;
+    }   
 
     @Override
     public String toString() {
-        return "FarmDTO{" + "farmID=" + farmID + ", farmName=" + farmName + ", farmLocation=" + farmLocation + ", description=" + description + ", farmImageURL=" + farmImageURL + ", farmStatus=" + farmStatus + '}';
+        return "FarmDTO{" + "farmID=" + farmID + ", farmName=" + farmName + ", Location=" + Location + ", description=" + description + ", Image=" + Image + ", Status=" + Status + '}';
     }
-    
 }

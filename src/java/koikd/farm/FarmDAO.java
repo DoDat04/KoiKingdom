@@ -33,9 +33,9 @@ public class FarmDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT [farmID], [farmName], [farmLocation], [description], [Image], [Status]\n"
+                String sql = "SELECT [FarmID], [FarmName], [Location], [Description], [Image], [Status]\n"
                         + " FROM [dbo].[FARM]\n"
-                        + " WHERE [farmStatus] = 'TRUE'";
+                        + " WHERE [Status] = 'TRUE'";
                 if (nameFarm != null && !nameFarm.isEmpty()) {
                     sql += " AND [FarmName] LIKE ?";
                 }
@@ -46,10 +46,10 @@ public class FarmDAO {
                 rs = pst.executeQuery();
                 if (rs != null) {
                     while (rs.next()) {
-                        int farmID = rs.getInt("farmID");
-                        String farmName = rs.getString("farmName");
-                        String farmLocation = rs.getString("farmLocation");
-                        String description = rs.getString("description");
+                        int farmID = rs.getInt("FarmID");
+                        String farmName = rs.getString("FarmName");
+                        String farmLocation = rs.getString("Location");
+                        String description = rs.getString("Description");
                         String farmImageURL = rs.getString("Image");
                         boolean farmStatus = rs.getBoolean("Status");
                         FarmDTO dao = new FarmDTO(farmID, farmName, farmLocation, description, farmImageURL, farmStatus);
@@ -73,7 +73,7 @@ public class FarmDAO {
         return list;
     }
 //    public static void main(String[] args) throws SQLException {
-//        String nameFarm = "Sakura";
+//        String nameFarm = "Koi Dreamland";
 //        FarmDAO services = new FarmDAO();
 //        ArrayList<FarmDTO> dto = services.getFarmList(nameFarm);
 //        for (FarmDTO farmDTO : dto) {
