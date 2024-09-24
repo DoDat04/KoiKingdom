@@ -11,18 +11,18 @@ package koikd.farm;
 public class FarmDTO {
     private int farmID;
     private String farmName;
-    private String Location;
+    private String location;
     private String description;
-    private String Image;
-    private boolean Status;
+    private String image;
+    private boolean status;
 
     public FarmDTO(int farmID, String farmName, String Location, String description, String Image, boolean Status) {
         this.farmID = farmID;
         this.farmName = farmName;
-        this.Location = Location;
+        this.location = Location;
         this.description = description;
-        this.Image = Image;
-        this.Status = Status;
+        this.image = Image;
+        this.status = Status;
     }
 
     public int getFarmID() {
@@ -42,11 +42,11 @@ public class FarmDTO {
     }
 
     public String getLocation() {
-        return Location;
+        return location;
     }
 
-    public void setLocation(String Location) {
-        this.Location = Location;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getDescription() {
@@ -58,23 +58,23 @@ public class FarmDTO {
     }
 
     public String getImage() {
-        return Image;
+        return image;
     }
 
-    public void setImage(String Image) {
-        this.Image = Image;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public boolean isStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(boolean Status) {
-        this.Status = Status;
+        this.status = Status;
     }   
 
     @Override
     public String toString() {
-        return "FarmDTO{" + "farmID=" + farmID + ", farmName=" + farmName + ", Location=" + Location + ", description=" + description + ", Image=" + Image + ", Status=" + Status + '}';
+        return "FarmDTO{" + "farmID=" + farmID + ", farmName=" + farmName + ", Location=" + location + ", description=" + description + ", Image=" + image + ", Status=" + status + '}';
     }
 }
