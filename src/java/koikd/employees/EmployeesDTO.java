@@ -123,4 +123,10 @@ public class EmployeesDTO implements Serializable {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "EmployeesDTO{" + "employeeID=" + employeeID + ", email=" + email + ", password=" + password + ", role=" + role + ", lastName=" + lastName + ", firstName=" + firstName + ", address=" + address + ", status=" + status + '}';
+    }
+    
 }

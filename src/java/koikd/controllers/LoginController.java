@@ -19,7 +19,6 @@ import koikd.customer.CustomerDAO;
 import koikd.customer.CustomerDTO;
 import koikd.employees.EmployeesDAO;
 import koikd.employees.EmployeesDTO;
-import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -73,6 +72,7 @@ public class LoginController extends HttpServlet {
                         session.setAttribute("LOGIN_DELIVERY", employeeResult);
                         url = DELIVERY_PAGE;
                     } else if ("Manager".equals(role)) {
+                        session.setAttribute("LOGIN_MANAGER", employeeResult);
                         url = MANAGER_PAGE;
                     } else {
                         request.setAttribute("ERROR", "Invalid role for this employee!");
@@ -89,7 +89,10 @@ public class LoginController extends HttpServlet {
                 response.sendRedirect("home");
             } else if (DELIVERY_PAGE.equals(url)) {
                 response.sendRedirect("home?action=Delivery");
-            } else {
+            } else if(MANAGER_PAGE.equals(url)) {
+                response.sendRedirect("home?action=Manager");
+            }
+            else {
                 request.getRequestDispatcher(url).forward(request, response);
             }
         }

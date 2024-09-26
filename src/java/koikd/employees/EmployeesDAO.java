@@ -72,14 +72,25 @@ public class EmployeesDAO {
         return result;
     }
 
-    /**
-     * Get User Information
-     *
-     * @param email
-     * @return
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     */
+//    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+//        String email = "lamtranmanager@gmail.com";
+//        String password = "123";
+//        EmployeesDAO dao = new EmployeesDAO();
+//        EmployeesDTO dto = dao.checkLoginDelivery(email, password);
+//        if (dto != null) {
+//            System.out.println(dto);
+//        } else {
+//            System.out.println("Fail");
+//        }
+//    }
+        /**
+         * Get User Information
+         *
+         * @param email
+         * @return
+         * @throws SQLException
+         * @throws ClassNotFoundException
+         */
     public EmployeesDTO getProfile(String email) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -122,13 +133,14 @@ public class EmployeesDAO {
 
     /**
      * Update information of delivery
+     *
      * @param firstName
      * @param lastName
      * @param email
      * @param address
      * @return
      * @throws SQLException
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     public boolean updateDeliveryProfile(String firstName, String lastName, String email, String address) throws SQLException, ClassNotFoundException {
         Connection con = null;
@@ -163,8 +175,7 @@ public class EmployeesDAO {
         }
         return result;  // Trả về kết quả
     }
-    
-    
+
     public List<EmployeesDTO> getAllEmployees() throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -188,7 +199,7 @@ public class EmployeesDAO {
                     EmployeesDTO dto = new EmployeesDTO(id, email, role, lastName, firstName, address, status);
                     result.add(dto);
                 }
-                
+
             }
         } finally {
             if (rs != null) {

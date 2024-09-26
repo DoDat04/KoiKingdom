@@ -5,24 +5,21 @@
 package koikd.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
- * @author Do Dat, Minhngo
+ * @author ADMIN LAM
  */
-@WebServlet(name = "HomeController", urlPatterns = {"/home"})
-public class HomeController extends HttpServlet {
+@WebServlet(name = "LogoutManagerController", urlPatterns = {"/logoutmanager"})
+public class LogoutManagerController extends HttpServlet {
 
-    private static final String HOME_PAGE = "homeForCustomer.jsp";
-    private static final String LOGOUT_CONTROLLER = "LogoutController";
-    private static final String LOGOUT_MANAGER_CONTROLLER = "LogoutManagerController";
-    private static final String DELIVERY_PAGE = "GetKoiOrder";
-    private static final String MANAGER_PAGE = "managerDashboard.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,22 +32,15 @@ public class HomeController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = HOME_PAGE;
         try {
-            String action = request.getParameter("action");
-            if (action == null) {
-                url = HOME_PAGE;
-            } else if (action.equals("Logout")) {
-                url = LOGOUT_CONTROLLER;
-            } else if (action.equals("Delivery")) {
-                url = DELIVERY_PAGE;
-            } else if(action.equals("LogoutManager")){
-                url = LOGOUT_MANAGER_CONTROLLER;
-            } else if (action.equals("Manager")) {
-                url = MANAGER_PAGE;
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
             }
+        } catch (Exception ex) {
+            System.out.println("Error at: " + ex.getMessage());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect("home");
         }
     }
 
