@@ -33,6 +33,18 @@ public class CustomerDTO implements Serializable{
         this.status = status;
     }
 
+    
+    public CustomerDTO(int customerID, String email, String password, String lastName, String firstName, String address, String accountType, boolean status) {
+        this.customerID = customerID;
+        this.email = email;
+        this.password = password;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.address = address;
+        this.accountType = accountType;
+        this.status = status;
+    }
+
     public int getCustomerID() {
         return customerID;
     }

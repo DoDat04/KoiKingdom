@@ -36,6 +36,7 @@ public class CustomerDAO implements Serializable {
                 stm = con.prepareStatement(sql);
                 rs = stm.executeQuery();
                 while (rs.next()) {
+                    int customerID = rs.getInt("CustomerID");
                     String email = rs.getString("Email");
                     String lastName = rs.getString("LastName");
                     String firstName = rs.getString("FirstName");
@@ -43,7 +44,7 @@ public class CustomerDAO implements Serializable {
                     String accountType = rs.getString("AccountType");
                     boolean status = rs.getBoolean("Status");
 
-                    CustomerDTO customer = new CustomerDTO(email, "",lastName, firstName, address, accountType, status);
+                    CustomerDTO customer = new CustomerDTO(customerID, email, "",lastName, firstName, address, accountType, status);
                     customerList.add(customer);
                 }
             }
@@ -408,4 +409,56 @@ public class CustomerDAO implements Serializable {
         }
         return customer;
     }
+    /**
+     *
+     * @param id
+     * @return update status
+     * @throws SQLException
+     */
+    public boolean updateStatusCustomer(int id) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String selectSql = "SELECT [Status] FROM [dbo].[CUSTOMER] "
+                        + "WHERE [CustomerID] = ?";
+                pst = conn.prepareStatement(selectSql);
+                pst.setInt(1, id);
+                rs = pst.executeQuery();
+                if (rs.next()) {
+                    boolean currentStatus = rs.getBoolean("Status");
+
+                    String updateSql = "UPDATE [dbo].[CUSTOMER] SET [STATUS] = ? WHERE [CustomerID] = ?";
+                    pst = conn.prepareStatement(updateSql);
+                    pst.setBoolean(1, !currentStatus);
+                    pst.setInt(2, id);
+                    int affectedRows = pst.executeUpdate();
+                    return affectedRows > 0;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return false;
+    }
+
+//    public static void main(String[] args) throws SQLException {
+//        int id = 1;
+//        CustomerDAO dao = new CustomerDAO();
+//        boolean update = dao.updateStatusCustomer(id);
+//        if(update){
+//            System.out.println("Update status successfully");
+//        }
+//    }
+
 }
