@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import koikd.utils.DBUtils;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -26,7 +28,7 @@ public class DeliveryDAO {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public EmployeesDTO checkLoginEmployee(String email, String password) throws SQLException, ClassNotFoundException {
+    public EmployeesDTO checkLoginDelivery(String email, String password) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -37,19 +39,21 @@ public class DeliveryDAO {
             if (con != null) {
                 String sql = "SELECT [EmployeeID], [Email], [Password], [Role], [LastName], [FirstName], [Address], [Status]\n"
                         + "FROM DBO.EMPLOYEE\n"
-                        + "WHERE Email = ? and Status = 1 ";
+                        + "WHERE Email = ? and Status = 1;";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, email);
                 rs = stm.executeQuery();
                 if (rs.next()) {
-                    String hashedPassword = rs.getString("Password");                     
+                    String hashedPassword = rs.getString("Password");
                     if (BCrypt.checkpw(password, hashedPassword)) {
+                        int id = rs.getInt("EmployeeID");
                         String role = rs.getString("role");
                         String lastName = rs.getString("LastName");
                         String firstName = rs.getString("FirstName");
                         String address = rs.getString("Address");
                         boolean status = rs.getBoolean("Status");
-                        result = new EmployeesDTO(email, "", role, lastName, firstName, address, status);
+                        result = new EmployeesDTO(id, email, "", role, lastName, firstName, address, status);
+
                     }
                 }
             }
@@ -92,12 +96,13 @@ public class DeliveryDAO {
                 stm.setString(1, email);
                 rs = stm.executeQuery();
                 if (rs.next()) {
+                    int id = rs.getInt("EmployeeID");
                     String role = rs.getString("role");
                     String lastName = rs.getString("LastName");
                     String firstName = rs.getString("FirstName");
                     String address = rs.getString("Address");
                     boolean status = rs.getBoolean("Status");
-                    result = new EmployeesDTO(email, "", role, lastName, firstName, address, status);
+                    result = new EmployeesDTO(id, email, "", role, lastName, firstName, address, status);
                 }
             }
 
@@ -157,5 +162,45 @@ public class DeliveryDAO {
             }
         }
         return result;  // Trả về kết quả
-    }       
+    }
+    
+    
+    public List<EmployeesDTO> getAllEmployees() throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<EmployeesDTO> result = new ArrayList<>();
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT EmployeeID, Email, Role, LastName, FirstName, Address, Status "
+                        + "FROM EMPLOYEE ";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    int id = rs.getInt("EmployeeID");
+                    String email = rs.getString("Email");
+                    String role = rs.getString("Role");
+                    String lastName = rs.getString("LastName");
+                    String firstName = rs.getString("FirstName");
+                    String address = rs.getString("Address");
+                    boolean status = rs.getBoolean("Status");
+                    EmployeesDTO dto = new EmployeesDTO(id, email, role, lastName, firstName, address, status);
+                    result.add(dto);
+                }
+                
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
 }

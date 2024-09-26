@@ -85,7 +85,7 @@
 <div class="navbar">
     <a href="managerDashboard.jsp" class="active">Home</a>
     <a href="GetListCustomer">Customer</a>
-    <a href="#">Employee</a>
+    <a href="GetListEmployee">Employee</a>
     <a href="#">Tour</a>
 </div>
 

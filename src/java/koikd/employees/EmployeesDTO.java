@@ -12,10 +12,18 @@ import java.io.Serializable;
  */
 public class EmployeesDTO implements Serializable {
 
+    public int getEmployeeID() {
+        return employeeID;
+    }
+
     /**
      * Common properties of employees
      */
-    private String customerID;
+    public void setEmployeeID(int employeeID) {
+        this.employeeID = employeeID;
+    }
+
+    private int employeeID;
     private String email;
     private String password;
     private String role;
@@ -33,7 +41,8 @@ public class EmployeesDTO implements Serializable {
     /**
      * Parameterized Constructor
      */
-    public EmployeesDTO(String email, String password, String role, String lastName, String firstName, String address, boolean status) {
+    public EmployeesDTO(int employeeID, String email, String password, String role, String lastName, String firstName, String address, boolean status) {
+        this.employeeID = employeeID;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -43,16 +52,21 @@ public class EmployeesDTO implements Serializable {
         this.status = status;
     }
 
+    public EmployeesDTO(int employeeID, String email, String role, String lastName, String firstName, String address, boolean status) {
+        this.employeeID = employeeID;
+        this.email = email;
+        this.role = role;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.address = address;
+        this.status = status;
+    }
+    
+
     /**
      * Getter / Setter* @return
      */
-    public String getCustomerID() {
-        return customerID;
-    }
-
-    public void setCustomerID(String customerID) {
-        this.customerID = customerID;
-    }
+    
 
     public String getEmail() {
         return email;

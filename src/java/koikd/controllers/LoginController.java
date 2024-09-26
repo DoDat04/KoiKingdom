@@ -55,7 +55,7 @@ public class LoginController extends HttpServlet {
                 CustomerDAO customerDao = new CustomerDAO();
                 CustomerDTO customerResult = customerDao.checkLogin(email, password);
                 DeliveryDAO deliveryDao = new DeliveryDAO();
-                EmployeesDTO employeeResult = deliveryDao.checkLoginEmployee(email, password);
+                EmployeesDTO employeeResult = deliveryDao.checkLoginDelivery(email, password);
 
                 HttpSession session = request.getSession();
 
