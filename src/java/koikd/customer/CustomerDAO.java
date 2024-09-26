@@ -460,5 +460,5 @@ public class CustomerDAO implements Serializable {
 //            System.out.println("Update status successfully");
 //        }
 //    }
-
+    
 }

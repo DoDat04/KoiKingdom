@@ -248,4 +248,58 @@ public class TourDAO implements Serializable {
         }
         return result;
     }
+    
+    /**
+     * 
+     * @param id
+     * @return status tour.
+     * @throws SQLException 
+     */
+    public boolean updateStatusTour(int id) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String selectSql = "SELECT [Status] FROM [dbo].[TOUR] "
+                        + "WHERE [TourID] = ?";
+                pst = conn.prepareStatement(selectSql);
+                pst.setInt(1, id);
+                rs = pst.executeQuery();
+                if (rs.next()) {
+                    boolean currentStatus = rs.getBoolean("Status");
+
+                    String updateSql = "UPDATE [dbo].[TOUR] SET [Status] = ? WHERE [TourID] = ?";
+                    pst = conn.prepareStatement(updateSql);
+                    pst.setBoolean(1, !currentStatus);
+                    pst.setInt(2, id);
+                    int affectedRows = pst.executeUpdate();
+                    return affectedRows > 0;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return false;
+    }
+    
+//    public static void main(String[] args) throws SQLException {
+//        int id = 11;
+//        TourDAO dao = new TourDAO();
+//        boolean dto = dao.updateStatusTour(id);
+//        if(dto){
+//            System.out.println("Update status successfully.");
+//        } else{
+//            System.out.println("Fail.");
+//        }
+//    }
 }

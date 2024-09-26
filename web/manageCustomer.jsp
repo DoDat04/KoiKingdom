@@ -118,7 +118,7 @@
 
         <!-- Menu điều hướng -->
         <div class="navbar">
-            <a href="managerDashboard.jsp">Home</a>
+            <a href="home?action=Manager">Home</a>
             <a href="GetListCustomer">Customer</a>
             <a href="GetListEmployee">Employee</a>
             <a href="GetListTour">Tour</a>
@@ -150,7 +150,7 @@
                             <td>${customer.firstName}</td>
                             <td>${customer.address}</td>
                             <td>${customer.accountType}</td>
-                            
+
                             <td>
                                 <c:choose>
                                     <c:when test="${customer.status}">
@@ -171,6 +171,11 @@
                     </c:forEach>
                 </tbody>
             </table>
+            <c:if test="${not empty UPDATE_STATUS}">
+                <div class="alert alert-success">
+                    ${UPDATE_STATUS}
+                </div>
+            </c:if>
         </div>
 
         <!-- Footer -->

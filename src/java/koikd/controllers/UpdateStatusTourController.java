@@ -5,23 +5,22 @@
 package koikd.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
-import koikd.customer.CustomerDAO;
+import koikd.tour.TourDAO;
 
 /**
  *
  * @author ADMIN LAM
  */
-@WebServlet(name = "UpdateStatusCustomerController", urlPatterns = {"/updateStatus"})
-public class UpdateStatusCustomerController extends HttpServlet {
-
-    private static final String MANAGER_PAGE = "manageCustomer.jsp";
-
+@WebServlet(name = "UpdateStatusTourController", urlPatterns = {"/updateStatusTour"})
+public class UpdateStatusTourController extends HttpServlet {
+    private static final String MANAGE_TOUR_PAGE = "manageTour.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,9 +33,8 @@ public class UpdateStatusCustomerController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = MANAGER_PAGE;
-
-        String idCustomerString = request.getParameter("customerID");
+        String url = MANAGE_TOUR_PAGE;
+        String idCustomerString = request.getParameter("tourID");
         int idCustomer = 0;
         boolean updateStatusResult = false;
 
@@ -45,14 +43,14 @@ public class UpdateStatusCustomerController extends HttpServlet {
                 try {
                     idCustomer = Integer.parseInt(idCustomerString);
                 } catch (NumberFormatException e) {
-                    request.setAttribute("ERROR_UPDATE", "Invalid customer ID format: " + idCustomerString);
+                    request.setAttribute("ERROR_UPDATE", "Invalid tour ID format: " + idCustomerString);
                     request.getRequestDispatcher(url).forward(request, response);
                     return;
                 }
 
-                CustomerDAO dao = new CustomerDAO();
+                TourDAO dao = new TourDAO();
                 try {
-                    updateStatusResult = dao.updateStatusCustomer(idCustomer);
+                    updateStatusResult = dao.updateStatusTour(idCustomer);
                 } catch (SQLException e) {
                     request.setAttribute("ERROR_UPDATE", "Database error: " + e.getMessage());
                     request.getRequestDispatcher(url).forward(request, response);

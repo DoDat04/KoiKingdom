@@ -11,17 +11,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
-import koikd.customer.CustomerDAO;
+import koikd.employees.EmployeesDAO;
 
 /**
  *
  * @author ADMIN LAM
  */
-@WebServlet(name = "UpdateStatusCustomerController", urlPatterns = {"/updateStatus"})
-public class UpdateStatusCustomerController extends HttpServlet {
-
-    private static final String MANAGER_PAGE = "manageCustomer.jsp";
-
+@WebServlet(name = "UpdateStatusEmployeeController", urlPatterns = {"/updateStatusEmployee"})
+public class UpdateStatusEmployeeController extends HttpServlet {
+    private static final String MANAGE_EMPLOYEES_PAGE = "manageEmployee.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,9 +32,9 @@ public class UpdateStatusCustomerController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = MANAGER_PAGE;
-
-        String idCustomerString = request.getParameter("customerID");
+        String url = MANAGE_EMPLOYEES_PAGE;
+        
+        String idCustomerString = request.getParameter("employeeID");
         int idCustomer = 0;
         boolean updateStatusResult = false;
 
@@ -45,14 +43,14 @@ public class UpdateStatusCustomerController extends HttpServlet {
                 try {
                     idCustomer = Integer.parseInt(idCustomerString);
                 } catch (NumberFormatException e) {
-                    request.setAttribute("ERROR_UPDATE", "Invalid customer ID format: " + idCustomerString);
+                    request.setAttribute("ERROR_UPDATE", "Invalid employee ID format: " + idCustomerString);
                     request.getRequestDispatcher(url).forward(request, response);
                     return;
                 }
 
-                CustomerDAO dao = new CustomerDAO();
+                EmployeesDAO dao = new EmployeesDAO();
                 try {
-                    updateStatusResult = dao.updateStatusCustomer(idCustomer);
+                    updateStatusResult = dao.updateStatusEmployee(idCustomer);
                 } catch (SQLException e) {
                     request.setAttribute("ERROR_UPDATE", "Database error: " + e.getMessage());
                     request.getRequestDispatcher(url).forward(request, response);
