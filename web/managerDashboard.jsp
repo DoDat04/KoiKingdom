@@ -83,10 +83,10 @@
 
 <!-- Menu -->
 <div class="navbar">
-    <a href="managerDashboard.jsp" class="active">Home</a>
+    <a href="managerDashboard.jsp">Home</a>
     <a href="GetListCustomer">Customer</a>
     <a href="GetListEmployee">Employee</a>
-    <a href="#">Tour</a>
+    <a href="GetListTour">Tour</a>
 </div>
 
 <!-- Nội dung chính -->

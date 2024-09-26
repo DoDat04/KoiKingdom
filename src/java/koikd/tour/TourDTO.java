@@ -23,10 +23,27 @@ public class TourDTO implements Serializable{
     private Timestamp endDate;
     private String tourImage;
     private double tourRating;
+    private boolean status;
 
     public TourDTO() {
     }
+    
+    public TourDTO(int tourID, String tourName, String duration, String description, double tourPrice, Timestamp startDate, Timestamp endDate, String tourImage, double tourRating, boolean status) {
+        this.tourID = tourID;
+        this.tourName = tourName;
+        this.duration = duration;
+        this.description = description;
+        this.tourPrice = tourPrice;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.tourImage = tourImage;
+        this.tourRating = tourRating;
+        this.status = status;
+    }
 
+    
+
+    
     public TourDTO(int tourID, String tourName, String koiTypeName, String farmName, String duration, String description, double tourPrice, Timestamp startDate, Timestamp endDate, String tourImage, double tourRating) {
         this.tourID = tourID;
         this.tourName = tourName;
@@ -127,5 +144,13 @@ public class TourDTO implements Serializable{
 
     public void setTourImage(String tourImage) {
         this.tourImage = tourImage;
+    }
+    
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

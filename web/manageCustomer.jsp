@@ -119,9 +119,9 @@
         <!-- Menu điều hướng -->
         <div class="navbar">
             <a href="managerDashboard.jsp">Home</a>
-            <a href="GetListCustomer" class="active">Customer</a>
+            <a href="GetListCustomer">Customer</a>
             <a href="GetListEmployee">Employee</a>
-            <a href="#">Tour</a>
+            <a href="GetListTour">Tour</a>
         </div>
 
         <!-- Nội dung chính -->

@@ -205,4 +205,47 @@ public class TourDAO implements Serializable {
 
         return tour;
     }
+    
+    public List<TourDTO> getAllTour() throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<TourDTO> result = new ArrayList<>();
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT TourID, TourName, Duration, Description, TourPrice, StartDate, EndDate, Image, Status, Rating "
+                        + "FROM TOUR ";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+
+                    int id = rs.getInt("TourID");
+                    String name = rs.getString("TourName");
+                    String duration = rs.getString("Duration");
+                    String description = rs.getString("Description");
+                    double price = rs.getDouble("TourPrice");
+                    Timestamp start = rs.getTimestamp("StartDate");
+                    Timestamp end = rs.getTimestamp("EndDate");
+                    String img = rs.getString("Image");
+                    boolean status = rs.getBoolean("Status");
+                    double rating = rs.getDouble("Rating");
+                    TourDTO dto = new TourDTO(id, name, duration, description, price, start, end, img, rating, status);
+                    result.add(dto);
+                }
+
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
 }
