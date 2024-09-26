@@ -20,12 +20,12 @@ import java.io.OutputStream;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import koikd.employees.DeliveryDAO;
+import koikd.employees.EmployeesDAO;
 import koikd.employees.EmployeesDTO;
 
 /**
  *
- * @author Admin
+ * @author Minhngo
  */
 @MultipartConfig
 public class UpdateProfileDeliveryController extends HttpServlet {
@@ -98,7 +98,7 @@ public class UpdateProfileDeliveryController extends HttpServlet {
                 }
 
                 // Gọi DAO để cập nhật hồ sơ nhân viên giao hàng
-                DeliveryDAO delivery = new DeliveryDAO();
+                EmployeesDAO delivery = new EmployeesDAO();
                 boolean isUpdate = delivery.updateDeliveryProfile(firstName, lastName, email, custAddress);
 
                 if (isUpdate) {

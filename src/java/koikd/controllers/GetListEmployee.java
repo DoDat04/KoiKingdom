@@ -18,7 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import koikd.customer.CustomerDAO;
 import koikd.customer.CustomerDTO;
-import koikd.employees.DeliveryDAO;
+import koikd.employees.EmployeesDAO;
 import koikd.employees.EmployeesDTO;
 
 /**
@@ -42,7 +42,7 @@ public class GetListEmployee extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = MANAGE_EMPLOYEE;
         try {
-            DeliveryDAO dao = new DeliveryDAO();
+            EmployeesDAO dao = new EmployeesDAO();
             List<EmployeesDTO> em = dao.getAllEmployees();
             request.setAttribute("employee", em);
         } catch (SQLException ex) {

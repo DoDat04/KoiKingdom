@@ -20,7 +20,7 @@ public class HomeController extends HttpServlet {
 
     private static final String HOME_PAGE = "homeForCustomer.jsp";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
-    private static final String DELIVERY_PAGE = "homeForDelivery.jsp";
+    private static final String DELIVERY_PAGE = "GetKoiOrder";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

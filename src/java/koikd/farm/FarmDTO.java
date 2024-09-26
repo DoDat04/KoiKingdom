@@ -16,6 +16,9 @@ public class FarmDTO {
     private String image;
     private boolean status;
 
+    public FarmDTO() {
+    }
+    
     public FarmDTO(int farmID, String farmName, String Location, String description, String Image, boolean Status) {
         this.farmID = farmID;
         this.farmName = farmName;

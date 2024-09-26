@@ -17,7 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import koikd.customer.CustomerDAO;
 import koikd.customer.CustomerDTO;
-import koikd.employees.DeliveryDAO;
+import koikd.employees.EmployeesDAO;
 import koikd.employees.EmployeesDTO;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -54,7 +54,7 @@ public class LoginController extends HttpServlet {
             } else {
                 CustomerDAO customerDao = new CustomerDAO();
                 CustomerDTO customerResult = customerDao.checkLogin(email, password);
-                DeliveryDAO deliveryDao = new DeliveryDAO();
+                EmployeesDAO deliveryDao = new EmployeesDAO();
                 EmployeesDTO employeeResult = deliveryDao.checkLoginDelivery(email, password);
 
                 HttpSession session = request.getSession();
