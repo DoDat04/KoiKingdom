@@ -20,15 +20,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 }
 
 .modal-contentt {
-    background-color: #fefefe;
-    margin: 0px auto; /* Căn giữa modal */
+    background-color: #e0f7fa; /* Light blue background */
+    margin: 0px auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
     max-width: 500px;
     text-align: center;
     border-radius: 10px;
-    position: relative; /* Để dấu "close" nằm trong khung */
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .close-button {
@@ -46,6 +47,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+/* Style for green checkmark */
+.modal-contentt .checkmark {
+    font-size: 50px;
+    color: green; /* Green color */
+    margin-bottom: 15px;
 }
 
 .welcome-text{

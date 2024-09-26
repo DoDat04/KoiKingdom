@@ -60,6 +60,7 @@ public class LoginController extends HttpServlet {
 
                 if (customerResult != null) {
                     session.setAttribute("LOGIN_USER", customerResult);
+                    session.setAttribute("SUCCESS", "Login Successfully!");
                     setUserImage(session, email);
                     url = HOME_PAGE;
                 } else if (employeeResult != null) {

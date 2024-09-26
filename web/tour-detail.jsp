@@ -77,7 +77,7 @@
                             </div>
 
                             <!-- Form to add to cart -->
-                            <form action="addToCartController" method="post">
+                            <form action="AddToCartController" method="post">
                                 <input type="hidden" name="tourID" value="${selectedTour.tourID}">
                                 <input type="hidden" name="numberOfPeople" id="hiddenQuantity" value="0">
 

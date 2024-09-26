@@ -216,6 +216,7 @@
         <div id="error-modal" class="modall">
             <div class="modal-contentt">
                 <span class="close-button" onclick="closeModal()">&times;</span>
+                <div class="checkmark"><i class="fa-solid fa-check"></i></div>
                 <p id="error-message"></p>
             </div>
         </div>
@@ -242,6 +243,13 @@
             <script>
                 showModal('${error}');
                 <% session.removeAttribute("CHANGE_PASS_ERROR");%>
+            </script>
+        </c:if>
+
+        <c:set var="logoutSuccess" value="${requestScope.notiSuccess}"/>
+        <c:if test="${not empty logoutSuccess}">
+            <script>
+                showModal('${logoutSuccess}');       
             </script>
         </c:if>
 

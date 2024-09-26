@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -17,7 +18,6 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "HomeController", urlPatterns = {"/home"})
 public class HomeController extends HttpServlet {
-
     private static final String HOME_PAGE = "homeForCustomer.jsp";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
     private static final String LOGOUT_MANAGER_CONTROLLER = "LogoutManagerController";
@@ -37,6 +37,15 @@ public class HomeController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = HOME_PAGE;
         try {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                // Ở đây sẽ nhận biến session logout đó xong đổi nó thành requestScope
+                String message = (String) session.getAttribute("SUCCESS");
+                if (message != null) {
+                    request.setAttribute("notiSuccess", message);
+                    session.removeAttribute("SUCCESS");
+                }
+            }
             String action = request.getParameter("action");
             if (action == null) {
                 url = HOME_PAGE;

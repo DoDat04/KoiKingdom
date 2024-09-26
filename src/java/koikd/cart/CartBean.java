@@ -27,7 +27,7 @@ public class CartBean implements Serializable {
 
     public void addItemToCart(TourDTO tour, int numberOfPeople) {
         if (tour == null || numberOfPeople <= 0) {
-            return; 
+            return;
         }
 
         int tourID = tour.getTourID();
@@ -39,5 +39,24 @@ public class CartBean implements Serializable {
             this.items.put(tourID, new CartItem(tour, numberOfPeople));
         }
     }
-
+    
+    public int getTotalNumberOfPeople() {
+        int totalPeople = 0;
+        for (CartItem item : items.values()) {
+            totalPeople += item.getNumberOfPeople();
+        }
+        return totalPeople;
+    }
+    
+    public double getTotalPrice() {
+        double totalPrice = 0;
+        for (CartItem item : items.values()) {
+            totalPrice += item.getTotalPrice();
+        }
+        return totalPrice;
+    }
+    
+    public int getTotalQuantity() {
+        return items.size();
+    }
 }
