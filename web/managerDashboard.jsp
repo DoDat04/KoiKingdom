@@ -82,7 +82,7 @@
     <body>
         <!-- Menu -->
         <div class="navbar">
-            <a href="managerDashboard.jsp">Home</a>
+            <a href="home?action=Manager">Home</a>
             <a href="GetListCustomer">Customer</a>
             <a href="GetListEmployee">Employee</a>
             <a href="GetListTour">Tour</a>
