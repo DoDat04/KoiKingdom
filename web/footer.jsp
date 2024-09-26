@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -36,9 +37,9 @@
                         <ul class="list-unstyled">
                             <li><a href="#popularTour">Famous Tours</a></li>
                             <li><a href="tour-list">Available Tours</a></li>
-                            <li><a href="#">Custom Tour</a></li>
+                            <li><a href="listfarm">Koi Farms</a></li>
                             <li><a href="#popularKoi">Popular Koi Breeds</a></li>
-                            <li><a href="#">Koi Species</a></li>
+                            <li><a href="listkoitype">Koi Species</a></li>
                         </ul>
                     </div>
 
@@ -46,12 +47,28 @@
                     <div class="col-md-2">
                         <h6>Services</h6>
                         <ul class="list-unstyled">
-                            <li>
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal">
-                                    My Profile
-                                </a>
-                            </li>
-                            <li><a href="#">Order history</a></li>
+                            <c:choose>
+                                <c:when test="${sessionScope.LOGIN_USER == null and sessionScope.LOGIN_GMAIL == null}">
+                                    <li>
+                                        <a href="#" onclick="alert('You do not have permission to access this page!')">
+                                            My Profile
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" onclick="alert('You do not have permission to access this page!')">
+                                            Order history
+                                        </a>
+                                    </li>
+                                </c:when>
+                                <c:otherwise>
+                                    <li>
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal">
+                                            My Profile
+                                        </a>
+                                    </li>
+                                    <li><a href="#">Order history</a></li>
+                                </c:otherwise>
+                            </c:choose>                            
                             <li><a href="#">Notifications</a></li>
                             <li><a href="#">Shopping cart</a></li>
                             <li><a href="#">Chat with us</a></li>

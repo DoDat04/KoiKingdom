@@ -73,6 +73,7 @@ public class LoginGoogleController extends HttpServlet {
 
                     String emailPrefix = getUserIdBeforeAt(googlePojo.getEmail());
                     String avatarUrl = googlePojo.getPicture();
+                    System.out.println(avatarUrl + " hihi");
                     dao.createEmailUser(googlePojo, accessToken);
 
                     String uploadPath = getServletContext().getRealPath("/images");

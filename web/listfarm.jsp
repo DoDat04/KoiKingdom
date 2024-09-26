@@ -77,6 +77,14 @@
 
             </div>
         </div>
+        
+        <!-- Back to Top Button -->
+        <button id="backToTop" class="btn btn-primary" style="display: none;">
+            <i class="fas fa-angle-up"></i>
+        </button>
+
+        <script src="js/backToTop.js"></script>
+        
         <jsp:include page="footer.jsp" flush="true"/>
     </body>
 </html>

@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,7 +28,9 @@ import koikd.tour.TourDTO;
  */
 @WebServlet(name = "TourListController", urlPatterns = {"/tour-list"})
 public class TourListController extends HttpServlet {
+
     private static final String TOUR_PAGE = "tourList.jsp";
+    private static final String TOUR_DETAIL_PAGE = "tour-detail.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,30 +45,46 @@ public class TourListController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = TOUR_PAGE;
+
         String farmID = request.getParameter("farmID");
         String koiTypeID = request.getParameter("koiTypeID");
         String priceOrder = request.getParameter("priceOrder");
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
+        String tourIDParam = request.getParameter("tourID");
+
         try {
             TourDAO dao = new TourDAO();
-            TourDAO tourDAO = new TourDAO();
             FarmDAO farmDao = new FarmDAO();
             KoiTypeDAO koiTypeDao = new KoiTypeDAO();
-            List<TourDTO> tourList = dao.getTourList();
-            request.setAttribute("tourList", tourList); 
-            
-            List<FarmDTO> farmList = farmDao.getFarmList();           
-            request.setAttribute("farmList", farmList);
-            
-            List<KoiTypeDTO> koiTypeList = koiTypeDao.getKoiTypeList();
-            request.setAttribute("koiTypeList", koiTypeList);
-            
-            List<TourDTO> filterTourList = tourDAO.filterTours(farmID, koiTypeID, priceOrder, startDate, endDate);
-            request.setAttribute("tourList", filterTourList);
-        } catch (SQLException ex) {
-            Logger.getLogger(TourListController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+
+            if (tourIDParam != null && !tourIDParam.isEmpty()) {
+                int tourID = Integer.parseInt(tourIDParam);
+
+                TourDTO selectedTour = dao.getTourByID(tourID);
+
+                if (selectedTour != null) {
+                    request.setAttribute("selectedTour", selectedTour);
+                    url = TOUR_DETAIL_PAGE; 
+                }
+            } else {
+                List<TourDTO> tourList = dao.getTourList();
+                request.setAttribute("tourList", tourList); 
+
+                List<FarmDTO> farmList = farmDao.getFarmList();
+                request.setAttribute("farmList", farmList);
+
+                List<KoiTypeDTO> koiTypeList = koiTypeDao.getKoiTypeList();
+                request.setAttribute("koiTypeList", koiTypeList);
+
+                if (farmID != null || koiTypeID != null || priceOrder != null || startDate != null || endDate != null) {
+                    List<TourDTO> filterTourList = dao.filterTours(farmID, koiTypeID, priceOrder, startDate, endDate);
+                    request.setAttribute("tourList", filterTourList);
+                } else {
+                    request.setAttribute("tourList", tourList);
+                }
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(TourListController.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);

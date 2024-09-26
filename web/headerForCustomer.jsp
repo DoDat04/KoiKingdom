@@ -129,7 +129,7 @@
                                             <div class="text-center mb-4">
                                                 <div class="avatar-container">
                                                     <img id="avatarPreview" 
-                                                         src="${sessionScope.AVATAR != null ? sessionScope.AVATAR : 'images/default_avatar.png'}" 
+                                                         src="${sessionScope.AVATAR}" 
                                                          alt="">
                                                 </div>
                                                 <input type="file" id="avatar" name="profileImage" class="form-control mt-2" accept="image/*" onchange="previewAvatar()">

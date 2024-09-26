@@ -17,7 +17,6 @@
         <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/header.css">
-        <link rel="stylesheet" href="css/stylstyle.css">
     </head>
     <body>
         <div class="colorlib-loader"></div>
@@ -68,6 +67,14 @@
                 </c:forEach>
             </div>
         </div>
+        <!-- Back to Top Button -->
+        <button id="backToTop" class="btn btn-primary" style="display: none;">
+            <i class="fas fa-angle-up"></i>
+        </button>
+
+        <script src="js/backToTop.js"></script>    
+        <script src="js/tourList.js"></script>
+        
         <jsp:include page="footer.jsp" flush="true"/>
     </body>
 </html>

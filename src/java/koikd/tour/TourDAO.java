@@ -154,4 +154,55 @@ public class TourDAO implements Serializable {
         }
         return tourList;
     }
+
+    public TourDTO getTourByID(int tourID) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        TourDTO tour = null;
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT t.TourID, t.TourName, t.Duration, t.Description, t.TourPrice, t.StartDate, t.EndDate, t.Image, t.Rating, "
+                        + "(SELECT STRING_AGG(f.FarmName, ', ') FROM TOUR_FARM tf "
+                        + "INNER JOIN FARM f ON tf.FarmID = f.FarmID WHERE tf.TourID = t.TourID) AS 'Farm', "
+                        + "(SELECT STRING_AGG(k.TypeName, ', ') FROM TOUR_KOITYPE tk "
+                        + "INNER JOIN KOITYPE k ON tk.KoiTypeID = k.KoiTypeID WHERE tk.TourID = t.TourID) AS 'KoiType' "
+                        + "FROM TOUR t "
+                        + "WHERE t.TourID = ? "
+                        + "GROUP BY t.TourID, t.TourName, t.Duration, t.Description, t.TourPrice, t.StartDate, t.EndDate, t.Image, t.Rating";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, tourID);  // Set tourID as a parameter
+                rs = stm.executeQuery();
+
+                if (rs.next()) {
+                    String tourName = rs.getString("TourName");
+                    String tourDuration = rs.getString("Duration");
+                    String tourDescription = rs.getString("Description");
+                    double tourPrice = rs.getDouble("TourPrice");
+                    Timestamp startDate = rs.getTimestamp("StartDate");
+                    Timestamp endDate = rs.getTimestamp("EndDate");
+                    String farmName = rs.getString("Farm");
+                    String koiTypeName = rs.getString("KoiType");
+                    String tourImage = rs.getString("Image");
+                    double tourRating = rs.getDouble("Rating");
+
+                    tour = new TourDTO(tourID, tourName, koiTypeName, farmName, tourDuration, tourDescription, tourPrice, startDate, endDate, tourImage, tourRating);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+
+        return tour;
+    }
 }

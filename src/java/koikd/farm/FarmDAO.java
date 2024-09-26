@@ -72,16 +72,16 @@ public class FarmDAO {
         }
         return list;
     }
-    public static void main(String[] args) throws SQLException {
-        String nameFarm = "Koi Dreamland";
-        FarmDAO services = new FarmDAO();
-        ArrayList<FarmDTO> dto = services.getFarmList(nameFarm);
-        for (FarmDTO farmDTO : dto) {
-            if(farmDTO!=null){
-                System.out.println(farmDTO);
-            }
-        }
-    }
+//    public static void main(String[] args) throws SQLException {
+//        String nameFarm = "Koi Dreamland";
+//        FarmDAO services = new FarmDAO();
+//        ArrayList<FarmDTO> dto = services.getFarmList(nameFarm);
+//        for (FarmDTO farmDTO : dto) {
+//            if(farmDTO!=null){
+//                System.out.println(farmDTO);
+//            }
+//        }
+//    }
 
     /**
      *

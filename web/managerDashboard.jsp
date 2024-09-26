@@ -91,7 +91,7 @@
 
 <!-- Nội dung chính -->
 <div class="container">
-    <h1>Welcome to Manager Dashboard haha</h1>
+    <h1>Welcome to Manager Dashboard</h1>
     
 </div>
 

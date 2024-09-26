@@ -108,73 +108,39 @@
                 </c:if>
                 <c:forEach var="tour" items="${tourList}">
                     <div class="col-md-4 mb-4">
-                        <div class="card">
-                            <!-- Tour Image -->
-                            <img src="${tour.tourImage}" class="card-img-top" alt="${tour.tourName}">
-                            <div class="card-body">
-                                <!-- Tour Title -->
-                                <h5 class="card-title">${tour.tourName}</h5>
-                                <span class="rating">
-                                    <i class="fas fa-star text-warning"></i> <!-- Ngôi sao màu vàng -->
-                                    <span class="rating-number">${tour.tourRating}</span> <!-- Số đánh giá -->
-                                </span>
-
-                                <!-- Tour Duration and Dates -->
-                                <p class="card-text"><strong>Duration:</strong> ${tour.duration}</p>
-                                <p class="card-text"><strong>Start Date:</strong> 
-                                    <fmt:formatDate value="${tour.startDate}" pattern="dd-MM-yyyy"/>
-                                </p>
-                                <p class="card-text"><strong>End Date:</strong> 
-                                    <fmt:formatDate value="${tour.endDate}" pattern="dd-MM-yyyy"/>
-                                </p>
-
-                                <!-- Farm and Koi Type -->
-                                <p class="card-text"><strong>Farm:</strong> ${tour.farmName}</p>
-                                <p class="card-text"><strong>Koi Type:</strong> ${tour.koiTypeName}</p>
-
-                                <!-- Action Buttons -->
-                                <div class="d-flex justify-content-between">
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tourModal${tour.tourID}">
-                                        View details
-                                    </button>                               
-                                    <button type="button" class="btn btn-danger" onclick="buyNow(${tour.tourID})">
-                                        Buy now
-                                    </button>
+                        <form action="tour-list" method="get">
+                            <input type="hidden" name="tourID" value="${tour.tourID}"/>
+                            <button type="submit" class="btn btn-link p-0" style="text-decoration: none; color: inherit;">
+                                <div class="card h-100">
+                                    <!-- Tour Image -->
+                                    <img src="${tour.tourImage}" class="card-img-top" alt="${tour.tourName}">
+                                    <div class="card-body text-start">
+                                        <h5 class="card-title">${tour.tourName}</h5>
+                                        <span class="rating">
+                                            <i class="fas fa-star text-warning"></i>
+                                            <span class="rating-number">${tour.tourRating}</span>
+                                        </span>
+                                        <p class="card-text"><strong>Duration:</strong> ${tour.duration}</p>
+                                        <p class="card-text"><strong>Start Date:</strong>
+                                            <fmt:formatDate value="${tour.startDate}" pattern="dd-MM-yyyy"/>
+                                        </p>
+                                        <p class="card-text"><strong>End Date:</strong>
+                                            <fmt:formatDate value="${tour.endDate}" pattern="dd-MM-yyyy"/>
+                                        </p>
+                                        <p class="card-text"><strong>Farm:</strong> ${tour.farmName}</p>
+                                        <p class="card-text"><strong>Koi Type:</strong> ${tour.koiTypeName}</p>
+                                    </div>
+                                    <div class="card-footer text-end">
+                                        <strong class="fs-4 text-danger">${tour.tourPrice} $</strong>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <!-- Price at the bottom right -->
-                            <div class="card-footer text-end">
-                                <strong class="fs-4 text-danger">${tour.tourPrice} USD</strong>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Modal for Description -->
-                    <div class="modal fade" id="tourModal${tour.tourID}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">${tour.tourName}</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <!-- Tour Description inside modal -->
-                                    <p class="card-text">
-                                        <strong>Description:</strong>
-                                        <c:out value="${tour.description}" escapeXml="false" />
-                                    </p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
+                            </button>
+                        </form>
                     </div>
                 </c:forEach>
             </div>
         </div>               
-                        
+
         <!-- Back to Top Button -->
         <button id="backToTop" class="btn btn-primary" style="display: none;">
             <i class="fas fa-angle-up"></i>
