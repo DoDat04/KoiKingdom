@@ -14,6 +14,7 @@ import koikd.customer.CustomerDTO;
 import koikd.farm.FarmDAO;
 import koikd.farm.FarmDTO;
 import koikd.koi.KoiDTO;
+import koikd.order.KoiOrderDetailDTO;
 import koikd.utils.DBUtils;
 
 /**
@@ -23,12 +24,13 @@ import koikd.utils.DBUtils;
 public class KoiOrderDAO {
 
     /**
-     * getKoiOrderList 
+     * Get order list by customer's name
+     *
      * @param nameCustomer
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
-    public ArrayList<KoiOrderDTO> getKoiOrderList(String nameCustomer) throws SQLException {
+    public ArrayList<KoiOrderDTO> getKoiOrderListByNameCustomer(String nameCustomer) throws SQLException {
         ArrayList<KoiOrderDTO> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement pst = null;
@@ -41,7 +43,8 @@ public class KoiOrderDAO {
                         + "    O.KoiOrderID, \n"
                         + "    C.CustomerID,\n"
                         + "    O.DeliveryDate, \n"
-                        + "    O.Status\n"
+                        + "    O.Status,\n"
+                        + "    O.EstimatedDelivery \n"
                         + "FROM \n"
                         + "    [dbo].[KOIORDER] O\n"
                         + "INNER JOIN \n"
@@ -53,14 +56,14 @@ public class KoiOrderDAO {
                 if (nameCustomer != null && !nameCustomer.isEmpty()) {
                     pst.setString(1, "%" + nameCustomer + "%");
                 }
-
                 rs = pst.executeQuery();
                 while (rs.next()) {
                     int KoiOrderID = rs.getInt("KoiOrderID");
                     int customerId = rs.getInt("CustomerID");
                     Date deliveryDate = rs.getDate("DeliveryDate");
                     boolean status = rs.getBoolean("Status");
-                    KoiOrderDTO dao = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status);
+                    Date estimatedDelivery = rs.getDate("EstimatedDelivery");
+                    KoiOrderDTO dao = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery);
                     list.add(dao);
                 }
             }
@@ -82,28 +85,36 @@ public class KoiOrderDAO {
 
     /**
      * getCustomerNameById
+     *
      * @param customerId
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
-    public String getCustomerNameById(int customerId) throws SQLException {
+    public CustomerDTO getCustomerByCustomerID(int customerId) throws SQLException {
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
-        String customerName = null;
+        CustomerDTO result = null;
 
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT FirstName, LastName FROM [dbo].[CUSTOMER] WHERE CustomerID = ?";
+                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
+                        + "FROM CUSTOMER "
+                        + "WHERE CustomerID = ?";  // Added space before WHERE
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, customerId);
-
                 rs = pst.executeQuery();
                 if (rs.next()) {
-                    String firstName = rs.getString("FirstName");
+                    int customerID = rs.getInt("CustomerID");
+                    String email = rs.getString("Email");
                     String lastName = rs.getString("LastName");
-                    customerName = lastName + " " + firstName; // Combine first and last name
+                    String firstName = rs.getString("FirstName");
+                    String address = rs.getString("Address");
+                    String accountType = rs.getString("AccountType");
+                    boolean status = rs.getBoolean("Status");
+                    // Fixed constructor call
+                    result = new CustomerDTO(customerID, email, lastName, lastName, firstName, address, accountType, status);
                 }
             }
         } catch (Exception e) {
@@ -119,16 +130,17 @@ public class KoiOrderDAO {
                 conn.close();
             }
         }
-        return customerName;
+        return result;
     }
 
     /**
      * getKoiOrderDetail
+     *
      * @param orderKoiId
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
-    public KoiOrderDetailDTO getKoiOrderDetail(int orderKoiId) throws SQLException {
+    public KoiOrderDetailDTO getKoiOrderDetaiByID(int orderKoiId) throws SQLException {
         KoiOrderDetailDTO detail = null;
         Connection conn = null;
         PreparedStatement pst = null;
@@ -186,11 +198,12 @@ public class KoiOrderDAO {
 
     /**
      * getFarmName
+     *
      * @param farmId
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
-    public FarmDTO getFarmName(int farmId) throws SQLException {
+    public FarmDTO getFarmByFarmID(int farmId) throws SQLException {
         FarmDTO detail = null;
         Connection conn = null;
         PreparedStatement pst = null;
@@ -235,11 +248,12 @@ public class KoiOrderDAO {
 
     /**
      * getKoiName
+     *
      * @param koiId
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
-    public KoiDTO getKoiName(int koiId) throws SQLException {
+    public KoiDTO getKoiFishByKoiID(int koiId) throws SQLException {
         KoiDTO detail = null;
         Connection conn = null;
         PreparedStatement pst = null;
@@ -264,6 +278,116 @@ public class KoiOrderDAO {
                     int price = rs.getInt("Price");
                     String image = rs.getString("Image");
                     detail = new KoiDTO(KoiID, koiName, koiTypeID, age, length, weight, price, image);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return detail;
+    }
+
+    public ArrayList<KoiOrderDTO> getKoiOrderListByID(int customerID) throws SQLException, ClassNotFoundException {
+        ArrayList<KoiOrderDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT \n"
+                        + "    O.KoiOrderID, \n"
+                        + "    C.CustomerID, \n"
+                        + "    O.DeliveryDate, \n"
+                        + "    O.Status, \n"
+                        + "    O.EstimatedDelivery \n" // Thêm cột EstimatedDelivery
+                        + "FROM \n"
+                        + "    [dbo].[KOIORDER] O\n"
+                        + "INNER JOIN \n"
+                        + "    [dbo].[CUSTOMER] C ON O.CustomerID = C.CustomerID\n"
+                        + "WHERE O.CustomerID = ?";
+
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, customerID);  // Gán customerID vào câu lệnh SQL
+
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    int KoiOrderID = rs.getInt("KoiOrderID");
+                    int customerId = rs.getInt("CustomerID");
+                    Date deliveryDate = rs.getDate("DeliveryDate");
+                    boolean status = rs.getBoolean("Status");  // Lấy kiểu boolean cho cột Status
+                    Date estimatedDelivery = rs.getDate("EstimatedDelivery");  // Thêm EstimatedDelivery
+                    // Tạo DTO từ dữ liệu lấy được
+                    KoiOrderDTO dao = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery);
+                    list.add(dao);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+
+    public ArrayList<KoiOrderDetailDTO> getKoiOrderDetaiListById(int orderKoiId) throws SQLException {
+        ArrayList<KoiOrderDetailDTO> detail = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT \n"
+                        + "    OD.KoiOrderDetailID, \n"
+                        + "    OD.KoiOrderID, \n"
+                        + "    OD.KoiID, \n"
+                        + "    OD.FarmID, \n"
+                        + "    OD.Quantity, \n"
+                        + "    OD.UnitPrice, \n"
+                        + "    OD.TotalPrice, \n"
+                        + "    O.DeliveryDate, \n"
+                        + "    O.Status \n"
+                        + "FROM \n"
+                        + "    [dbo].[KOIORDERDETAIL] OD \n"
+                        + "INNER JOIN \n"
+                        + "    [dbo].[KOIORDER] O ON OD.KoiOrderID = O.KoiOrderID \n"
+                        + "WHERE OD.KoiOrderID = ?";
+
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, orderKoiId);
+
+                rs = pst.executeQuery();
+                while (rs.next()) { // Fetch the first result
+                    int koiOrderDetailID = rs.getInt("KoiOrderDetailID");
+                    int koiOrderID = rs.getInt("KoiOrderID");
+                    int koiID = rs.getInt("KoiID");
+                    int farmID = rs.getInt("FarmID");
+                    int quantity = rs.getInt("Quantity");
+                    double unitPrice = rs.getDouble("UnitPrice");
+                    double totalPrice = rs.getDouble("TotalPrice");
+                    KoiOrderDetailDTO orderDetail = new KoiOrderDetailDTO(koiOrderDetailID, koiOrderID, koiID, farmID, quantity, unitPrice, totalPrice);
+                    detail.add(orderDetail);
                 }
             }
         } catch (Exception e) {

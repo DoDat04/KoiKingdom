@@ -1,0 +1,119 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Sep 26, 2024, 9:58:28 PM
+    Author     : Admin
+*/
+/* Order Details Section */
+.order-details {
+    flex: 1.6;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #fff;
+    padding: 30px; /* Tăng padding để tạo không gian thoáng hơn */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* Hiệu ứng bóng mềm hơn */
+}
+
+/* Header Section */
+.header {
+    border-bottom: 2px solid #007BFF;
+    padding-bottom: 15px;
+    margin-bottom: 20px; /* Thêm khoảng cách giữa header và nội dung */
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 26px; /* Tăng kích thước font cho tiêu đề */
+    color: #007BFF;
+    text-transform: uppercase; /* Viết hoa toàn bộ để nhấn mạnh */
+    letter-spacing: 1px; /* Khoảng cách giữa các ký tự */
+}
+
+/* Order Information */
+.order-info {
+    margin: 15px 0;
+    font-size: 16px; /* Tăng kích thước font cho dễ đọc */
+    color: #666; /* Màu xám nhẹ cho thông tin phụ */
+    line-height: 1.6; /* Giãn dòng cho dễ đọc */
+}
+
+/* Koi Item Section */
+.koi-item {
+    width: 729px;
+    margin-bottom: 20px; /* Khoảng cách giữa các mục */
+    text-align: center; /* Căn giữa nội dung */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    background: #f5f5f5; /* Màu nền nhẹ nhàng hơn */
+    transition: all 0.3s ease; /* Hiệu ứng chuyển động khi hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Bóng mềm hơn */
+    margin-left:20px;
+}
+
+.koi-item:hover {
+    transform: scale(1.05); /* Hiệu ứng phóng to hơn khi hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Bóng nổi bật hơn khi hover */
+}
+
+/* Koi Row Section */
+.koi-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Căn đều 2 đầu giữa ảnh và nội dung */
+    margin-bottom: 10px;
+}
+
+.koi-item img {
+    width: 120px; /* Kích thước ảnh lớn hơn */
+    height: auto;
+    margin-right: 20px; /* Khoảng cách lớn hơn giữa ảnh và nội dung */
+    border-radius: 6px; /* Bo góc cho ảnh */
+    transition: transform 0.3s ease; /* Hiệu ứng khi hover vào ảnh */
+}
+
+.koi-item img:hover {
+    transform: scale(1.1); /* Phóng to ảnh khi hover */
+}
+
+/* Koi Name and Price */
+.koi-name, .koi-price {
+    font-weight: bold;
+    font-size: 18px; /* Tăng kích thước font */
+    margin-right: 20px;
+}
+
+.price {
+    color: #28a745; /* Màu xanh lá cho giá */
+    font-size: 20px; /* Tăng kích thước font cho giá */
+}
+
+/* Sidebar Section */
+.sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Tăng khoảng cách giữa các mục */
+    padding: 30px; /* Tăng padding */
+    background-color: #f8f9fa; /* Màu nền sáng hơn */
+}
+
+.sidebar div {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Thêm hiệu ứng hover */
+}
+
+.sidebar div:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Bóng đổ lớn hơn khi hover */
+    transform: translateY(-5px); /* Di chuyển nhẹ lên khi hover */
+}
+body .container{
+
+    font-family: 'Rokkitt', sans-serif;
+}

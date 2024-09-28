@@ -9,21 +9,25 @@ import java.util.Date;
 
 /**
  *
- * @author Admin
+ * @author Minhngo
  */
-public class KoiOrderDTO implements Serializable{
+public class KoiOrderDTO implements Serializable {
+
     private int koiOrderID;
     private int customerID;
     private Date deliveryDate;
     private boolean status;
+    private Date estimatedDelivery;
 
     public KoiOrderDTO() {
     }
-    public KoiOrderDTO(int koiOrderID, int customerID, Date deliveryDate, boolean status) {
+
+    public KoiOrderDTO(int koiOrderID, int customerID, Date deliveryDate, boolean status, Date estimatedDelivery) {
         this.koiOrderID = koiOrderID;
         this.customerID = customerID;
         this.deliveryDate = deliveryDate;
         this.status = status;
+        this.estimatedDelivery = estimatedDelivery;
     }
 
     public int getKoiOrderID() {
@@ -58,10 +62,19 @@ public class KoiOrderDTO implements Serializable{
         this.status = status;
     }
 
+    public Date getEstimatedDelivery() {
+        return estimatedDelivery;
+    }
+
+    public void setEstimatedDelivery(Date estimatedDelivery) {
+        this.estimatedDelivery = estimatedDelivery;
+    }
+
+    
+    
     @Override
     public String toString() {
         return "KoiOrderDTO{" + "koiOrderID=" + koiOrderID + ", customerID=" + customerID + ", deliveryDate=" + deliveryDate + ", status=" + status + '}';
     }
-    
-    
+
 }

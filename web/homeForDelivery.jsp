@@ -35,7 +35,17 @@
                                     <td>${order.customerID}</td>
                                     <td>${requestScope.customerNames[status.index]}</td>
                                     <td>${order.deliveryDate}</td>
-                                    <td>${order.status}</td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${order.status == true}">
+                                                Complete
+                                            </c:when>
+                                            <c:when test="${order.status == false}">
+                                                On-going
+                                            </c:when>
+                                        </c:choose>
+
+                                    </td>
                                     <td>
                                         <form action="GetKoiOrderDetail" method="GET">
                                             <input type="hidden" name="orderName" value="${requestScope.customerNames[status.index]}">

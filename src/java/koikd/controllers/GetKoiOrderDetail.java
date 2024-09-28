@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import koikd.customer.CustomerDTO;
 import koikd.farm.FarmDTO;
 import koikd.koi.KoiDTO;
 import koikd.order.KoiOrderDAO;
@@ -46,7 +47,7 @@ public class GetKoiOrderDetail extends HttpServlet {
 
         try (PrintWriter out = response.getWriter()) {
             KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
-            ArrayList<KoiOrderDTO> koiOrders = koiOrderDAO.getKoiOrderList(nameOrder);
+            ArrayList<KoiOrderDTO> koiOrders = koiOrderDAO.getKoiOrderListByNameCustomer(nameOrder);
 
             if (koiOrders != null && !koiOrders.isEmpty()) {
                 processOrderDetails(koiOrders, request, koiOrderDAO);
@@ -68,17 +69,18 @@ public class GetKoiOrderDetail extends HttpServlet {
 
         for (KoiOrderDTO koiOrder : koiOrders) {
             // Lấy tên khách hàng
-            customerNames.add(koiOrderDAO.getCustomerNameById(koiOrder.getCustomerID()));
+            CustomerDTO name = koiOrderDAO.getCustomerByCustomerID(koiOrder.getCustomerID());
+            customerNames.add(name.getLastName() + " " + name.getFirstName());
 
             // Lấy chi tiết đơn hàng
-            KoiOrderDetailDTO koiOrderDetail = koiOrderDAO.getKoiOrderDetail(koiOrder.getKoiOrderID());
+            KoiOrderDetailDTO koiOrderDetail = koiOrderDAO.getKoiOrderDetaiByID(koiOrder.getKoiOrderID());
 
             if (koiOrderDetail != null) {
                 koiOrderDetails.add(koiOrderDetail);
 
                 // Lấy tên trại và tên koi
-                FarmDTO farmName = koiOrderDAO.getFarmName(koiOrderDetail.getFarmID());
-                KoiDTO koiName = koiOrderDAO.getKoiName(koiOrderDetail.getKoiID());
+                FarmDTO farmName = koiOrderDAO.getFarmByFarmID(koiOrderDetail.getFarmID());
+                KoiDTO koiName = koiOrderDAO.getKoiFishByKoiID(koiOrderDetail.getKoiID());
 
                 farmNames.add(farmName);
                 koiNames.add(koiName);
@@ -86,7 +88,7 @@ public class GetKoiOrderDetail extends HttpServlet {
                 // Xử lý nếu không tìm thấy chi tiết đơn hàng (tuỳ chọn)
                 request.setAttribute("errorMessage", "No farm found.");
                 request.setAttribute("errorMessage", "No koiname found.");
-                
+
             }
         }
 

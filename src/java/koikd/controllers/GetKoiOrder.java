@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import koikd.customer.CustomerDTO;
 import koikd.order.KoiOrderDAO;
 import koikd.order.KoiOrderDTO;
 
@@ -33,14 +34,14 @@ public class GetKoiOrder extends HttpServlet {
         String url = SHIPHISTORYPAGE;
 
         try {
-            String nameOrder = request.getParameter("txtOrder");
+            String nameOrder = request.getParameter("txtNameCustomer");
             KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
-            ArrayList<KoiOrderDTO> koiList = koiOrderDAO.getKoiOrderList(nameOrder);
+            ArrayList<KoiOrderDTO> koiList = koiOrderDAO.getKoiOrderListByNameCustomer(nameOrder);
             ArrayList<String> customerNames = new ArrayList<>();
             if (koiList != null && !koiList.isEmpty()) {
                 for (KoiOrderDTO koiOrderDTO : koiList) {
-                    String customerName = koiOrderDAO.getCustomerNameById(koiOrderDTO.getCustomerID());
-                    customerNames.add(customerName);
+                    CustomerDTO name = koiOrderDAO.getCustomerByCustomerID(koiOrderDTO.getCustomerID());
+                    customerNames.add(name.getLastName()+" "+name.getFirstName());
                 }
                 request.setAttribute("koiList", koiList);
                 request.setAttribute("customerNames", customerNames);

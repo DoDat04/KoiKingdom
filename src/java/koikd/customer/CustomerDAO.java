@@ -44,7 +44,7 @@ public class CustomerDAO implements Serializable {
                     String accountType = rs.getString("AccountType");
                     boolean status = rs.getBoolean("Status");
 
-                    CustomerDTO customer = new CustomerDTO(customerID, email, "",lastName, firstName, address, accountType, status);
+                    CustomerDTO customer = new CustomerDTO(customerID, email, "", lastName, firstName, address, accountType, status);
                     customerList.add(customer);
                 }
             }
@@ -80,12 +80,15 @@ public class CustomerDAO implements Serializable {
                 if (rs.next()) {
                     String hashedPassword = rs.getString("Password");
                     if (BCrypt.checkpw(password, hashedPassword)) {
+
+                        int customerId = rs.getInt("CustomerID");
                         String lastName = rs.getString("LastName");
                         String firstName = rs.getString("FirstName");
                         String address = rs.getString("Address");
                         String accountType = rs.getString("AccountType");
                         boolean status = rs.getBoolean("Status");
-                        result = new CustomerDTO(email, "", lastName, firstName, address, accountType, status);
+                        result = new CustomerDTO(customerId, email, password, lastName, firstName, address, accountType, status);
+
                     }
                 }
             }
@@ -376,7 +379,7 @@ public class CustomerDAO implements Serializable {
             con = DBUtils.getConnection();
             if (con != null) {
                 // Cập nhật truy vấn SQL để lấy lastName và firstName
-                String sql = "SELECT Email, FirstName, LastName, AccountType, Address, Status "
+                String sql = "SELECT customerID, Email, FirstName, LastName, AccountType, Address, Status "
                         + "FROM CUSTOMER "
                         + "WHERE Email = ? "
                         + "AND AccountType = ?";
@@ -386,6 +389,7 @@ public class CustomerDAO implements Serializable {
 
                 rs = stm.executeQuery();
                 if (rs.next()) {
+                     int customerID = rs.getInt("CustomerID");
                     String customerEmail = rs.getString("Email");
                     String firstName = rs.getString("FirstName");
                     String lastName = rs.getString("LastName");
@@ -393,7 +397,7 @@ public class CustomerDAO implements Serializable {
                     String address = rs.getString("Address");
                     boolean status = rs.getBoolean("Status");
 
-                    customer = new CustomerDTO(customerEmail, "", lastName, firstName, address, accType, status);
+                   customer = new CustomerDTO(customerID, customerEmail, "", lastName, firstName, address, accType, status);
                 }
             }
         } finally {
@@ -409,6 +413,7 @@ public class CustomerDAO implements Serializable {
         }
         return customer;
     }
+
     /**
      *
      * @param id
@@ -460,5 +465,4 @@ public class CustomerDAO implements Serializable {
 //            System.out.println("Update status successfully");
 //        }
 //    }
-    
 }

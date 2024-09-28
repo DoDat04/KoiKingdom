@@ -63,19 +63,8 @@
 
                     <!-- Right Menu (Add to Cart, Account) -->
                     <div class="menu-right d-flex align-items-center">
-                        <a href="cart" class="text-black me-3 icon-size position-relative">
+                        <a href="#" class="text-black me-3 icon-size">
                             <i class="fas fa-shopping-cart"></i>
-                            <!-- Cart Item Count -->
-                            <span class="cart-badge">
-                                <c:choose>
-                                    <c:when test="${sessionScope.cartItemCount != null or sessionScope.cartItemCount > 0}">
-                                        ${sessionScope.cartItemCount}
-                                    </c:when>
-                                    <c:otherwise>
-                                        0
-                                    </c:otherwise>
-                                </c:choose>
-                            </span>
                         </a>
                         <a href="#" class="text-black me-3 icon-size">
                             <i class="fa-solid fa-heart"></i>
@@ -112,14 +101,19 @@
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal"><i class="fa-solid fa-key"></i> Change Password</a></li>
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
                                         <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
-                                        <li><a class="dropdown-item" href="#"><i class="fa fa-history"></i> My Order</a></li>
+                                        <li><a class="dropdown-item" href="MyOrder?customerID=${sessionScope.LOGIN_USER.customerID}"><i class="fa fa-history"></i> My Order</a></li>
                                         <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
                                         </c:when>
                                         <c:otherwise>                                       
                                         <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
                                         <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
-                                        <li><a class="dropdown-item" href="#"><i class="fa fa-history"></i> My Order</a></li>
+                                        <li>
+                                            <a class="dropdown-item" href="MyOrder?customerID=${sessionScope.customerID}">
+                                                <i class="fa fa-history"></i> My Order
+                                            </a>
+                                        </li>
+
                                         <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
                                         </c:otherwise>
                                     </c:choose>
@@ -247,21 +241,21 @@
         </header>
 
         <script>
-            function previewAvatar() {
-                const file = document.getElementById('avatar').files[0];
-                const preview = document.getElementById('avatarPreview');
-                const reader = new FileReader();
+                                                    function previewAvatar() {
+                                                        const file = document.getElementById('avatar').files[0];
+                                                        const preview = document.getElementById('avatarPreview');
+                                                        const reader = new FileReader();
 
-                reader.onloadend = function () {
-                    preview.src = reader.result;
-                };
+                                                        reader.onloadend = function () {
+                                                            preview.src = reader.result;
+                                                        };
 
-                if (file) {
-                    reader.readAsDataURL(file);
-                } else {
-                    preview.src = "";
-                }
-            }
+                                                        if (file) {
+                                                            reader.readAsDataURL(file);
+                                                        } else {
+                                                            preview.src = "";
+                                                        }
+                                                    }
         </script>
         <script src="js/load.js"></script>
     </body>

@@ -90,5 +90,11 @@ public class KoiOrderDetailDTO implements Serializable {
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
+
+    @Override
+    public String toString() {
+        return "KoiOrderDetailDTO{" + "koiOrderDetailID=" + koiOrderDetailID + ", koiOrderID=" + koiOrderID + ", koiID=" + koiID + ", farmID=" + farmID + ", quantity=" + quantity + ", unitPrice=" + unitPrice + ", totalPrice=" + totalPrice + '}';
+    }
+    
     
 }

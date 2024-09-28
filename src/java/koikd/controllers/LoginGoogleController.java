@@ -51,19 +51,21 @@ public class LoginGoogleController extends HttpServlet {
                 GooglePojo googlePojo = GoogleUtils.getUserInfo(accessToken);
 
                 if (googlePojo != null) {
-                    url = HOME_PAGE;                  
+                    url = HOME_PAGE;
                     CustomerDAO dao = new CustomerDAO();
                     HttpSession session = request.getSession();
                     session.removeAttribute("LOGIN_USER"); // Clear regular login user info
                     session.setAttribute("SUCCESS", "Login Successfully!");
-                    
+
                     //Kiểm tra trong database có tài khoản google đó chưa
                     CustomerDTO dto = dao.findCustomerByEmailAndAccountType(googlePojo.getEmail(), "google");
                     if (dto != null) {
+                        int customerID = dto.getCustomerID();
                         String firstName = dto.getFirstName();
                         String lastName = dto.getLastName();
                         session.setAttribute("firstName", firstName);
                         session.setAttribute("lastName", lastName);
+                        session.setAttribute("customerID", customerID);
                         // sau khi login lấy address từ db bỏ vào attribute
                         session.setAttribute("address", dto.getAddress());
                     } else {
