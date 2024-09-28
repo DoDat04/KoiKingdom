@@ -31,16 +31,16 @@
         <div class="container-fluid" id="detail" style="padding-top: 90px; padding-bottom: 90px; display: flex; gap: 20px; padding-left: 57px; padding-right: 57px;">
             <c:if test="${not empty requestScope.koiOrderDetails}">
                 <div class="order-details">
-                    <div class="header">
-                        <div class="order-info">
-                            <span style="padding-right: 19px;">Order date: ${requestScope.myOrders[koiOrderID.index].deliveryDate}</span>
-                            <span>Estimated delivery: ${requestScope.myOrders[koiOrderID.index].estimatedDelivery}</span>
-                        </div>
-                        <div>Address: ${requestScope.customer.address}</div>
-                    </div>
 
                     <div class="koi-section" style="max-height: 450px; overflow-y: auto;">
                         <c:forEach var="koiOrderDetails" items="${requestScope.koiOrderDetails}" varStatus="koiOrderID">
+                            <div class="header">
+                                <div class="order-info">
+                                    <span style="padding-right: 19px;">Order date: ${requestScope.myOrders[koiOrderID.index].deliveryDate}</span>
+                                    <span>Estimated delivery: ${requestScope.myOrders[koiOrderID.index].estimatedDelivery}</span>
+                                </div>
+                                <div>Address: ${requestScope.customer.address}</div>
+                            </div>
                             <div style="font-size: 20px;">${requestScope.farmNames[koiOrderID.index].farmName}</div>
                             <div class="koi-item">
                                 <div class="koi-row">

@@ -7,38 +7,50 @@ document.addEventListener('DOMContentLoaded', function() {
     const updateProfileModal = document.getElementById('updateProfileModal');
     
     updateProfileModal.addEventListener('hidden.bs.modal', function () {
-        // Ẩn các phần Home Address và Select Box khi modal bị đóng
         document.getElementById('homeAddressDiv').style.display = 'none';
         document.getElementById('addressSelectDiv').style.display = 'none';
     });
 
-    // Khi nhấn nút Edit, hiển thị các trường cần thiết
     document.getElementById('editAddressBtn').addEventListener('click', function() {
         document.getElementById('homeAddressDiv').style.display = 'block';
         document.getElementById('addressSelectDiv').style.display = 'flex';
     });
 });
 
-
 const host = "https://provinces.open-api.vn/api/";
 var callAPI = (api) => {
     return axios.get(api)
-            .then((response) => {
-                renderData(response.data, "city");
-            });
+        .then((response) => {
+            console.log(response.data); // Check the response data
+            renderData(response.data, "city");
+        })
+        .catch((error) => {
+            console.error("Error fetching cities:", error);
+        });
 };
+
 callAPI('https://provinces.open-api.vn/api/?depth=1');
+
 var callApiDistrict = (api) => {
     return axios.get(api)
-            .then((response) => {
-                renderData(response.data.districts, "district");
-            });
+        .then((response) => {
+            console.log(response.data); // Check the response data
+            renderData(response.data.districts, "district");
+        })
+        .catch((error) => {
+            console.error("Error fetching districts:", error);
+        });
 };
+
 var callApiWard = (api) => {
     return axios.get(api)
-            .then((response) => {
-                renderData(response.data.wards, "ward");
-            });
+        .then((response) => {
+            console.log(response.data); // Check the response data
+            renderData(response.data.wards, "ward");
+        })
+        .catch((error) => {
+            console.error("Error fetching wards:", error);
+        });
 };
 
 var renderData = (array, select) => {
@@ -59,11 +71,21 @@ var renderData = (array, select) => {
 };
 
 $("#city").change(() => {
-    callApiDistrict(host + "p/" + $("#city").find(':selected').data('id') + "?depth=2");
+    const selectedCity = $("#city").find(':selected');
+    if (selectedCity.data('id')) {
+        callApiDistrict(host + "p/" + selectedCity.data('id') + "?depth=2");
+    }
 });
+
 $("#district").change(() => {
-    callApiWard(host + "d/" + $("#district").find(':selected').data('id') + "?depth=2");
+    const selectedDistrict = $("#district").find(':selected');
+    if (selectedDistrict.data('id')) {
+        callApiWard(host + "d/" + selectedDistrict.data('id') + "?depth=2");
+    }
 });
+
 $("#ward").change(() => {
+    // Logic if needed when ward changes
 });
+
 

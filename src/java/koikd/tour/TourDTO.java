@@ -39,11 +39,8 @@ public class TourDTO implements Serializable{
         this.tourImage = tourImage;
         this.tourRating = tourRating;
         this.status = status;
-    }
-
-    
-
-    
+    }   
+  
     public TourDTO(int tourID, String tourName, String koiTypeName, String farmName, String duration, String description, double tourPrice, Timestamp startDate, Timestamp endDate, String tourImage, double tourRating) {
         this.tourID = tourID;
         this.tourName = tourName;

@@ -16,6 +16,7 @@ import koikd.tour.TourDTO;
 public class CartBean implements Serializable {
 
     private Map<Integer, CartItem> items; // Change type to CartItem
+    private double totalPrice; // Thêm biến tổng tiền
 
     public CartBean() {
         this.items = new HashMap<>(); // Initialize the map
@@ -23,6 +24,10 @@ public class CartBean implements Serializable {
 
     public Map<Integer, CartItem> getItems() {
         return items;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public void addItemToCart(TourDTO tour, int numberOfPeople) {
@@ -37,6 +42,17 @@ public class CartBean implements Serializable {
             existingItem.setNumberOfPeople(existingItem.getNumberOfPeople() + numberOfPeople);
         } else {
             this.items.put(tourID, new CartItem(tour, numberOfPeople));
+        }
+    }
+    
+    public void removeItemFromCart(TourDTO tour, int numberOfPeople) {
+        if (tour == null || numberOfPeople <= 0) {
+            return;
+        }
+        
+        int tourID = tour.getTourID();
+        if (this.items.containsKey(tourID)) {
+            this.items.remove(tourID);
         }
     }
     

@@ -80,6 +80,7 @@
                             <form action="AddToCartController" method="post">
                                 <input type="hidden" name="tourID" value="${selectedTour.tourID}">
                                 <input type="hidden" name="numberOfPeople" id="hiddenQuantity" value="0">
+                                <input type="hidden" name="customerID" value="${sessionScope.custID}">
 
                                 <!-- Add to Cart & Book Now Buttons -->
                                 <div class="tour-buttons d-flex justify-content-between mt-4">
@@ -145,20 +146,18 @@
                         <a href="#" onclick="toggleMoreFeedback(event)" class="show-more-link">Show More</a>
                     </div>
                 </div>
-
             </div>
-        </section>
+        </section>       
 
         <!-- Back to Top Button -->
         <button id="backToTop" class="btn btn-primary" style="display: none;">
             <i class="fas fa-angle-up"></i>
         </button>
 
-        <script src="js/backToTop.js"></script>
+        <script src="js/backToTop.js"></script>        
 
         <!-- Footer Include -->
         <jsp:include page="footer.jsp" flush="true"/>
         <script src="js/tourDetail.js"></script>
-
     </body>
 </html>

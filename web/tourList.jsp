@@ -108,7 +108,7 @@
                 </c:if>
                 <c:forEach var="tour" items="${tourList}">
                     <div class="col-md-4 mb-4">
-                        <form action="tour-list" method="get">
+                        <form action="tour-detail" method="get">
                             <input type="hidden" name="tourID" value="${tour.tourID}"/>
                             <button type="submit" class="btn btn-link p-0" style="text-decoration: none; color: inherit;">
                                 <div class="card h-100">

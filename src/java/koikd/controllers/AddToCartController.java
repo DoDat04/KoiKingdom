@@ -24,7 +24,7 @@ import koikd.tour.TourDTO;
  */
 @WebServlet(name = "AddToCartController", urlPatterns = {"/AddToCartController"})
 public class AddToCartController extends HttpServlet {
-    private static final String TOUR_DETAIL_PAGE = "tour-list";
+    private static final String TOUR_DETAIL_PAGE = "tour-detail";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -62,6 +62,8 @@ public class AddToCartController extends HttpServlet {
                     
                     session.setAttribute("cartItemCount", cart.getTotalQuantity());
                 }                             
+            } else {
+                request.setAttribute("ERROR", "You need to login to perform this action!");
             }
             
         } catch (SQLException ex) {
@@ -99,7 +101,7 @@ public class AddToCartController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        processRequest(request, response);        
     }
 
     /**

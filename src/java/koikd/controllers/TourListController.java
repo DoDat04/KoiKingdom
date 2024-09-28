@@ -30,7 +30,6 @@ import koikd.tour.TourDTO;
 public class TourListController extends HttpServlet {
 
     private static final String TOUR_PAGE = "tourList.jsp";
-    private static final String TOUR_DETAIL_PAGE = "tour-detail.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,38 +50,26 @@ public class TourListController extends HttpServlet {
         String priceOrder = request.getParameter("priceOrder");
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
-        String tourIDParam = request.getParameter("tourID");
 
         try {
             TourDAO dao = new TourDAO();
             FarmDAO farmDao = new FarmDAO();
             KoiTypeDAO koiTypeDao = new KoiTypeDAO();
 
-            if (tourIDParam != null && !tourIDParam.isEmpty()) {
-                int tourID = Integer.parseInt(tourIDParam);
+            List<TourDTO> tourList = dao.getTourList();
+            request.setAttribute("tourList", tourList);
 
-                TourDTO selectedTour = dao.getTourByID(tourID);
+            List<FarmDTO> farmList = farmDao.getFarmList();
+            request.setAttribute("farmList", farmList);
 
-                if (selectedTour != null) {
-                    request.setAttribute("selectedTour", selectedTour);
-                    url = TOUR_DETAIL_PAGE; 
-                }
+            List<KoiTypeDTO> koiTypeList = koiTypeDao.getKoiTypeList();
+            request.setAttribute("koiTypeList", koiTypeList);
+
+            if (farmID != null || koiTypeID != null || priceOrder != null || startDate != null || endDate != null) {
+                List<TourDTO> filterTourList = dao.filterTours(farmID, koiTypeID, priceOrder, startDate, endDate);
+                request.setAttribute("tourList", filterTourList);
             } else {
-                List<TourDTO> tourList = dao.getTourList();
-                request.setAttribute("tourList", tourList); 
-
-                List<FarmDTO> farmList = farmDao.getFarmList();
-                request.setAttribute("farmList", farmList);
-
-                List<KoiTypeDTO> koiTypeList = koiTypeDao.getKoiTypeList();
-                request.setAttribute("koiTypeList", koiTypeList);
-
-                if (farmID != null || koiTypeID != null || priceOrder != null || startDate != null || endDate != null) {
-                    List<TourDTO> filterTourList = dao.filterTours(farmID, koiTypeID, priceOrder, startDate, endDate);
-                    request.setAttribute("tourList", filterTourList);
-                } else {
-                    request.setAttribute("tourList", tourList);
-                }
+                request.setAttribute("tourList", tourList);
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(TourListController.class.getName()).log(Level.SEVERE, null, ex);

@@ -5,12 +5,12 @@
 package koikd.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import koikd.cart.CartBean;
 
 /**
  *
@@ -18,7 +18,9 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ViewCartController", urlPatterns = {"/cart"})
 public class ViewCartController extends HttpServlet {
+
     private static final String CART_PAGE = "cartPage.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,7 +34,7 @@ public class ViewCartController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = CART_PAGE;
-        try {
+        try {           
             url = CART_PAGE;
         } finally {
             request.getRequestDispatcher(url).forward(request, response);

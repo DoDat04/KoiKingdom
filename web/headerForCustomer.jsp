@@ -63,8 +63,19 @@
 
                     <!-- Right Menu (Add to Cart, Account) -->
                     <div class="menu-right d-flex align-items-center">
-                        <a href="#" class="text-black me-3 icon-size">
+                        <a href="cart" class="text-black me-3 icon-size position-relative">
                             <i class="fas fa-shopping-cart"></i>
+                            <!-- Cart Item Count -->
+                            <span class="cart-badge">
+                                <c:choose>
+                                    <c:when test="${sessionScope.cartItemCount != null or sessionScope.cartItemCount > 0}">
+                                        ${sessionScope.cartItemCount}
+                                    </c:when>
+                                    <c:otherwise>
+                                        0
+                                    </c:otherwise>
+                                </c:choose>
+                            </span>
                         </a>
                         <a href="#" class="text-black me-3 icon-size">
                             <i class="fa-solid fa-heart"></i>

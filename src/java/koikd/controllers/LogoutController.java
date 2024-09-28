@@ -36,8 +36,7 @@ public class LogoutController extends HttpServlet {
             if (session != null) {
                 session.removeAttribute("LOGIN_USER");
                 session.removeAttribute("LOGIN_GMAIL");
-                // Gán biến logout thành công vô session vì ở đây sendRedirect đến home
-                session.setAttribute("SUCCESS", "Logout Successfully!");
+                session.invalidate();               
             }            
         } finally {
             response.sendRedirect("home");
