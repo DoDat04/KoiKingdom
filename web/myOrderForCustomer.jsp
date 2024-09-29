@@ -22,60 +22,74 @@
         <link rel="stylesheet" href="css/myOrderForCustomer.css">  
     </head>
 
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+    </style>
     <body>
         <div class="colorlib-loader"></div>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
-
-        <c:if test="${not empty requestScope.koiOrderDetails}">
-            <c:forEach var="koiOrderDetails" items="${requestScope.koiOrderDetails}" varStatus="koiOrderID">
-
-                <c:if test="${koiOrderID.first || koiOrderDetails.koiOrderID != prevKoiOrderID}">
-                    <c:if test="${not koiOrderID.first}">
+        <div>
+            <c:if test="${not empty requestScope.koiOrderDetails}">
+                <c:forEach var="koiOrderDetails" items="${requestScope.koiOrderDetails}" varStatus="koiOrderID">
+                    <c:if test="${koiOrderID.first || koiOrderDetails.koiOrderID != prevKoiOrderID}">
+                        <c:if test="${not koiOrderID.first}">
+                        </div> 
                     </div> 
-                </div> 
-            </c:if>
-
-            <div style="border: 1px solid #ccc; border-radius: 10px; margin-bottom: 20px; width: 1117px; margin: 0 auto; margin-top: 92px">
-                <div class="container-fluid" id="detail" style="padding:57px 57px 57px 57px; gap: 20px;">
                 </c:if>
 
-                <div class="order-details" style="display: flex; justify-content: center;">
-                    <div class="koi-section" style="padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 909px">
-                        <div style="font-size: 20px; margin-bottom: 17px;">
-                            ${requestScope.farmNames[koiOrderID.index].farmName}
-                        </div>                                                                                     
-                        <a href="MyOrderDetail?koiOrderID=${koiOrderDetails.koiOrderID}&customerID=${requestScope.customerNames.customerID}" style="text-decoration: none; color: black">
-                            <div class="koi-item">
-                                <div class="koi-row" style="display: flex; align-items: center;">
-                                    <img src="${requestScope.koiNames[koiOrderID.index].image}" alt="Picture of KOI" style="width: 58px; margin-right: 10px;"/>
-                                    <div class="koi-name" style="margin-right: 454px;">
-                                        ${requestScope.koiNames[koiOrderID.index].koiName}
-                                    </div>
-                                    <div>
-                                        <div class="koi-price price">
-                                            <fmt:formatNumber type="currency" currencySymbol="$" value="${requestScope.koiNames[koiOrderID.index].price}"/> 
+                <div style="border: 1px solid #ccc; border-radius: 10px; margin-bottom: 20px; width: 1117px; margin: 0 auto; margin-top: 92px">
+                    <div class="container-fluid" id="detail" style="padding:57px 57px 57px 57px; gap: 20px;">
+                    </c:if>
+
+                    <div class="order-details" style="display: flex; justify-content: center;">
+                        <div class="koi-section" style="padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 909px">
+                            <div style="font-size: 20px; margin-bottom: 17px;">
+                                ${requestScope.farmNames[koiOrderID.index].farmName}
+                            </div>                                                                                     
+                            <a href="MyOrderDetail?koiOrderID=${koiOrderDetails.koiOrderID}&customerID=${requestScope.customerNames.customerID}" style="text-decoration: none; color: black">
+                                <div class="koi-item">
+                                    <div class="koi-row" style="display: flex; align-items: center;">
+                                        <img src="${requestScope.koiNames[koiOrderID.index].image}" alt="Picture of KOI" style="width: 58px; margin-right: 10px;"/>
+                                        <div class="koi-name" style="margin-right: 454px;">
+                                            ${requestScope.koiNames[koiOrderID.index].koiName}
                                         </div>
-                                        <div class="item-koi">
-                                            ${koiOrderDetails.quantity} items
+                                        <div>
+                                            <div class="koi-price price">
+                                                <fmt:formatNumber type="currency" currencySymbol="$" value="${requestScope.koiNames[koiOrderID.index].price}"/> 
+                                            </div>
+                                            <div class="item-koi">
+                                                ${koiOrderDetails.quantity} items
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
+                    <c:set var="prevKoiOrderID" value="${koiOrderDetails.koiOrderID}"/>
+                    <c:if test="${koiOrderID.last}">
+                    </div> 
                 </div>
-                <c:set var="prevKoiOrderID" value="${koiOrderDetails.koiOrderID}"/>
-                <c:if test="${koiOrderID.last}">
-                </div> 
-            </div>
-        </c:if>
-    </c:forEach>
-</c:if>
+            </c:if>
+        </c:forEach>
+    </c:if>
 
 
-<c:if test="${empty requestScope.myOrder}">
-    <p class="alert alert-danger">${Error}</p>
-</c:if>
+    <c:if test="${empty requestScope.koiOrderDetails}">
+        <p class="alert alert-danger" style="
+           margin-top: 15px;">${Error}</p>
+    </c:if>
+</div>
 
 <jsp:include page="footer.jsp" flush="true"/>
 </body>

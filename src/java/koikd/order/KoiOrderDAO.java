@@ -11,10 +11,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import koikd.customer.CustomerDTO;
-import koikd.farm.FarmDAO;
 import koikd.farm.FarmDTO;
 import koikd.koi.KoiDTO;
-import koikd.order.KoiOrderDetailDTO;
 import koikd.utils.DBUtils;
 
 /**
@@ -84,7 +82,7 @@ public class KoiOrderDAO {
     }
 
     /**
-     * getCustomerNameById
+     *  Get Customer By CustomerID
      *
      * @param customerId
      * @return
@@ -101,7 +99,7 @@ public class KoiOrderDAO {
             if (conn != null) {
                 String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
                         + "FROM CUSTOMER "
-                        + "WHERE CustomerID = ?";  // Added space before WHERE
+                        + "WHERE CustomerID = ?"; 
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, customerId);
                 rs = pst.executeQuery();
@@ -134,7 +132,7 @@ public class KoiOrderDAO {
     }
 
     /**
-     * getKoiOrderDetail
+     * Get KoiOrderDetail By OrderKoiID
      *
      * @param orderKoiId
      * @return
@@ -197,7 +195,7 @@ public class KoiOrderDAO {
     }
 
     /**
-     * getFarmName
+     * Get Farm By Farm ID
      *
      * @param farmId
      * @return
@@ -247,7 +245,7 @@ public class KoiOrderDAO {
     }
 
     /**
-     * getKoiName
+     * Get Koi Fish By KoiID
      *
      * @param koiId
      * @return
@@ -296,6 +294,13 @@ public class KoiOrderDAO {
         return detail;
     }
 
+    /**
+     * Get KoiOrderList By Id
+     * @param customerID
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException 
+     */
     public ArrayList<KoiOrderDTO> getKoiOrderListByID(int customerID) throws SQLException, ClassNotFoundException {
         ArrayList<KoiOrderDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -318,15 +323,15 @@ public class KoiOrderDAO {
                         + "WHERE O.CustomerID = ?";
 
                 pst = conn.prepareStatement(sql);
-                pst.setInt(1, customerID);  // Gán customerID vào câu lệnh SQL
+                pst.setInt(1, customerID);  
 
                 rs = pst.executeQuery();
                 while (rs.next()) {
                     int KoiOrderID = rs.getInt("KoiOrderID");
                     int customerId = rs.getInt("CustomerID");
                     Date deliveryDate = rs.getDate("DeliveryDate");
-                    boolean status = rs.getBoolean("Status");  // Lấy kiểu boolean cho cột Status
-                    Date estimatedDelivery = rs.getDate("EstimatedDelivery");  // Thêm EstimatedDelivery
+                    boolean status = rs.getBoolean("Status");  
+                    Date estimatedDelivery = rs.getDate("EstimatedDelivery");  
                     // Tạo DTO từ dữ liệu lấy được
                     KoiOrderDTO dao = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery);
                     list.add(dao);
@@ -349,6 +354,12 @@ public class KoiOrderDAO {
         return list;
     }
 
+    /**
+     * Get KoiOrderDetailList By ID
+     * @param orderKoiId
+     * @return
+     * @throws SQLException 
+     */
     public ArrayList<KoiOrderDetailDTO> getKoiOrderDetaiListById(int orderKoiId) throws SQLException {
         ArrayList<KoiOrderDetailDTO> detail = new ArrayList<>();
         Connection conn = null;
@@ -378,7 +389,7 @@ public class KoiOrderDAO {
                 pst.setInt(1, orderKoiId);
 
                 rs = pst.executeQuery();
-                while (rs.next()) { // Fetch the first result
+                while (rs.next()) {
                     int koiOrderDetailID = rs.getInt("KoiOrderDetailID");
                     int koiOrderID = rs.getInt("KoiOrderID");
                     int koiID = rs.getInt("KoiID");
@@ -405,4 +416,64 @@ public class KoiOrderDAO {
         }
         return detail;
     }
+
+    /**
+     * GetKoiOrderListByOrderID
+     * @param koiOrderID
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException 
+     */
+    public ArrayList<KoiOrderDTO> getKoiOrderListByOrderID(int koiOrderID) throws SQLException, ClassNotFoundException {
+        ArrayList<KoiOrderDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT \n"
+                        + "    O.KoiOrderID, \n"
+                        + "    C.CustomerID, \n"
+                        + "    O.DeliveryDate, \n"
+                        + "    O.Status, \n"
+                        + "    O.EstimatedDelivery \n"
+                        + "FROM \n"
+                        + "    [dbo].[KOIORDER] O\n"
+                        + "INNER JOIN \n"
+                        + "    [dbo].[CUSTOMER] C ON O.CustomerID = C.CustomerID\n"
+                        + "WHERE O.KoiOrderID = ?";
+
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, koiOrderID); 
+
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    int KoiOrderID = rs.getInt("KoiOrderID");
+                    int customerId = rs.getInt("CustomerID");
+                    Date deliveryDate = rs.getDate("DeliveryDate");
+                    boolean status = rs.getBoolean("Status");
+                    Date estimatedDelivery = rs.getDate("EstimatedDelivery");
+                    KoiOrderDTO dao = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery);
+                    list.add(dao);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+
 }

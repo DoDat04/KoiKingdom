@@ -48,36 +48,44 @@ public class GetMyOrderDetail extends HttpServlet {
             String customerID = request.getParameter("customerID");
             String koiOrderID = request.getParameter("koiOrderID");
 
-            KoiOrderDAO dao = new KoiOrderDAO();
-            FarmDTO farm = new FarmDTO();
-            KoiDTO koiFish = new KoiDTO();
-            CustomerDTO customer = new CustomerDTO();
-            
-            ArrayList<KoiOrderDTO> koiOrderList = dao.getKoiOrderListByID(Integer.parseInt(customerID));
-            ArrayList<KoiOrderDetailDTO> koiOrderDetailCollection = new ArrayList<>();
-            ArrayList<FarmDTO> farmCollection = new ArrayList<>();                    
-            ArrayList<KoiDTO> koiFishCollection = new ArrayList<>();
+            if (customerID != null && koiOrderID != null) {
+                KoiOrderDAO dao = new KoiOrderDAO();
+                FarmDTO farm = new FarmDTO();
+                KoiDTO koiFish = new KoiDTO();
+                CustomerDTO customer = new CustomerDTO();
 
-            for (KoiOrderDTO koiOrderDTO : koiOrderList) {
-                if (koiOrderDTO.getKoiOrderID() == Integer.parseInt(koiOrderID)) {
-                    ArrayList<KoiOrderDetailDTO> koiOrderDetailList = dao.getKoiOrderDetaiListById(Integer.parseInt(koiOrderID));
-                    for (KoiOrderDetailDTO koiOrderDetailItem : koiOrderDetailList) {
-                        koiOrderDetailCollection.add(koiOrderDetailItem);
-                        farm = dao.getFarmByFarmID(koiOrderDetailItem.getFarmID());
-                        farmCollection.add(farm);
-                        koiFish = dao.getKoiFishByKoiID(koiOrderDetailItem.getKoiID());
-                        koiFishCollection.add(koiFish);
+                ArrayList<KoiOrderDTO> koiOrderList = dao.getKoiOrderListByID(Integer.parseInt(customerID));
+                ArrayList<KoiOrderDTO> koiOrderListByOrderList = dao.getKoiOrderListByOrderID(Integer.parseInt(koiOrderID));
+
+                ArrayList<KoiOrderDetailDTO> koiOrderDetailCollection = new ArrayList<>();
+                ArrayList<FarmDTO> farmCollection = new ArrayList<>();
+                ArrayList<KoiDTO> koiFishCollection = new ArrayList<>();
+
+                for (KoiOrderDTO koiOrderDTO : koiOrderList) {
+                    if (koiOrderDTO.getKoiOrderID() == Integer.parseInt(koiOrderID)) {
+                        ArrayList<KoiOrderDetailDTO> koiOrderDetailList = dao.getKoiOrderDetaiListById(Integer.parseInt(koiOrderID));
+                        for (KoiOrderDetailDTO koiOrderDetailItem : koiOrderDetailList) {
+                            koiOrderDetailCollection.add(koiOrderDetailItem);
+                            farm = dao.getFarmByFarmID(koiOrderDetailItem.getFarmID());
+                            farmCollection.add(farm);
+                            koiFish = dao.getKoiFishByKoiID(koiOrderDetailItem.getKoiID());
+                            koiFishCollection.add(koiFish);
+                        }
                     }
                 }
+                customer = dao.getCustomerByCustomerID(Integer.parseInt(customerID));
+
+                request.setAttribute("koiOrderListByOrderList", koiOrderListByOrderList);
+                request.setAttribute("koiOrderDetails", koiOrderDetailCollection);
+                request.setAttribute("koiNames", koiFishCollection);
+                request.setAttribute("customer", customer);
+                request.setAttribute("farmNames", farmCollection);
+                request.setAttribute("myOrders", koiOrderList);
+            } else if (customerID == null) {
+                request.setAttribute("Error", "User is not logged in. ");
+            } else {
+                request.setAttribute("Error", "The user has not yet placed an order. ");
             }
-            customer = dao.getCustomerByCustomerID(Integer.parseInt(customerID));
-            
-            request.setAttribute("koiOrderDetails", koiOrderDetailCollection);
-            request.setAttribute("koiNames", koiFishCollection);
-            request.setAttribute("customer", customer);
-            request.setAttribute("farmNames", farmCollection);
-            request.setAttribute("myOrders", koiOrderList);
-            
             request.getRequestDispatcher(url).forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(GetMyOrderDetail.class.getName()).log(Level.SEVERE, null, ex);

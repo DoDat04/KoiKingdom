@@ -31,16 +31,18 @@
         <div class="container-fluid" id="detail" style="padding-top: 90px; padding-bottom: 90px; display: flex; gap: 20px; padding-left: 57px; padding-right: 57px;">
             <c:if test="${not empty requestScope.koiOrderDetails}">
                 <div class="order-details">
-
+                    <div class="header">
+                        <div class="order-info">
+                            <c:forEach var="koiOrderListByOrderList" items="${requestScope.koiOrderListByOrderList}" varStatus="koiOrderID">
+                                <span style="padding-right: 19px;">Order date: ${koiOrderListByOrderList.deliveryDate}</span>
+                                <span>Estimated delivery: ${koiOrderListByOrderList.estimatedDelivery}</span>
+                            </c:forEach>
+                        </div>
+                        <div>Address: ${requestScope.customer.address}</div>
+                    </div>
                     <div class="koi-section" style="max-height: 450px; overflow-y: auto;">
                         <c:forEach var="koiOrderDetails" items="${requestScope.koiOrderDetails}" varStatus="koiOrderID">
-                            <div class="header">
-                                <div class="order-info">
-                                    <span style="padding-right: 19px;">Order date: ${requestScope.myOrders[koiOrderID.index].deliveryDate}</span>
-                                    <span>Estimated delivery: ${requestScope.myOrders[koiOrderID.index].estimatedDelivery}</span>
-                                </div>
-                                <div>Address: ${requestScope.customer.address}</div>
-                            </div>
+
                             <div style="font-size: 20px;">${requestScope.farmNames[koiOrderID.index].farmName}</div>
                             <div class="koi-item">
                                 <div class="koi-row">
@@ -57,8 +59,6 @@
                         </c:forEach>
                     </div>
                 </div>
-
-
 
                 <div class="sidebar">
                     <div>
@@ -79,20 +79,12 @@
 
                     </div>
 
-                    <!-- Di chuyển Payment Methods xuống đây -->
-                    <div>
-                        <h2 style="font-size: 40px;">Payment Methods</h2>
-                        <ul style="list-style-type: none; padding: 0;">
-                            <li><i class="fa fa-credit-card" aria-hidden="true"></i> Credit Card</li>
-                            <li><i class="fa-brands fa-paypal"></i> PayPal</li>
-                            <li><i class="fa-solid fa-money-bill"></i> Cash on Delivery</li>
-                        </ul>
-                    </div>
                 </div>
             </c:if>
         </div>
         <c:if test="${empty requestScope.koiOrderDetails}">
-            <p class="alert alert-danger">${Error}</p>
+            <p class="alert alert-danger" style="
+               margin-top: 15px;">${Error}</p>
         </c:if>
         <jsp:include page="footer.jsp" flush="true"/>
     </body>

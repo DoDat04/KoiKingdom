@@ -63,14 +63,18 @@ public class GetMyOrder extends HttpServlet {
 
                     for (KoiOrderDTO koiOrder : koiOrderList) {
                         ArrayList<KoiOrderDetailDTO> koiOrderDetailList = dao.getKoiOrderDetaiListById(koiOrder.getKoiOrderID());
+                        if (!koiOrderDetailList.isEmpty()) {
 
-                        for (KoiOrderDetailDTO koiOrderDetailItem : koiOrderDetailList) {
+                            for (KoiOrderDetailDTO koiOrderDetailItem : koiOrderDetailList) {
 
-                            farm = dao.getFarmByFarmID(koiOrderDetailItem.getFarmID());
-                            farmCollection.add(farm);
-                            koiFish = dao.getKoiFishByKoiID(koiOrderDetailItem.getKoiID());
-                            koiFishCollection.add(koiFish);
-                            koiOrderDetailCollection.add(koiOrderDetailItem);
+                                farm = dao.getFarmByFarmID(koiOrderDetailItem.getFarmID());
+                                farmCollection.add(farm);
+                                koiFish = dao.getKoiFishByKoiID(koiOrderDetailItem.getKoiID());
+                                koiFishCollection.add(koiFish);
+                                koiOrderDetailCollection.add(koiOrderDetailItem);
+                            }
+                        } else {
+                            request.setAttribute("Error", "Some orders do not have details");
                         }
                         customer = dao.getCustomerByCustomerID(koiOrder.getCustomerID());
                     }

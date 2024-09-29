@@ -68,11 +68,8 @@ public class GetKoiOrderDetail extends HttpServlet {
         ArrayList<KoiDTO> koiNames = new ArrayList<>();
 
         for (KoiOrderDTO koiOrder : koiOrders) {
-            // Lấy tên khách hàng
             CustomerDTO name = koiOrderDAO.getCustomerByCustomerID(koiOrder.getCustomerID());
             customerNames.add(name.getLastName() + " " + name.getFirstName());
-
-            // Lấy chi tiết đơn hàng
             KoiOrderDetailDTO koiOrderDetail = koiOrderDAO.getKoiOrderDetaiByID(koiOrder.getKoiOrderID());
 
             if (koiOrderDetail != null) {
