@@ -73,7 +73,7 @@ public class EmployeesDAO {
     }
 
 //    public static void main(String[] args) throws SQLException, ClassNotFoundException {
-//        String email = "lamtranmanager@gmail.com";
+//        String email = "sale@gmail.com";
 //        String password = "123";
 //        EmployeesDAO dao = new EmployeesDAO();
 //        EmployeesDTO dto = dao.checkLoginDelivery(email, password);
@@ -153,8 +153,7 @@ public class EmployeesDAO {
                 // Câu lệnh SQL sửa lại từ 'SUPDATE' thành 'UPDATE'
                 String sql = "UPDATE DBO.EMPLOYEE "
                         + "SET firstname = ?, lastname = ?, address = ? "
-                        + "WHERE Email = ? "
-                        + "AND Role = 'Delivery';";  // Kiểm tra vai trò là 'Delivery'
+                        + "WHERE Email = ? ";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, firstName);
                 stm.setString(2, lastName);
@@ -174,6 +173,30 @@ public class EmployeesDAO {
             }
         }
         return result;  // Trả về kết quả
+    }
+
+    public static void main(String[] args) {
+        try {
+            // Tạo đối tượng DAO (Data Access Object)
+            EmployeesDAO deliveryDAO = new EmployeesDAO();
+
+            // Thông tin cần cập nhật
+            String firstName = "John";
+            String lastName = "Doe";
+            String email = "sale@gmail.com";
+            String address = "123 Main Street, New York, NY";
+
+            // Gọi phương thức updateDeliveryProfile và kiểm tra kết quả
+            boolean isUpdated = deliveryDAO.updateDeliveryProfile(firstName, lastName, email, address);
+
+            if (isUpdated) {
+                System.out.println("Profile updated successfully!");
+            } else {
+                System.out.println("Profile update failed. Please check the email address.");
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace(); // In lỗi ra console để kiểm tra
+        }
     }
 
     public List<EmployeesDTO> getAllEmployees() throws SQLException, ClassNotFoundException {
@@ -216,10 +239,10 @@ public class EmployeesDAO {
     }
 
     /**
-     * 
+     *
      * @param id
      * @return employee status.
-     * @throws SQLException 
+     * @throws SQLException
      */
     public boolean updateStatusEmployee(int id) throws SQLException {
         Connection conn = null;

@@ -23,6 +23,7 @@ public class HomeController extends HttpServlet {
     private static final String LOGOUT_MANAGER_CONTROLLER = "LogoutManagerController";
     private static final String DELIVERY_PAGE = "GetKoiOrder";
     private static final String MANAGER_PAGE = "managerDashboard.jsp";
+    private static final String SALES_PAGE = "homeForSales.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -57,6 +58,8 @@ public class HomeController extends HttpServlet {
                 url = LOGOUT_MANAGER_CONTROLLER;
             } else if (action.equals("Manager")) {
                 url = MANAGER_PAGE;
+            } else if (action.equals("Sales")){
+                url = SALES_PAGE;
             }
         } finally {
             request.getRequestDispatcher(url).forward(request, response);

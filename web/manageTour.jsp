@@ -160,7 +160,7 @@
                             <td>${tour.tourPrice}</td>
                             <td>${tour.startDate}</td>
                             <td>${tour.endDate}</td>
-                            <td>${tour.tourImage}</td>
+                            <td><img src="${tour.tourImage}" alt="tour-image" height="150px" width="250px" style="border-radius: 20px; object-fit: contain" ></td>
                             <td>${tour.tourRating}</td>
                             <td>
                                 <c:choose>

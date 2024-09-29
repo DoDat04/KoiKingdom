@@ -86,7 +86,7 @@
             <a href="GetListCustomer">Customer</a>
             <a href="GetListEmployee">Employee</a>
             <a href="GetListTour">Tour</a>
-            <a href="logoutmanager">Logout</a>
+            <a href="LogoutController">Logout</a>
         </div>
 
     <c:choose>                       
