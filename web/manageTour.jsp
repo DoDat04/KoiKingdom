@@ -118,76 +118,73 @@
     <body>
 
         <!-- Menu điều hướng -->
-<!--        <div class="navbar">
-            <a href="home?action=Manager">Home</a>
-            <a href="GetListCustomer">Customer</a>
-            <a href="GetListEmployee">Employee</a>
-            <a href="GetListTour">Tour</a>
-        </div>-->
+        <!--        <div class="navbar">
+                    <a href="home?action=Manager">Home</a>
+                    <a href="GetListCustomer">Customer</a>
+                    <a href="GetListEmployee">Employee</a>
+                    <a href="GetListTour">Tour</a>
+                </div>-->
         <jsp:include page="headerForManager.jsp" flush="true"/>   
         <!-- Nội dung chính -->
-        <div class="container">
-            <h1>Tour Management</h1>
+        <div class="main" style="margin-top: -216px; margin-left: 223px; margin-right: 30px;">       
+            <div class="container">
+                <h1>Tour Management</h1>
 
-            <table>
-                <c:if test="${not empty UPDATE_STATUS}">
-                    <div class="alert alert-success">
-                        ${UPDATE_STATUS}
-                    </div>
-                </c:if>
-                <thead>
-                    <tr>
-                        <th>Tour ID</th>
-                        <th>Tour Name</th>
-                        <th>Duration</th>
-                        <th>Description</th>
-                        <th>Tour Price</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Image</th>
-                        <th>Rating</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="tour" items="${tour}">
+                <table>
+                    <c:if test="${not empty UPDATE_STATUS}">
+                        <div class="alert alert-success">
+                            ${UPDATE_STATUS}
+                        </div>
+                    </c:if>
+                    <thead>
                         <tr>
-                            <td>${tour.tourID}</td>
-                            <td>${tour.tourName}</td>
-                            <td>${tour.duration}</td>
-                            <td>${tour.description}</td>
-                            <td>${tour.tourPrice}</td>
-                            <td>${tour.startDate}</td>
-                            <td>${tour.endDate}</td>
-                            <td><img src="${tour.tourImage}" alt="tour-image" height="150px" width="250px" style="border-radius: 20px; object-fit: contain" ></td>
-                            <td>${tour.tourRating}</td>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${tour.status}">
-                                        <span class="status-active">Active</span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span class="status-inactive">Inactive</span>
-                                    </c:otherwise>
-                                </c:choose>
-                            </td>
-                            <td>
-                                <a href="updateStatusTour?tourID=${tour.tourID}" 
-                                   onclick="return confirm('Are you sure you want to change the status?');">
-                                    Change Status
-                                </a>
-                            </td>
+                            <th>Tour ID</th>
+                            <th>Tour Name</th>
+                            <th>Duration</th>
+                            <th>Description</th>
+                            <th>Tour Price</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Image</th>
+                            <th>Rating</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="tour" items="${tour}">
+                            <tr>
+                                <td>${tour.tourID}</td>
+                                <td>${tour.tourName}</td>
+                                <td>${tour.duration}</td>
+                                <td>${tour.description}</td>
+                                <td>${tour.tourPrice}</td>
+                                <td>${tour.startDate}</td>
+                                <td>${tour.endDate}</td>
+                                <td><img src="${tour.tourImage}" alt="tour-image" height="150px" width="250px" style="border-radius: 20px; object-fit: contain" ></td>
+                                <td>${tour.tourRating}</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${tour.status}">
+                                            <span class="status-active">Active</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="status-inactive">Inactive</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <a href="updateStatusTour?tourID=${tour.tourID}" 
+                                       onclick="return confirm('Are you sure you want to change the status?');">
+                                        Change Status
+                                    </a>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
         </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <p>&copy; 2024 Employee Management. All rights reserved.</p>
-        </div>
-
+    </div>
     </body>
 </html>

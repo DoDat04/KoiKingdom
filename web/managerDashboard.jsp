@@ -8,105 +8,36 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <!-- Font Awesome for Icons -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="css/homeForDelivery.css" rel="stylesheet">
         <title>Manager Dashboard</title>
-        <style>
-            /* Tổng quan */
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f4f4f9;
-            }
 
-            h1 {
-                text-align: center;
-                margin: 20px 0;
-                color: #333;
-            }
-
-            /* Menu */
-            .navbar {
-                background-color: #333;
-                overflow: hidden;
-            }
-
-            .navbar a {
-                float: left;
-                display: block;
-                color: #f2f2f2;
-                text-align: center;
-                padding: 14px 20px;
-                text-decoration: none;
-                font-size: 17px;
-            }
-
-            .navbar a:hover {
-                background-color: #ddd;
-                color: black;
-            }
-
-            .navbar a.active {
-                background-color: #04AA6D;
-                color: white;
-            }
-
-            /* Container cho nội dung */
-            .container {
-                padding: 20px;
-                margin: auto;
-                max-width: 1200px;
-                background-color: #fff;
-                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-                margin-top: 20px;
-            }
-
-            /* Nội dung trong trang */
-            .content {
-                text-align: center;
-                margin-top: 20px;
-            }
-
-            /* Footer */
-            .footer {
-                background-color: #333;
-                color: white;
-                padding: 10px 0;
-                text-align: center;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-            }
-        </style>
-    </head>
-    <body>
-        <!-- Menu -->
-<!--        <div class="navbar">
-            <a href="home?action=Manager">Home</a>
-            <a href="GetListCustomer">Customer</a>
-            <a href="GetListEmployee">Employee</a>
-            <a href="GetListTour">Tour</a>
-            <a href="LogoutController">Logout</a>
-        </div>-->
         <jsp:include page="headerForManager.jsp" flush="true"/>   
-    <c:choose>                       
-        <c:when test="${sessionScope.LOGIN_MANAGER != null}"> 
-            <div class="container">
-                <h1>
-                    Welcome
-                    @<span>${sessionScope.LOGIN_MANAGER.firstName} ${sessionScope.LOGIN_MANAGER.lastName}</span> 
-                    to Manager Dashboard.
-                </h1>
-            </div>
-        </c:when>
-    </c:choose>
+    <div class="main" style="margin-top: -216px; margin-left: 223px; margin-right: 30px;">       
 
+        <c:choose>                       
+            <c:when test="${sessionScope.LOGIN_MANAGER != null}"> 
+                <div class="container">
+                    <h1>
+                        Welcome
+                        @<span>${sessionScope.LOGIN_MANAGER.firstName} ${sessionScope.LOGIN_MANAGER.lastName}</span> 
+                        to Manager Dashboard.
+                    </h1>
+                </div>
+                <style>
+                    .container{
+                        text-align: center;
+                    }
+                </style>
 
-    <!-- Footer -->
-    <div class="footer">
-        <p>&copy; 2024 Manager Dashboard. All rights reserved.</p>
+            </c:when>
+        </c:choose>
     </div>
-
 </body>
 
 </html>

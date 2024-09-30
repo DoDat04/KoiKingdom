@@ -117,71 +117,69 @@
     <body>
 
         <!-- Menu điều hướng -->
-<!--        <div class="navbar">
-            <a href="home?action=Manager">Home</a>
-            <a href="GetListCustomer">Customer</a>
-            <a href="GetListEmployee">Employee</a>
-            <a href="GetListTour">Tour</a>
-        </div>-->
+        <!--        <div class="navbar">
+                    <a href="home?action=Manager">Home</a>
+                    <a href="GetListCustomer">Customer</a>
+                    <a href="GetListEmployee">Employee</a>
+                    <a href="GetListTour">Tour</a>
+                </div>-->
         <jsp:include page="headerForManager.jsp" flush="true"/>   
         <!-- Nội dung chính -->
-        <div class="container">
-            <h1>Customer Management</h1>
+        <div class="main" style="margin-top: -216px; margin-left: 223px; margin-right: 30px;">       
+            <div class="container">
+                <h1>Customer Management</h1>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Email</th>
-                        <th>Last Name</th>
-                        <th>First Name</th>
-                        <th>Address</th>
-                        <th>Account Type</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="customer" items="${customer}">
+                <table>
+                    <thead>
                         <tr>
-                            <td>${customer.customerID}</td>
-                            <td>${customer.email}</td>
-                            <td>${customer.lastName}</td>
-                            <td>${customer.firstName}</td>
-                            <td>${customer.address}</td>
-                            <td>${customer.accountType}</td>
-
-                            <td>
-                                <c:choose>
-                                    <c:when test="${customer.status}">
-                                        <span class="status-active">Active</span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span class="status-inactive">Inactive</span>
-                                    </c:otherwise>
-                                </c:choose>
-                            </td>
-                            <td>
-                                <a href="updateStatus?customerID=${customer.customerID}" 
-                                   onclick="return confirm('Are you sure you want to change the status?');">
-                                    Change Status
-                                </a>
-                            </td>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Address</th>
+                            <th>Account Type</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-            <c:if test="${not empty UPDATE_STATUS}">
-                <div class="alert alert-success">
-                    ${UPDATE_STATUS}
-                </div>
-            </c:if>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="customer" items="${customer}">
+                            <tr>
+                                <td>${customer.customerID}</td>
+                                <td>${customer.email}</td>
+                                <td>${customer.lastName}</td>
+                                <td>${customer.firstName}</td>
+                                <td>${customer.address}</td>
+                                <td>${customer.accountType}</td>
+
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${customer.status}">
+                                            <span class="status-active">Active</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="status-inactive">Inactive</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <a href="updateStatus?customerID=${customer.customerID}" 
+                                       onclick="return confirm('Are you sure you want to change the status?');">
+                                        Change Status
+                                    </a>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+                <c:if test="${not empty UPDATE_STATUS}">
+                    <div class="alert alert-success">
+                        ${UPDATE_STATUS}
+                    </div>
+                </c:if>
+            </div>
         </div>
 
-        <!-- Footer -->
-        <div class="footer">
-            <p>&copy; 2024 Customer Management. All rights reserved.</p>
-        </div>
 
     </body>
 </html>

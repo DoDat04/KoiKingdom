@@ -118,69 +118,67 @@
     <body>
 
         <!-- Menu điều hướng -->
-<!--        <div class="navbar">
-            <a href="home?action=Manager">Home</a>
-            <a href="GetListCustomer">Customer</a>
-            <a href="GetListEmployee">Employee</a>
-            <a href="GetListTour">Tour</a>
-        </div>-->
+        <!--        <div class="navbar">
+                    <a href="home?action=Manager">Home</a>
+                    <a href="GetListCustomer">Customer</a>
+                    <a href="GetListEmployee">Employee</a>
+                    <a href="GetListTour">Tour</a>
+                </div>-->
         <jsp:include page="headerForManager.jsp" flush="true"/>   
         <!-- Nội dung chính -->
-        <div class="container">
-            <h1>Employee Management</h1>
+        <div class="main" style="margin-top: -216px; margin-left: 223px; margin-right: 30px;">       
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Last Name</th>
-                        <th>First Name</th>
-                        <th>Address</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="employee" items="${employee}">
+            <div class="container">
+                <h1>Employee Management</h1>
+
+                <table>
+                    <thead>
                         <tr>
-                            <td>${employee.employeeID}</td>
-                            <td>${employee.email}</td>
-                            <td>${employee.role}</td>
-                            <td>${employee.lastName}</td>
-                            <td>${employee.firstName}</td>
-                            <td>${employee.address}</td>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${employee.status}">
-                                        <span class="status-active">Active</span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span class="status-inactive">Block</span>
-                                    </c:otherwise>
-                                </c:choose>
-                            </td>
-                            <td>
-                                <a href="updateStatusEmployee?employeeID=${employee.employeeID}" 
-                                   onclick="return confirm('Are you sure you want to change the status?');">
-                                    Change Status
-                                </a>
-                            </td>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Address</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
-                    </c:forEach>
-                </tbody>
-                <c:if test="${not empty UPDATE_STATUS}">
-                    <div class="alert alert-success">
-                        ${UPDATE_STATUS}
-                    </div>
-                </c:if>
-            </table>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <p>&copy; 2024 Employee Management. All rights reserved.</p>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="employee" items="${employee}">
+                            <tr>
+                                <td>${employee.employeeID}</td>
+                                <td>${employee.email}</td>
+                                <td>${employee.role}</td>
+                                <td>${employee.lastName}</td>
+                                <td>${employee.firstName}</td>
+                                <td>${employee.address}</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${employee.status}">
+                                            <span class="status-active">Active</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="status-inactive">Block</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <a href="updateStatusEmployee?employeeID=${employee.employeeID}" 
+                                       onclick="return confirm('Are you sure you want to change the status?');">
+                                        Change Status
+                                    </a>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                    <c:if test="${not empty UPDATE_STATUS}">
+                        <div class="alert alert-success">
+                            ${UPDATE_STATUS}
+                        </div>
+                    </c:if>
+                </table>
+            </div>
         </div>
 
     </body>

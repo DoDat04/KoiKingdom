@@ -58,16 +58,19 @@
                                     </div>
                                     <i style="font-size:18px" class="fa fa-angle-double-left toggle-btn" style="font-size:18px;"></i>
                                 </div>
-                            </li>
+                            </li>                 
                         </div>
                         <li class="menu-item">
-                            <a href="GetListCustomer" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Customer</a>
+                            <a href="managerDashboard.jsp" style="color: black"><i class="fa-solid fa-house"></i>Home</a>
                         </li>
                         <li class="menu-item">
-                            <a href="GetListEmployee" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Employee</a>
+                            <a href="GetListCustomer" style="color: black"><i class="fa-solid fa-users"></i>Customer</a>
                         </li>
                         <li class="menu-item">
-                            <a href="GetListTour" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Tour</a>
+                            <a href="GetListEmployee" style="color: black"><i class="fa-solid fa-user-group"></i>Employee</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="GetListTour" style="color: black"><i class="fa-solid fa-list"></i>Tour</a>
                         </li>
                         <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
                                 <i style='font-size:24px' class='fas'>&#xf406;</i>Profile</a></li>
