@@ -118,13 +118,13 @@
     <body>
 
         <!-- Menu điều hướng -->
-        <div class="navbar">
+<!--        <div class="navbar">
             <a href="home?action=Manager">Home</a>
             <a href="GetListCustomer">Customer</a>
             <a href="GetListEmployee">Employee</a>
             <a href="GetListTour">Tour</a>
-        </div>
-
+        </div>-->
+        <jsp:include page="headerForManager.jsp" flush="true"/>   
         <!-- Nội dung chính -->
         <div class="container">
             <h1>Tour Management</h1>

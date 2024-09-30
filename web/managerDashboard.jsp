@@ -81,14 +81,14 @@
     </head>
     <body>
         <!-- Menu -->
-        <div class="navbar">
+<!--        <div class="navbar">
             <a href="home?action=Manager">Home</a>
             <a href="GetListCustomer">Customer</a>
             <a href="GetListEmployee">Employee</a>
             <a href="GetListTour">Tour</a>
             <a href="LogoutController">Logout</a>
-        </div>
-
+        </div>-->
+        <jsp:include page="headerForManager.jsp" flush="true"/>   
     <c:choose>                       
         <c:when test="${sessionScope.LOGIN_MANAGER != null}"> 
             <div class="container">
