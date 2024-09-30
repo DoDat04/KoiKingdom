@@ -18,24 +18,8 @@
     </head>
     <body>
         <jsp:include page="headerForSales.jsp" flush="true"/>
+        <div class="main" style="margin-top: -100px; margin-left: 223px; margin-right: 30px;"> 
         <h1>Hello World!</h1>
-        <c:if test="${not empty sessionScope.updateSuccess}">
-            <script>
-                window.onload = function () {
-                    showToast('${sessionScope.updateSuccess}', 'success');
-                };
-            </script>
-            <c:set var="updateSuccess" value="${null}" scope="session"/>
-        </c:if>
-
-        <c:if test="${not empty sessionScope.updateError}">
-            <script>
-                window.onload = function () {
-                    showToast('${sessionScope.updateError}', 'error');
-                };
-            </script>
-            <c:set var="updateError" value="${null}" scope="session"/>
-        </c:if>
-        <jsp:include page="footer.jsp" flush="true"/>
+        </div>
     </body>
 </html>

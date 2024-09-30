@@ -1,9 +1,10 @@
 <%-- 
     Document   : headerForSales
-    Created on : Sep 28, 2024, 9:13:55 PM
+    Created on : Sep 29, 2024, 9:30:06 PM
     Author     : ADMIN LAM
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -13,75 +14,74 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <!-- Font Awesome for Icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="css/header.css">  
-        <!-- Script get api province -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <link rel="stylesheet" href="css/headerForDelivery.css">
+        <title>Header</title>
     </head>
-    <body>
-        <header class="text-black py-4" style="background-color: #fdf4f0;">
-            <div class="header-content">
-                <div class="d-flex justify-content-between align-items-center">
-                    <!-- Logo -->
-                    <div class="logo">
-                        <a href="home?action=Sales">
-                            <img src="img/logo.png" style="width: 185px; height: 150px;">
-                        </a>
-                    </div>
+    <body>   
+        <div class="main-content">           
+            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -52px; padding-top: 11px;">
 
-                    <!-- Sales Menu (e.g., Dashboard, Orders, Customers) -->
-                    <div class="menu-center">
-                        <ul class="nav justify-content-center">
-                            <li class="nav-item">
-                                <a class="nav-link text-black" href="dashboard">Dashboard</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-black" href="orders">Orders</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-black" href="customers">Customers</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-black" href="products">Products</a>
-                            </li>
-                        </ul>
-                    </div>
+                <a href="home?action=Delivery" style="margin-left: 116px">
+                    <img src="img/logo.png" class="main-icon" >
+                </a>
 
-                    <!-- Right Menu (Sales User Info, Settings) -->
-                    <div class="menu-right d-flex align-items-center">
-                        <!-- User Info with Name and Icon -->
-                        <div class="user-info d-flex align-items-center">
-                            <!-- Display Name -->
-                            <span class="user-name text-black">
-                                <c:choose>
-                                    <c:when test="${sessionScope.LOGIN_SALES != null}">
-                                        <span class="separator mx-2">|</span>
-                                        ${sessionScope.LOGIN_SALES.firstName} ${sessionScope.LOGIN_SALES.lastName}
-                                    </c:when>
-                                </c:choose>
-                            </span>
 
-                            <!-- User Icon -->
-                            <a href="#" class="text-black icon-size nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal"><i class="fa-solid fa-key"></i> Change Password</a></li>
-                                <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="menu-center">
+                    <ul class="nav justify-content-center">
+                        <form action="GetKoiOrder" method="get" class="search--box"> 
+                            <input type="text" name="txtNameCustomer" placeholder="Search name customer" style=" border: none;"/>
+                            <button type="submit" style="border: none; border-radius: 4px; padding-left: 49px;">  <i class="fa-solid fa-search"></i> </button>
+                        </form>
+                    </ul>
                 </div>
             </div>
-        </header>
+        </div>
 
-        <!-- Update Profile Modal -->
-        <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="updateProfileModalLabel" aria-hidden="true">
+
+
+        <div class="sidebar" style="margin-top: -468px; padding-top: 11px;">
+            <c:choose>
+                <c:when test="${sessionScope.LOGIN_SALES != null}">
+                    <ul class="menu">
+                        <div class="user-frame">
+                            <li class="user-info">
+                                <div class="user-details">   
+                                    <div>
+                                        <span class="user-name">
+                                            ${sessionScope.LOGIN_SALES.firstName} ${sessionScope.LOGIN_SALES.lastName}
+                                        </span><br>
+                                        <span class="user-role">${sessionScope.LOGIN_SALES.role}</span>
+                                    </div>
+                                    <i style="font-size:18px" class="fa fa-angle-double-left toggle-btn" style="font-size:18px;"></i>
+                                </div>
+                            </li>
+                        </div>
+                        <li class="menu-item">
+                            <a href="#" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Ship History</a>
+                        </li>
+                        <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
+                                <i style='font-size:24px' class='fas'>&#xf406;</i>Profile</a></li>
+                        <li class="menu-item">
+                            <a href="home?action=Logout" style="color: black"><i style="font-size:24px" class="fa">&#xf08b;</i>Sign out</a>
+                        </li>
+                    </ul>
+                </c:when>
+                <c:otherwise>
+                    <script>
+                        window.location.href = "login.jsp";
+                    </script>
+                </c:otherwise>
+            </c:choose>
+        </div>
+
+
+        <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5 align-items-center" id="exampleModalLabel">Update Profile</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -94,22 +94,14 @@
                                 </div>
                                 <input type="file" id="avatar" name="profileImage" class="form-control mt-2" accept="image/*" onchange="previewAvatar()">
                             </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="fname-addon"><i class="fa-solid fa-user"></i></span>
-                                <input type="text" class="form-control" id="fname" name="fname" value="${sessionScope.LOGIN_SALES.lastName}" placeholder="First Name">
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="lname-addon"><i class="fa-solid fa-user"></i></span>
-                                <input type="text" class="form-control" id="lname" name="lname" value="${sessionScope.LOGIN_SALES.firstName}" placeholder="Last Name">
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="email-addon"><i class="fa-solid fa-envelope"></i></span>
-                                <input type="email" class="form-control" id="email" name="email" value="${sessionScope.LOGIN_SALES.email}" readonly placeholder="Email">
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="address-addon"><i class="fa-solid fa-location-dot"></i></span>
-                                <input type="text" class="form-control" id="address" name="address" value="${sessionScope.LOGIN_SALES.address}" readonly placeholder="Address">
-                            </div>
+                            <label for="fname">Họ:</label>
+                            <input type="text" id="fname" name="fname" readonly value="${sessionScope.LOGIN_SALES.lastName}">
+                            <label for="lname">Tên:</label>
+                            <input type="text" id="lname" name="lname" readonly value="${sessionScope.LOGIN_SALES.firstName}">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" readonly value="${sessionScope.LOGIN_SALES.email}">
+                            <label for="address">Địa chỉ:</label>
+                            <input type="text" id="address" name="address" readonly value="${sessionScope.LOGIN_SALES.address}">
                             <div class="mb-3 select-group" id="addressSelectDiv" style="display: none;">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -133,10 +125,8 @@
                                 </div>
                             </div>
                             <script src="js/address.js"></script>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="role-addon"><i class="fa-solid fa-user-tag"></i></span>
-                                <input type="text" class="form-control" id="role" name="role" value="${sessionScope.LOGIN_SALES.role}" readonly placeholder="Role">
-                            </div>
+                            <label for="role">Vai trò:</label>
+                            <input type="text" id="role" name="role" readonly value="${sessionScope.LOGIN_SALES.role}">
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" id="closeButton" data-bs-dismiss="modal">Close</button>
@@ -149,88 +139,51 @@
                 </div>
             </div>
         </div>
+        <script src="js/headerForDelivery.js"></script>
 
-        <!-- Modal for Changing Password -->
-        <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="ChangePasswordController" method="post">
-                            <!-- Old Password Field -->
-                            <div class="mb-3">
-                                <label for="oldPassword" class="form-label">Old Password:</label>
-                                <input type="password" class="form-control" id="oldPassword" name="oldPassword" placeholder="Enter your old password" required>
-                            </div>
 
-                            <!-- New Password Field -->
-                            <div class="mb-3">
-                                <label for="newPassword" class="form-label">New Password:</label>
-                                <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Enter your new password" required>
-                            </div>
 
-                            <!-- Confirm New Password Field (Optional) -->
-                            <div class="mb-3">
-                                <label for="confirmPassword" class="form-label">Confirm New Password:</label>
-                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your new password" required>
-                            </div>
 
-                            <!-- Submit Button -->
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary">Update Password</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Hiển thị thông tin từ request nếu có lỗi -->
-    <c:if test="${not empty requestScope.updateError}">
-        <p style="color:red">${requestScope.updateError}</p>
-    </c:if>
-    <script>
-        function previewAvatar() {
-            const file = document.getElementById('avatar').files[0];
-            const preview = document.getElementById('avatarPreview');
-            const reader = new FileReader();
+        <script>
+                                    function previewAvatar() {
+                                        const file = document.getElementById('avatar').files[0];
+                                        const preview = document.getElementById('avatarPreview');
+                                        const reader = new FileReader();
 
-            reader.onloadend = function () {
-                preview.src = reader.result;
-            };
+                                        reader.onloadend = function () {
+                                            preview.src = reader.result;
+                                        };
 
-            if (file) {
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = "";
-            }
-        }
+                                        if (file) {
+                                            reader.readAsDataURL(file);
+                                        } else {
+                                            preview.src = "";
+                                        }
+                                    }
 
-        function toggleEdit() {
-            const isReadOnly = document.getElementById('fname').readOnly;
-            const fields = ['fname', 'lname', 'email', 'address', 'avatar'];
-            const saveButton = document.getElementById('saveButton');
-            const cancelButton = document.getElementById('cancelButton');
-            const editButton = document.getElementById('editButton');
-            const addressSelectDiv = document.getElementById('addressSelectDiv');
 
-            fields.forEach(field => {
-                const element = document.getElementById(field);
-                if (element) {
-                    element.readOnly = !isReadOnly;
-                    element.disabled = !isReadOnly;
-                }
-            });
 
-            // Toggle visibility of buttons and address select div
-            saveButton.style.display = isReadOnly ? 'inline-block' : 'none';
-            cancelButton.style.display = isReadOnly ? 'inline-block' : 'none';
-            editButton.style.display = isReadOnly ? 'none' : 'inline-block';
-            addressSelectDiv.style.display = isReadOnly ? 'block' : 'none';
-        }
-    </script>
-</body>
+
+                                    document.querySelector('.toggle-btn').addEventListener('click', function () {
+                                        const sidebar = document.querySelector('.sidebar');
+                                        const main = document.querySelector('.main');
+                                        const mainContent = document.querySelector('.main-content');
+                                        const logo = document.querySelector('.main-icon');
+
+                                        sidebar.classList.toggle('collapsed');
+
+                                        if (sidebar.classList.contains('collapsed')) {
+                                            main.style.marginLeft = '60px';
+                                            mainContent.style.marginLeft = '-80px';
+                                        } else {
+                                            main.style.marginLeft = '223px';
+                                            mainContent.style.marginLeft = '0px';
+                                        }
+                                    });
+        </script>
+
+
+    </body>
+
 
 </html>
