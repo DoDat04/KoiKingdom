@@ -14,21 +14,15 @@ import koikd.tour.TourDTO;
  * @author Do Dat
  */
 public class CartBean implements Serializable {
-
-    private Map<Integer, CartItem> items; // Change type to CartItem
-    private double totalPrice; // Thêm biến tổng tiền
+    private Map<Integer, CartItem> items; 
 
     public CartBean() {
-        this.items = new HashMap<>(); // Initialize the map
-    }
+        this.items = new HashMap<>(); 
+    }   
 
     public Map<Integer, CartItem> getItems() {
         return items;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
+    }       
 
     public void addItemToCart(TourDTO tour, int numberOfPeople) {
         if (tour == null || numberOfPeople <= 0) {
@@ -43,7 +37,7 @@ public class CartBean implements Serializable {
         } else {
             this.items.put(tourID, new CartItem(tour, numberOfPeople));
         }
-    }
+    }       
     
     public void removeItemFromCart(TourDTO tour, int numberOfPeople) {
         if (tour == null || numberOfPeople <= 0) {

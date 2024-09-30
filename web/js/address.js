@@ -54,13 +54,13 @@ var callApiWard = (api) => {
 };
 
 var renderData = (array, select) => {
-    let row = '<option disable value="">Chọn ';
+    let row = '<option disable value="">Select ';
     if (select === 'city') {
-        row += 'tỉnh / thành';
+        row += 'province';
     } else if (select === 'district') {
-        row += 'quận / huyện';
+        row += 'district';
     } else if (select === 'ward') {
-        row += 'phường / xã';
+        row += 'ward';
     }
     row += '</option>';
 

@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -45,9 +46,9 @@ public class GetListKoiTypeController extends HttpServlet {
 
         try {
             ArrayList<KoiTypeDTO> dtoList = services.getKoiTypeList(nameKoiType);
-
+            HttpSession session = request.getSession();
             if (dtoList != null && !dtoList.isEmpty()) {
-                request.setAttribute("LIST_KOITYPE", dtoList);
+                session.setAttribute("LIST_KOITYPE", dtoList);
             } else {
                 request.setAttribute("ERROR_NULL", "No Koi types found.");
             }

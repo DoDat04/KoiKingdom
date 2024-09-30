@@ -42,7 +42,7 @@
                                 <a class="nav-link dropdown-toggle text-black" id="bookingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Booking</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bookingDropdown">
                                     <li><a class="dropdown-item" href="tour-list">Tour</a></li>
-                                    <li><a class="dropdown-item" href="#">Custom Tour</a></li>
+                                    <li><a class="dropdown-item" href="customTour.jsp">Custom Tour</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item">
@@ -185,17 +185,17 @@
                                             <div class="mb-3 select-group" id="addressSelectDiv" style="display: none;">
                                                 <div class="select-container">
                                                     <select id="city" name="city">
-                                                        <option value="">Chọn tỉnh / thành</option>
+                                                        <option value="">Select province</option>
                                                     </select>
                                                 </div>
                                                 <div class="select-container">
                                                     <select id="district" name="district">
-                                                        <option value="">Chọn quận / huyện</option>
+                                                        <option value="">Select district</option>
                                                     </select>
                                                 </div>
                                                 <div class="select-container">
                                                     <select id="ward" name="ward">
-                                                        <option value="">Chọn phường / xã</option>
+                                                        <option value="">Select ward</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -252,21 +252,21 @@
         </header>
 
         <script>
-                                                    function previewAvatar() {
-                                                        const file = document.getElementById('avatar').files[0];
-                                                        const preview = document.getElementById('avatarPreview');
-                                                        const reader = new FileReader();
+            function previewAvatar() {
+                const file = document.getElementById('avatar').files[0];
+                const preview = document.getElementById('avatarPreview');
+                const reader = new FileReader();
 
-                                                        reader.onloadend = function () {
-                                                            preview.src = reader.result;
-                                                        };
+                reader.onloadend = function () {
+                    preview.src = reader.result;
+                };
 
-                                                        if (file) {
-                                                            reader.readAsDataURL(file);
-                                                        } else {
-                                                            preview.src = "";
-                                                        }
-                                                    }
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = "";
+                }
+            }
         </script>
         <script src="js/load.js"></script>
     </body>

@@ -98,7 +98,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 .payment-label {
     display: inline-block;
-    border: 2px solid gray;
+    border: 2px solid #DCDCDC;
     padding: 10px;
     border-radius: 5px;
     background-color: white;

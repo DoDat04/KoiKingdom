@@ -30,7 +30,7 @@
         </form>
         <div class="container">
             <div class="row">
-                <c:forEach var="koiType" items="${requestScope.LIST_KOITYPE}">
+                <c:forEach var="koiType" items="${sessionScope.LIST_KOITYPE}">
                     <div class="col-md-4">
                         <div class="koi-type-card">
                             <h2 class="koi-text"><strong>${koiType.typeName}</strong></h2>

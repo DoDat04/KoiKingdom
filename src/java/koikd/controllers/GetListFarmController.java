@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -45,8 +46,9 @@ public class GetListFarmController extends HttpServlet {
             
             try {
                 ArrayList<FarmDTO> dto = dao.getFarmList(nameFarm);
+                HttpSession session = request.getSession();
                 if(dto!=null && !dto.isEmpty()){
-                    request.setAttribute("LIST_FARM", dto);
+                    session.setAttribute("LIST_FARM", dto);
                 } else{
                     request.setAttribute("ERROR_NULL", "Can't find the farm list.");
                 }

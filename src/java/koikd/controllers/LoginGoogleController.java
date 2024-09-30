@@ -66,6 +66,7 @@ public class LoginGoogleController extends HttpServlet {
                         session.setAttribute("firstName", firstName);
                         session.setAttribute("lastName", lastName);
                         session.setAttribute("customerID", customerID);
+                        session.setAttribute("email", googlePojo.getEmail());
                         // sau khi login lấy address từ db bỏ vào attribute
                         session.setAttribute("address", dto.getAddress());
                     } else {
@@ -76,7 +77,6 @@ public class LoginGoogleController extends HttpServlet {
 
                     String emailPrefix = getUserIdBeforeAt(googlePojo.getEmail());
                     String avatarUrl = googlePojo.getPicture();
-                    System.out.println(avatarUrl + " hihi");
                     dao.createEmailUser(googlePojo, accessToken);
 
                     String uploadPath = getServletContext().getRealPath("/images");

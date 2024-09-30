@@ -29,7 +29,7 @@
         </form>
         <div class="container">
             <div class="row">
-                <c:forEach var="farm" items="${requestScope.LIST_FARM}">
+                <c:forEach var="farm" items="${sessionScope.LIST_FARM}">
                     <div class="col-md-4 mb-4">
                         <div class="card" style="width: 15rem;">
                             <img src="${farm.image}" class="card-img-top koi-image" alt="${farm.farmName}">

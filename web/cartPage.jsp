@@ -95,7 +95,7 @@
                         <p>Total: <strong class="total-price">$<c:out value="${cart.totalPrice}"/></strong></p>
 
                         <c:choose>
-                            <c:when test="${cart.totalQuantity == null}">
+                            <c:when test="${cart.totalQuantity == null || cart.totalQuantity == 0}">
                                 <button type="button" class="btn btn-danger w-100" 
                                         onclick="alert('Please add something to the cart!')">
                                     Proceed to checkout

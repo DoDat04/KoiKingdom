@@ -25,9 +25,9 @@ function updateQuantity(amount) {
 
     // Update displayed quantity
     document.getElementById('quantityDisplay').innerText = quantity;
-
     // Update value for the hidden input
     document.getElementById('hiddenQuantity').value = quantity;
+    document.getElementById('hiddenQuantityy').value = quantity;
 
     // Toggle buttons based on updated quantity
     toggleButtons();

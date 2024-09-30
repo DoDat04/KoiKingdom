@@ -10,7 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import koikd.cart.CartBean;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -34,7 +34,9 @@ public class ViewCartController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = CART_PAGE;
-        try {           
+        try {  
+            HttpSession session = request.getSession();
+            session.removeAttribute("selectedTour");
             url = CART_PAGE;
         } finally {
             request.getRequestDispatcher(url).forward(request, response);

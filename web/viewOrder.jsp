@@ -40,34 +40,72 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="entry" items="${cart.items}">
-                            <tr>
-                                <td>
-                                    <img class="tour-img" src="${entry.value.tour.tourImage}" alt="${entry.value.tour.tourName}">
-                                </td>
-                                <td>
-                                    <div class="tour-info">
-                                        <div class="tour-name">${entry.value.tour.tourName}</div>
-                                        <div class="tour-dates">
-                                            <span>Start Date: 
-                                                <fmt:formatDate value="${entry.value.tour.startDate}" pattern="dd-MM-yyyy" />
-                                            </span>
-                                            <span>End Date: 
-                                                <fmt:formatDate value="${entry.value.tour.endDate}" pattern="dd-MM-yyyy" />
-                                            </span>
+                        <c:choose>
+                            <c:when test="${not empty selectedTour}">
+                                <!-- Hiển thị tour đã được chọn trong "Book Now" -->
+                                <tr>
+                                    <td>
+                                        <img class="tour-img" src="${selectedTour.tour.tourImage}" alt="${selectedTour.tour.tourName}">
+                                    </td>
+                                    <td>
+                                        <div class="tour-info">
+                                            <div class="tour-name">${selectedTour.tour.tourName}</div>
+                                            <div class="tour-dates">
+                                                <span>Start Date: 
+                                                    <fmt:formatDate value="${selectedTour.tour.startDate}" pattern="dd-MM-yyyy" />
+                                                </span>
+                                                <span>End Date: 
+                                                    <fmt:formatDate value="${selectedTour.tour.endDate}" pattern="dd-MM-yyyy" />
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>${entry.value.numberOfPeople}</td>
-                                <td>$${entry.value.tour.tourPrice}</td>
-                                <td>$${entry.value.totalPrice}</td>
-                            </tr>
-                        </c:forEach>
+                                    </td>
+                                    <td>${selectedTour.numberOfPeople}</td>
+                                    <td>$${selectedTour.tour.tourPrice}</td>
+                                    <td>$${selectedTour.totalPrice}</td>
+                                </tr>
+                            </c:when>
+                            <c:otherwise>
+                                <!-- Hiển thị giỏ hàng nếu không có tour nào được chọn qua "Book Now" -->
+                                <c:forEach var="entry" items="${cart.items}">
+                                    <tr>
+                                        <td>
+                                            <img class="tour-img" src="${entry.value.tour.tourImage}" alt="${entry.value.tour.tourName}">
+                                        </td>
+                                        <td>
+                                            <div class="tour-info">
+                                                <div class="tour-name">${entry.value.tour.tourName}</div>
+                                                <div class="tour-dates">
+                                                    <span>Start Date: 
+                                                        <fmt:formatDate value="${entry.value.tour.startDate}" pattern="dd-MM-yyyy" />
+                                                    </span>
+                                                    <span>End Date: 
+                                                        <fmt:formatDate value="${entry.value.tour.endDate}" pattern="dd-MM-yyyy" />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>${entry.value.numberOfPeople}</td>
+                                        <td>$${entry.value.tour.tourPrice}</td>
+                                        <td>$${entry.value.totalPrice}</td>
+                                    </tr>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>                         
                     </tbody>
                     <tfoot>
                         <tr>
                             <td colspan="4" class="text-end fw-bold">Subtotal:</td>
-                            <td>$<c:out value="${cart.totalPrice}"/></td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty selectedTour}">
+                                        $<c:out value="${selectedTour.totalPrice}"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        $<c:out value="${cart.totalPrice}"/>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
                         </tr>
                     </tfoot>
                 </table>
@@ -75,19 +113,29 @@
 
             <h4 class="mb-4">Contact Information</h4>
             <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="fullName"><strong>Full Name</strong></label>
-                    <input type="text" class="form-control" name="fullName" placeholder="Enter your full name" required>
-                </div>
+                <c:choose>
+                    <c:when test="${sessionScope.LOGIN_USER != null}">
+                        <div class="form-group col-md-6">
+                            <label for="fullName"><strong>Full Name</strong></label>
+                            <input type="text" class="form-control" name="fullName" value="${sessionScope.LOGIN_USER.firstName} ${sessionScope.LOGIN_USER.lastName}" placeholder="Enter your full name" required>
+                        </div>                
+                    </c:when>
+                    <c:otherwise>
+                        <div class="form-group col-md-6">
+                            <label for="fullName"><strong>Full Name</strong></label>
+                            <input type="text" class="form-control" name="fullName" value="${sessionScope.lastName} ${sessionScope.firstName}" placeholder="Enter your full name" required>
+                        </div>
+                    </c:otherwise>
+                </c:choose> 
                 <div class="form-group col-md-6">
                     <label for="email"><strong>Email Address</strong></label>
-                    <input type="email" class="form-control" name="email" placeholder="Enter your email" required>
+                    <input type="email" class="form-control" name="email" value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.LOGIN_GMAIL.email : sessionScope.LOGIN_USER.email}" placeholder="Enter your email" required>
                 </div>
             </div>
 
             <div class="mb-3">
                 <label for="homeAddress" class="form-label"><strong>Shipping Address</strong></label>
-                <input type="text" class="form-control" id="homeAddresss" name="homeAddress" placeholder="Số nhà, tên đường">
+                <input type="text" class="form-control" id="homeAddresss" name="homeAddress" placeholder="House number, street name">
             </div>
 
             <div class="mb-3 select-group">
@@ -123,9 +171,9 @@
                 <div class="form-group mt-3">
                     <h5>Select payment interface language:</h5>
                     <input type="radio" id="language" checked="true" name="language" value="vn">
-                    <label for="language">Tiếng việt</label><br>
+                    <label for="language">Vietnamese</label><br>
                     <input type="radio" id="language" name="language" value="en">
-                    <label for="language">Tiếng anh</label><br>
+                    <label for="language">English</label><br>
                 </div>
 
                 <button type="submit" class="btn btn-primary payment-button">Thanh toán</button>

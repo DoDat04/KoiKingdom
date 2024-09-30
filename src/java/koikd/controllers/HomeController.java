@@ -58,7 +58,7 @@ public class HomeController extends HttpServlet {
                 url = LOGOUT_MANAGER_CONTROLLER;
             } else if (action.equals("Manager")) {
                 url = MANAGER_PAGE;
-            } else if (action.equals("Sales")){
+            } else if (action.equals("Sales")){               
                 url = SALES_PAGE;
             }
         } finally {

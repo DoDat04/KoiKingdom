@@ -78,22 +78,48 @@
                                 <button class="btn btn-secondary" type="button" onclick="updateQuantity(1)">+</button>                                
                             </div>
 
-                            <!-- Form to add to cart -->
-                            <form action="AddToCartController" method="post">
-                                <input type="hidden" name="tourID" value="${selectedTour.tourID}">
-                                <input type="hidden" name="numberOfPeople" id="hiddenQuantity" value="0">
-                                <input type="hidden" name="customerID" value="${sessionScope.custID}">
+                            <div class="buttonTour d-flex justify-content-between align-items-center mt-4">
+                                <!-- Form to add to cart -->
+                                <form action="AddToCartController" method="post">
+                                    <input type="hidden" name="tourID" value="${selectedTour.tourID}">
+                                    <input type="hidden" name="numberOfPeople" id="hiddenQuantity" value="0">
+                                    <input type="hidden" name="customerID" value="${sessionScope.custID}">
 
-                                <!-- Add to Cart & Book Now Buttons -->
-                                <div class="tour-buttons d-flex justify-content-between mt-4">
-                                    <button type="submit" class="btn btn-primary" id="addToCartBtn">
-                                        <i class="fas fa-cart-plus"></i> Add to Cart
-                                    </button>
-                                    <button type="button" class="btn btn-danger" id="bookNowBtn" onclick="bookNow(${selectedTour.tourID})">
-                                        <i class="fas fa-credit-card"></i> Book Now
-                                    </button>
-                                </div>
-                            </form>
+                                    <!-- Add to Cart -->
+                                    <div class="tour-buttons">
+                                        <button type="submit" class="btn btn-primary btn-block" id="addToCartBtn" style="width: 200px;">
+                                            <i class="fas fa-cart-plus"></i> Add to Cart
+                                        </button>
+                                    </div>
+                                </form>
+
+                                <!-- Form to book now -->
+                                <form action="BookNowController" method="post">
+                                    <input type="hidden" name="tourID" value="${selectedTour.tourID}">
+                                    <input type="hidden" name="numberOfPeople" id="hiddenQuantityy" value="0">
+                                    <input type="hidden" name="customerID" value="${sessionScope.custID}">
+
+                                    <!-- Book Now -->
+                                    <div class="tour-buttons">
+                                        <button type="submit" class="btn btn-danger btn-block" id="bookNowBtn" style="width: 200px;">
+                                            <i class="fas fa-credit-card"></i> Book Now
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>   
+                            <script>
+                                document.getElementById("bookNowBtn").addEventListener("click", function (event) {
+                                    // Kiểm tra nếu người dùng chưa đăng nhập
+                                    const isUserLoggedIn = "${sessionScope.LOGIN_USER}" || "${sessionScope.LOGIN_GMAIL}";
+                                    if (!isUserLoggedIn) {
+                                        alert('You need to login to book now!');
+                                        event.preventDefault(); // Ngăn chặn gửi form
+                                    } else {
+                                        // Cho phép gửi form nếu đã đăng nhập
+                                        document.getElementById("bookNowForm").submit();
+                                    }
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>

@@ -10,6 +10,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import koikd.cart.CartBean;
 
 /**
  *
@@ -31,7 +33,7 @@ public class CheckOutController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = VIEW_ORDER_PAGE;
-        try {
+        try {           
             url = VIEW_ORDER_PAGE;
         } finally {
             request.getRequestDispatcher(url).forward(request, response);

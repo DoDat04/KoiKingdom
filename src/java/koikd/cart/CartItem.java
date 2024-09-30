@@ -17,7 +17,7 @@ public class CartItem {
     public CartItem(TourDTO tour, int numberOfPeople) {
         this.tour = tour;
         this.numberOfPeople = numberOfPeople;
-    }
+    }    
 
     public TourDTO getTour() {
         return tour;

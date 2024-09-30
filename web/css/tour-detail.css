@@ -181,6 +181,11 @@ body {
     border: none;
 }
 
+.tour-buttons button {
+    flex-grow: 1;
+    margin: 0 10px; /* Add space between buttons */
+}
+
 /* Section Title Styling */
 .tour-schedule .section-title {
     font-family: 'Playfair Display', serif;
