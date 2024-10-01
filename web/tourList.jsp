@@ -131,6 +131,7 @@
                                         </p>
                                         <p class="card-text"><strong>Farm:</strong> ${tour.farmName}</p>
                                         <p class="card-text"><strong>Koi Type:</strong> ${tour.koiTypeName}</p>
+                                        <p class="card-text"><strong>Departure Location:</strong> ${tour.tourDepartLoca}</p>
                                     </div>
                                     <div class="card-footer text-end">
                                         <strong class="fs-4 text-danger">${tour.tourPrice} $</strong>

@@ -67,6 +67,7 @@
                             <p><strong>End Date:</strong> <fmt:formatDate value="${selectedTour.endDate}" pattern="dd-MM-yyyy"/></p>
                             <p><strong>Farm:</strong> ${selectedTour.farmName}</p>
                             <p><strong>Koi Type:</strong> ${selectedTour.koiTypeName}</p>
+                            <p><strong>Departure Location:</strong> ${selectedTour.tourDepartLoca}</p>
                             <p class="text-end tour-price">${selectedTour.tourPrice} $</p>
 
                             <!-- Quantity Input -->

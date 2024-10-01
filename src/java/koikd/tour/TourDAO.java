@@ -29,13 +29,17 @@ public class TourDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT t.TourID, t.TourName, t.Duration, t.Description, t.TourPrice, t.StartDate, t.EndDate, t.Image, t.Rating, "
-                        + "(SELECT STRING_AGG(f.FarmName, ', ') FROM TOUR_FARM tf "
-                        + "INNER JOIN FARM f ON tf.FarmID = f.FarmID WHERE tf.TourID = t.TourID) AS 'Farm', "
+                String sql = "SELECT t.TourID, t.TourName, t.Duration, t.Description, t.TourPrice, t.StartDate, t.EndDate, t.Image, t.DepartureLocation, "
+                        + "AVG(f.Rating) AS Rating,  "
+                        + "(SELECT STRING_AGG(f2.FarmName, ', ') FROM TOUR_FARM tf "
+                        + "INNER JOIN FARM f2 ON tf.FarmID = f2.FarmID WHERE tf.TourID = t.TourID) AS Farm, "
                         + "(SELECT STRING_AGG(k.TypeName, ', ') FROM TOUR_KOITYPE tk "
-                        + "INNER JOIN KOITYPE k ON tk.KoiTypeID = k.KoiTypeID WHERE tk.TourID = t.TourID) AS 'KoiType' "
+                        + "INNER JOIN KOITYPE k ON tk.KoiTypeID = k.KoiTypeID WHERE tk.TourID = t.TourID) AS KoiType "
                         + "FROM TOUR t "
-                        + "GROUP BY t.TourID, t.TourName, t.Duration, t.Description, t.TourPrice, t.StartDate, t.EndDate, t.Image, t.Rating";
+                        + "LEFT JOIN TOUR_FEEDBACK tf ON t.TourID = tf.TourID "
+                        + "LEFT JOIN FEEDBACK f ON tf.FeedbackID = f.FeedbackID "
+                        + "GROUP BY t.TourID, t.TourName, t.Duration, t.Description, t.TourPrice, t.StartDate, t.EndDate, t.Image, t.DepartureLocation";
+
                 stm = con.prepareStatement(sql);
                 rs = stm.executeQuery();
 
@@ -51,8 +55,9 @@ public class TourDAO implements Serializable {
                     String koiTypeName = rs.getString("KoiType");
                     String tourImage = rs.getString("Image");
                     double tourRating = rs.getDouble("Rating");
+                    String departureLocation = rs.getString("DepartureLocation");
 
-                    TourDTO dto = new TourDTO(tourID, tourName, koiTypeName, farmName, tourDuration, tourDescription, tourPrice, startDate, endDate, tourImage, tourRating);
+                    TourDTO dto = new TourDTO(tourID, tourName, koiTypeName, farmName, tourDuration, tourDescription, tourPrice, startDate, endDate, tourImage, tourRating, departureLocation);
                     tourList.add(dto);
                 }
             }
@@ -82,14 +87,18 @@ public class TourDAO implements Serializable {
             con = DBUtils.getConnection();
             if (con != null) {
                 StringBuilder sql = new StringBuilder("SELECT t.TourID, t.TourName, t.Duration, t.Description, "
-                        + "t.TourPrice, t.StartDate, t.EndDate, t.Image, t.Rating, "
+                        + "t.TourPrice, t.StartDate, t.EndDate, t.Image, t.DepartureLocation, "
+                        + "AVG(f.Rating) AS Rating,  "
                         + "(SELECT STRING_AGG(f.FarmName, ', ') FROM TOUR_FARM tf "
                         + "INNER JOIN FARM f ON tf.FarmID = f.FarmID WHERE tf.TourID = t.TourID) AS Farm, "
                         + "(SELECT STRING_AGG(k.TypeName, ', ') FROM TOUR_KOITYPE tk "
                         + "INNER JOIN KOITYPE k ON tk.KoiTypeID = k.KoiTypeID WHERE tk.TourID = t.TourID) AS KoiType "
-                        + "FROM TOUR t WHERE 1=1 ");
+                        + "FROM TOUR t "
+                        + "LEFT JOIN TOUR_FEEDBACK tf ON t.TourID = tf.TourID "
+                        + "LEFT JOIN FEEDBACK f ON tf.FeedbackID = f.FeedbackID "
+                        + "WHERE 1=1 ");
 
-                // Thêm các bộ lọc một cách động dựa trên đầu vào không null
+                // Add dynamic filters based on non-null inputs
                 if (farmID != null && !farmID.isEmpty()) {
                     sql.append(" AND EXISTS (SELECT 1 FROM TOUR_FARM tf WHERE tf.TourID = t.TourID AND tf.FarmID = ?) ");
                 }
@@ -102,6 +111,9 @@ public class TourDAO implements Serializable {
                 if (endDate != null && !endDate.isEmpty()) {
                     sql.append(" AND t.EndDate <= ? ");
                 }
+                sql.append(" GROUP BY t.TourID, t.TourName, t.Duration, t.Description, t.TourPrice, "
+                        + "t.StartDate, t.EndDate, t.Image, t.DepartureLocation ");
+
                 if (priceOrder != null && !priceOrder.isEmpty()) {
                     sql.append(" ORDER BY t.TourPrice ").append(priceOrder.equalsIgnoreCase("asc") ? "ASC" : "DESC");
                 }
@@ -109,7 +121,7 @@ public class TourDAO implements Serializable {
                 stm = con.prepareStatement(sql.toString());
 
                 int paramIndex = 1;
-                // Gán các tham số cho các bộ lọc
+                // Set parameters for the filters
                 if (farmID != null && !farmID.isEmpty()) {
                     stm.setString(paramIndex++, farmID);
                 }
@@ -136,8 +148,9 @@ public class TourDAO implements Serializable {
                     String koiTypeName = rs.getString("KoiType");
                     String tourImage = rs.getString("Image");
                     double tourRating = rs.getDouble("Rating");
+                    String departureLocation = rs.getString("DepartureLocation");
 
-                    TourDTO dto = new TourDTO(tourID, tourName, koiTypeName, farmName, tourDuration, tourDescription, tourPrice, start, end, tourImage, tourRating);
+                    TourDTO dto = new TourDTO(tourID, tourName, koiTypeName, farmName, tourDuration, tourDescription, tourPrice, start, end, tourImage, tourRating, departureLocation);
                     tourList.add(dto);
                 }
             }
@@ -164,14 +177,20 @@ public class TourDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT t.TourID, t.TourName, t.Duration, t.Description, t.TourPrice, t.StartDate, t.EndDate, t.Image, t.Rating, "
+                String sql = "SELECT t.TourID, t.TourName, t.Duration, t.Description, t.TourPrice, "
+                        + "t.StartDate, t.EndDate, t.Image, t.DepartureLocation, "
+                        + "AVG(f.Rating) AS Rating, " 
                         + "(SELECT STRING_AGG(f.FarmName, ', ') FROM TOUR_FARM tf "
-                        + "INNER JOIN FARM f ON tf.FarmID = f.FarmID WHERE tf.TourID = t.TourID) AS 'Farm', "
+                        + "INNER JOIN FARM f ON tf.FarmID = f.FarmID WHERE tf.TourID = t.TourID) AS Farm, "
                         + "(SELECT STRING_AGG(k.TypeName, ', ') FROM TOUR_KOITYPE tk "
-                        + "INNER JOIN KOITYPE k ON tk.KoiTypeID = k.KoiTypeID WHERE tk.TourID = t.TourID) AS 'KoiType' "
+                        + "INNER JOIN KOITYPE k ON tk.KoiTypeID = k.KoiTypeID WHERE tk.TourID = t.TourID) AS KoiType "
                         + "FROM TOUR t "
+                        + "LEFT JOIN TOUR_FEEDBACK tf ON t.TourID = tf.TourID "
+                        + "LEFT JOIN FEEDBACK f ON tf.FeedbackID = f.FeedbackID "
                         + "WHERE t.TourID = ? "
-                        + "GROUP BY t.TourID, t.TourName, t.Duration, t.Description, t.TourPrice, t.StartDate, t.EndDate, t.Image, t.Rating";
+                        + "GROUP BY t.TourID, t.TourName, t.Duration, t.Description, "
+                        + "t.TourPrice, t.StartDate, t.EndDate, t.Image, t.DepartureLocation"; 
+
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, tourID);  // Set tourID as a parameter
                 rs = stm.executeQuery();
@@ -187,8 +206,9 @@ public class TourDAO implements Serializable {
                     String koiTypeName = rs.getString("KoiType");
                     String tourImage = rs.getString("Image");
                     double tourRating = rs.getDouble("Rating");
+                    String departureLocation = rs.getString("DepartureLocation");
 
-                    tour = new TourDTO(tourID, tourName, koiTypeName, farmName, tourDuration, tourDescription, tourPrice, startDate, endDate, tourImage, tourRating);
+                    tour = new TourDTO(tourID, tourName, koiTypeName, farmName, tourDuration, tourDescription, tourPrice, startDate, endDate, tourImage, tourRating, departureLocation);
                 }
             }
         } finally {
@@ -205,7 +225,7 @@ public class TourDAO implements Serializable {
 
         return tour;
     }
-    
+
     public List<TourDTO> getAllTour() throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -248,12 +268,12 @@ public class TourDAO implements Serializable {
         }
         return result;
     }
-    
+
     /**
-     * 
+     *
      * @param id
      * @return status tour.
-     * @throws SQLException 
+     * @throws SQLException
      */
     public boolean updateStatusTour(int id) throws SQLException {
         Connection conn = null;
@@ -291,7 +311,7 @@ public class TourDAO implements Serializable {
         }
         return false;
     }
-    
+
 //    public static void main(String[] args) throws SQLException {
 //        int id = 11;
 //        TourDAO dao = new TourDAO();

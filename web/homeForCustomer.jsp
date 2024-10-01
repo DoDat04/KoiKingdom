@@ -256,7 +256,6 @@
                     showToast('${logoutSuccess}', 'success');
                 };
             </script>
-            <c:remove var="notiSuccess" scope="session"/>
         </c:if>
         <div id="toastBox" class="toast-container position-fixed top-0 end-0 p-3"></div>
         <script src="js/showToast.js"></script>

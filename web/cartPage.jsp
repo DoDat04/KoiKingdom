@@ -67,6 +67,9 @@
                                                         <span>End Date: 
                                                             <fmt:formatDate value="${entry.value.tour.endDate}" pattern="dd-MM-yyyy" />
                                                         </span>
+                                                        <span>Departure Location: 
+                                                            ${entry.value.tour.tourDepartLoca}
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </td>
