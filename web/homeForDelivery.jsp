@@ -10,11 +10,14 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="css/homeForDelivery.css" rel="stylesheet">
+        <link href="css/toast.css" rel="stylesheet">
         <title>Delivery Home</title>
     </head>
     <body>
         <jsp:include page="headerForDelivery.jsp" flush="true"/>
-        <div class="main" style="margin-top: -216px; margin-left: 223px; margin-right: 30px;">                 
+        <div style="    margin-top: -26vh;
+             margin-left: 17%;
+             margin-right: 6%">                 
             <table class="styled-table">
                 <thead>
                     <tr>
@@ -84,13 +87,9 @@
             <c:set var="updateError" value="${null}" scope="session"/>
         </c:if>
 
-
-
         <div id="toastBox" class="toast-container position-fixed top-0 end-0 p-3"></div>
         <script src="js/homeForDelivery.js"></script>
-
-
-
+        <script src="js/showToast.js"></script>
         <style>
             .styled-table {
                 width: 100%;

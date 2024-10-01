@@ -19,10 +19,10 @@
         <link rel="stylesheet" href="css/headerForDelivery.css">
         <title>Header</title>
     </head>
-    <body>   
-        <div class="main-content">           
-            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -52px; padding-top: 11px;">
+    <body>  
 
+        <div class="navbar-header">           
+            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -52px; padding-top: 9.7px">
                 <a href="home?action=Delivery" style="margin-left: 116px">
                     <img src="img/logo.png" class="main-icon" >
                 </a>
@@ -47,9 +47,9 @@
                     <ul class="menu">
                         <div class="user-frame">
                             <li class="user-info">
-                                <div class="user-details">   
-                                    <div>
-                                        <span class="user-name">
+                                <div class="user-details">      
+                                    <div style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <span class="user-name"  \>
                                             ${sessionScope.LOGIN_DELIVERY.firstName} ${sessionScope.LOGIN_DELIVERY.lastName}
                                         </span><br>
                                         <span class="user-role">${sessionScope.LOGIN_DELIVERY.role}</span>
@@ -138,51 +138,44 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <script src="js/headerForDelivery.js"></script>
-
-
-
-
+        </div>   
         <script>
-                                    function previewAvatar() {
-                                        const file = document.getElementById('avatar').files[0];
-                                        const preview = document.getElementById('avatarPreview');
-                                        const reader = new FileReader();
+            function previewAvatar() {
+                const file = document.getElementById('avatar').files[0];
+                const preview = document.getElementById('avatarPreview');
+                const reader = new FileReader();
 
-                                        reader.onloadend = function () {
-                                            preview.src = reader.result;
-                                        };
+                reader.onloadend = function () {
+                    preview.src = reader.result;
+                };
 
-                                        if (file) {
-                                            reader.readAsDataURL(file);
-                                        } else {
-                                            preview.src = "";
-                                        }
-                                    }
-
-
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = "";
+                }
+            }
 
 
-                                    document.querySelector('.toggle-btn').addEventListener('click', function () {
-                                        const sidebar = document.querySelector('.sidebar');
-                                        const main = document.querySelector('.main');
-                                        const mainContent = document.querySelector('.main-content');
-                                        const logo = document.querySelector('.main-icon');
 
-                                        sidebar.classList.toggle('collapsed');
+            document.querySelector('.toggle-btn').addEventListener('click', function () {
+                const sidebar = document.querySelector('.sidebar');
+                const main = document.querySelector('.main');
+                const mainContent = document.querySelector('.main-content');
+                const logo = document.querySelector('.main-icon');
 
-                                        if (sidebar.classList.contains('collapsed')) {
-                                            main.style.marginLeft = '60px';
-                                            mainContent.style.marginLeft = '-80px';
-                                        } else {
-                                            main.style.marginLeft = '223px';
-                                            mainContent.style.marginLeft = '0px';
-                                        }
-                                    });
-        </script>
+                sidebar.classList.toggle('collapsed');
 
-
+                if (sidebar.classList.contains('collapsed')) {
+                    main.style.marginLeft = '60px';
+                    mainContent.style.marginLeft = '-80px';
+                } else {
+                    main.style.marginLeft = '223px';
+                    mainContent.style.marginLeft = '0px';
+                }
+            });
+        </script>                    
+        <script src="js/headerForDelivery.js"></script>
     </body>
 
 

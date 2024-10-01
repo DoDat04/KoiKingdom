@@ -1,0 +1,94 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Sep 30, 2024, 8:24:23 AM
+    Author     : Admin
+*/
+
+
+.toast-container {
+    position: fixed; /* Đặt vị trí cố định */
+    top: 1rem; /* Khoảng cách từ trên cùng */
+    right: 1rem; /* Khoảng cách từ bên phải */
+    z-index: 1050; /* Đảm bảo nó hiển thị trên các phần tử khác */
+    width: auto; /* Đặt chiều rộng tự động hoặc theo ý muốn */
+    display: flex; /* Sử dụng flexbox để quản lý các toast */
+    flex-direction: column; /* Đặt hướng là cột */
+    gap: 15px; /* Khoảng cách giữa các toast */
+}
+
+#toastBox {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.toast::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 5px;
+    background: white;
+    animation: anim 5s linear forwards;
+}
+
+@keyframes moveleft {
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.toast {
+    width: 400px;
+    height: 80px;
+    margin: 15px 0;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 10px; /* Thêm khoảng cách */
+    border-radius: 5px; /* Bo góc */
+    opacity: 1; /* Đặt độ mờ mặc định */
+    transition: opacity 0.5s; /* Hiệu ứng chuyển đổi */
+}
+
+@keyframes anim {
+    100% {
+        width: 0;
+    }
+}
+
+/* Close button styles */
+
+.btn-close-toast {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #fff; /* Màu chữ cho nút đóng */
+    margin-left: 10px; /* Khoảng cách từ nội dung */
+}
+
+.btn-close-toast:hover {
+    color: #ff0000; /* Đổi màu khi hover */
+}
+
+/* Optional: Style for toast content */
+.toast span {
+    flex-grow: 1;
+    padding: 10px 20px; /* Thêm khoảng cách cho nội dung */
+}
+
+.btn-detail {
+    border: none;
+    background: none;
+}

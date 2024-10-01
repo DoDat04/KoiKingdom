@@ -8,14 +8,20 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
-    <head>
+      <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Verify OTP - Koi Kingdom</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
         <link rel="stylesheet" href="css/login.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <!-- Font Awesome for Icons -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script src="js/otpVerification.js"></script>
         <!--=============== SWIPER CSS ===============-->
         <link rel="stylesheet" href="css/swiper-bundle.min.css">
+        <link href="css/toast.css" rel="stylesheet">
+        <link href="css/toast.css" rel="stylesheet">
     </head>
     <body>
         <div class="container">
@@ -57,10 +63,15 @@
 
         <c:if test="${not empty sessionScope.errorMessage}">
             <script>
-                showModal('${sessionScope.errorMessage}');
+                window.onload = function () {
+                    showToast('${sessionScope.errorMessage}', 'success');
+                };
             </script>
             <c:remove var="errorMessage" scope="session"/>
         </c:if>
+
+        <div id="toastBox" class="toast-container position-fixed top-0 end-0 p-3"></div>
+        <script src="js/showToast.js"></script>
         <script src="js/otpTimer.js"></script> 
         <!-- SWIPER JS -->
         <script src="js/swiper-bundle.min.js"></script> 

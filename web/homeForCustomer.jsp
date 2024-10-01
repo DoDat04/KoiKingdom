@@ -20,7 +20,8 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <link rel="stylesheet" href="css/home.css">
         <link rel="stylesheet" href="css/style.css">
-        <script src="js/login.js"></script>       
+        <link href="css/toast.css" rel="stylesheet">
+        <script src="js/login.js"></script>     
     </head>
     <body>
         <div class="colorlib-loader"></div>
@@ -213,20 +214,14 @@
             </div>
         </div>
 
-        <div id="error-modal" class="modall">
-            <div class="modal-contentt">
-                <span class="close-button" onclick="closeModal()">&times;</span>
-                <div class="checkmark"><i class="fa-solid fa-check"></i></div>
-                <p id="error-message"></p>
-            </div>
-        </div>
-
         <c:set var="success" value="${sessionScope.updateSuccess}"/>
         <c:if test="${not empty success}">
             <script>
-                showModal('${success}');
-                <% session.removeAttribute("updateSuccess"); %>
+                window.onload = function () {
+                    showToast('${success}', 'success');
+                };
             </script>
+            <c:remove var="updateSuccess" scope="session"/>
         </c:if>
 
         <c:set var="success" value="${sessionScope.CHANGE_PASS_SUCCESS}"/>
@@ -234,24 +229,37 @@
 
         <c:if test="${not empty success}">
             <script>
-                showModal('${success}');
+                window.onload = function () {
+                    showToast('${success}', 'success');
+                };
+
                 <% session.removeAttribute("CHANGE_PASS_SUCCESS"); %>
+
+
             </script>
         </c:if>
 
         <c:if test="${not empty error}">
             <script>
-                showModal('${error}');
+                window.onload = function () {
+                    showToast('${error}', 'error');
+                };
                 <% session.removeAttribute("CHANGE_PASS_ERROR");%>
             </script>
         </c:if>
 
         <c:set var="logoutSuccess" value="${requestScope.notiSuccess}"/>
+
         <c:if test="${not empty logoutSuccess}">
             <script>
-                showModal('${logoutSuccess}');       
+                window.onload = function () {
+                    showToast('${logoutSuccess}', 'success');
+                };
             </script>
+            <c:remove var="notiSuccess" scope="session"/>
         </c:if>
+        <div id="toastBox" class="toast-container position-fixed top-0 end-0 p-3"></div>
+        <script src="js/showToast.js"></script>
 
         <!-- Back to Top Button -->
         <button id="backToTop" class="btn btn-primary" style="display: none;">

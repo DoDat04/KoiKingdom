@@ -9,13 +9,19 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sign Up - Koi Kingdom</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
         <!--=============== FONT AWESOME ===============-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <!--=============== MAIN CSS ===============-->
         <link rel="stylesheet" href="css/signUp.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <!-- Font Awesome for Icons -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="css/toast.css" rel="stylesheet">
         <!--=============== SWIPER CSS ===============-->
         <link rel="stylesheet" href="css/swiper-bundle.min.css">    
         <!-- MAIN JS-->
@@ -134,50 +140,71 @@
             </div>
         </div>
 
-        <c:set var="success" value="${requestScope.CREATE_SUCCESS}" />
+            <c:set var="success" value="${requestScope.CREATE_SUCCESS}" />
         <c:set var="errors" value="${requestScope.CREATE_ERROR}"/>
         <c:choose>
             <c:when test="${not empty errors.emailIsExisted}">
                 <script>
-                    showModal('${errors.emailIsExisted}');
+                    window.onload = function () {
+                        showToast('${errors.emailIsExisted}', 'error');
+                    };
                 </script>
             </c:when>
             <c:when test="${not empty errors.passwordLengthErr}">
                 <script>
-                    showModal('${errors.passwordLengthErr}');
+                    window.onload = function () {
+                        showToast('${errors.passwordLengthErr}', 'error');
+                    };
                 </script>
             </c:when>
             <c:when test="${not empty errors.firstNameLengthErr}">
                 <script>
-                    showModal('${errors.firstNameLengthErr}');
+                    window.onload = function () {
+                        showToast('${errors.firstNameLengthErr}', 'error');
+                    };
                 </script>
             </c:when>
             <c:when test="${not empty errors.lastNameLengthErr}">
                 <script>
-                    showModal('${errors.lastNameLengthErr}');
+                    window.onload = function () {
+                        showToast('${errors.lastNameLengthErr}', 'error');
+                    };
                 </script>
             </c:when>
             <c:when test="${not empty errors.firstNameInvalidErr}">
                 <script>
-                    showModal('${errors.firstNameInvalidErr}');
+                    window.onload = function () {
+                        showToast('${errors.firstNameInvalidErr}', 'error');
+                    };
                 </script>
             </c:when>
             <c:when test="${not empty errors.lastNameInvalidErr}">
                 <script>
-                    showModal('${errors.lastNameInvalidErr}');
+                    window.onload = function () {
+                        showToast('${errors.lastNameInvalidErr}', 'error');
+                    };
                 </script>
             </c:when>
             <c:when test="${not empty errors.confirmNotMacthed}">
                 <script>
-                    showModal('${errors.confirmNotMacthed}');
+                    window.onload = function () {
+                        showToast('${errors.confirmNotMacthed}', 'error');
+                    };
                 </script>
             </c:when>
             <c:when test="${not empty success}">
                 <script>
-                    showModal('${success}');
+                    window.onload = function () {
+                        showToast('${success}', 'success');
+                    };
                 </script>
             </c:when>
         </c:choose>
+
+
+        <div id="toastBox" class="toast-container position-fixed top-0 end-0 p-3"></div>
+        <!-- SWIPER JS -->
+        <script src="js/showToast.js"></script>
 
         <!-- SWIPER JS -->
         <script src="js/swiper-bundle.min.js"></script>   
