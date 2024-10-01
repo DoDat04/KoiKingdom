@@ -93,9 +93,14 @@ public class UpdateProfileDeliveryController extends HttpServlet {
                         && city != null && !city.isEmpty()
                         && district != null && !district.isEmpty()
                         && ward != null && !ward.isEmpty()) {
+                    // Nếu có địa chỉ mới thì tạo mới địa chỉ
                     custAddress = address + ", " + ward + ", " + district + ", " + city;
-                    employee.setAddress(custAddress); // Cập nhật địa chỉ mới cho đối tượng `employee`
+                } else {
+                    // Giữ nguyên địa chỉ cũ nếu không có thông tin mới
+                    custAddress = employee.getAddress();
                 }
+
+                employee.setAddress(custAddress); // Cập nhật địa chỉ mới cho đối tượng `employee`
 
                 // Gọi DAO để cập nhật hồ sơ nhân viên giao hàng
                 EmployeesDAO delivery = new EmployeesDAO();
@@ -114,7 +119,7 @@ public class UpdateProfileDeliveryController extends HttpServlet {
                 }
 
                 // Chuyển tiếp đến trang hiển thị thông tin
-                 response.sendRedirect("home?action=Delivery");
+                response.sendRedirect("home?action=Delivery");
             }
         } catch (SQLException ex) {
             Logger.getLogger(UpdateProfileDeliveryController.class.getName()).log(Level.SEVERE, null, ex);

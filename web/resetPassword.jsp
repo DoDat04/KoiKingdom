@@ -97,7 +97,7 @@
             </script>
         </c:if>
 
-        <div id="toastBox" class="toast-container position-fixed top-0 end-0 p-3"></div>
+       <div id="toastBox"></div>
         <!-- SWIPER JS -->
         <script src="js/showToast.js"></script>
         <!-- SWIPER JS -->

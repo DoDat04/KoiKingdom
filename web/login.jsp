@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="css/login.css">  
         <!--=============== SWIPER CSS ===============-->
         <link rel="stylesheet" href="css/swiper-bundle.min.css">
+          <link href="css/toast.css" rel="stylesheet">
         <!-- MAIN JS-->
         <script src="js/login.js"></script>
     </head>
@@ -96,10 +97,13 @@
             <c:set var="error" value="${requestScope.ERROR}"/>
             <c:if test="${not empty error and error != null}">
                 <script>
-                    showModal('${error}');
+                    window.onload = function () {
+                        showToast('${error}', 'error');
+                    };
                 </script>
             </c:if> 
-
+            <div id="toastBox"></div>
+            <script src="js/showToast.js"></script>
             <!-- SWIPER JS -->
             <script src="js/swiper-bundle.min.js"></script>           
     </body>
