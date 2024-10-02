@@ -11,6 +11,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import koikd.farm.FarmDAO;
+import koikd.farm.FarmDTO;
+import koikd.koitype.KoiTypeDAO;
+import koikd.koitype.KoiTypeDTO;
 
 /**
  *
@@ -38,7 +46,24 @@ public class HomeController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = HOME_PAGE;
         try {
-            HttpSession session = request.getSession(false);
+            HttpSession session = request.getSession();
+            KoiTypeDAO services = new KoiTypeDAO();
+            List<KoiTypeDTO> dtoList = services.getKoiTypeList();
+            if (dtoList != null && !dtoList.isEmpty()) {
+                session.setAttribute("LIST_KOITYPE", dtoList);
+            } else {
+                request.setAttribute("ERROR_NULL", "No Koi types found.");
+            }
+            
+            FarmDAO dao = new FarmDAO();
+            List<FarmDTO> listFarm = dao.getFarmList();
+            if (listFarm != null && !listFarm.isEmpty()) {
+                session.setAttribute("LIST_FARM", listFarm);
+            } else {
+                request.setAttribute("ERROR_NULL", "No Farms found.");
+            }
+            
+            
             if (session != null) {
                 // Ở đây sẽ nhận biến session logout đó xong đổi nó thành requestScope
                 String message = (String) session.getAttribute("SUCCESS");
@@ -61,6 +86,10 @@ public class HomeController extends HttpServlet {
             } else if (action.equals("Sales")){               
                 url = SALES_PAGE;
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

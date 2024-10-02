@@ -77,10 +77,18 @@
                                 </c:choose>
                             </span>
                         </a>
-                        <a href="#" class="text-black me-3 icon-size">
-                            <i class="fa-solid fa-heart"></i>
-                        </a>
-
+                        <c:choose>
+                            <c:when test="${sessionScope.LOGIN_USER == null and sessionScope.LOGIN_GMAIL == null}">  
+                                <a href="#" class="text-black me-3 icon-size" onclick="alert('You need to login to see favorite tours!')">
+                                    <i class="fa-solid fa-heart"></i>
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="favorite" class="text-black me-3 icon-size">
+                                    <i class="fa-solid fa-heart"></i>
+                                </a>
+                                </c:otherwise>
+                            </c:choose>                      
                         <!-- User Info with Name and Icon -->
                         <div class="user-info d-flex align-items-center">
                             <!-- Display Name -->

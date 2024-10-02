@@ -110,37 +110,60 @@
                 </c:if>
                 <c:forEach var="tour" items="${tourList}">
                     <div class="col-md-4 mb-4">
-                        <form action="tour-detail" method="get">
-                            <input type="hidden" name="tourID" value="${tour.tourID}"/>
-                            <button type="submit" class="btn btn-link p-0" style="text-decoration: none; color: inherit;">
-                                <div class="card h-100">
+                        <div class="card h-100 position-relative">
+
+                            <!-- Form trang chi tiết tour -->
+                            <form action="tour-detail" method="get">
+                                <input type="hidden" name="tourID" value="${tour.tourID}" />
+                                <!-- Chỉ bao quanh phần hình ảnh và tên tour -->
+                                <button type="submit" class="btn btn-link p-0" style="text-decoration: none; color: inherit;">
                                     <!-- Tour Image -->
                                     <img src="${tour.tourImage}" class="card-img-top" alt="${tour.tourName}">
+
+                                    <!-- Tên tour -->
                                     <div class="card-body text-start">
                                         <h5 class="card-title">${tour.tourName}</h5>
-                                        <span class="rating">
-                                            <i class="fas fa-star text-warning"></i>
-                                            <span class="rating-number">${tour.tourRating}</span>
-                                        </span>
-                                        <p class="card-text"><strong>Duration:</strong> ${tour.duration}</p>
-                                        <p class="card-text"><strong>Start Date:</strong>
-                                            <fmt:formatDate value="${tour.startDate}" pattern="dd-MM-yyyy"/>
-                                        </p>
-                                        <p class="card-text"><strong>End Date:</strong>
-                                            <fmt:formatDate value="${tour.endDate}" pattern="dd-MM-yyyy"/>
-                                        </p>
-                                        <p class="card-text"><strong>Farm:</strong> ${tour.farmName}</p>
-                                        <p class="card-text"><strong>Koi Type:</strong> ${tour.koiTypeName}</p>
-                                        <p class="card-text"><strong>Departure Location:</strong> ${tour.tourDepartLoca}</p>
                                     </div>
-                                    <div class="card-footer text-end">
-                                        <strong class="fs-4 text-danger">${tour.tourPrice} $</strong>
-                                    </div>
-                                </div>
-                            </button>
-                        </form>
+                                </button>
+                            </form>
+
+                            <!-- Nội dung tour không liên quan tới link -->
+                            <div class="card-body text-start">
+                                <span class="rating">
+                                    <i class="fas fa-star text-warning"></i>
+                                    <span class="rating-number">${tour.tourRating}</span>
+                                </span>
+                                <p class="card-text"><strong>Duration:</strong> ${tour.duration}</p>
+                                <p class="card-text"><strong>Start Date:</strong>
+                                    <fmt:formatDate value="${tour.startDate}" pattern="dd-MM-yyyy" />
+                                </p>
+                                <p class="card-text"><strong>End Date:</strong>
+                                    <fmt:formatDate value="${tour.endDate}" pattern="dd-MM-yyyy" />
+                                </p>
+                                <p class="card-text"><strong>Farm:</strong> ${tour.farmName}</p>
+                                <p class="card-text"><strong>Koi Type:</strong> ${tour.koiTypeName}</p>
+                                <p class="card-text"><strong>Departure Location:</strong> ${tour.tourDepartLoca}</p>
+                            </div>
+                            <div class="card-footer text-end">
+                                <strong class="fs-4 text-danger">${tour.tourPrice} $</strong>
+                            </div>
+
+                            <!-- Form ẩn để thêm tour vào yêu thích -->
+                            <form action="favorite" method="post" id="favoriteForm-${tour.tourID}">
+                                <input type="hidden" name="tourID" value="${tour.tourID}">
+                                <input type="hidden" name="custID" value="${sessionScope.custID}">
+                            </form>
+
+                            <!-- Biểu tượng trái tim -->
+                            <div class="favorite-icon position-absolute" style="top: -9px; left: 395px;">
+                                <i class="fas fa-heart text-danger" style="font-size: 2rem; cursor: pointer;"
+                                   onclick="document.getElementById('favoriteForm-${tour.tourID}').submit(); event.stopPropagation();">
+                                </i>
+                            </div>
+
+                        </div>
                     </div>
-                </c:forEach>
+                </c:forEach>                
             </div>
         </div>               
 

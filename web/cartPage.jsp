@@ -31,7 +31,7 @@
                     </div>
 
                     <c:choose>
-                        <c:when test="${cart.totalQuantity == 0}">
+                        <c:when test="${cart == null || cart.totalQuantity == 0}">
                             <div class="cart-empty">
                                 <p>Nothing here... Let's add something to the cart!</p>
                             </div>
