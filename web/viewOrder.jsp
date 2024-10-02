@@ -40,77 +40,42 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:choose>
-                            <c:when test="${not empty selectedTour}">
-                                <!-- Hiển thị tour đã được chọn trong "Book Now" -->
-                                <tr>
-                                    <td>
-                                        <img class="tour-img" src="${selectedTour.tour.tourImage}" alt="${selectedTour.tour.tourName}">
-                                    </td>
-                                    <td>
-                                        <div class="tour-info">
-                                            <div class="tour-name">${selectedTour.tour.tourName}</div>
-                                            <div class="tour-dates">
-                                                <span>Start Date: 
-                                                    <fmt:formatDate value="${selectedTour.tour.startDate}" pattern="dd-MM-yyyy" />
-                                                </span>
-                                                <span>End Date: 
-                                                    <fmt:formatDate value="${selectedTour.tour.endDate}" pattern="dd-MM-yyyy" />
-                                                </span>
-                                                <span>Departure Location: 
-                                                    ${selectedTour.tour.tourDepartLoca}
-                                                </span>
-                                            </div>
+
+                        <!-- Hiển thị giỏ hàng nếu không có tour nào được chọn qua "Book Now" -->
+                        <c:forEach var="entry" items="${cart.items}">
+                            <tr>
+                                <td>
+                                    <img class="tour-img" src="${entry.value.tour.tourImage}" alt="${entry.value.tour.tourName}">
+                                </td>
+                                <td>
+                                    <div class="tour-info">
+                                        <div class="tour-name">${entry.value.tour.tourName}</div>
+                                        <div class="tour-dates">
+                                            <span>Start Date: 
+                                                <fmt:formatDate value="${entry.value.tour.startDate}" pattern="dd-MM-yyyy" />
+                                            </span>
+                                            <span>End Date: 
+                                                <fmt:formatDate value="${entry.value.tour.endDate}" pattern="dd-MM-yyyy" />
+                                            </span>
+                                            <span>Departure Location: 
+                                                ${entry.value.tour.tourDepartLoca}
+                                            </span>
                                         </div>
-                                    </td>
-                                    <td>${selectedTour.numberOfPeople}</td>
-                                    <td>$${selectedTour.tour.tourPrice}</td>
-                                    <td>$${selectedTour.totalPrice}</td>
-                                </tr>
-                            </c:when>
-                            <c:otherwise>
-                                <!-- Hiển thị giỏ hàng nếu không có tour nào được chọn qua "Book Now" -->
-                                <c:forEach var="entry" items="${cart.items}">
-                                    <tr>
-                                        <td>
-                                            <img class="tour-img" src="${entry.value.tour.tourImage}" alt="${entry.value.tour.tourName}">
-                                        </td>
-                                        <td>
-                                            <div class="tour-info">
-                                                <div class="tour-name">${entry.value.tour.tourName}</div>
-                                                <div class="tour-dates">
-                                                    <span>Start Date: 
-                                                        <fmt:formatDate value="${entry.value.tour.startDate}" pattern="dd-MM-yyyy" />
-                                                    </span>
-                                                    <span>End Date: 
-                                                        <fmt:formatDate value="${entry.value.tour.endDate}" pattern="dd-MM-yyyy" />
-                                                    </span>
-                                                    <span>Departure Location: 
-                                                            ${entry.value.tour.tourDepartLoca}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>${entry.value.numberOfPeople}</td>
-                                        <td>$${entry.value.tour.tourPrice}</td>
-                                        <td>$${entry.value.totalPrice}</td>
-                                    </tr>
-                                </c:forEach>
-                            </c:otherwise>
-                        </c:choose>                         
+                                    </div>
+                                </td>
+                                <td>${entry.value.numberOfPeople}</td>
+                                <td>$${entry.value.tour.tourPrice}</td>
+                                <td>
+                                    <fmt:formatNumber value="${entry.value.totalPrice}" type="number" maxFractionDigits="2" minFractionDigits="2" />
+                                </td>
+                            </tr>
+                        </c:forEach>                         
                     </tbody>
                     <tfoot>
                         <tr>
                             <td colspan="4" class="text-end fw-bold">Subtotal:</td>
                             <td>
-                                <c:choose>
-                                    <c:when test="${not empty selectedTour}">
-                                        $<c:out value="${selectedTour.totalPrice}"/>
-                                    </c:when>
-                                    <c:otherwise>
-                                        $<c:out value="${cart.totalPrice}"/>
-                                    </c:otherwise>
-                                </c:choose>
+                                $<fmt:formatNumber value="${cart.totalPrice}" type="number" maxFractionDigits="2" minFractionDigits="2" />
                             </td>
                         </tr>
                     </tfoot>

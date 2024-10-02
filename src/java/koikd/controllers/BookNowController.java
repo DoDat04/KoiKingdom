@@ -54,8 +54,13 @@ public class BookNowController extends HttpServlet {
                 TourDTO selectedTour = dao.getTourByID(tourID);
 
                 if (selectedTour != null && numberOfPeople > 0) {
-                    CartItem cartItem = new CartItem(selectedTour, numberOfPeople);
-                    session.setAttribute("selectedTour", cartItem);
+                    CartBean cart = (CartBean) session.getAttribute("cart");
+
+                    if (cart == null) {
+                        cart = new CartBean();
+                    }
+                    cart.addItemToCart(selectedTour, numberOfPeople);
+                    session.setAttribute("cart", cart);
                 }
             }
         } catch (SQLException | ClassNotFoundException ex) {

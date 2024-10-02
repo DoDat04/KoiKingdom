@@ -103,6 +103,7 @@ public class VNPayCallBackController extends HttpServlet {
                         mail_message = "Đơn xác nhận đã được gửi qua email. Vui lòng kiểm tra email!";
                         notificationSvg = "<svg viewBox='0 0 52 52'><path class='checkmark' fill='none' stroke='green' stroke-width='4' d='M14 27 L22 35 L38 19' /></svg>";
                         // Lặp qua cái cartItem để insert từng tour
+                        
                         Map<Integer, CartItem> items = cart.getItems();
                         for (CartItem item : items.values()) {
                             TourDTO tour = item.getTour();
