@@ -147,7 +147,7 @@
                             <th>End Date</th>
                             <th>Image</th>
                             <th>Rating</th>
-                            <th>Status</th>
+                            <th>Departure Location</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -162,7 +162,7 @@
                                 <td>${tour.startDate}</td>
                                 <td>${tour.endDate}</td>
                                 <td><img src="${tour.tourImage}" alt="tour-image" height="150px" width="250px" style="border-radius: 20px; object-fit: contain" ></td>
-                                <td>${tour.tourRating}</td>
+                                <td>${tour.tourDepartLoca}</td>
                                 <td>
                                     <c:choose>
                                         <c:when test="${tour.status}">

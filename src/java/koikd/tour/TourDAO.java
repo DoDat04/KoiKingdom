@@ -234,7 +234,7 @@ public class TourDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT TourID, TourName, Duration, Description, TourPrice, StartDate, EndDate, Image, Status, Rating "
+                String sql = "SELECT TourID, TourName, Duration, Description, TourPrice, StartDate, EndDate, Image, Status, DepartureLocation "
                         + "FROM TOUR ";
                 stm = con.prepareStatement(sql);
                 rs = stm.executeQuery();
@@ -249,8 +249,8 @@ public class TourDAO implements Serializable {
                     Timestamp end = rs.getTimestamp("EndDate");
                     String img = rs.getString("Image");
                     boolean status = rs.getBoolean("Status");
-                    double rating = rs.getDouble("Rating");
-                    TourDTO dto = new TourDTO(id, name, duration, description, price, start, end, img, rating, status);
+                    String loca = rs.getString("DepartureLocation");
+                    TourDTO dto = new TourDTO(id, name, duration, description, price, start, end, img, status, duration);
                     result.add(dto);
                 }
 
