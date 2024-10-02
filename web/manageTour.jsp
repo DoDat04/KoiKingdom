@@ -146,7 +146,7 @@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Image</th>
-                            <th>Rating</th>
+                            <th>Status</th>
                             <th>Departure Location</th>
                             <th>Actions</th>
                         </tr>
@@ -162,7 +162,7 @@
                                 <td>${tour.startDate}</td>
                                 <td>${tour.endDate}</td>
                                 <td><img src="${tour.tourImage}" alt="tour-image" height="150px" width="250px" style="border-radius: 20px; object-fit: contain" ></td>
-                                <td>${tour.tourDepartLoca}</td>
+                                
                                 <td>
                                     <c:choose>
                                         <c:when test="${tour.status}">
@@ -173,6 +173,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
+                                <td>${tour.tourDepartLoca}</td>
                                 <td>
                                     <a href="updateStatusTour?tourID=${tour.tourID}" 
                                        onclick="return confirm('Are you sure you want to change the status?');">

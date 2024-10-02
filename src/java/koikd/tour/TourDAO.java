@@ -250,7 +250,7 @@ public class TourDAO implements Serializable {
                     String img = rs.getString("Image");
                     boolean status = rs.getBoolean("Status");
                     String loca = rs.getString("DepartureLocation");
-                    TourDTO dto = new TourDTO(id, name, duration, description, price, start, end, img, status, duration);
+                    TourDTO dto = new TourDTO(id, name, duration, description, price, start, end, img, status, loca);
                     result.add(dto);
                 }
 
