@@ -69,3 +69,44 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     background-color: #D3D3D3;
     transform: translateY(-5px); /* Di chuyển lên 5px */
 }
+
+.banner-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f8d8cc;
+    padding: 40px;
+}
+
+.banner-text {
+    flex: 1;
+    padding: 20px;
+}
+
+.banner-text h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 4em;
+    color: #d18b73;
+    text-align: center;
+    margin-bottom: 0.2em;
+}
+
+.banner-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 6em;
+    color: #000;
+    text-align: center;
+}
+
+.banner-images {
+    display: flex;
+    flex: 2;
+    justify-content: space-around;
+}
+
+.banner-images img {
+    width: 30%;
+    height: 350px; /* Tăng chiều cao của hình ảnh để banner lớn hơn */
+    object-fit: cover;
+    border-radius: 10px;
+}

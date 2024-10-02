@@ -57,6 +57,9 @@
                                                 <span>End Date: 
                                                     <fmt:formatDate value="${selectedTour.tour.endDate}" pattern="dd-MM-yyyy" />
                                                 </span>
+                                                <span>Departure Location: 
+                                                    ${selectedTour.tour.tourDepartLoca}
+                                                </span>
                                             </div>
                                         </div>
                                     </td>
@@ -81,6 +84,9 @@
                                                     </span>
                                                     <span>End Date: 
                                                         <fmt:formatDate value="${entry.value.tour.endDate}" pattern="dd-MM-yyyy" />
+                                                    </span>
+                                                    <span>Departure Location: 
+                                                            ${entry.value.tour.tourDepartLoca}
                                                     </span>
                                                 </div>
                                             </div>
@@ -112,53 +118,60 @@
             </div>
 
             <h4 class="mb-4">Contact Information</h4>
-            <div class="form-row">
+            <form action="ajaxServlet" id="frmCreateOrder" method="post"> 
+                <div class="form-row">
+                    <c:choose>
+                        <c:when test="${sessionScope.LOGIN_USER != null}">
+                            <div class="form-group col-md-6">
+                                <label for="fullName"><strong>Full Name</strong></label>
+                                <input type="text" class="form-control" name="fullName" value="${sessionScope.LOGIN_USER.firstName} ${sessionScope.LOGIN_USER.lastName}" placeholder="Enter your full name" required>
+                            </div>                
+                        </c:when>
+                        <c:otherwise>
+                            <div class="form-group col-md-6">
+                                <label for="fullName"><strong>Full Name</strong></label>
+                                <input type="text" class="form-control" name="fullName" value="${sessionScope.lastName} ${sessionScope.firstName}" placeholder="Enter your full name" required>
+                            </div>
+                        </c:otherwise>
+                    </c:choose> 
+                    <div class="form-group col-md-6">
+                        <label for="email"><strong>Email Address</strong></label>
+                        <input type="email" class="form-control" name="email" value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.LOGIN_GMAIL.email : sessionScope.LOGIN_USER.email}" placeholder="Enter your email" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="homeAddress" class="form-label"><strong>Shipping Address</strong></label>
+                    <input type="text" class="form-control" id="homeAddresss" name="homeAddress" placeholder="House number, street name">
+                </div>
+
+                <div class="mb-3 select-group">
+                    <div class="select-container">
+                        <select id="cityy" name="city">
+                            <option value="">Select province</option>
+                        </select>
+                    </div>
+                    <div class="select-container">
+                        <select id="districtt" name="district">
+                            <option value="">Select district</option>
+                        </select>
+                    </div>
+                    <div class="select-container">
+                        <select id="wardd" name="ward">
+                            <option value="">Select ward</option>
+                        </select>
+                    </div>
+                </div>
+                <script src="js/viewOrder.js"></script>
+
                 <c:choose>
-                    <c:when test="${sessionScope.LOGIN_USER != null}">
-                        <div class="form-group col-md-6">
-                            <label for="fullName"><strong>Full Name</strong></label>
-                            <input type="text" class="form-control" name="fullName" value="${sessionScope.LOGIN_USER.firstName} ${sessionScope.LOGIN_USER.lastName}" placeholder="Enter your full name" required>
-                        </div>                
+                    <c:when test="${not empty selectedTour}">
+                        <input type="hidden" id="amount" name="amount" value="${selectedTour.totalPrice * 24610}">
                     </c:when>
                     <c:otherwise>
-                        <div class="form-group col-md-6">
-                            <label for="fullName"><strong>Full Name</strong></label>
-                            <input type="text" class="form-control" name="fullName" value="${sessionScope.lastName} ${sessionScope.firstName}" placeholder="Enter your full name" required>
-                        </div>
+                        <input type="hidden" id="amount" name="amount" value="${cart.totalPrice * 24610}">
                     </c:otherwise>
-                </c:choose> 
-                <div class="form-group col-md-6">
-                    <label for="email"><strong>Email Address</strong></label>
-                    <input type="email" class="form-control" name="email" value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.LOGIN_GMAIL.email : sessionScope.LOGIN_USER.email}" placeholder="Enter your email" required>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label for="homeAddress" class="form-label"><strong>Shipping Address</strong></label>
-                <input type="text" class="form-control" id="homeAddresss" name="homeAddress" placeholder="House number, street name">
-            </div>
-
-            <div class="mb-3 select-group">
-                <div class="select-container">
-                    <select id="cityy" name="city">
-                        <option value="">Select province</option>
-                    </select>
-                </div>
-                <div class="select-container">
-                    <select id="districtt" name="district">
-                        <option value="">Select district</option>
-                    </select>
-                </div>
-                <div class="select-container">
-                    <select id="wardd" name="ward">
-                        <option value="">Select ward</option>
-                    </select>
-                </div>
-            </div>
-            <script src="js/viewOrder.js"></script>
-
-            <form action="ajaxServlet" id="frmCreateOrder" method="post">        
-                <input type="hidden" id="amount" name="amount" value="${cart.totalPrice * 24610}">                
+                </c:choose>                
 
                 <h4 class="mt-4">Payment Method</h4>
                 <div class="form-group payment-method">

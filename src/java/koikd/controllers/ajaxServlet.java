@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -50,6 +51,18 @@ public class ajaxServlet extends HttpServlet {
         String amountParam = request.getParameter("amount");
         BigDecimal amountDecimal = new BigDecimal(amountParam);
         long amount = amountDecimal.longValue(); // Convert to long
+        String fullName = request.getParameter("fullName");
+        String email = request.getParameter("email");
+        String homeAddress = request.getParameter("homeAddress");
+        String city = request.getParameter("city");
+        String district = request.getParameter("district");
+        String ward = request.getParameter("ward");
+        String custAddress = homeAddress + ", " + ward + ", " + district + ", " + city;
+        
+        HttpSession session = request.getSession();
+        session.setAttribute("custFullName", fullName);
+        session.setAttribute("custEmail", email);
+        session.setAttribute("custAddress", custAddress);
 
         String bankCode = request.getParameter("bankCode");
 

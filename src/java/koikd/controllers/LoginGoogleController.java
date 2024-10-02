@@ -65,7 +65,7 @@ public class LoginGoogleController extends HttpServlet {
                         String lastName = dto.getLastName();
                         session.setAttribute("firstName", firstName);
                         session.setAttribute("lastName", lastName);
-                        session.setAttribute("customerID", customerID);
+                        session.setAttribute("custID", customerID);
                         session.setAttribute("email", googlePojo.getEmail());
                         // sau khi login lấy address từ db bỏ vào attribute
                         session.setAttribute("address", dto.getAddress());

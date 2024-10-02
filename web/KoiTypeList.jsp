@@ -21,6 +21,17 @@
     <body>
         <div class="colorlib-loader"></div>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
+        <div class="banner-container">
+            <div class="banner-text">
+                <h2>Category</h2>
+                <h1>List KoiType</h1>
+            </div>
+            <div class="banner-images">
+                <img src="img/TourImage/koitype.jpg" alt="Tour 1">
+                <img src="img/TourImage/koitype.jpg" alt="Tour 2">
+                <img src="img/TourImage/koitype.jpg" alt="Tour 3">
+            </div>
+        </div>
         <h1 class="welcome-text">All Koi Types</h1>
 
         <!-- Search form -->

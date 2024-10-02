@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +27,11 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import koikd.booking.BookingDAO;
+import koikd.booking.BookingDTO;
 import koikd.cart.CartBean;
+import koikd.cart.CartItem;
+import koikd.tour.TourDTO;
 import koikd.utils.ConfigVNPayUtils;
 
 /**
@@ -34,10 +40,12 @@ import koikd.utils.ConfigVNPayUtils;
  */
 @WebServlet(name = "VNPayCallBackController", urlPatterns = {"/VNPayCallBackController"})
 public class VNPayCallBackController extends HttpServlet {
+
     private static final String SUCCESS_VNPAY = "vnpay_return.jsp";
     private static final String FAIL_VNPAY = "vnpay_return_fail.jsp";
     private static final String GMAIL_USERNAME = "koikingdomsystem@gmail.com";
     private static final String GMAIL_APP_PASSWORD = "srzw mrnk kkhj ipcx";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -76,14 +84,41 @@ public class VNPayCallBackController extends HttpServlet {
             HttpSession session = request.getSession(false);
             if (session != null) {
                 String email = (String) session.getAttribute("email");
+                Integer custID = (Integer) session.getAttribute("custID");
+                String fullName = (String) session.getAttribute("custFullName");
+                String custEmail = (String) session.getAttribute("custEmail");
+                String custAddress = (String) session.getAttribute("custAddress");
+                Timestamp today = new Timestamp(System.currentTimeMillis());
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                String formattedDate = sdf.format(today);
+
                 CartBean cart = (CartBean) session.getAttribute("cart");
-                if (cart!= null && signValue.equals(vnp_SecureHash)) {
+                if (cart != null && signValue.equals(vnp_SecureHash)) {
                     // Nếu thanh toán thành công mới sendEmail, createOrder, addOrderDetail và RemoveCookie
                     if ("00".equals(transactionStatus)) {
                         url = SUCCESS_VNPAY;
                         message = "Giao dịch thành công!";
                         mail_message = "Đơn xác nhận đã được gửi qua email. Vui lòng kiểm tra email!";
-                        notificationSvg = "<svg viewBox='0 0 52 52'><path class='checkmark' fill='none' stroke='green' stroke-width='4' d='M14 27 L22 35 L38 19' /></svg>";    
+                        notificationSvg = "<svg viewBox='0 0 52 52'><path class='checkmark' fill='none' stroke='green' stroke-width='4' d='M14 27 L22 35 L38 19' /></svg>";
+                        // Lặp qua cái cartItem để insert từng tour
+                        Map<Integer, CartItem> items = cart.getItems();
+                        for (CartItem item : items.values()) {
+                            TourDTO tour = item.getTour();
+                            int numberOfPeople = item.getNumberOfPeople();
+
+                            BookingDTO booking = new BookingDTO();
+                            booking.setCustomerID(custID);
+                            booking.setTourID(tour.getTourID());
+                            booking.setCustName(fullName);
+                            booking.setCustEmail(custEmail);
+                            booking.setBookingDate(today);
+                            booking.setShippingAddress(custAddress);
+                            booking.setQuantity(numberOfPeople);
+                            booking.setStatus("Paid"); 
+
+                            BookingDAO bookingDAO = new BookingDAO();
+                            bookingDAO.addBooking(booking);
+                        }
                         session.removeAttribute("cart");
                         session.removeAttribute("cartItemCount");
                         sendBillForCustomer(email);
@@ -107,7 +142,7 @@ public class VNPayCallBackController extends HttpServlet {
             response.sendRedirect(url);
         }
     }
-    
+
     private void sendBillForCustomer(String toEmail) throws Exception {
         String host = "smtp.gmail.com";
         String port = "587";
