@@ -12,21 +12,25 @@ import java.io.Serializable;
  */
 public class TourBookingDetailDTO implements Serializable{
     private int tourBookingDetailID;
-    private int bookingID;
+    private int customerID;
     private int tourID;
     private int quantity;
     private double unitPrice;
     private double totalPrice;
     private String status;
 
-    public TourBookingDetailDTO(int bookingID, int tourID, int quantity, double unitPrice, double totalPrice, String status) {
-        this.bookingID = bookingID;
+    public TourBookingDetailDTO() {
+    }
+
+    public TourBookingDetailDTO(int tourBookingDetailID, int customerID, int tourID, int quantity, double unitPrice, double totalPrice, String status) {
+        this.tourBookingDetailID = tourBookingDetailID;
+        this.customerID = customerID;
         this.tourID = tourID;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
         this.totalPrice = totalPrice;
         this.status = status;
-    }     
+    }
 
     public int getTourBookingDetailID() {
         return tourBookingDetailID;
@@ -36,12 +40,12 @@ public class TourBookingDetailDTO implements Serializable{
         this.tourBookingDetailID = tourBookingDetailID;
     }
 
-    public int getBookingID() {
-        return bookingID;
+    public int getCustomerID() {
+        return customerID;
     }
 
-    public void setBookingID(int bookingID) {
-        this.bookingID = bookingID;
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
     }
 
     public int getTourID() {

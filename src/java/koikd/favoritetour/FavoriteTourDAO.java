@@ -45,7 +45,7 @@ public class FavoriteTourDAO implements Serializable {
                 rs = stm.executeQuery();
 
                 while (rs.next()) {
-                    int favoriteTourID = rs.getInt("FavoriteTourID"); // Lấy favoriteTourID
+                    int favoriteTourID = rs.getInt("FavoriteTourID"); 
                     int tourID = rs.getInt("TourID");
                     String tourName = rs.getString("TourName");
                     String tourDuration = rs.getString("Duration");
@@ -59,7 +59,6 @@ public class FavoriteTourDAO implements Serializable {
                     double tourRating = rs.getDouble("Rating");
                     String departureLocation = rs.getString("DepartureLocation");
 
-                    // Khởi tạo DTO với favoriteTourID
                     FavoriteTourDTO dto = new FavoriteTourDTO(favoriteTourID, custID, tourID, tourName, koiTypeName, farmName, tourDuration, tourDescription, tourPrice, startDate, endDate, tourImage, tourRating, departureLocation);
                     favoriteTourList.add(dto);
                 }

@@ -23,10 +23,10 @@ public class TourBookingDetailDAO implements Serializable{
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "INSERT INTO TOURBOOKINGDETAIL (BookingID, TourID, Quantity, UnitPrice, TotalPrice, Status) "
+                String sql = "INSERT INTO TOURBOOKINGDETAIL (CustomerID, TourID, Quantity, UnitPrice, TotalPrice, Status) "
                         + "VALUES (?, ?, ?, ?, ?, ?)";
                 stm = con.prepareStatement(sql);
-                stm.setInt(1, tourBookingDetail.getBookingID());
+                stm.setInt(1, tourBookingDetail.getCustomerID());
                 stm.setInt(2, tourBookingDetail.getTourID());
                 stm.setInt(3, tourBookingDetail.getQuantity());
                 stm.setDouble(4, tourBookingDetail.getUnitPrice());

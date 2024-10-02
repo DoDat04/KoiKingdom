@@ -32,6 +32,8 @@ import koikd.booking.BookingDTO;
 import koikd.cart.CartBean;
 import koikd.cart.CartItem;
 import koikd.tour.TourDTO;
+import koikd.tourbookingdetail.TourBookingDetailDAO;
+import koikd.tourbookingdetail.TourBookingDetailDTO;
 import koikd.utils.ConfigVNPayUtils;
 
 /**
@@ -118,6 +120,17 @@ public class VNPayCallBackController extends HttpServlet {
 
                             BookingDAO bookingDAO = new BookingDAO();
                             bookingDAO.addBooking(booking);
+                            
+                            TourBookingDetailDTO dto = new TourBookingDetailDTO();
+                            dto.setCustomerID(custID);
+                            dto.setTourID(tour.getTourID());
+                            dto.setQuantity(numberOfPeople);
+                            dto.setUnitPrice(tour.getTourPrice());
+                            dto.setTotalPrice(tour.getTourPrice() * numberOfPeople);
+                            dto.setStatus("Confirmed");
+                            
+                            TourBookingDetailDAO dao = new TourBookingDetailDAO();
+                            dao.addTourBookingDetail(dto);
                         }
                         session.removeAttribute("cart");
                         session.removeAttribute("cartItemCount");
