@@ -179,7 +179,7 @@ public class TourDAO implements Serializable {
             if (con != null) {
                 String sql = "SELECT t.TourID, t.TourName, t.Duration, t.Description, t.TourPrice, "
                         + "t.StartDate, t.EndDate, t.Image, t.DepartureLocation, "
-                        + "AVG(f.Rating) AS Rating, " 
+                        + "AVG(f.Rating) AS Rating, "
                         + "(SELECT STRING_AGG(f.FarmName, ', ') FROM TOUR_FARM tf "
                         + "INNER JOIN FARM f ON tf.FarmID = f.FarmID WHERE tf.TourID = t.TourID) AS Farm, "
                         + "(SELECT STRING_AGG(k.TypeName, ', ') FROM TOUR_KOITYPE tk "
@@ -189,7 +189,7 @@ public class TourDAO implements Serializable {
                         + "LEFT JOIN FEEDBACK f ON tf.FeedbackID = f.FeedbackID "
                         + "WHERE t.TourID = ? "
                         + "GROUP BY t.TourID, t.TourName, t.Duration, t.Description, "
-                        + "t.TourPrice, t.StartDate, t.EndDate, t.Image, t.DepartureLocation"; 
+                        + "t.TourPrice, t.StartDate, t.EndDate, t.Image, t.DepartureLocation";
 
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, tourID);  // Set tourID as a parameter
@@ -226,7 +226,7 @@ public class TourDAO implements Serializable {
         return tour;
     }
 
-    public List<TourDTO> getAllTour() throws SQLException, ClassNotFoundException {
+public List<TourDTO> getAllTour() throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;

@@ -1,0 +1,82 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Oct 3, 2024, 6:35:54 PM
+    Author     : Admin
+*/
+
+
+.order_booking {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.order_booking-section {
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 900px;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.order_booking-section:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.order_booking-item {
+    margin-bottom: 10px;
+}
+
+.order_booking-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.order_booking-row img {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.order_booking-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    flex-grow: 1;
+}
+
+.order_booking-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff6f61;
+    margin-bottom: 5px;
+}
+
+.order_booking-koi {
+    font-size: 14px;
+    color: #333; 
+    font-weight: 600; 
+}
+
+.price {
+    text-align: right;
+}
+
+.status-label {
+    font-weight: bold;
+    color: black;
+}
+
+.status-value {
+    font-weight: bold;
+    color: green;
+}

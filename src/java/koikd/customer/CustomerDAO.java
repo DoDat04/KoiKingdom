@@ -389,7 +389,7 @@ public class CustomerDAO implements Serializable {
 
                 rs = stm.executeQuery();
                 if (rs.next()) {
-                     int customerID = rs.getInt("CustomerID");
+                    int customerID = rs.getInt("CustomerID");
                     String customerEmail = rs.getString("Email");
                     String firstName = rs.getString("FirstName");
                     String lastName = rs.getString("LastName");
@@ -397,7 +397,7 @@ public class CustomerDAO implements Serializable {
                     String address = rs.getString("Address");
                     boolean status = rs.getBoolean("Status");
 
-                   customer = new CustomerDTO(customerID, customerEmail, "", lastName, firstName, address, accType, status);
+                    customer = new CustomerDTO(customerID, customerEmail, "", lastName, firstName, address, accType, status);
                 }
             }
         } finally {
@@ -457,6 +457,48 @@ public class CustomerDAO implements Serializable {
         return false;
     }
 
+    public CustomerDTO getCustomerByCustomerID(int customerId) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        CustomerDTO result = null;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
+                        + "FROM CUSTOMER "
+                        + "WHERE CustomerID = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, customerId);
+                rs = pst.executeQuery();
+                if (rs.next()) {
+                    int customerID = rs.getInt("CustomerID");
+                    String email = rs.getString("Email");
+                    String lastName = rs.getString("LastName");
+                    String firstName = rs.getString("FirstName");
+                    String address = rs.getString("Address");
+                    String accountType = rs.getString("AccountType");
+                    boolean status = rs.getBoolean("Status");
+                    // Fixed constructor call
+                    result = new CustomerDTO(customerID, email, lastName, lastName, firstName, address, accountType, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return result;
+    }
 //    public static void main(String[] args) throws SQLException {
 //        int id = 1;
 //        CustomerDAO dao = new CustomerDAO();

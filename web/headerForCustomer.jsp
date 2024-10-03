@@ -120,7 +120,8 @@
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal"><i class="fa-solid fa-key"></i> Change Password</a></li>
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
                                         <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
-                                        <li><a class="dropdown-item" href="MyOrder?customerID=${sessionScope.LOGIN_USER.customerID}"><i class="fa fa-history"></i> My Order</a></li>
+                                        <li><a class="dropdown-item" href="MyOrder?customerID=${sessionScope.LOGIN_USER.customerID}"><i class="fa fa-history"></i> My Order KOI</a></li>
+                                        <li><a class="dropdown-item" href="get-booking?customerID=${sessionScope.LOGIN_USER.customerID}"><i class="fa fa-history"></i> My Order <Booking/a></li>
                                         <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
                                         </c:when>
                                         <c:otherwise>                                       
@@ -129,7 +130,7 @@
                                         <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
                                         <li>
                                             <a class="dropdown-item" href="MyOrder?customerID=${sessionScope.custID}">
-                                                <i class="fa fa-history"></i> My Order
+                                                <i class="fa fa-history"></i> My Order KOI
                                             </a>
                                         </li>
                                         <li>
