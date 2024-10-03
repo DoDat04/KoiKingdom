@@ -11,6 +11,7 @@
         <link href="css/homeForDelivery.css" rel="stylesheet">
         <link href="css/toast.css" rel="stylesheet">
         <title>Delivery Home</title>
+        <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
     </head>
     <body>
         <jsp:include page="headerForDelivery.jsp" flush="true"/>

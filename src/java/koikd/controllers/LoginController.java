@@ -32,6 +32,7 @@ public class LoginController extends HttpServlet {
     private static final String DELIVERY_PAGE = "homeForDelivery.jsp";
     private static final String MANAGER_PAGE = "managerDashboard.jsp";
     private static final String SALES_PAGE = "homeForSales.jsp";
+    private static final String CONSULTING_PAGE = "homeForConsulting.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -81,7 +82,10 @@ public class LoginController extends HttpServlet {
                     } else if("Sales".equals(role)){
                         session.setAttribute("LOGIN_SALES", employeeResult);
                         url = SALES_PAGE;
-                    }
+                    } else if ("Consulting".equals(role)) {
+                        session.setAttribute("LOGIN_CONSULTING", employeeResult);
+                        url = CONSULTING_PAGE;
+                    }                   
                     else {
                         request.setAttribute("ERROR", "Invalid role for this employee!");
                     }
@@ -101,6 +105,8 @@ public class LoginController extends HttpServlet {
                 response.sendRedirect("home?action=Manager");
             } else if(SALES_PAGE.equals(url)){
                 response.sendRedirect("home?action=Sales");
+            } else if(CONSULTING_PAGE.equals(url)){
+                response.sendRedirect("home?action=Consulting");
             }
             else {
                 request.getRequestDispatcher(url).forward(request, response);

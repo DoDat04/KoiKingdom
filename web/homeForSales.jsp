@@ -10,6 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sales Page</title>
+        <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
         <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
         <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">

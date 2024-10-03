@@ -102,16 +102,15 @@
                 <c:if test="${empty tourList}">
                     <div class="col-12 text-center">
                         <div class="alert alert-warning" role="alert" style="font-size: 1.2rem; border-radius: 8px;">
-                            <strong>Không tìm thấy tour!</strong> <br>
-                            Chúng tôi rất tiếc, nhưng không có tour nào phù hợp với tiêu chí tìm kiếm của bạn. 
-                            Hãy thử thay đổi bộ lọc hoặc kiểm tra lại sau.
+                            <strong>No tour found!</strong> <br>
+                            We're sorry, but there are no tours that match your search criteria. 
+                            Try changing the filter or check again later.
                         </div>
                     </div>
                 </c:if>
                 <c:forEach var="tour" items="${tourList}">
                     <div class="col-md-4 mb-4">
                         <div class="card h-100 position-relative">
-
                             <!-- Form trang chi tiết tour -->
                             <form action="tour-detail" method="get">
                                 <input type="hidden" name="tourID" value="${tour.tourID}" />
@@ -156,11 +155,19 @@
 
                             <!-- Biểu tượng trái tim -->
                             <div class="favorite-icon position-absolute" style="top: -9px; left: 395px;">
-                                <i class="fas fa-heart text-danger" style="font-size: 2rem; cursor: pointer;"
-                                   onclick="document.getElementById('favoriteForm-${tour.tourID}').submit(); event.stopPropagation();">
-                                </i>
+                                <c:choose>
+                                    <c:when test="${sessionScope.LOGIN_USER == null and sessionScope.LOGIN_GMAIL == null}">
+                                        <i class="fas fa-heart" style="font-size: 2rem; cursor: pointer;"
+                                           onclick="alert('You need to login to add favorite tours!')">
+                                        </i>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i class="fas fa-heart" style="font-size: 2rem; cursor: pointer;"
+                                           onclick="document.getElementById('favoriteForm-${tour.tourID}').submit(); event.stopPropagation();">
+                                        </i> 
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
-
                         </div>
                     </div>
                 </c:forEach>                

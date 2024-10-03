@@ -42,9 +42,9 @@
                 <c:if test="${empty favoriteList}">
                     <div class="col-12 text-center">
                         <div class="alert alert-warning" role="alert" style="font-size: 1.2rem; border-radius: 8px;">
-                            <strong>Không tìm thấy tour!</strong> <br>
-                            Chúng tôi rất tiếc, nhưng bạn chưa thêm tour nào vào mục yêu thích cả. 
-                            Hãy thử quay lại và thêm tour vào mục yêu thích.
+                            <strong>No tour found!</strong> <br>
+                            We're sorry, but you haven't added any tours to your favorites yet. 
+                            Try coming back and adding the tour to your favorites.
                         </div>
                     </div>
                 </c:if>

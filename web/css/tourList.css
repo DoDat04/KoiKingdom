@@ -123,6 +123,22 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     color: grey;
 }
 
+.favorite-icon i {
+    color: white; 
+    font-size: 2rem; 
+    cursor: pointer; 
+    text-shadow: 
+        1px 1px 0 black,  
+        -1px -1px 0 black, 
+        -1px 1px 0 black,  
+        1px -1px 0 black;  
+    transition: color 0.3s ease; 
+}
+
+.favorite-icon i:hover {
+    color: red; 
+}
+
 
 
 

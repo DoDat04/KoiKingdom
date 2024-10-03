@@ -70,7 +70,7 @@
                                 </c:otherwise>
                             </c:choose>                            
                             <li><a href="#">Notifications</a></li>
-                            <li><a href="#">Shopping cart</a></li>
+                            <li><a href="cart">Shopping cart</a></li>
                             <li><a href="#">Chat with us</a></li>
                         </ul>
                     </div>
@@ -81,9 +81,9 @@
                         <ul class="list-unstyled">
                             <li><a href="#">FAQs</a></li>
                             <li><a href="#">Articles</a></li>
-                            <li><a href="#">About us</a></li>
+                            <li><a href="#aboutUs">About us</a></li>
                             <li><a href="#">Contact us</a></li>
-                            <li><a href="#">Tour price</a></li>
+                            <li><a href="tour-list">Tour price</a></li>
                         </ul>
                     </div>
 
