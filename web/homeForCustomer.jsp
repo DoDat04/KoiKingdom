@@ -23,6 +23,7 @@
         <link rel="stylesheet" href="css/style.css">
         <link href="css/toast.css" rel="stylesheet">
         <script src="js/login.js"></script>     
+        <script src="js/load.js"></script>
     </head>
     <body>
         <div class="colorlib-loader"></div>

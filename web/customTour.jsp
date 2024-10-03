@@ -13,6 +13,10 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Custom Tour</title>
+        <link rel="stylesheet" href="css/style.css">
+        <script src="js/load.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <style>
@@ -61,6 +65,7 @@
         </style>
     </head>
     <body>
+        <div class="colorlib-loader"></div>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
 
         <h1>Custom Tour Request</h1>
@@ -76,11 +81,22 @@
             </div>
             <div class="form-group">
                 <label for="numberOfPeople">Number of People</label>
-                <input type="number" id="numberOfPeople" name="numberOfPeople" class="form-control" required min="1">
+                <input type="number" id="numberOfPeople" name="numberOfPeople" class="form-control" required min="1" max="50">
             </div>
             <div class="form-group">
                 <label for="departureLocation">Departure Location</label>
-                <input type="text" id="departureLocation" name="departureLocation" class="form-control" required>
+                <select class="form-select" aria-label="Default select example" id="departureLocation" name="departureLocation" required="">
+                    <option selected>Noi Bai International Airport (Hanoi)</option>
+                    <option value="1">Tan Son Nhat International Airport (Ho Chi Minh City)</option>
+                    <option value="2">Da Nang International Airport (Da Nang)</option>
+                    <option value="3">Cam Ranh International Airport (Nha Trang)</option>
+                    <option value="4">Phu Quoc International Airport (Phu Quoc)</option>
+                    <option value="5">Cat Bi International Airport (Hai Phong)</option>
+                    <option value="6">Can Tho International Airport (Can Tho)</option>
+                    <option value="7">Van Don International Airport (Quang Ninh)</option>
+                    <option value="8">Tho Xuan International Airport (Thanh Hoa)</option>
+                </select>
+
             </div>
             <div class="form-group checkbox-group">
                 <label>Select Farms</label><br>
