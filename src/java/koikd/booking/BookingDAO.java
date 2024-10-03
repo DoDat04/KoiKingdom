@@ -8,18 +8,24 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import koikd.utils.DBUtils;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
+import koikd.tour.TourDAO;
+import koikd.tour.TourDTO;
 
 /**
  *
  * @author Do Dat
  */
-public class BookingDAO implements Serializable{
-    public boolean addBooking(BookingDTO booking) throws SQLException, ClassNotFoundException{
+public class BookingDAO implements Serializable {
+
+    public boolean addBooking(BookingDTO booking) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         boolean result = false;
-        
+
         try {
             con = DBUtils.getConnection();
             if (con != null) {
@@ -34,12 +40,12 @@ public class BookingDAO implements Serializable{
                 stm.setString(6, booking.getShippingAddress());
                 stm.setInt(7, booking.getQuantity());
                 stm.setString(8, booking.getStatus());
-                
+
                 int affectedRows = stm.executeUpdate();
                 if (affectedRows > 0) {
                     result = true;
                 }
-            }           
+            }
         } finally {
             if (stm != null) {
                 stm.close();

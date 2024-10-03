@@ -49,7 +49,7 @@
                             <li class="user-info">
                                 <div class="user-details">      
                                     <div style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                        <span class="user-name"  \>
+                                        <span class="user-name" \>
                                             ${sessionScope.LOGIN_DELIVERY.firstName} ${sessionScope.LOGIN_DELIVERY.lastName}
                                         </span><br>
                                         <span class="user-role">${sessionScope.LOGIN_DELIVERY.role}</span>

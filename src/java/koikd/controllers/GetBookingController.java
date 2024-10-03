@@ -30,7 +30,7 @@ import koikd.tourbookingdetail.TourBookingDetailDTO;
  */
 @WebServlet(name = "GetBookingController", urlPatterns = {"/get-booking"})
 public class GetBookingController extends HttpServlet {
-
+private static final String ORDERBOOKING_PAGE = "myOrderBooking.jsp" ;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -43,6 +43,7 @@ public class GetBookingController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+         String url = ORDERBOOKING_PAGE;
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             int customerID = Integer.parseInt(request.getParameter("customerID"));
@@ -52,20 +53,25 @@ public class GetBookingController extends HttpServlet {
             ArrayList<TourBookingDetailDTO> orders = bookingDetailDao.getTourBookingDetailListByCustomerID(customerID);
             ArrayList<TourDTO> tourList = new ArrayList<>();
             ArrayList<CustomerDTO> customerList = new ArrayList<>();
-            for (TourBookingDetailDTO order : orders) {
-                TourDTO tour = tourDAO.getTourByID(order.getTourID());
-                if (tour != null) {
-                    tourList.add(tour);
+            if (orders != null && !orders.isEmpty()) {
+                for (TourBookingDetailDTO order : orders) {
+                    TourDTO tour = tourDAO.getTourByID(order.getTourID());
+                    if (tour != null) {
+                        tourList.add(tour);
+                    }
+                    CustomerDTO customer = customerDAO.getCustomerByCustomerID(order.getCustomerID());
+                    if (customer != null) {
+                        customerList.add(customer);
+                    }
                 }
-                CustomerDTO customer = customerDAO.getCustomerByCustomerID(order.getCustomerID());
-                if (customer != null) {
-                    customerList.add(customer);
-                }
+                request.setAttribute("customers", customerList);
+                request.setAttribute("tours", tourList);
+                request.setAttribute("orders", orders);
+            } else {
+                request.setAttribute("Error", "No order booking");
             }
-            request.setAttribute("customers", customerList);
-            request.setAttribute("tours", tourList);
-            request.setAttribute("orders", orders);
-            request.getRequestDispatcher("myOrderBooking.jsp").forward(request, response);
+
+            request.getRequestDispatcher(url).forward(request, response);
 
         } catch (SQLException ex) {
             Logger.getLogger(GetBookingController.class.getName()).log(Level.SEVERE, null, ex);
