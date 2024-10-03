@@ -157,7 +157,27 @@
                                 <td>${tour.tourID}</td>
                                 <td>${tour.tourName}</td>
                                 <td>${tour.duration}</td>
-                                <td>${tour.description}</td>
+                                <td>
+                                    <div id="description-${tour.tourID}">
+                                        <span id="shortDesc-${tour.tourID}">
+                                            <c:choose>
+                                                <c:when test="${fn:length(tour.description) > 100}">
+                                                    ${fn:substring(tour.description, 0, 100)}...
+                                                </c:when>
+                                                <c:otherwise>
+                                                    ${tour.description}
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
+                                        <span id="dots-${tour.tourID}" style="display:none;">...</span>
+                                        <span id="moreDesc-${tour.tourID}" style="display:none;">
+                                            ${tour.description}
+                                        </span>
+                                    </div>
+                                    <button onclick="toggleDescription(${tour.tourID})" id="toggleBtn-${tour.tourID}">
+                                        Show more
+                                    </button>
+                                </td>
                                 <td>${tour.tourPrice}</td>
                                 <td>${tour.startDate}</td>
                                 <td>${tour.endDate}</td>
@@ -187,5 +207,27 @@
             </div>
         </div>
     </div>
+    <script>
+        function toggleDescription(tourID) {
+            var dots = document.getElementById("dots-" + tourID);
+            var moreText = document.getElementById("moreDesc-" + tourID);
+            var shortDesc = document.getElementById("shortDesc-" + tourID);
+            var btnText = document.getElementById("toggleBtn-" + tourID);
+
+            if (dots.style.display === "none") {
+                // Hiển thị văn bản rút gọn
+                dots.style.display = "inline";
+                moreText.style.display = "none";
+                shortDesc.style.display = "inline";
+                btnText.innerHTML = "Show more";
+            } else {
+                // Hiển thị toàn bộ văn bản
+                dots.style.display = "none";
+                moreText.style.display = "inline";
+                shortDesc.style.display = "none";
+                btnText.innerHTML = "Show less";
+            }
+        }
+    </script>
     </body>
 </html>
