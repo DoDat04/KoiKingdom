@@ -41,62 +41,54 @@ public class GetKoiOrderDetail extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
         String url = SHIPHISTORYPAGE;
-        String nameOrder = request.getParameter("orderName");
-
         try (PrintWriter out = response.getWriter()) {
-            KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
-            ArrayList<KoiOrderDTO> koiOrders = koiOrderDAO.getKoiOrderListByNameCustomer(nameOrder);
+            String koiOrderID = request.getParameter("orderID");
+            String customerID = request.getParameter("customerID");
+            if (customerID != null && koiOrderID != null) {
+                KoiOrderDAO dao = new KoiOrderDAO();
+                FarmDTO farm = new FarmDTO();
+                KoiDTO koiFish = new KoiDTO();
+                CustomerDTO customer = new CustomerDTO();
 
-            if (koiOrders != null && !koiOrders.isEmpty()) {
-                processOrderDetails(koiOrders, request, koiOrderDAO);
-            } else {
-                request.setAttribute("errorMessage", "No orders found.");
+                ArrayList<KoiOrderDTO> koiOrderList = dao.getKoiOrderListByID(Integer.parseInt(customerID));
+                ArrayList<KoiOrderDTO> koiOrderListByOrderList = dao.getKoiOrderListByOrderID(Integer.parseInt(koiOrderID));
+
+                ArrayList<KoiOrderDetailDTO> koiOrderDetailCollection = new ArrayList<>();
+                ArrayList<FarmDTO> farmCollection = new ArrayList<>();
+                ArrayList<KoiDTO> koiFishCollection = new ArrayList<>();
+
+                for (KoiOrderDTO koiOrderDTO : koiOrderList) {
+                    if (koiOrderDTO.getKoiOrderID() == Integer.parseInt(koiOrderID)) {
+                        ArrayList<KoiOrderDetailDTO> koiOrderDetailList = dao.getKoiOrderDetaiListById(Integer.parseInt(koiOrderID));
+                        for (KoiOrderDetailDTO koiOrderDetailItem : koiOrderDetailList) {
+                            koiOrderDetailCollection.add(koiOrderDetailItem);
+                            farm = dao.getFarmByFarmID(koiOrderDetailItem.getFarmID());
+                            farmCollection.add(farm);
+                            koiFish = dao.getKoiFishByKoiID(koiOrderDetailItem.getKoiID());
+                            koiFishCollection.add(koiFish);
+                        }
+                    }
+                }
+                customer = dao.getCustomerByCustomerID(Integer.parseInt(customerID));
+
+                request.setAttribute("koiOrderListByOrderList", koiOrderListByOrderList);
+                request.setAttribute("koiOrderDetails", koiOrderDetailCollection);
+                request.setAttribute("koiNames", koiFishCollection);
+                request.setAttribute("customer", customer);
+                request.setAttribute("farmNames", farmCollection);
+                request.setAttribute("myOrders", koiOrderList);
             }
+           
 
             request.getRequestDispatcher(url).forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(GetKoiOrderDetail.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GetKoiOrderDetail.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    private void processOrderDetails(ArrayList<KoiOrderDTO> koiOrders, HttpServletRequest request, KoiOrderDAO koiOrderDAO) throws SQLException {
-        ArrayList<String> customerNames = new ArrayList<>();
-        ArrayList<KoiOrderDetailDTO> koiOrderDetails = new ArrayList<>();
-        ArrayList<FarmDTO> farmNames = new ArrayList<>();
-        ArrayList<KoiDTO> koiNames = new ArrayList<>();
-
-        for (KoiOrderDTO koiOrder : koiOrders) {
-            CustomerDTO name = koiOrderDAO.getCustomerByCustomerID(koiOrder.getCustomerID());
-            customerNames.add(name.getLastName() + " " + name.getFirstName());
-            KoiOrderDetailDTO koiOrderDetail = koiOrderDAO.getKoiOrderDetaiByID(koiOrder.getKoiOrderID());
-
-            if (koiOrderDetail != null) {
-                koiOrderDetails.add(koiOrderDetail);
-
-                // Lấy tên trại và tên koi
-                FarmDTO farmName = koiOrderDAO.getFarmByFarmID(koiOrderDetail.getFarmID());
-                KoiDTO koiName = koiOrderDAO.getKoiFishByKoiID(koiOrderDetail.getKoiID());
-
-                farmNames.add(farmName);
-                koiNames.add(koiName);
-            } else {
-                // Xử lý nếu không tìm thấy chi tiết đơn hàng (tuỳ chọn)
-                request.setAttribute("errorMessage", "No farm found.");
-                request.setAttribute("errorMessage", "No koiname found.");
-
-            }
-        }
-
-        // Thiết lập thuộc tính cho request
-        request.setAttribute("listKoiName", koiNames);
-        request.setAttribute("nameFarmList", farmNames);
-        request.setAttribute("koiList", koiOrders);
-        request.setAttribute("customerNames", customerNames);
-        request.setAttribute("koiOrderDetails", koiOrderDetails);
-    }
-
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

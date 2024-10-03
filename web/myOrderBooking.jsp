@@ -1,6 +1,6 @@
 <%-- 
-    Document   : myOrderForCustomer
-    Created on : Sep 27, 2024, 6:40:00 PM
+    Document   : myOrderBooking
+    Created on : Oct 2, 2024, 9:20:36 PM
     Author     : Admin
 --%>
 
@@ -11,7 +11,6 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>My Order</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
         <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
@@ -19,28 +18,14 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="css/myOrderForCustomer.css">  
+        <title>JSP Page</title>
     </head>
-
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-    </style>
     <body>
         <div class="colorlib-loader"></div>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
         <div>
-            <c:if test="${not empty requestScope.koiOrderDetails}">
-                <c:forEach var="koiOrderDetails" items="${requestScope.koiOrderDetails}" varStatus="koiOrderID">
+            <c:if test="${not empty requestScope.tours}">
+                <c:forEach var="koiOrderDetails" items="${requestScope.tours}" varStatus="koiOrderID">
                     <c:if test="${koiOrderID.first || koiOrderDetails.koiOrderID != prevKoiOrderID}">
                         <c:if test="${not koiOrderID.first}">
                         </div> 
@@ -89,8 +74,9 @@
         <p class="alert alert-danger" style="
            margin-top: 15px;">${Error}</p>
     </c:if>
-</div>
 
-<jsp:include page="footer.jsp" flush="true"/>
+
+    <jsp:include page="footer.jsp" flush="true"/>
 </body>
+
 </html>

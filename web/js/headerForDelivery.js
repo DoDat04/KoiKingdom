@@ -36,3 +36,22 @@ function toggleEdit() {
         cancelButton.style.display = 'none';
     }
 }
+
+
+
+function previewAvatar() {
+    const file = document.getElementById('avatar').files[0];
+    const preview = document.getElementById('avatarPreview');
+    const reader = new FileReader();
+
+    reader.onloadend = function () {
+        preview.src = reader.result;
+    };
+
+    if (file) {
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = "";
+    }
+}
+

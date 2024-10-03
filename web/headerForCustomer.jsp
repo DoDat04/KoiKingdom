@@ -87,8 +87,8 @@
                                 <a href="favorite" class="text-black me-3 icon-size">
                                     <i class="fa-solid fa-heart"></i>
                                 </a>
-                                </c:otherwise>
-                            </c:choose>                      
+                            </c:otherwise>
+                        </c:choose>                      
                         <!-- User Info with Name and Icon -->
                         <div class="user-info d-flex align-items-center">
                             <!-- Display Name -->
@@ -128,8 +128,13 @@
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
                                         <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
                                         <li>
-                                            <a class="dropdown-item" href="MyOrder?customerID=${sessionScope.customerID}">
+                                            <a class="dropdown-item" href="MyOrder?customerID=${sessionScope.custID}">
                                                 <i class="fa fa-history"></i> My Order
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="get-booking?customerID=${sessionScope.custID}">
+                                                <i class="fa fa-history"></i> My Order Booking
                                             </a>
                                         </li>
 
@@ -260,21 +265,21 @@
         </header>
 
         <script>
-            function previewAvatar() {
-                const file = document.getElementById('avatar').files[0];
-                const preview = document.getElementById('avatarPreview');
-                const reader = new FileReader();
+                                                    function previewAvatar() {
+                                                        const file = document.getElementById('avatar').files[0];
+                                                        const preview = document.getElementById('avatarPreview');
+                                                        const reader = new FileReader();
 
-                reader.onloadend = function () {
-                    preview.src = reader.result;
-                };
+                                                        reader.onloadend = function () {
+                                                            preview.src = reader.result;
+                                                        };
 
-                if (file) {
-                    reader.readAsDataURL(file);
-                } else {
-                    preview.src = "";
-                }
-            }
+                                                        if (file) {
+                                                            reader.readAsDataURL(file);
+                                                        } else {
+                                                            preview.src = "";
+                                                        }
+                                                    }
         </script>
         <script src="js/load.js"></script>
     </body>

@@ -12,18 +12,17 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-        
         <!-- Font Awesome for Icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <link rel="stylesheet" href="css/headerForDelivery.css">
-        <title>Header</title>
+        <title>Header For Delivery</title>
     </head>
     <body>  
 
         <div class="navbar-header">           
-            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -52px; padding-top: 9.7px">
+            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -80px; padding-top: 32.7px">
                 <a href="home?action=Delivery" style="margin-left: 116px">
                     <img src="img/logo.png" class="main-icon" >
                 </a>
@@ -32,8 +31,8 @@
                 <div class="menu-center">
                     <ul class="nav justify-content-center">
                         <form action="GetKoiOrder" method="get" class="search--box"> 
-                            <input type="text" name="txtNameCustomer" placeholder="Search name customer" style=" border: none;"/>
-                            <button type="submit" style="border: none; border-radius: 4px; padding-left: 49px;">  <i class="fa-solid fa-search"></i> </button>
+                            <input oninput="searchByName(this)" type="text" name="txtNameCustomer" placeholder="Search name customer" style=" border: none;"/>
+                            <button type="submit" style="border: none; border-radius: 4px;">  <i class="fa-solid fa-search"></i> </button>
                         </form>
                     </ul>
                 </div>
@@ -140,44 +139,58 @@
                 </div>
             </div>
         </div>   
-        <script>
-            function previewAvatar() {
-                const file = document.getElementById('avatar').files[0];
-                const preview = document.getElementById('avatarPreview');
-                const reader = new FileReader();
-
-                reader.onloadend = function () {
-                    preview.src = reader.result;
-                };
-
-                if (file) {
-                    reader.readAsDataURL(file);
-                } else {
-                    preview.src = "";
-                }
-            }
-
-
-
-            document.querySelector('.toggle-btn').addEventListener('click', function () {
-                const sidebar = document.querySelector('.sidebar');
-                const main = document.querySelector('.main');
-                const mainContent = document.querySelector('.main-content');
-                const logo = document.querySelector('.main-icon');
-
-                sidebar.classList.toggle('collapsed');
-
-                if (sidebar.classList.contains('collapsed')) {
-                    main.style.marginLeft = '60px';
-                    mainContent.style.marginLeft = '-80px';
-                } else {
-                    main.style.marginLeft = '223px';
-                    mainContent.style.marginLeft = '0px';
-                }
-            });
-        </script>                    
         <script src="js/headerForDelivery.js"></script>
-    </body>
 
+        <script>
+
+                                    document.querySelector('.toggle-btn').addEventListener('click', function () {
+                                        const sidebar = document.querySelector('.sidebar');
+                                        const mainFrame = document.querySelector('.main-frame');
+                                        const mainContent = document.querySelector('.main-content');
+
+                                        sidebar.classList.toggle('collapsed');
+
+                                        if (sidebar.classList.contains('collapsed')) {
+                                            mainFrame.style.marginLeft = '-10%';
+                                            mainContent.style.marginLeft = '10%';
+                                        } else {
+                                            mainFrame.style.marginLeft = '-5.2%'; // Reset the content frame
+                                            mainContent.style.marginLeft = '17%'; // Adjust the main content
+                                        }
+                                    });
+
+                                    function searchByName(param) {
+                                        var txtSearch = param.value;
+                                        $.ajax({
+                                            url: "/KoiKingdom/GetKoiOrderByAjax",
+                                            type: "GET",
+                                            data: {
+                                                txtNameCustomer: txtSearch
+                                            },
+                                            success: function (data) {
+                                                var row = document.getElementById("content");
+                                                row.innerHTML = data;
+
+                                                // Re-attach the click event to handle "Detail" button clicks
+                                                row.addEventListener("click", function (event) {
+                                                    if (event.target && event.target.classList.contains("btn-detail")) {
+                                                        // Prevent the default form submission
+                                                        event.preventDefault();
+                                                        // Find the closest form element and submit it
+                                                        var form = event.target.closest("form");
+                                                        if (form) {
+                                                            form.submit();
+                                                        }
+                                                    }
+                                                });
+                                            },
+                                            error: function (xhr) {
+                                                console.error("Error occurred while fetching data:", xhr);
+                                            }
+                                        });
+                                    }
+
+        </script>
+    </body>
 
 </html>

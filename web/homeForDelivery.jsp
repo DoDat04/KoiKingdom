@@ -13,12 +13,14 @@
         <title>Delivery Home</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
     </head>
+
     <body>
         <jsp:include page="headerForDelivery.jsp" flush="true"/>
         <div style="    margin-top: -26vh;
              margin-left: 17%;
-             margin-right: 6%">                 
-            <table class="styled-table">
+             margin-right: 6%" class="main-content">          
+
+            <table id="content" class="styled-table">
                 <thead>
                     <tr>
                         <th>KoiOrderID</th>
@@ -49,13 +51,14 @@
                                         </c:choose>
 
                                     </td>
-                                    <td>
-                                        <form action="GetKoiOrderDetail" method="GET">
-                                            <input type="hidden" name="orderName" value="${requestScope.customerNames[status.index]}">
-                                            <button class="btn-detail" type="submit" >Detail</button>
+                                    <td style="padding-left: 4%;">
+                                        <form action="GetKoiOrderDetail" method="GET" style="display:inline;">
+                                            <input type="hidden" name="orderID" value="${order.koiOrderID}">
+                                            <input type="hidden" name="customerID" value="${order.customerID}">
+                                            <button class="btn-detail" type="submit" style="    border: none;
+                                                    background: none">Detail</button>
                                         </form>
                                     </td>
-
                                 </tr>
                             </c:forEach>
                         </c:when>
@@ -87,54 +90,8 @@
             <c:set var="updateError" value="${null}" scope="session"/>
         </c:if>
 
-      <div id="toastBox"></div>
+        <div id="toastBox"></div>
         <script src="js/homeForDelivery.js"></script>
         <script src="js/showToast.js"></script>
-        <style>
-            .styled-table {
-                width: 100%;
-                border-collapse: collapse;
-                margin: 25px 0;
-                font-size: 16px;
-                text-align: left;
-            }
-            .styled-table thead tr {
-                background-color: #000;
-                color: #fff;
-                text-align: left;
-            }
-            .styled-table tbody tr {
-                border-bottom: 1px solid #dddddd;
-            }
-            .styled-table tbody tr:nth-of-type(even) {
-                background-color: #f3f3f3;
-            }
-            .styled-table tbody tr:hover {
-                background-color: #f1f1f1;
-            }
-            .styled-table td, .styled-table th {
-                padding: 12px 15px;
-            }
-            .edit-btn {
-                background-color: #009879;
-                color: white;
-                border: none;
-                padding: 8px 12px;
-                cursor: pointer;
-                border-radius: 5px;
-                transition: background-color 0.3s;
-            }
-
-            .edit-btn:hover {
-                background-color: #007f67;
-            }
-            a {
-                color: #009879;
-                text-decoration: none;
-            }
-            a:hover {
-                text-decoration: underline;
-            }
-        </style>
     </body>
 </html>
