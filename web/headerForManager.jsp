@@ -22,10 +22,10 @@
         <title>Header</title>
     </head>
     <body>   
-        <div class="main-content">           
-            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -52px; padding-top: 11px;">
-
-                <a href="MainController?action=homePage" style="margin-left: 116px">
+        
+        <div class="navbar-header">           
+            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -80px; padding-top: 32.7px">
+                <a href="home?action=Delivery" style="margin-left: 116px">
                     <img src="img/logo.png" class="main-icon" >
                 </a>
 
@@ -33,8 +33,8 @@
                 <div class="menu-center">
                     <ul class="nav justify-content-center">
                         <form action="GetKoiOrder" method="get" class="search--box"> 
-                            <input type="text" name="txtOrder" placeholder="Search order" class="seachFrame" style=" border: none;"/>
-                            <button type="submit" style="border: none; border-radius: 4px; padding-left: 49px;">  <i class="fa-solid fa-search"></i> </button>
+                            <input oninput="searchByName(this)" type="text" name="txtNameCustomer" placeholder="Search name customer" style=" border: none;"/>
+                            <button type="submit" style="border: none; border-radius: 4px;">  <i class="fa-solid fa-search"></i> </button>
                         </form>
                     </ul>
                 </div>
