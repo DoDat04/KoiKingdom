@@ -20,6 +20,7 @@
         <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <link href="css/toast.css" rel="stylesheet">
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -45,7 +46,7 @@
                 font-weight: bold;
                 margin-bottom: 10px;
             }
-            button {
+            .tour-request-btn  {
                 background-color: #007bff;
                 color: white;
                 border: none;
@@ -54,7 +55,7 @@
                 font-size: 16px;
                 width: 100%;
             }
-            button:hover {
+            .tour-request-btn:hover {
                 background-color: #0056b3;
             }
             .form-group.checkbox-group {
@@ -93,11 +94,22 @@
 
         <!-- Display success or error message -->
         <c:if test="${not empty successMessage}">
-            <div class="alert alert-success">${successMessage}</div>
+            <script>
+                window.onload = function () {
+                    showToast('${successMessage}', 'success');
+                };
+            </script>
         </c:if>
         <c:if test="${not empty errorMessage}">
-            <div class="alert alert-danger">${errorMessage}</div>
+            <script>
+                window.onload = function () {
+                    showToast('${errorMessage}', 'error');
+                };
+            </script>
         </c:if>
+        <div id="toastBox"></div>
+        <script src="js/showToast.js"></script>
+
 
         <form action="create-customtour" method="post">
             <div class="form-group">
@@ -157,7 +169,7 @@
                     </c:forEach>
                 </div>
             </div>
-            <button type="submit" id="submitTourBtn">Submit Tour Request</button>
+            <button class="tour-request-btn" type="submit" id="submitTourBtn">Submit Tour Request</button>
             <script>
                 document.getElementById("submitTourBtn").addEventListener("click", function (event) {
                     // Kiểm tra nếu người dùng chưa đăng nhập

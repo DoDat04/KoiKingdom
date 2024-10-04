@@ -13,6 +13,7 @@
         <title>Create Tour</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any"> 
         <link rel="stylesheet" href="css/createTour.css"> 
+        <link href="css/toast.css" rel="stylesheet">
     </head>
     <body>
         <jsp:include page="headerForManager.jsp" flush="true"/> 
@@ -20,8 +21,15 @@
             <div class="container">
                 <h1>Create Tour</h1>
                 <c:if test="${not empty CREATE_SUCCESS}">
-                    <div class="alert alert-success">${CREATE_SUCCESS}</div>
+                    <script>
+                        window.onload = function () {
+                            showToast('${CREATE_SUCCESS}', 'success');
+                        };
+                    </script>
                 </c:if>
+
+                <div id="toastBox"></div>
+                <script src="js/showToast.js"></script>
                 <form action="CreateTourController" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="tourName">Tour Name</label>
