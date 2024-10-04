@@ -35,6 +35,16 @@ public class TourBookingDetailDTO implements Serializable {
         this.status = status;
     }
 
+    public TourBookingDetailDTO(int tourBookingDetailID, int customerID, int tourID, int quantity, double unitPrice, double totalPrice, String status) {
+        this.tourBookingDetailID = tourBookingDetailID;
+        this.customerID = customerID;
+        this.tourID = tourID;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.totalPrice = totalPrice;
+        this.status = status;
+    }
+
     public int getTourBookingDetailID() {
         return tourBookingDetailID;
     }

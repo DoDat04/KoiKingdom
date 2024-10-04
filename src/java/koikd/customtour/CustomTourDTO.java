@@ -13,6 +13,8 @@ import java.util.Date;
  */
 public class CustomTourDTO implements Serializable{
     private int requestID;
+    private int customerID;
+    private String custName;
     private String farmName;
     private String koiTypeName;
     private String duration;
@@ -23,12 +25,15 @@ public class CustomTourDTO implements Serializable{
     private String status;
     private String managerApprovalStatus;
     private String departureLocation;
+    private String image;
 
     public CustomTourDTO() {
     }
 
-    public CustomTourDTO(int requestID, String farmName, String koiTypeName, String duration, String quotationPrice, int quantity, Date startDate, Date endDate, String status, String managerApprovalStatus, String departureLocation) {
+    public CustomTourDTO(int requestID, int customerID, String custName, String farmName, String koiTypeName, String duration, String quotationPrice, int quantity, Date startDate, Date endDate, String status, String managerApprovalStatus, String departureLocation, String image) {
         this.requestID = requestID;
+        this.customerID = customerID;
+        this.custName = custName;
         this.farmName = farmName;
         this.koiTypeName = koiTypeName;
         this.duration = duration;
@@ -39,6 +44,31 @@ public class CustomTourDTO implements Serializable{
         this.status = status;
         this.managerApprovalStatus = managerApprovalStatus;
         this.departureLocation = departureLocation;
+        this.image = image;
+    }       
+
+    public int getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
+    }
+
+    public String getCustName() {
+        return custName;
+    }
+
+    public void setCustName(String custName) {
+        this.custName = custName;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public int getRequestID() {

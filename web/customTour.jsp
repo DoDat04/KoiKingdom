@@ -57,11 +57,26 @@
             button:hover {
                 background-color: #0056b3;
             }
-            .checkbox-group {
-                margin-bottom: 10px;
+            .form-group.checkbox-group {
+                margin-top: 20px;
             }
-            .checkbox-group input[type="checkbox"] {
-                margin-right: 10px;
+
+            .checkbox-grid {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px; /* Thêm khoảng cách giữa các ô */
+            }
+
+            .checkbox-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                width: calc(33.333% - 10px);
+                padding: 5px 0;
+            }
+
+            .checkbox-item label {
+                margin-left: 0;
             }
             .alert {
                 margin: 20px auto;
@@ -86,16 +101,20 @@
 
         <form action="create-customtour" method="post">
             <div class="form-group">
+                <label for="duration">Full Name</label>
+                <input type="text" id="fullName" name="fullName" class="form-control" required>
+            </div>
+            <div class="form-group">
                 <label for="duration">Duration</label>
-                <input type="text" id="duration" name="duration" class="form-control" required>
+                <input type="text" id="duration" name="duration" class="form-control" required placeholder="Example: 4 Days 3 Nights">
             </div>
             <div class="form-group">
                 <label for="startDate">Start Date</label>
-                <input type="datetime-local" id="startDate" name="startDate" class="form-control" required>
+                <input type="date" id="startDate" name="startDate" class="form-control" required>
             </div>
             <div class="form-group">
                 <label for="endDate">End Date</label>
-                <input type="datetime-local" id="endDate" name="endDate" class="form-control" required>
+                <input type="date" id="endDate" name="endDate" class="form-control" required>
             </div>
             <div class="form-group">
                 <label for="quantity">Number of People</label>
@@ -103,31 +122,40 @@
             </div>
             <div class="form-group">
                 <label for="departureLocation">Departure Location</label>
-                <select class="form-select" id="departureLocation" name="departureLocation" required>
-                    <option selected>Noi Bai International Airport (Hanoi)</option>
-                    <option value="1">Tan Son Nhat International Airport (Ho Chi Minh City)</option>
-                    <option value="2">Da Nang International Airport (Da Nang)</option>
-                    <option value="3">Cam Ranh International Airport (Nha Trang)</option>
-                    <option value="4">Phu Quoc International Airport (Phu Quoc)</option>
-                    <option value="5">Cat Bi International Airport (Hai Phong)</option>
-                    <option value="6">Can Tho International Airport (Can Tho)</option>
-                    <option value="7">Van Don International Airport (Quang Ninh)</option>
-                    <option value="8">Tho Xuan International Airport (Thanh Hoa)</option>
+                <select class="form-select" aria-label="Default select example" id="departureLocation" name="departureLocation" required>
+                    <option value="" selected>Choose Departure Location</option>
+                    <option value="Hà Nội">Hà Nội</option>
+                    <option value="Hồ Chí Minh">Hồ Chí Minh</option>
+                    <option value="Đà Nẵng">Đà Nẵng</option>
+                    <option value="Cam Ranh">Cam Ranh</option>
+                    <option value="Phú Quốc">Phú Quốc</option>
+                    <option value="Hải Phòng">Hải Phòng</option>
+                    <option value="Cần Thơ">Cần Thơ</option>
+                    <option value="Quảng Ninh">Quảng Ninh</option>
+                    <option value="Thanh Hóa">Thanh Hóa</option>
                 </select>
             </div>
             <div class="form-group checkbox-group">
-                <label>Select Farms</label><br>
-                <c:forEach var="farm" items="${sessionScope.LIST_FARM}">
-                    <input type="checkbox" name="farmName" value="${farm.farmName}" id="farm-${farm.farmID}">
-                    <label for="farm-${farm.farmID}">${farm.farmName}</label><br>
-                </c:forEach>
+                <label class="checkbox-group-label">Select Farms</label>
+                <div class="checkbox-grid">
+                    <c:forEach var="farm" items="${sessionScope.LIST_FARM}">
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="farms" value="${farm.farmName}" id="farm-${farm.farmID}">
+                            <label for="farm-${farm.farmID}">${farm.farmName}</label>
+                        </div>
+                    </c:forEach>
+                </div>
             </div>
             <div class="form-group checkbox-group">
-                <label>Select Koi Types</label><br>
-                <c:forEach var="koiType" items="${sessionScope.LIST_KOITYPE}">
-                    <input type="checkbox" name="koiTypeName" value="${koiType.typeName}" id="koiType-${koiType.koiTypeID}">
-                    <label for="koiType-${koiType.koiTypeID}">${koiType.typeName}</label><br>
-                </c:forEach>
+                <label class="checkbox-group-label">Select Koi Types</label>
+                <div class="checkbox-grid">
+                    <c:forEach var="koiType" items="${sessionScope.LIST_KOITYPE}">
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="koiTypes" value="${koiType.typeName}" id="koiType-${koiType.koiTypeID}">
+                            <label for="koiType-${koiType.koiTypeID}">${koiType.typeName}</label>
+                        </div>
+                    </c:forEach>
+                </div>
             </div>
             <button type="submit">Submit Tour Request</button>
         </form>

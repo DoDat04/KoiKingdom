@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,7 +26,6 @@ import koikd.customtour.CustomTourDTO;
  */
 @WebServlet(name = "CreateCustomTourFromCustomer", urlPatterns = {"/create-customtour"})
 public class CreateCustomTourFromCustomer extends HttpServlet {
-
     private static final String SUCCESS_CREATE_CUSTOMTOUR = "customTour.jsp";
 
     /**
@@ -43,18 +43,21 @@ public class CreateCustomTourFromCustomer extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String url = SUCCESS_CREATE_CUSTOMTOUR;
-
+        
+        HttpSession session = request.getSession();
+        Integer custID = (Integer) session.getAttribute("custID");
+        String fullName = request.getParameter("fullName");
         String duration = request.getParameter("duration");
         String startDateStr = request.getParameter("startDate");
         String endDateStr = request.getParameter("endDate");
         String departureLocation = request.getParameter("departureLocation");
-        String[] farmNames = request.getParameterValues("farmName");
+        String[] farmNames = request.getParameterValues("farms");
         String farmNameString = "";
 
         if (farmNames != null) {
             farmNameString = String.join(", ", farmNames);
         }
-        String[] koiTypeNames = request.getParameterValues("koiTypeName");
+        String[] koiTypeNames = request.getParameterValues("koiTypes");
         String koiTypeNameString = "";
 
         if (koiTypeNames != null) {
@@ -64,18 +67,8 @@ public class CreateCustomTourFromCustomer extends HttpServlet {
         int quantity = 0;
 
         if (quantityStr != null && !quantityStr.isEmpty()) {
-            try {
-                quantity = Integer.parseInt(quantityStr);
-            } catch (NumberFormatException e) {
-                request.setAttribute("errorMessage", "Quantity must be a valid number.");
-                request.getRequestDispatcher(url).forward(request, response);
-                return;
-            }
-        } else {
-            request.setAttribute("errorMessage", "Quantity cannot be empty.");
-            request.getRequestDispatcher(url).forward(request, response);
-            return;
-        }
+            quantity = Integer.parseInt(quantityStr);           
+        } 
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = null;
@@ -90,6 +83,8 @@ public class CreateCustomTourFromCustomer extends HttpServlet {
         }
 
         CustomTourDTO customTourDTO = new CustomTourDTO();
+        customTourDTO.setCustomerID(custID);
+        customTourDTO.setCustName(fullName);
         customTourDTO.setDuration(duration);
         customTourDTO.setStartDate(startDate);
         customTourDTO.setEndDate(endDate);

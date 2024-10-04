@@ -5,7 +5,6 @@
 package koikd.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -217,7 +216,7 @@ public class VNPayCallBackController extends HttpServlet {
                 + "</tr>"
                 + "<tr>"
                 + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Status:</td>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + dto.getStatus() + "</td>"
+                + "<td style='padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold;'>" + dto.getStatus() + "</td>"
                 + "</tr>"
                 + "</table>"
                 + "<p style='margin-top: 20px;'>If you have any questions, please contact us at <a href='mailto:koikingdomsystem@gmail.com' style='color: #4CAF50; text-decoration: none;'>koikingdomsystem@gmail.com</a></p>"

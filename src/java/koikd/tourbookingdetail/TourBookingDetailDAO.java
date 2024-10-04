@@ -130,12 +130,11 @@ public class TourBookingDetailDAO implements Serializable {
                     int tourBookingDetail = rs.getInt("tourBookingDetail");
                     int customerID = rs.getInt("customerID");
                     int tourID = rs.getInt("tourID");
-                    String tourName = rs.getString("tourName");
                     int quantity = rs.getInt("quantity");
                     double unitPrice = rs.getDouble("unitPrice");
                     double totalPrice = rs.getDouble("totalPrice");
-                    String status = rs.getString("sourBookingDetailDTO(tourBookingDetail, customerID, tourID, quantity, unitPrice, totalPrice, statustatus");
-                    dto = new TourBookingDetailDTO(tourBookingDetail, customerID, tourID, tourName, quantity, unitPrice, totalPrice, status);
+                    String status = rs.getString("status");
+                    dto = new TourBookingDetailDTO(tourBookingDetail, customerID, tourID, quantity, unitPrice, totalPrice, status);
                     list.add(dto);
                 }
 

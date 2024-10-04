@@ -19,7 +19,6 @@ import koikd.utils.DBUtils;
  * @author Do Dat
  */
 public class TourDAO implements Serializable {
-
     public List<TourDTO> getTourList() throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;

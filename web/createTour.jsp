@@ -20,6 +20,9 @@
         <div class="main" style="margin-top: -216px; margin-left: 223px; margin-right: 30px;">       
             <div class="container">
                 <h1>Create Tour</h1>
+                <c:if test="${not empty CREATE_SUCCESS}">
+                    <div class="alert alert-success">${CREATE_SUCCESS}</div>
+                </c:if>
                 <form action="CreateTourController" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="tourName">Tour Name</label>
@@ -90,14 +93,5 @@
                 </form>
             </div>
         </div>
-        <c:set var="success" value="${requestScope.CREATE_SUCCESS}"/>
-        <c:if test="${not empty success}">
-            <script>
-                window.onload = function () {
-                    showToast('${success}', 'success');
-                };
-            </script>
-        </c:if>
-        <script src="js/showToast.js"></script>
     </body>
 </html>

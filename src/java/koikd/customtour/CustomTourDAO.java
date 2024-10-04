@@ -22,20 +22,23 @@ public class CustomTourDAO implements Serializable {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 String sql = "INSERT INTO [dbo].[CUSTOMTOURREQUEST] "
-                        + "([Duration], [StartDate], [EndDate], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], [KoiTypeName], [Quantity]) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        + "([CustomerID], [FullName], [Duration], [StartDate], [EndDate], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], [KoiTypeName], [Quantity], [Image]) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                 pst = conn.prepareStatement(sql);
-
-                pst.setString(1, customTourDTO.getDuration());  
-                pst.setTimestamp(2, new java.sql.Timestamp(customTourDTO.getStartDate().getTime()));
-                pst.setTimestamp(3, new java.sql.Timestamp(customTourDTO.getEndDate().getTime())); 
-                pst.setString(4, customTourDTO.getStatus()); 
-                pst.setString(5, customTourDTO.getManagerApprovalStatus()); 
-                pst.setString(6, customTourDTO.getDepartureLocation()); 
-                pst.setString(7, customTourDTO.getFarmName());
-                pst.setString(8, customTourDTO.getKoiTypeName());
-                pst.setInt(9, customTourDTO.getQuantity());
+                
+                pst.setInt(1, customTourDTO.getCustomerID());
+                pst.setString(2, customTourDTO.getCustName());
+                pst.setString(3, customTourDTO.getDuration());  
+                pst.setTimestamp(4, new java.sql.Timestamp(customTourDTO.getStartDate().getTime()));
+                pst.setTimestamp(5, new java.sql.Timestamp(customTourDTO.getEndDate().getTime())); 
+                pst.setString(6, customTourDTO.getStatus()); 
+                pst.setString(7, customTourDTO.getManagerApprovalStatus()); 
+                pst.setString(8, customTourDTO.getDepartureLocation()); 
+                pst.setString(9, customTourDTO.getFarmName());
+                pst.setString(10, customTourDTO.getKoiTypeName());
+                pst.setInt(11, customTourDTO.getQuantity());
+                pst.setString(12, "img/TourImage/1.jpg");               
 
                 int affectedRows = pst.executeUpdate();
                 if (affectedRows > 0) {
@@ -79,8 +82,12 @@ public class CustomTourDAO implements Serializable {
         customTourDTO.setManagerApprovalStatus("Pending");
         customTourDTO.setDepartureLocation("Tokyo, Japan");
         customTourDTO.setFarmName("Koi Farm A");
+        customTourDTO.setFarmName("Koi Farm B");
+        customTourDTO.setFarmName("Koi Farm C");
         customTourDTO.setKoiTypeName("Tancho");
-        customTourDTO.setQuantity(10); 
+        customTourDTO.setKoiTypeName("Tancho B");
+        customTourDTO.setKoiTypeName("Tancho C");
+        customTourDTO.setQuantity(2); 
 
         // Tạo đối tượng CustomTourDAO để gọi phương thức tạo tour
         CustomTourDAO customTourDAO = new CustomTourDAO();
