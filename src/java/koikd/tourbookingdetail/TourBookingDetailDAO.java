@@ -26,8 +26,8 @@ public class TourBookingDetailDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "INSERT INTO TOURBOOKINGDETAIL (CustomerID, TourID, Quantity, UnitPrice, TotalPrice, Status) "
-                        + "VALUES (?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO TOURBOOKINGDETAIL (CustomerID, TourID, Quantity, UnitPrice, TotalPrice, Status, TourType) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?)";
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, tourBookingDetail.getCustomerID());
                 stm.setInt(2, tourBookingDetail.getTourID());
@@ -35,6 +35,7 @@ public class TourBookingDetailDAO implements Serializable {
                 stm.setDouble(4, tourBookingDetail.getUnitPrice());
                 stm.setDouble(5, tourBookingDetail.getTotalPrice());
                 stm.setString(6, tourBookingDetail.getStatus());
+                stm.setString(7, tourBookingDetail.getTourType());
 
                 int affectedRows = stm.executeUpdate();
                 if (affectedRows > 0) {

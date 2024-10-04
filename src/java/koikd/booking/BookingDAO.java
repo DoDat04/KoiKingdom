@@ -8,19 +8,14 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import koikd.utils.DBUtils;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
-import koikd.tour.TourDAO;
-import koikd.tour.TourDTO;
+
 
 /**
  *
  * @author Do Dat
  */
 public class BookingDAO implements Serializable {
-
     public boolean addBooking(BookingDTO booking) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -29,8 +24,8 @@ public class BookingDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "INSERT INTO BOOKING (CustomerID, TourID, Name, Email, BookingDate, ShippingAddress, Quantity, Status) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO BOOKING (CustomerID, TourID, Name, Email, BookingDate, ShippingAddress, Quantity, Status, TourType) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, booking.getCustomerID());
                 stm.setInt(2, booking.getTourID());
@@ -40,6 +35,7 @@ public class BookingDAO implements Serializable {
                 stm.setString(6, booking.getShippingAddress());
                 stm.setInt(7, booking.getQuantity());
                 stm.setString(8, booking.getStatus());
+                stm.setString(9, booking.getTourType());
 
                 int affectedRows = stm.executeUpdate();
                 if (affectedRows > 0) {

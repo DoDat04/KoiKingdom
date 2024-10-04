@@ -14,6 +14,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Tour Management</title>
+        <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
         <style>
             /* Tổng quan */
             body {

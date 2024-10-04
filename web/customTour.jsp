@@ -157,9 +157,23 @@
                     </c:forEach>
                 </div>
             </div>
-            <button type="submit">Submit Tour Request</button>
+            <button type="submit" id="submitTourBtn">Submit Tour Request</button>
+            <script>
+                document.getElementById("submitTourBtn").addEventListener("click", function (event) {
+                    // Kiểm tra nếu người dùng chưa đăng nhập
+                    const isUserLoggedIn = "${sessionScope.LOGIN_USER}" || "${sessionScope.LOGIN_GMAIL}";
+                    if (!isUserLoggedIn) {
+                        alert('You need to login to custom tour!');
+                        event.preventDefault(); // Ngăn chặn gửi form
+                    } 
+                });
+            </script>
         </form>
+        <button id="backToTop" class="btn btn-primary" style="display: none;">
+            <i class="fas fa-angle-up"></i>
+        </button>
 
+        <script src="js/backToTop.js"></script> 
         <jsp:include page="footer.jsp" flush="true"/>
     </body>
 </html>

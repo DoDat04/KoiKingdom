@@ -21,11 +21,13 @@ public class BookingDTO implements Serializable{
     private String shippingAddress;
     private int quantity;
     private String status;
+    private String tourType;
 
     public BookingDTO() {
     }   
 
-    public BookingDTO(int customerID, int tourID, String custName, String custEmail, Timestamp bookingDate, String shippingAddress, int quantity, String status) {
+    public BookingDTO(int bookingID, int customerID, int tourID, String custName, String custEmail, Timestamp bookingDate, String shippingAddress, int quantity, String status, String tourType) {
+        this.bookingID = bookingID;
         this.customerID = customerID;
         this.tourID = tourID;
         this.custName = custName;
@@ -34,7 +36,16 @@ public class BookingDTO implements Serializable{
         this.shippingAddress = shippingAddress;
         this.quantity = quantity;
         this.status = status;
-    }  
+        this.tourType = tourType;
+    }
+
+    public String getTourType() {
+        return tourType;
+    }
+
+    public void setTourType(String tourType) {
+        this.tourType = tourType;
+    }
 
     public int getBookingID() {
         return bookingID;

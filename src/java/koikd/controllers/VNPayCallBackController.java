@@ -116,7 +116,8 @@ public class VNPayCallBackController extends HttpServlet {
                             booking.setBookingDate(today);
                             booking.setShippingAddress(custAddress);
                             booking.setQuantity(numberOfPeople);
-                            booking.setStatus("Paid"); 
+                            booking.setStatus("Paid");
+                            booking.setTourType("Available");
 
                             BookingDAO bookingDAO = new BookingDAO();
                             bookingDAO.addBooking(booking);
@@ -128,6 +129,7 @@ public class VNPayCallBackController extends HttpServlet {
                             dto.setUnitPrice(tour.getTourPrice());
                             dto.setTotalPrice(tour.getTourPrice() * numberOfPeople);
                             dto.setStatus("Confirmed");
+                            dto.setTourType("Available");
                             
                             TourBookingDetailDAO dao = new TourBookingDetailDAO();
                             dao.addTourBookingDetail(dto);

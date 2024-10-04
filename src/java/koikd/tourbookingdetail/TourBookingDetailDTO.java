@@ -11,7 +11,6 @@ import java.io.Serializable;
  * @author Do Dat
  */
 public class TourBookingDetailDTO implements Serializable {
-
     private int tourBookingDetailID;
     private int customerID;
     private int tourID;
@@ -20,6 +19,7 @@ public class TourBookingDetailDTO implements Serializable {
     private double unitPrice;
     private double totalPrice;
     private String status;
+    private String tourType;
 
     public TourBookingDetailDTO() {
     }
@@ -43,6 +43,14 @@ public class TourBookingDetailDTO implements Serializable {
         this.unitPrice = unitPrice;
         this.totalPrice = totalPrice;
         this.status = status;
+    }
+
+    public String getTourType() {
+        return tourType;
+    }
+
+    public void setTourType(String tourType) {
+        this.tourType = tourType;
     }
 
     public int getTourBookingDetailID() {

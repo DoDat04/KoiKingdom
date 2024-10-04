@@ -19,7 +19,8 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <link rel="stylesheet" href="css/myOrderBooking.css"/>
-        <title>JSP Page</title>
+        <title>My Booking - Koi Kingdom</title>
+        <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
     </head>
     <style>
 

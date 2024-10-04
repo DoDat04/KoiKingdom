@@ -13,7 +13,6 @@
         <title>Create Tour</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any"> 
         <link rel="stylesheet" href="css/createTour.css"> 
-        <link href="css/toast.css" rel="stylesheet">
     </head>
     <body>
         <jsp:include page="headerForManager.jsp" flush="true"/> 

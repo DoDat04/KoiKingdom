@@ -16,6 +16,7 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="css/homeForDelivery.css" rel="stylesheet">
         <title>Manager Dashboard</title>
+        <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
 
         <jsp:include page="headerForManager.jsp" flush="true"/>   
     <div class="main" style="margin-top: -216px; margin-left: 223px; margin-right: 30px;">       
