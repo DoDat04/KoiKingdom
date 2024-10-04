@@ -27,6 +27,14 @@
             background-color: #b0e0e6;
             padding: 40px;
         }
+
+        .banner-text h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4em;
+            color: #003366;
+            text-align: center;
+            margin-bottom: 0.2em;
+        }
     </style>
     <body>
         <div class="colorlib-loader"></div>
