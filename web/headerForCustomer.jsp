@@ -42,7 +42,7 @@
                                 <a class="nav-link dropdown-toggle text-black" id="bookingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Booking</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bookingDropdown">
                                     <li><a class="dropdown-item" href="tour-list">Tour</a></li>
-                                    <li><a class="dropdown-item" href="customTour.jsp">Custom Tour</a></li>
+                                    <li><a class="dropdown-item" href="home?action=customTour">Custom Tour</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item">
