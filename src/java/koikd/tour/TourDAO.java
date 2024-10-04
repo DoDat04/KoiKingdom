@@ -226,7 +226,7 @@ public class TourDAO implements Serializable {
         return tour;
     }
 
-public List<TourDTO> getAllTour() throws SQLException, ClassNotFoundException {
+    public List<TourDTO> getAllTour() throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -253,7 +253,6 @@ public List<TourDTO> getAllTour() throws SQLException, ClassNotFoundException {
                     TourDTO dto = new TourDTO(id, name, duration, description, price, start, end, img, status, loca);
                     result.add(dto);
                 }
-
             }
         } finally {
             if (rs != null) {
@@ -311,15 +310,110 @@ public List<TourDTO> getAllTour() throws SQLException, ClassNotFoundException {
         }
         return false;
     }
+    
+    public boolean createTour(String tourName, String duration, String description, double tourPrice,
+            Timestamp startDate, Timestamp endDate, String imagePath,
+            String[] selectedFarms, String[] selectedKoiTypes, String departureLocation) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        boolean result = false;
 
-//    public static void main(String[] args) throws SQLException {
-//        int id = 11;
-//        TourDAO dao = new TourDAO();
-//        boolean dto = dao.updateStatusTour(id);
-//        if(dto){
-//            System.out.println("Update status successfully.");
-//        } else{
-//            System.out.println("Fail.");
-//        }
-//    }
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "INSERT INTO TOUR (TourName, Duration, Description, TourPrice, StartDate, EndDate, Image, Status, DepartureLocation) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                stm = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); // Lấy tourID vừa được tạo ra
+                stm.setString(1, tourName);
+                stm.setString(2, duration);
+                stm.setString(3, description);
+                stm.setDouble(4, tourPrice);
+                stm.setTimestamp(5, startDate);
+                stm.setTimestamp(6, endDate);
+                stm.setString(7, imagePath);
+                stm.setBoolean(8, true); 
+                stm.setString(9, departureLocation);
+                int affectedRows = stm.executeUpdate();
+                if (affectedRows > 0) {
+                    result = true;
+                }
+
+                // Lấy tourID ở trên để insert vào 2 bảng dưới
+                ResultSet generatedKeys = stm.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int tourID = generatedKeys.getInt(1);
+
+                    // Insert tourID và farmID vào TOUR_FARM
+                    if (selectedFarms != null) {
+                        for (String farmId : selectedFarms) {
+                            insertTourFarm(tourID, Integer.parseInt(farmId));
+                        }
+                    }
+
+                    // Insert tourID và koiTypeID vào TOUR_FARM
+                    if (selectedKoiTypes != null) {
+                        for (String koiTypeId : selectedKoiTypes) {
+                            insertTourKoiType(tourID, Integer.parseInt(koiTypeId));
+                        }
+                    }
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
+    
+    private void insertTourFarm(int tourID, int farmID) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "INSERT INTO TOUR_FARM (TourID, FarmID) "
+                        + "VALUES (?, ?)";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, tourID);
+                stm.setInt(2, farmID);
+                stm.executeUpdate();
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }              
+    }
+    
+    private void insertTourKoiType(int tourID, int koiTypeID) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "INSERT INTO TOUR_KOITYPE (TourID, KoiTypeID) "
+                        + "VALUES (?, ?)";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, tourID);
+                stm.setInt(2, koiTypeID);
+                stm.executeUpdate();
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }              
+    }   
 }

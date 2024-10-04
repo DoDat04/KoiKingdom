@@ -72,6 +72,9 @@
                         <li class="menu-item">
                             <a href="GetListTour" style="color: black"><i class="fa-solid fa-list"></i>Tour</a>
                         </li>
+                        <li class="menu-item">
+                            <a href="createTour.jsp" style="color: black"><i class="fa-solid fa-plus"></i></i>Add Tour</a>
+                        </li>
                         <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
                                 <i style='font-size:24px' class='fas'>&#xf406;</i>Profile</a></li>
                         <li class="menu-item">
