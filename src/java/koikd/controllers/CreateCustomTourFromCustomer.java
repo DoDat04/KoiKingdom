@@ -26,6 +26,7 @@ import koikd.customtour.CustomTourDTO;
  */
 @WebServlet(name = "CreateCustomTourFromCustomer", urlPatterns = {"/create-customtour"})
 public class CreateCustomTourFromCustomer extends HttpServlet {
+
     private static final String SUCCESS_CREATE_CUSTOMTOUR = "customTour.jsp";
 
     /**
@@ -43,7 +44,7 @@ public class CreateCustomTourFromCustomer extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String url = SUCCESS_CREATE_CUSTOMTOUR;
-        
+
         HttpSession session = request.getSession();
         Integer custID = (Integer) session.getAttribute("custID");
         String fullName = request.getParameter("fullName");
@@ -67,8 +68,8 @@ public class CreateCustomTourFromCustomer extends HttpServlet {
         int quantity = 0;
 
         if (quantityStr != null && !quantityStr.isEmpty()) {
-            quantity = Integer.parseInt(quantityStr);           
-        } 
+            quantity = Integer.parseInt(quantityStr);
+        }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = null;
@@ -101,11 +102,10 @@ public class CreateCustomTourFromCustomer extends HttpServlet {
 
             if (isCreated) {
                 request.setAttribute("successMessage", "Custom tour was created successfully!");
-                request.getRequestDispatcher(url).forward(request, response);
             } else {
                 request.setAttribute("errorMessage", "Failed to create custom tour.");
-                request.getRequestDispatcher(url).forward(request, response);
             }
+            request.getRequestDispatcher(url).forward(request, response);
         } catch (SQLException e) {
             request.setAttribute("errorMessage", "Database error: " + e.getMessage());
             request.getRequestDispatcher(url).forward(request, response);

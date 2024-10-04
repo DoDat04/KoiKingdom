@@ -56,7 +56,7 @@
                                 </ul>
                             </li>                           
                             <li class="nav-item">
-                                <a class="nav-link text-black" href="#">Contact</a>
+                                <a class="nav-link text-black" href="home?action=contact">Contact</a>
                             </li>
                         </ul>
                     </div>

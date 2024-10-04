@@ -34,6 +34,7 @@ public class HomeController extends HttpServlet {
     private static final String SALES_PAGE = "homeForSales.jsp";
     private static final String CONSULTING_PAGE = "homeForConsulting.jsp";
     private static final String CUSTOM_TOUR_PAGE = "customTour.jsp";
+    private static final String CONTACT_PAGE = "contact.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -91,6 +92,8 @@ public class HomeController extends HttpServlet {
                 url = CONSULTING_PAGE;
             } else if (action.equals("customTour")){
                 url = CUSTOM_TOUR_PAGE;
+            } else if(action.equals("contact")){
+                url = CONTACT_PAGE;
             }
         } catch (SQLException ex) {
             Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
