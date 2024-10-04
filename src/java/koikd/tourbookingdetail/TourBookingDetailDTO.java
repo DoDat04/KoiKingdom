@@ -10,10 +10,12 @@ import java.io.Serializable;
  *
  * @author Do Dat
  */
-public class TourBookingDetailDTO implements Serializable{
+public class TourBookingDetailDTO implements Serializable {
+
     private int tourBookingDetailID;
     private int customerID;
     private int tourID;
+    private String tourName;
     private int quantity;
     private double unitPrice;
     private double totalPrice;
@@ -22,10 +24,11 @@ public class TourBookingDetailDTO implements Serializable{
     public TourBookingDetailDTO() {
     }
 
-    public TourBookingDetailDTO(int tourBookingDetailID, int customerID, int tourID, int quantity, double unitPrice, double totalPrice, String status) {
+    public TourBookingDetailDTO(int tourBookingDetailID, int customerID, int tourID, String tourName, int quantity, double unitPrice, double totalPrice, String status) {
         this.tourBookingDetailID = tourBookingDetailID;
         this.customerID = customerID;
         this.tourID = tourID;
+        this.tourName = tourName;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
         this.totalPrice = totalPrice;
@@ -54,6 +57,14 @@ public class TourBookingDetailDTO implements Serializable{
 
     public void setTourID(int tourID) {
         this.tourID = tourID;
+    }
+
+    public String getTourName() {
+        return tourName;
+    }
+
+    public void setTourName(String tourName) {
+        this.tourName = tourName;
     }
 
     public int getQuantity() {
@@ -90,6 +101,8 @@ public class TourBookingDetailDTO implements Serializable{
 
     @Override
     public String toString() {
-        return "TourBookingDetailDTO{" + "tourBookingDetailID=" + tourBookingDetailID + ", customerID=" + customerID + ", tourID=" + tourID + ", quantity=" + quantity + ", unitPrice=" + unitPrice + ", totalPrice=" + totalPrice + ", status=" + status + '}';
+        return "TourBookingDetailDTO{" + "tourBookingDetailID=" + tourBookingDetailID + ", customerID=" + customerID + ", tourID=" + tourID + ", tourName=" + tourName + ", quantity=" + quantity + ", unitPrice=" + unitPrice + ", totalPrice=" + totalPrice + ", status=" + status + '}';
     }
+
+    
 }

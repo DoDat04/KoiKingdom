@@ -52,6 +52,12 @@ public class TourBookingDetailDAO implements Serializable {
         return result;
     }
 
+    /**
+     * 
+     * @param custID
+     * @return tour booking bill.
+     * @throws SQLException 
+     */
     public TourBookingDetailDTO getTourBookingDetailByCustomerID(int custID) throws SQLException {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -60,9 +66,10 @@ public class TourBookingDetailDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT [TourBookingDetail], [CustomerID], [TourID], [Quantity], [UnitPrice], [TotalPrice], [Status]\n"
-                        + "FROM [dbo].[TOURBOOKINGDETAIL]\n"
-                        + "WHERE [CustomerID] = ?";
+                String sql = "SELECT a.TourBookingDetail, a.TourID, a.CustomerID, a.Quantity, a.UnitPrice, a.TotalPrice, a.Status, b.TourName\n"
+                        + "FROM TOURBOOKINGDETAIL a\n"
+                        + "INNER JOIN TOUR b ON a.TourID = b.TourID\n"
+                        + "WHERE a.CustomerID = ?";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, custID);
                 rs = pst.executeQuery();
@@ -70,11 +77,12 @@ public class TourBookingDetailDAO implements Serializable {
                     int tourBookingDetail = rs.getInt("tourBookingDetail");
                     int customerID = rs.getInt("customerID");
                     int tourID = rs.getInt("tourID");
+                    String tourName = rs.getString("tourName");
                     int quantity = rs.getInt("quantity");
                     double unitPrice = rs.getDouble("unitPrice");
                     double totalPrice = rs.getDouble("totalPrice");
                     String status = rs.getString("status");
-                    dto = new TourBookingDetailDTO(tourBookingDetail, customerID, tourID, quantity, unitPrice, totalPrice, status);
+                    dto = new TourBookingDetailDTO(tourBookingDetail, customerID, tourID, tourName, quantity, unitPrice, totalPrice, status);
                 }
 
             }
@@ -93,6 +101,15 @@ public class TourBookingDetailDAO implements Serializable {
         }
         return dto;
     }
+
+//    public static void main(String[] args) throws SQLException {
+//        int custID = 12;
+//        TourBookingDetailDAO dao = new TourBookingDetailDAO();
+//        TourBookingDetailDTO dto = dao.getTourBookingDetailByCustomerID(custID);
+//        if (dto != null) {
+//            System.out.println(dto);
+//        }
+//    }
 
     public ArrayList<TourBookingDetailDTO> getTourBookingDetailListByCustomerID(int custID) throws SQLException {
         Connection conn = null;
@@ -113,11 +130,12 @@ public class TourBookingDetailDAO implements Serializable {
                     int tourBookingDetail = rs.getInt("tourBookingDetail");
                     int customerID = rs.getInt("customerID");
                     int tourID = rs.getInt("tourID");
+                    String tourName = rs.getString("tourName");
                     int quantity = rs.getInt("quantity");
                     double unitPrice = rs.getDouble("unitPrice");
                     double totalPrice = rs.getDouble("totalPrice");
-                    String status = rs.getString("status");
-                    dto = new TourBookingDetailDTO(tourBookingDetail, customerID, tourID, quantity, unitPrice, totalPrice, status);
+                    String status = rs.getString("sourBookingDetailDTO(tourBookingDetail, customerID, tourID, quantity, unitPrice, totalPrice, statustatus");
+                    dto = new TourBookingDetailDTO(tourBookingDetail, customerID, tourID, tourName, quantity, unitPrice, totalPrice, status);
                     list.add(dto);
                 }
 

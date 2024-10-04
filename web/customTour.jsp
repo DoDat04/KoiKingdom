@@ -63,6 +63,11 @@
             .checkbox-group input[type="checkbox"] {
                 margin-right: 10px;
             }
+            .alert {
+                margin: 20px auto;
+                width: 80%;
+                max-width: 600px;
+            }
         </style>
     </head>
     <body>
@@ -71,7 +76,19 @@
 
         <h1>Custom Tour Request</h1>
 
-        <form action="submitTourRequest.jsp" method="post">
+        <!-- Display success or error message -->
+        <c:if test="${not empty successMessage}">
+            <div class="alert alert-success">${successMessage}</div>
+        </c:if>
+        <c:if test="${not empty errorMessage}">
+            <div class="alert alert-danger">${errorMessage}</div>
+        </c:if>
+
+        <form action="create-customtour" method="post">
+            <div class="form-group">
+                <label for="duration">Duration</label>
+                <input type="text" id="duration" name="duration" class="form-control" required>
+            </div>
             <div class="form-group">
                 <label for="startDate">Start Date</label>
                 <input type="datetime-local" id="startDate" name="startDate" class="form-control" required>
@@ -81,12 +98,12 @@
                 <input type="datetime-local" id="endDate" name="endDate" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="numberOfPeople">Number of People</label>
-                <input type="number" id="numberOfPeople" name="numberOfPeople" class="form-control" required min="1" max="50">
+                <label for="quantity">Number of People</label>
+                <input type="number" id="quantity" name="quantity" class="form-control" required min="1" max="50">
             </div>
             <div class="form-group">
                 <label for="departureLocation">Departure Location</label>
-                <select class="form-select" aria-label="Default select example" id="departureLocation" name="departureLocation" required="">
+                <select class="form-select" id="departureLocation" name="departureLocation" required>
                     <option selected>Noi Bai International Airport (Hanoi)</option>
                     <option value="1">Tan Son Nhat International Airport (Ho Chi Minh City)</option>
                     <option value="2">Da Nang International Airport (Da Nang)</option>
@@ -97,19 +114,18 @@
                     <option value="7">Van Don International Airport (Quang Ninh)</option>
                     <option value="8">Tho Xuan International Airport (Thanh Hoa)</option>
                 </select>
-
             </div>
             <div class="form-group checkbox-group">
                 <label>Select Farms</label><br>
                 <c:forEach var="farm" items="${sessionScope.LIST_FARM}">
-                    <input type="checkbox" name="farms" value="${farm.farmID}" id="farm-${farm.farmID}">
+                    <input type="checkbox" name="farmName" value="${farm.farmName}" id="farm-${farm.farmID}">
                     <label for="farm-${farm.farmID}">${farm.farmName}</label><br>
                 </c:forEach>
             </div>
             <div class="form-group checkbox-group">
                 <label>Select Koi Types</label><br>
                 <c:forEach var="koiType" items="${sessionScope.LIST_KOITYPE}">
-                    <input type="checkbox" name="koiTypes" value="${koiType.koiTypeID}" id="koiType-${koiType.koiTypeID}">
+                    <input type="checkbox" name="koiTypeName" value="${koiType.typeName}" id="koiType-${koiType.koiTypeID}">
                     <label for="koiType-${koiType.koiTypeID}">${koiType.typeName}</label><br>
                 </c:forEach>
             </div>
@@ -119,5 +135,6 @@
         <jsp:include page="footer.jsp" flush="true"/>
     </body>
 </html>
+
 
 
