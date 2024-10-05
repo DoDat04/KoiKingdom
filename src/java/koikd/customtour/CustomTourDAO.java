@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import koikd.utils.DBUtils;
 
@@ -183,15 +182,113 @@ public class CustomTourDAO implements Serializable {
         return list;
     }
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        String fullName = "";
-        CustomTourDAO dao = new CustomTourDAO();
-        ArrayList<CustomTourDTO> list = dao.getListCustomTour(fullName);
-        for (CustomTourDTO customTourDTO : list) {
-            if (customTourDTO != null) {
-                System.out.println(customTourDTO);
+//    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+//        String fullName = "";
+//        CustomTourDAO dao = new CustomTourDAO();
+//        ArrayList<CustomTourDTO> list = dao.getListCustomTour(fullName);
+//        for (CustomTourDTO customTourDTO : list) {
+//            if (customTourDTO != null) {
+//                System.out.println(customTourDTO);
+//            }
+//        }
+//    }
+    /**
+     *
+     * @param quoPrice
+     * @param reqID
+     * @return update quotation price from requestID.
+     * @throws SQLException
+     */
+    public boolean updatePriceCustomTourBySales(double quoPrice, int reqID) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        boolean rs = false;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "UPDATE [dbo].[CUSTOMTOURREQUEST] "
+                        + " SET [QuotationPrice] = ? "
+                        + " WHERE [RequestID] = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setDouble(1, quoPrice);
+                pst.setInt(2, reqID);
+                int affectedRows = pst.executeUpdate();
+                if (affectedRows > 0) {
+                    rs = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
             }
         }
+        return rs;
     }
 
+//    public static void main(String[] args) throws SQLException {
+//        int reqID = 1;
+//        double quoPrice = 150;
+//        CustomTourDAO dao = new CustomTourDAO();
+//        boolean dto = dao.updatePriceCustomTourBySales(quoPrice, reqID);
+//        if (dto) {
+//            System.out.println("Update successfully!");
+//        } else {
+//            System.out.println("Fail.");
+//        }
+//    }
+    
+    /**
+     * 
+     * @param statusSales
+     * @param reqID
+     * @return status for requestID.
+     * @throws SQLException 
+     */
+    public boolean updateStatusCustomTourBySales(String statusSales, int reqID) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        boolean rs = false;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "UPDATE [dbo].[CUSTOMTOURREQUEST] "
+                        + " SET [Status] = ? "
+                        + " WHERE [RequestID] = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setString(1, statusSales);
+                pst.setInt(2, reqID);
+                int affectedRows = pst.executeUpdate();
+                if (affectedRows > 0) {
+                    rs = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return rs;
+    }
+    
+//    public static void main(String[] args) throws SQLException {
+//        int reqID = 1;
+//        String status = "Approved";
+//        CustomTourDAO dao = new CustomTourDAO();
+//        boolean dto = dao.updateStatusCustomTourBySales(status, reqID);
+//        if(dto){
+//            System.out.println("Updated successfully.");
+//        } else{
+//            System.out.println("Fail.");
+//        }
+//    }
 }

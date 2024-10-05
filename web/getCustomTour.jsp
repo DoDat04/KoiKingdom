@@ -4,6 +4,7 @@
     Author     : ADMIN LAM
 --%>
 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -42,6 +43,7 @@
                         <th>Quantity</th>
                         <th>Quotation Price</th>
                         <th>Image</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,14 +57,62 @@
                                     <td>${custom.duration}</td>
                                     <td>${custom.startDate}</td>
                                     <td>${custom.endDate}</td>
-                                    <td class="text-warning">${custom.status}</td>
-                                    <td class="text-warning">${custom.managerApprovalStatus}</td>
+                                    <td class="${custom.status == 'Pending' ? 'text-warning' : (custom.status == 'Approved' ? 'text-success' : (custom.status == 'Rejected' ? 'text-danger' : ''))}">
+                                        ${custom.status}
+                                    </td>
+                                    <td class="${custom.managerApprovalStatus == 'Pending' ? 'text-warning' : (custom.managerApprovalStatus == 'Approved' ? 'text-success' : (custom.managerApprovalStatus == 'Rejected' ? 'text-danger' : ''))}">
+                                        ${custom.managerApprovalStatus}
+                                    </td>
                                     <td>${custom.departureLocation}</td>
                                     <td>${custom.farmName}</td>
                                     <td>${custom.koiTypeName}</td>
                                     <td>${custom.quantity}</td>
-                                    <td>${custom.quotationPrice}</td>
+                                    <td><fmt:formatNumber value="${custom.quotationPrice}" type="currency" currencySymbol="$" /></td>
                                     <td><img src="${custom.image}" class="custom-tour" alt="" style="height: 100px; width: 150px; border-radius: 10px;"/></td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#updateModal${custom.requestID}">
+                                            Update
+                                        </button>
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateModal${custom.requestID}">
+                                            Send
+                                        </button>
+                                    </td>
+
+                                    <!-- Modal -->
+                            <div class="modal fade" id="updateModal${custom.requestID}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel${custom.requestID}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="updateModalLabel${custom.requestID}">Update Price and Status</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="updateForm${custom.requestID}" method="post" action="update-price-status">
+                                                <div class="mb-3">
+                                                    <label for="quotationPrice${custom.requestID}" class="form-label">Quotation Price</label>
+                                                    <input type="number" step="0.01" class="form-control" id="quotationPrice${custom.requestID}" name="txtQuoPrice" placeholder="Enter new quotation price" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="status${custom.requestID}" class="form-label">Status</label>
+                                                    <select class="form-control" id="status${custom.requestID}" name="txtStatus" required>
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Approved">Approved</option>
+                                                        <option value="Rejected">Rejected</option>
+                                                    </select>
+                                                </div>
+                                                <!-- Hidden input to pass the request ID -->
+                                                <input type="hidden" name="txtReq" value="${custom.requestID}">
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" form="updateForm${custom.requestID}" class="btn btn-primary">Update</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                             </tr>
                         </c:forEach>
                     </c:when>
@@ -72,6 +122,7 @@
                         </tr>
                     </c:otherwise>
                 </c:choose>
+
                 </tbody>
             </table>
         </div>
@@ -83,6 +134,15 @@
                 };
             </script>
             <c:set var="ERROR_MESSAGE" value="${null}" scope="session"/>
+        </c:if>
+
+        <c:if test="${not empty sessionScope.UPDATE_SUCCESS}">
+            <script>
+                window.onload = function () {
+                    showToast('${sessionScope.UPDATE_SUCCESS}', 'success');
+                };
+            </script>
+            <c:set var="UPDATE_SUCCESS" value="${null}" scope="session"/>
         </c:if>
 
         <div id="toastBox"></div>
