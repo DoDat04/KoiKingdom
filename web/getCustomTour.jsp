@@ -35,6 +35,7 @@
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Status</th>
+                        <th>Manager Approval Status</th>
                         <th>Departure Location</th>
                         <th>Farm Name</th>
                         <th>KoiType Name</th>
@@ -55,6 +56,7 @@
                                     <td>${custom.startDate}</td>
                                     <td>${custom.endDate}</td>
                                     <td class="text-warning">${custom.status}</td>
+                                    <td class="text-warning">${custom.managerApprovalStatus}</td>
                                     <td>${custom.departureLocation}</td>
                                     <td>${custom.farmName}</td>
                                     <td>${custom.koiTypeName}</td>

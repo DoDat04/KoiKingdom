@@ -132,7 +132,7 @@ public class CustomTourDAO implements Serializable {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 String sql = "SELECT [RequestID], [CustomerID], [FullName], [Duration], [StartDate], "
-                        + "[EndDate], [QuotationPrice], [Status], [DepartureLocation], [FarmName], "
+                        + "[EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], "
                         + "[KoiTypeName], [Quantity], [Image] FROM [dbo].[CUSTOMTOURREQUEST] ";
                 if (fullName != null && !fullName.isEmpty()) {
                     sql += " WHERE [FullName] LIKE ?";
@@ -158,15 +158,11 @@ public class CustomTourDAO implements Serializable {
                         Date endDate = rs.getDate("EndDate");
                         double quotationPrice = rs.getDouble("QuotationPrice");
                         String status = rs.getString("Status");
+                        String managerApprovalStatus = rs.getString("ManagerApprovalStatus");
                         String departureLocation = rs.getString("DepartureLocation");
                         String image = rs.getString("Image");
 
-                        CustomTourDTO customTourDTO = new CustomTourDTO(
-                                requestID, customerID, quotationPrice, custName,
-                                farmName, koiTypeName, duration, quantity,
-                                startDate, endDate, status, departureLocation, image
-                        );
-
+                        CustomTourDTO customTourDTO = new CustomTourDTO(requestID, customerID, custName, farmName, koiTypeName, duration, quotationPrice, quantity, startDate, endDate, status, managerApprovalStatus, departureLocation, image);
                         list.add(customTourDTO);
                     }
                 }
@@ -187,15 +183,15 @@ public class CustomTourDAO implements Serializable {
         return list;
     }
 
-//    public static void main(String[] args) throws SQLException, ClassNotFoundException {
-//        String fullName = "";
-//        CustomTourDAO dao = new CustomTourDAO();
-//        ArrayList<CustomTourDTO> list = dao.getListCustomTour(fullName);
-//        for (CustomTourDTO customTourDTO : list) {
-//            if (customTourDTO != null) {
-//                System.out.println(customTourDTO);
-//            }
-//        }
-//    }
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        String fullName = "";
+        CustomTourDAO dao = new CustomTourDAO();
+        ArrayList<CustomTourDTO> list = dao.getListCustomTour(fullName);
+        for (CustomTourDTO customTourDTO : list) {
+            if (customTourDTO != null) {
+                System.out.println(customTourDTO);
+            }
+        }
+    }
 
 }

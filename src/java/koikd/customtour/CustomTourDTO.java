@@ -48,24 +48,6 @@ public class CustomTourDTO implements Serializable{
         this.image = image;
     } 
     
-    //Constructor for Sales
-    public CustomTourDTO(int requestID, int customerID, double quotationPrice, String custName, String farmName, String koiTypeName, String duration, int quantity, Date startDate, Date endDate, String status, String departureLocation, String image) {
-        this.requestID = requestID;
-        this.customerID = customerID;
-        this.custName = custName;
-        this.farmName = farmName;
-        this.koiTypeName = koiTypeName;
-        this.duration = duration;
-        this.quantity = quantity;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.status = status;
-        this.departureLocation = departureLocation;
-        this.image = image;
-        this.quotationPrice = quotationPrice;
-    }
-    
-
     public int getCustomerID() {
         return customerID;
     }
