@@ -51,12 +51,10 @@ public class UpdateQuotationPriceAndStatusBySalesController extends HttpServlet 
                 session.setAttribute("UPDATE_SUCCESS", "Successfully updated quotation price and status.");
             } else {
                 request.setAttribute("ERROR", "Failed to update quotation price or status.");
-                url = "errorPage.jsp";
             }
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("ERROR", "An error occurred: " + e.getMessage());
-            url = "errorPage.jsp";
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
