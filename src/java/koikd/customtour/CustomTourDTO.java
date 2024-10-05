@@ -18,7 +18,7 @@ public class CustomTourDTO implements Serializable{
     private String farmName;
     private String koiTypeName;
     private String duration;
-    private String quotationPrice;
+    private double quotationPrice;
     private int quantity;
     private Date startDate;
     private Date endDate;
@@ -30,7 +30,8 @@ public class CustomTourDTO implements Serializable{
     public CustomTourDTO() {
     }
 
-    public CustomTourDTO(int requestID, int customerID, String custName, String farmName, String koiTypeName, String duration, String quotationPrice, int quantity, Date startDate, Date endDate, String status, String managerApprovalStatus, String departureLocation, String image) {
+    // Constructor for Customer
+    public CustomTourDTO(int requestID, int customerID, String custName, String farmName, String koiTypeName, String duration, double quotationPrice, int quantity, Date startDate, Date endDate, String status, String managerApprovalStatus, String departureLocation, String image) {
         this.requestID = requestID;
         this.customerID = customerID;
         this.custName = custName;
@@ -45,7 +46,25 @@ public class CustomTourDTO implements Serializable{
         this.managerApprovalStatus = managerApprovalStatus;
         this.departureLocation = departureLocation;
         this.image = image;
-    }       
+    } 
+    
+    //Constructor for Sales
+    public CustomTourDTO(int requestID, int customerID, double quotationPrice, String custName, String farmName, String koiTypeName, String duration, int quantity, Date startDate, Date endDate, String status, String departureLocation, String image) {
+        this.requestID = requestID;
+        this.customerID = customerID;
+        this.custName = custName;
+        this.farmName = farmName;
+        this.koiTypeName = koiTypeName;
+        this.duration = duration;
+        this.quantity = quantity;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.departureLocation = departureLocation;
+        this.image = image;
+        this.quotationPrice = quotationPrice;
+    }
+    
 
     public int getCustomerID() {
         return customerID;
@@ -103,11 +122,11 @@ public class CustomTourDTO implements Serializable{
         this.duration = duration;
     }
 
-    public String getQuotationPrice() {
+    public double getQuotationPrice() {
         return quotationPrice;
     }
 
-    public void setQuotationPrice(String quotationPrice) {
+    public void setQuotationPrice(double quotationPrice) {
         this.quotationPrice = quotationPrice;
     }
 
@@ -161,7 +180,6 @@ public class CustomTourDTO implements Serializable{
 
     @Override
     public String toString() {
-        return "CustomTourDTO{" + "requestID=" + requestID + ", farmName=" + farmName + ", koiTypeName=" + koiTypeName + ", duration=" + duration + ", quotationPrice=" + quotationPrice + ", quantity=" + quantity + ", startDate=" + startDate + ", endDate=" + endDate + ", status=" + status + ", managerApprovalStatus=" + managerApprovalStatus + ", departureLocation=" + departureLocation + '}';
+        return "CustomTourDTO{" + "requestID=" + requestID + ", customerID=" + customerID + ", custName=" + custName + ", farmName=" + farmName + ", koiTypeName=" + koiTypeName + ", duration=" + duration + ", quotationPrice=" + quotationPrice + ", quantity=" + quantity + ", startDate=" + startDate + ", endDate=" + endDate + ", status=" + status + ", managerApprovalStatus=" + managerApprovalStatus + ", departureLocation=" + departureLocation + ", image=" + image + '}';
     }
-    
 }

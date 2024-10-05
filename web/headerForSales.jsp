@@ -1,6 +1,6 @@
 <%-- 
-    Document   : headerForSales
-    Created on : Sep 29, 2024, 9:30:06 PM
+    Document   : headerForDelivery
+    Created on : Sep 21, 2024, 2:43:06 PM
     Author     : ADMIN LAM
 --%>
 
@@ -17,39 +17,37 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <link rel="stylesheet" href="css/headerForDelivery.css">
-        <title>Header</title>
+        <title>Header For SALES</title>
     </head>
-    <body>   
-        <div class="main-content">           
-            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -52px; padding-top: 11px;">
-
-                <a href="home?action=Delivery" style="margin-left: 116px">
+    <body>  
+        <!-- Search -->
+        <div class="navbar-header">           
+            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -80px; padding-top: 32.7px">
+                <a href="home?action=Sales" style="margin-left: 116px">
                     <img src="img/logo.png" class="main-icon" >
                 </a>
 
 
                 <div class="menu-center">
                     <ul class="nav justify-content-center">
-                        <form action="GetKoiOrder" method="get" class="search--box"> 
-                            <input type="text" name="txtNameCustomer" placeholder="Search name customer" style=" border: none;"/>
-                            <button type="submit" style="border: none; border-radius: 4px; padding-left: 49px;">  <i class="fa-solid fa-search"></i> </button>
+                        <form action="list-customTour" method="get" class="search--box"> 
+                            <input oninput="searchByName(this)" type="text" name="txtNameCustomer" placeholder="Search name customer" style=" border: none;"/>
+                            <button type="submit" style="border: none; border-radius: 4px;">  <i class="fa-solid fa-search"></i> </button>
                         </form>
                     </ul>
                 </div>
             </div>
         </div>
-
-
-
+        <!-- Menu -->
         <div class="sidebar" style="margin-top: -468px; padding-top: 11px;">
             <c:choose>
                 <c:when test="${sessionScope.LOGIN_SALES != null}">
                     <ul class="menu">
                         <div class="user-frame">
                             <li class="user-info">
-                                <div class="user-details">   
-                                    <div>
-                                        <span class="user-name">
+                                <div class="user-details">      
+                                    <div style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <span class="user-name" \>
                                             ${sessionScope.LOGIN_SALES.firstName} ${sessionScope.LOGIN_SALES.lastName}
                                         </span><br>
                                         <span class="user-role">${sessionScope.LOGIN_SALES.role}</span>
@@ -59,7 +57,7 @@
                             </li>
                         </div>
                         <li class="menu-item">
-                            <a href="#" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Ship History</a>
+                            <a href="list-customTour" style="color: black"><i style='font-size:24px' class='fas'><i class="fas fa-suitcase"></i></i>Custom Tour</a>
                         </li>
                         <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
                                 <i style='font-size:24px' class='fas'>&#xf406;</i>Profile</a></li>
@@ -75,8 +73,7 @@
                 </c:otherwise>
             </c:choose>
         </div>
-
-
+        <!-- Modal for update information -->
         <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -138,52 +135,59 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>   
         <script src="js/headerForDelivery.js"></script>
 
-
-
-
         <script>
-                                    function previewAvatar() {
-                                        const file = document.getElementById('avatar').files[0];
-                                        const preview = document.getElementById('avatarPreview');
-                                        const reader = new FileReader();
-
-                                        reader.onloadend = function () {
-                                            preview.src = reader.result;
-                                        };
-
-                                        if (file) {
-                                            reader.readAsDataURL(file);
-                                        } else {
-                                            preview.src = "";
-                                        }
-                                    }
-
-
-
 
                                     document.querySelector('.toggle-btn').addEventListener('click', function () {
                                         const sidebar = document.querySelector('.sidebar');
-                                        const main = document.querySelector('.main');
+                                        const mainFrame = document.querySelector('.main-frame');
                                         const mainContent = document.querySelector('.main-content');
-                                        const logo = document.querySelector('.main-icon');
 
                                         sidebar.classList.toggle('collapsed');
 
                                         if (sidebar.classList.contains('collapsed')) {
-                                            main.style.marginLeft = '60px';
-                                            mainContent.style.marginLeft = '-80px';
+                                            mainFrame.style.marginLeft = '-10%';
+                                            mainContent.style.marginLeft = '10%';
                                         } else {
-                                            main.style.marginLeft = '223px';
-                                            mainContent.style.marginLeft = '0px';
+                                            mainFrame.style.marginLeft = '-5.2%'; // Reset the content frame
+                                            mainContent.style.marginLeft = '17%'; // Adjust the main content
                                         }
                                     });
+
+                                    function searchByName(param) {
+                                        var txtSearch = param.value;
+                                        $.ajax({
+                                            url: "/KoiKingdom/GetKoiOrderByAjax",
+                                            type: "GET",
+                                            data: {
+                                                txtNameCustomer: txtSearch
+                                            },
+                                            success: function (data) {
+                                                var row = document.getElementById("content");
+                                                row.innerHTML = data;
+
+                                                // Re-attach the click event to handle "Detail" button clicks
+                                                row.addEventListener("click", function (event) {
+                                                    if (event.target && event.target.classList.contains("btn-detail")) {
+                                                        // Prevent the default form submission
+                                                        event.preventDefault();
+                                                        // Find the closest form element and submit it
+                                                        var form = event.target.closest("form");
+                                                        if (form) {
+                                                            form.submit();
+                                                        }
+                                                    }
+                                                });
+                                            },
+                                            error: function (xhr) {
+                                                console.error("Error occurred while fetching data:", xhr);
+                                            }
+                                        });
+                                    }
+
         </script>
-
-
     </body>
-
 
 </html>

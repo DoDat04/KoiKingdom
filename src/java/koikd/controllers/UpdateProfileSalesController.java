@@ -116,7 +116,7 @@ public class UpdateProfileSalesController extends HttpServlet {
                 }
 
                 // Chuyển tiếp đến trang hiển thị thông tin
-                 response.sendRedirect("home?action=Sales");
+                 response.sendRedirect("home?action=updateSalesProfile");
             }
         } catch (SQLException ex) {
             Logger.getLogger(UpdateProfileSalesController.class.getName()).log(Level.SEVERE, null, ex);
