@@ -59,7 +59,7 @@
                         <li class="menu-item">
                             <a href="list-customTour" style="color: black"><i style='font-size:24px' class='fas'><i class="fas fa-suitcase"></i></i>Custom Tour</a>
                         </li>
-                        <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
+                        <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Sales">
                                 <i style='font-size:24px' class='fas'>&#xf406;</i>Profile</a></li>
                         <li class="menu-item">
                             <a href="home?action=Logout" style="color: black"><i style="font-size:24px" class="fa">&#xf08b;</i>Sign out</a>

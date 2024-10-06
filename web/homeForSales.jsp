@@ -16,7 +16,7 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="css/homeForDelivery.css" rel="stylesheet">
         <link href="css/toast.css" rel="stylesheet">
-        <title>Delivery Home</title>
+        <title>Sales Home</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
     </head>
 

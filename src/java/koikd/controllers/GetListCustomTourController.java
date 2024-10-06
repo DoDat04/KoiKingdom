@@ -45,7 +45,6 @@ public class GetListCustomTourController extends HttpServlet {
 
         String fullName = request.getParameter("txtFullName"); 
         CustomTourDAO services = new CustomTourDAO();
-
         try {
             ArrayList<CustomTourDTO> dtoList = services.getListCustomTour(fullName);
             HttpSession session = request.getSession();
@@ -60,7 +59,7 @@ public class GetListCustomTourController extends HttpServlet {
             request.setAttribute("ERROR_MESSAGE", "An error occurred while processing your request. Please try again.");
         }
 
-        response.sendRedirect(url);
+        request.getRequestDispatcher(url).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
