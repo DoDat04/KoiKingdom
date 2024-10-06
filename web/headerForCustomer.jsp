@@ -121,168 +121,167 @@
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
                                         <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
                                         <li><a class="dropdown-item" href="MyOrder?customerID=${sessionScope.LOGIN_USER.customerID}"><i class="fa fa-history"></i> My Order KOI</a></li>
-                                        <li><a class="dropdown-item" href="get-booking?customerID=${sessionScope.LOGIN_USER.customerID}"><i class="fa fa-history"></i> My Order <Booking/a></li>
-                                        <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
-                                        </c:when>
-                                        <c:otherwise>                                       
-                                        <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
-                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
-                                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
-                                        <li>
-                                            <a class="dropdown-item" href="MyOrder?customerID=${sessionScope.custID}">
-                                                <i class="fa fa-history"></i> My Order KOI
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="get-booking?customerID=${sessionScope.custID}">
-                                                <i class="fa fa-history"></i> My Order Booking
-                                            </a>
-                                        </li>
+                                        <li><a class="dropdown-item" href="get-booking?customerID=${sessionScope.LOGIN_USER.customerID}"><i class="fa fa-history"></i> My Order Booking </a></li>
+                                                    <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
+                                                    </c:when>
+                                                    <c:otherwise>                                       
+                                                    <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
+                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="MyOrder?customerID=${sessionScope.custID}">
+                                                            <i class="fa fa-history"></i> My Order KOI
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="get-booking?customerID=${sessionScope.custID}">
+                                                            <i class="fa fa-history"></i> My Order Booking
+                                                        </a>
+                                                    </li>
 
-                                        <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
-                                        </c:otherwise>
-                                    </c:choose>
-                            </ul>
-                        </div>                       
+                                                    <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </ul>
+                                            </div>                       
 
-                        <!-- Update Profile Modal -->
-                        <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="updateProfileModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="updateProfileModalLabel">Update Profile</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="UpdateProfileController" method="post" enctype="multipart/form-data">
-                                            <!-- Avatar Section -->
-                                            <div class="text-center mb-4">
-                                                <div class="avatar-container">
-                                                    <img id="avatarPreview" 
-                                                         src="${sessionScope.AVATAR}" 
-                                                         alt="">
+                                            <!-- Update Profile Modal -->
+                                            <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="updateProfileModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="updateProfileModalLabel">Update Profile</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="UpdateProfileController" method="post" enctype="multipart/form-data">
+                                                                <!-- Avatar Section -->
+                                                                <div class="text-center mb-4">
+                                                                    <div class="avatar-container">
+                                                                        <img id="avatarPreview" 
+                                                                             src="${sessionScope.AVATAR}" 
+                                                                             alt="">
+                                                                    </div>
+                                                                    <input type="file" id="avatar" name="profileImage" class="form-control mt-2" accept="image/*" onchange="previewAvatar()">
+                                                                </div>
+
+                                                                <div class="mb-3">
+                                                                    <label for="email" class="form-label">Email:</label>
+                                                                    <input type="email" class="form-control" id="email" name="email" 
+                                                                           value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.LOGIN_GMAIL.email : sessionScope.LOGIN_USER.email}">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="firstName" class="form-label">First Name:</label>
+                                                                    <input type="text" class="form-control" id="firstName" name="firstName" 
+                                                                           value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.firstName : sessionScope.LOGIN_USER.firstName}">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="lastName" class="form-label">Last Name:</label>
+                                                                    <input type="text" class="form-control" id="lastName" name="lastName" 
+                                                                           value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.lastName : sessionScope.LOGIN_USER.lastName}">
+                                                                </div>                                           
+                                                                <div class="mb-3">
+                                                                    <label for="address" class="form-label">Default Address:</label>
+                                                                    <div class="d-flex align-items-center">
+                                                                        <input type="text" class="form-control" id="address" name="address" placeholder="Your address will appear here"
+                                                                               value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.address : sessionScope.LOGIN_USER.address}" readonly="">
+                                                                        <button class="btn btn-outline-secondary ms-2" type="button" id="editAddressBtn">
+                                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="mb-3" id="homeAddressDiv" style="display: none;">
+                                                                    <label for="homeAddress" class="form-label">Home Address:</label>
+                                                                    <input type="text" class="form-control" id="homeAddress" name="homeAddress" placeholder="Số nhà, tên đường">
+                                                                </div>
+
+                                                                <div class="mb-3 select-group" id="addressSelectDiv" style="display: none;">
+                                                                    <div class="select-container">
+                                                                        <select id="city" name="city">
+                                                                            <option value="">Select province</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="select-container">
+                                                                        <select id="district" name="district">
+                                                                            <option value="">Select district</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="select-container">
+                                                                        <select id="ward" name="ward">
+                                                                            <option value="">Select ward</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-center">
+                                                                    <button type="submit" class="btn btn-primary" name="action">Update</button>
+                                                                </div>
+                                                                <script src="js/address.js"></script>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <input type="file" id="avatar" name="profileImage" class="form-control mt-2" accept="image/*" onchange="previewAvatar()">
                                             </div>
 
-                                            <div class="mb-3">
-                                                <label for="email" class="form-label">Email:</label>
-                                                <input type="email" class="form-control" id="email" name="email" 
-                                                       value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.LOGIN_GMAIL.email : sessionScope.LOGIN_USER.email}">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="firstName" class="form-label">First Name:</label>
-                                                <input type="text" class="form-control" id="firstName" name="firstName" 
-                                                       value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.firstName : sessionScope.LOGIN_USER.firstName}">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="lastName" class="form-label">Last Name:</label>
-                                                <input type="text" class="form-control" id="lastName" name="lastName" 
-                                                       value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.lastName : sessionScope.LOGIN_USER.lastName}">
-                                            </div>                                           
-                                            <div class="mb-3">
-                                                <label for="address" class="form-label">Default Address:</label>
-                                                <div class="d-flex align-items-center">
-                                                    <input type="text" class="form-control" id="address" name="address" placeholder="Your address will appear here"
-                                                           value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.address : sessionScope.LOGIN_USER.address}" readonly="">
-                                                    <button class="btn btn-outline-secondary ms-2" type="button" id="editAddressBtn">
-                                                        <i class="fa-solid fa-pen-to-square"></i>
-                                                    </button>
+                                            <!-- Modal for Changing Password -->
+                                            <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="ChangePasswordController" method="post">
+                                                                <!-- Old Password Field -->
+                                                                <div class="mb-3">
+                                                                    <label for="oldPassword" class="form-label">Old Password:</label>
+                                                                    <input type="password" class="form-control" id="oldPassword" name="oldPassword" placeholder="Enter your old password" required>
+                                                                </div>
+
+                                                                <!-- New Password Field -->
+                                                                <div class="mb-3">
+                                                                    <label for="newPassword" class="form-label">New Password:</label>
+                                                                    <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Enter your new password" required>
+                                                                </div>
+
+                                                                <!-- Confirm New Password Field (Optional) -->
+                                                                <div class="mb-3">
+                                                                    <label for="confirmPassword" class="form-label">Confirm New Password:</label>
+                                                                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your new password" required>
+                                                                </div>
+
+                                                                <!-- Submit Button -->
+                                                                <div class="text-center">
+                                                                    <button type="submit" class="btn btn-primary">Update Password</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-
-                                            <div class="mb-3" id="homeAddressDiv" style="display: none;">
-                                                <label for="homeAddress" class="form-label">Home Address:</label>
-                                                <input type="text" class="form-control" id="homeAddress" name="homeAddress" placeholder="Số nhà, tên đường">
                                             </div>
-
-                                            <div class="mb-3 select-group" id="addressSelectDiv" style="display: none;">
-                                                <div class="select-container">
-                                                    <select id="city" name="city">
-                                                        <option value="">Select province</option>
-                                                    </select>
-                                                </div>
-                                                <div class="select-container">
-                                                    <select id="district" name="district">
-                                                        <option value="">Select district</option>
-                                                    </select>
-                                                </div>
-                                                <div class="select-container">
-                                                    <select id="ward" name="ward">
-                                                        <option value="">Select ward</option>
-                                                    </select>
-                                                </div>
                                             </div>
-                                            <div class="text-center">
-                                                <button type="submit" class="btn btn-primary" name="action">Update</button>
                                             </div>
-                                            <script src="js/address.js"></script>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                            </header>
 
-                        <!-- Modal for Changing Password -->
-                        <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="ChangePasswordController" method="post">
-                                            <!-- Old Password Field -->
-                                            <div class="mb-3">
-                                                <label for="oldPassword" class="form-label">Old Password:</label>
-                                                <input type="password" class="form-control" id="oldPassword" name="oldPassword" placeholder="Enter your old password" required>
-                                            </div>
+                                            <script>
+                                                                        function previewAvatar() {
+                                                                            const file = document.getElementById('avatar').files[0];
+                                                                            const preview = document.getElementById('avatarPreview');
+                                                                            const reader = new FileReader();
 
-                                            <!-- New Password Field -->
-                                            <div class="mb-3">
-                                                <label for="newPassword" class="form-label">New Password:</label>
-                                                <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Enter your new password" required>
-                                            </div>
+                                                                            reader.onloadend = function () {
+                                                                                preview.src = reader.result;
+                                                                            };
 
-                                            <!-- Confirm New Password Field (Optional) -->
-                                            <div class="mb-3">
-                                                <label for="confirmPassword" class="form-label">Confirm New Password:</label>
-                                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your new password" required>
-                                            </div>
-
-                                            <!-- Submit Button -->
-                                            <div class="text-center">
-                                                <button type="submit" class="btn btn-primary">Update Password</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <script>
-                                                    function previewAvatar() {
-                                                        const file = document.getElementById('avatar').files[0];
-                                                        const preview = document.getElementById('avatarPreview');
-                                                        const reader = new FileReader();
-
-                                                        reader.onloadend = function () {
-                                                            preview.src = reader.result;
-                                                        };
-
-                                                        if (file) {
-                                                            reader.readAsDataURL(file);
-                                                        } else {
-                                                            preview.src = "";
-                                                        }
-                                                    }
-        </script>
-        <script src="js/load.js"></script>
-    </body>
-</html>
-
+                                                                            if (file) {
+                                                                                reader.readAsDataURL(file);
+                                                                            } else {
+                                                                                preview.src = "";
+                                                                            }
+                                                                        }
+                                            </script>
+                                            <script src="js/load.js"></script>
+                                            </body>
+                                            </html>

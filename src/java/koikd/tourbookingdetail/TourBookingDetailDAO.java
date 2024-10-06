@@ -10,7 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import koikd.tour.TourDTO;
 import koikd.utils.DBUtils;
+import java.sql.Timestamp;
 
 /**
  *
@@ -54,10 +56,10 @@ public class TourBookingDetailDAO implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param custID
      * @return tour booking bill.
-     * @throws SQLException 
+     * @throws SQLException
      */
     public TourBookingDetailDTO getTourBookingDetailByCustomerID(int custID) throws SQLException {
         Connection conn = null;
@@ -111,7 +113,6 @@ public class TourBookingDetailDAO implements Serializable {
 //            System.out.println(dto);
 //        }
 //    }
-
     public ArrayList<TourBookingDetailDTO> getTourBookingDetailListByCustomerID(int custID) throws SQLException {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -156,4 +157,48 @@ public class TourBookingDetailDAO implements Serializable {
         return list;
     }
 
+    public TourDTO getTourByID(int tourID) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        TourDTO result = null;
+        try {
+            conn = DBUtils.getConnection(); // Ensure connection is retrieved properly.
+
+            if (conn != null) {
+                String sql = "SELECT [TourID], [TourName], [Duration], [Description], [TourPrice], [StartDate], [EndDate], [Image], [Status], [DepartureLocation]\n"
+                        + "FROM [dbo].[TOUR]\n"
+                        + "WHERE [TourID] = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, tourID);
+                rs = pst.executeQuery();
+                if (rs.next()) {
+                    String tourName = rs.getString("TourName");
+                    String tourDuration = rs.getString("Duration");
+                    String tourDescription = rs.getString("Description");
+                    double tourPrice = rs.getDouble("TourPrice");
+                    Timestamp startDate = rs.getTimestamp("StartDate");
+                    Timestamp endDate = rs.getTimestamp("EndDate");
+                    String tourImage = rs.getString("Image");
+                    String departureLocation = rs.getString("DepartureLocation");
+
+                    // Create the TourDTO object with retrieved data
+                    result = new TourDTO(tourID, tourName, tourDuration, tourDescription, tourPrice, startDate, endDate, tourImage, true, tourDuration);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return result;
+    }
 }

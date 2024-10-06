@@ -30,7 +30,9 @@ import koikd.tourbookingdetail.TourBookingDetailDTO;
  */
 @WebServlet(name = "GetBookingController", urlPatterns = {"/get-booking"})
 public class GetBookingController extends HttpServlet {
-private static final String ORDERBOOKING_PAGE = "myOrderBooking.jsp" ;
+
+    private static final String ORDERBOOKING_PAGE = "myOrderBooking.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -43,27 +45,35 @@ private static final String ORDERBOOKING_PAGE = "myOrderBooking.jsp" ;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         String url = ORDERBOOKING_PAGE;
+
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            int customerID = Integer.parseInt(request.getParameter("customerID"));
+            String url = ORDERBOOKING_PAGE;
+            String customerID = request.getParameter("customerID");
             TourBookingDetailDAO bookingDetailDao = new TourBookingDetailDAO();
             TourDAO tourDAO = new TourDAO();
             CustomerDAO customerDAO = new CustomerDAO();
-            ArrayList<TourBookingDetailDTO> orders = bookingDetailDao.getTourBookingDetailListByCustomerID(customerID);
+      
+            ArrayList<TourBookingDetailDTO> orders = bookingDetailDao.getTourBookingDetailListByCustomerID(Integer.parseInt(customerID));
             ArrayList<TourDTO> tourList = new ArrayList<>();
             ArrayList<CustomerDTO> customerList = new ArrayList<>();
+            TourDTO tour = new TourDTO();
+            CustomerDTO customer = new CustomerDTO();
             if (orders != null && !orders.isEmpty()) {
                 for (TourBookingDetailDTO order : orders) {
-                    TourDTO tour = tourDAO.getTourByID(order.getTourID());
+                    tour = bookingDetailDao.getTourByID(order.getTourID());
                     if (tour != null) {
                         tourList.add(tour);
                     }
-                    CustomerDTO customer = customerDAO.getCustomerByCustomerID(order.getCustomerID());
+                    customer = customerDAO.getCustomerByCustomerID(order.getCustomerID());
                     if (customer != null) {
                         customerList.add(customer);
                     }
                 }
+
+                request.setAttribute("customer", customer);
+                request.setAttribute("tour", tour);
+
                 request.setAttribute("customers", customerList);
                 request.setAttribute("tours", tourList);
                 request.setAttribute("orders", orders);
@@ -74,8 +84,6 @@ private static final String ORDERBOOKING_PAGE = "myOrderBooking.jsp" ;
             request.getRequestDispatcher(url).forward(request, response);
 
         } catch (SQLException ex) {
-            Logger.getLogger(GetBookingController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
             Logger.getLogger(GetBookingController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
