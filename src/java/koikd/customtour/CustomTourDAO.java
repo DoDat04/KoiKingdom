@@ -132,8 +132,8 @@ public class CustomTourDAO implements Serializable {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 String sql = "SELECT [RequestID], [CustomerID], [FullName], [Duration], [StartDate], "
-                        + "[EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], "
-                        + "[KoiTypeName], [Quantity], [Image] FROM [dbo].[CUSTOMTOURREQUEST] ";
+                        + "                        [EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], "
+                        + "                        [KoiTypeName], [Quantity], [Image], [DetailRejected],[Checked] FROM [dbo].[CUSTOMTOURREQUEST] ";
                 if (fullName != null && !fullName.isEmpty()) {
                     sql += " WHERE [FullName] LIKE ?";
                 }
@@ -161,8 +161,9 @@ public class CustomTourDAO implements Serializable {
                         String managerApprovalStatus = rs.getString("ManagerApprovalStatus");
                         String departureLocation = rs.getString("DepartureLocation");
                         String image = rs.getString("Image");
-
-                        CustomTourDTO customTourDTO = new CustomTourDTO(requestID, customerID, custName, farmName, koiTypeName, duration, quotationPrice, quantity, startDate, endDate, status, managerApprovalStatus, departureLocation, image);
+                        boolean checked = rs.getBoolean("checked");
+                        String detailRejected = rs.getString("detailRejected");
+                        CustomTourDTO customTourDTO = new CustomTourDTO(requestID, customerID, custName, farmName, koiTypeName, duration, quotationPrice, quantity, startDate, endDate, status, managerApprovalStatus, departureLocation, image, checked, detailRejected);
                         list.add(customTourDTO);
                     }
                 }
@@ -182,13 +183,13 @@ public class CustomTourDAO implements Serializable {
         }
         return list;
     }
-    
+
     public List<CustomTourDTO> getListCustomTour() throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         List<CustomTourDTO> listCustomTour = new ArrayList<>();
-        
+
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
@@ -231,7 +232,7 @@ public class CustomTourDAO implements Serializable {
                 conn.close();
             }
         }
-        
+
         return listCustomTour;
     }
 
@@ -294,13 +295,12 @@ public class CustomTourDAO implements Serializable {
 //            System.out.println("Fail.");
 //        }
 //    }
-    
     /**
-     * 
+     *
      * @param statusSales
      * @param reqID
      * @return status for requestID.
-     * @throws SQLException 
+     * @throws SQLException
      */
     public boolean updateStatusCustomTourBySales(String statusSales, int reqID) throws SQLException {
         Connection conn = null;
@@ -332,7 +332,7 @@ public class CustomTourDAO implements Serializable {
         }
         return rs;
     }
-    
+
 //    public static void main(String[] args) throws SQLException {
 //        int reqID = 1;
 //        String status = "Approved";
@@ -344,4 +344,51 @@ public class CustomTourDAO implements Serializable {
 //            System.out.println("Fail.");
 //        }
 //    }
+    
+    /**
+     * 
+     * @param reqID
+     * @return send data from sales to manager.
+     * @throws SQLException 
+     */
+    public boolean sendDetailCustomTourFromSalesToManager(int reqID) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        boolean rs = false;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "UPDATE [dbo].[CUSTOMTOURREQUEST] "
+                        + " SET [Checked] = 1 "
+                        + " WHERE [RequestID] = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, reqID);
+                int affectedRows = pst.executeUpdate();
+                if(affectedRows>0){
+                    rs = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            if(pst!=null){
+                pst.close();
+            }
+            if(conn!=null){
+                conn.close();
+            }
+        }
+        return rs;
+    }
+    
+    public static void main(String[] args) throws SQLException {
+        int reqID = 2;
+        CustomTourDAO dao = new CustomTourDAO();
+        boolean dto = dao.sendDetailCustomTourFromSalesToManager(reqID);
+        if(dto){
+            System.out.println("Updated.");
+        } else{
+            System.out.println("Fail.");
+        }
+    }
 }

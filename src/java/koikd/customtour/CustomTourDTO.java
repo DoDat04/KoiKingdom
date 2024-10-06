@@ -26,6 +26,8 @@ public class CustomTourDTO implements Serializable{
     private String managerApprovalStatus;
     private String departureLocation;
     private String image;
+    private boolean checked;
+    private String detailRejected;
 
     public CustomTourDTO() {
     }
@@ -47,6 +49,43 @@ public class CustomTourDTO implements Serializable{
         this.departureLocation = departureLocation;
         this.image = image;
     } 
+    
+    //Constructor for Sales, Manager
+    public CustomTourDTO(int requestID, int customerID, String custName, String farmName, String koiTypeName, String duration, double quotationPrice, int quantity, Date startDate, Date endDate, String status, String managerApprovalStatus, String departureLocation, String image, boolean checked, String detailRejected) {
+        this.requestID = requestID;
+        this.customerID = customerID;
+        this.custName = custName;
+        this.farmName = farmName;
+        this.koiTypeName = koiTypeName;
+        this.duration = duration;
+        this.quotationPrice = quotationPrice;
+        this.quantity = quantity;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.managerApprovalStatus = managerApprovalStatus;
+        this.departureLocation = departureLocation;
+        this.image = image;
+        this.checked = checked;
+        this.detailRejected = detailRejected;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    public String getDetailRejected() {
+        return detailRejected;
+    }
+
+    public void setDetailRejected(String detailRejected) {
+        this.detailRejected = detailRejected;
+    }
+    
     
     public int getCustomerID() {
         return customerID;
@@ -162,6 +201,7 @@ public class CustomTourDTO implements Serializable{
 
     @Override
     public String toString() {
-        return "CustomTourDTO{" + "requestID=" + requestID + ", customerID=" + customerID + ", custName=" + custName + ", farmName=" + farmName + ", koiTypeName=" + koiTypeName + ", duration=" + duration + ", quotationPrice=" + quotationPrice + ", quantity=" + quantity + ", startDate=" + startDate + ", endDate=" + endDate + ", status=" + status + ", managerApprovalStatus=" + managerApprovalStatus + ", departureLocation=" + departureLocation + ", image=" + image + '}';
+        return "CustomTourDTO{" + "requestID=" + requestID + ", customerID=" + customerID + ", custName=" + custName + ", farmName=" + farmName + ", koiTypeName=" + koiTypeName + ", duration=" + duration + ", quotationPrice=" + quotationPrice + ", quantity=" + quantity + ", startDate=" + startDate + ", endDate=" + endDate + ", status=" + status + ", managerApprovalStatus=" + managerApprovalStatus + ", departureLocation=" + departureLocation + ", image=" + image + ", checked=" + checked + ", detailRejected=" + detailRejected + '}';
     }
+
 }

@@ -5,23 +5,25 @@
 package koikd.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import koikd.customtour.CustomTourDAO;
 
 /**
  *
  * @author ADMIN LAM
  */
-@WebServlet(name = "UpdateQuotationPriceBySalesController", urlPatterns = {"/update-price"})
-public class UpdateQuotationPriceAndStatusBySalesController extends HttpServlet {
-
-    private static final String UPDATE_PAGE = "getCustomTour.jsp";
-
+@WebServlet(name = "SendCustomTourFromSalesToManagerController", urlPatterns = {"/sales-to-manager"})
+public class SendCustomTourFromSalesToManagerController extends HttpServlet {
+    private static final String SEND_DATA = "getCustomTour.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -31,32 +33,21 @@ public class UpdateQuotationPriceAndStatusBySalesController extends HttpServlet 
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = UPDATE_PAGE;
-        int reqID = Integer.parseInt(request.getParameter("txtReq"));
-        double quoPrice = Double.parseDouble(request.getParameter("txtQuoPrice"));
-
-        try {
-            CustomTourDAO dao = new CustomTourDAO();
-
-            boolean priceUpdated = dao.updatePriceCustomTourBySales(quoPrice, reqID);
-
-            if (priceUpdated) {
-                HttpSession session = request.getSession();
-                session.setAttribute("CUSTOM_LIST", dao.getListCustomTour());
-                session.setAttribute("UPDATE_SUCCESS", "Successfully updated quotation price.");
-            } else {
-                request.setAttribute("ERROR", "Failed to update quotation price or status.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("ERROR", "An error occurred: " + e.getMessage());
-        } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+        String url = SEND_DATA;
+        
+        int reqID = Integer.parseInt(request.getParameter("txtReqID"));
+        CustomTourDAO dao = new CustomTourDAO();
+        boolean isSend = dao.sendDetailCustomTourFromSalesToManager(reqID);
+        if(isSend){
+            HttpSession session = request.getSession();
+            session.setAttribute("SEND_SUCCESS", "Send to Manager successfully.");
+        } else{
+            request.setAttribute("SEND_ERROR", "Cannot send data for some reason!");
         }
+        request.getRequestDispatcher(url).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -71,7 +62,11 @@ public class UpdateQuotationPriceAndStatusBySalesController extends HttpServlet 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(SendCustomTourFromSalesToManagerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -85,7 +80,11 @@ public class UpdateQuotationPriceAndStatusBySalesController extends HttpServlet 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(SendCustomTourFromSalesToManagerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

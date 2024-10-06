@@ -41,6 +41,7 @@
                         <th>Departure Location</th>
                         <th>Farm Name</th>
                         <th>KoiType Name</th>
+                        <th>Detail Rejected</th>
                         <th>Quantity</th>
                         <th>Quotation Price</th>
                         <th>Image</th>
@@ -67,6 +68,7 @@
                                     <td>${custom.departureLocation}</td>
                                     <td>${custom.farmName}</td>
                                     <td>${custom.koiTypeName}</td>
+                                    <td>${custom.detailRejected}</td>
                                     <td>${custom.quantity}</td>
                                     <td><fmt:formatNumber value="${custom.quotationPrice}" type="currency" currencySymbol="$" /></td>
                                     <td><img src="${custom.image}" class="custom-tour" alt="" style="height: 100px; width: 150px; border-radius: 10px;"/></td>
@@ -98,19 +100,19 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form id="updateForm${custom.requestID}" method="post" action="update-price-status">
+                                            <form id="updateForm${custom.requestID}" method="post" action="update-price">
                                                 <div class="mb-3">
                                                     <label for="quotationPrice${custom.requestID}" class="form-label">Quotation Price</label>
                                                     <input type="number" step="0.01" class="form-control" id="quotationPrice${custom.requestID}" name="txtQuoPrice" placeholder="Enter new quotation price" required>
                                                 </div>
-                                                <div class="mb-3">
-                                                    <label for="status${custom.requestID}" class="form-label">Status</label>
-                                                    <select class="form-control" id="status${custom.requestID}" name="txtStatus" required>
-                                                        <option value="Pending">Pending</option>
-                                                        <option value="Approved">Approved</option>
-                                                        <option value="Rejected">Rejected</option>
-                                                    </select>
-                                                </div>
+                                                <!--                                                <div class="mb-3">
+                                                                                                    <label for="status${custom.requestID}" class="form-label">Status</label>
+                                                                                                    <select class="form-control" id="status${custom.requestID}" name="txtStatus" required>
+                                                                                                        <option value="Pending">Pending</option>
+                                                                                                        <option value="Approved">Approved</option>
+                                                                                                        <option value="Rejected">Rejected</option>
+                                                                                                    </select>
+                                                                                                </div>-->
                                                 <!-- Hidden input to pass the request ID -->
                                                 <input type="hidden" name="txtReq" value="${custom.requestID}">
                                             </form>
@@ -135,7 +137,10 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                            <button type="button" class="btn btn-primary">Yes</button>
+                                            <form action="sales-to-manager" method="POST">
+                                                <input type="hidden" name="txtReqID" value="${custom.requestID}">
+                                                <button type="submit" class="btn btn-primary">Yes</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -172,6 +177,15 @@
                 };
             </script>
             <c:set var="UPDATE_SUCCESS" value="${null}" scope="session"/>
+        </c:if>
+
+        <c:if test="${not empty sessionScope.SEND_SUCCESS}">
+            <script>
+                window.onload = function () {
+                    showToast('${sessionScope.SEND_SUCCESS}', 'success');
+                };
+            </script>
+            <c:set var="SEND_SUCCESS" value="${null}" scope="session"/>
         </c:if>
 
         <div id="toastBox"></div>
