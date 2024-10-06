@@ -23,7 +23,7 @@
     </head>
     <body>   
         
-<!--        <div class="navbar-header">           
+        <div class="navbar-header">           
             <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -80px; padding-top: 32.7px">
                 <a href="home?action=Delivery" style="margin-left: 116px">
                     <img src="img/logo.png" class="main-icon" >
@@ -39,7 +39,7 @@
                     </ul>
                 </div>
             </div>
-        </div>-->
+        </div>
 
 
 
