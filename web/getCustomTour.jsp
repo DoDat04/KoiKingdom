@@ -70,13 +70,23 @@
                                     <td><fmt:formatNumber value="${custom.quotationPrice}" type="currency" currencySymbol="$" /></td>
                                     <td><img src="${custom.image}" class="custom-tour" alt="" style="height: 100px; width: 150px; border-radius: 10px;"/></td>
                                     <td>
-                                        <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#updateModal${custom.requestID}">
-                                            Update
-                                        </button>
+                                        <c:choose>
+                                            <c:when test="${custom.status != 'Approved' && custom.status != 'Rejected'}">
+                                                <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#updateModal${custom.requestID}">
+                                                    Update
+                                                </button>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <button type="button" class="btn btn-secondary mb-2" disabled>
+                                                    Locked
+                                                </button>
+                                            </c:otherwise>
+                                        </c:choose>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#sendModal${custom.requestID}">
                                             Send
                                         </button>
                                     </td>
+
 
                                     <!-- Modal -->
                             <div class="modal fade" id="updateModal${custom.requestID}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel${custom.requestID}" aria-hidden="true">
