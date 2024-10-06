@@ -16,7 +16,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <link rel="stylesheet" href="css/headerForDelivery.css">
+        <link rel="stylesheet" href="css/headerForSales.css">
         <title>Header For SALES</title>
     </head>
     <body>  
@@ -31,7 +31,7 @@
                 <div class="menu-center">
                     <ul class="nav justify-content-center">
                         <form action="list-customTour" method="get" class="search--box"> 
-                            <input oninput="searchByName(this)" type="text" name="txtNameCustomer" placeholder="Search name customer" style=" border: none;"/>
+                            <input oninput="searchByName(this)" type="text" name="txtFullName" placeholder="Search name customer" style=" border: none;"/>
                             <button type="submit" style="border: none; border-radius: 4px;">  <i class="fa-solid fa-search"></i> </button>
                         </form>
                     </ul>
@@ -159,10 +159,10 @@
                                     function searchByName(param) {
                                         var txtSearch = param.value;
                                         $.ajax({
-                                            url: "/KoiKingdom/GetKoiOrderByAjax",
+                                            url: "/KoiKingdom/GetCustomTourByAjaxController",
                                             type: "GET",
                                             data: {
-                                                txtNameCustomer: txtSearch
+                                                txtFullName: txtSearch
                                             },
                                             success: function (data) {
                                                 var row = document.getElementById("content");
