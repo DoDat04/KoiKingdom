@@ -16,9 +16,9 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author ADMIN LAM
  */
-@WebServlet(name = "ContactController", urlPatterns = {"/ContactController"})
+@WebServlet(name = "ContactController", urlPatterns = {"/contact"})
 public class ContactController extends HttpServlet {
-
+    private static final String CONTACT_PAGE = "contact.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -31,17 +31,11 @@ public class ContactController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ContactController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ContactController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String url = CONTACT_PAGE;
+        try {
+            url = CONTACT_PAGE;
+        } finally {
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

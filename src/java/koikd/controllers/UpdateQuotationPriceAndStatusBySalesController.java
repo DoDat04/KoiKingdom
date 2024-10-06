@@ -48,6 +48,7 @@ public class UpdateQuotationPriceAndStatusBySalesController extends HttpServlet 
 
             if (statusUpdated && priceUpdated) {
                 HttpSession session = request.getSession();
+                session.setAttribute("CUSTOM_LIST", dao.getListCustomTour());
                 session.setAttribute("UPDATE_SUCCESS", "Successfully updated quotation price and status.");
             } else {
                 request.setAttribute("ERROR", "Failed to update quotation price or status.");

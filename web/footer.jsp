@@ -35,10 +35,10 @@
                     <div class="col-md-2">
                         <h6>Categories</h6>
                         <ul class="list-unstyled">
-                            <li><a href="#popularTour">Famous Tours</a></li>
+                            <li><a href="home">Famous Tours</a></li>
                             <li><a href="tour-list">Available Tours</a></li>
                             <li><a href="listfarm">Koi Farms</a></li>
-                            <li><a href="#popularKoi">Popular Koi Breeds</a></li>
+                            <li><a href="home">Popular Koi Breeds</a></li>
                             <li><a href="listkoitype">Koi Species</a></li>
                         </ul>
                     </div>
@@ -81,8 +81,8 @@
                         <ul class="list-unstyled">
                             <li><a href="#">FAQs</a></li>
                             <li><a href="#">Articles</a></li>
-                            <li><a href="#aboutUs">About us</a></li>
-                            <li><a href="#">Contact us</a></li>
+                            <li><a href="service">About us</a></li>
+                            <li><a href="contact">Contact us</a></li>
                             <li><a href="tour-list">Tour price</a></li>
                         </ul>
                     </div>

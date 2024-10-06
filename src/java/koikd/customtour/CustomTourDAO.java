@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import koikd.utils.DBUtils;
 
 /**
@@ -180,6 +181,58 @@ public class CustomTourDAO implements Serializable {
             }
         }
         return list;
+    }
+    
+    public List<CustomTourDTO> getListCustomTour() throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        List<CustomTourDTO> listCustomTour = new ArrayList<>();
+        
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT [RequestID], [CustomerID], [FullName], [Duration], [StartDate], "
+                        + "[EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], "
+                        + "[KoiTypeName], [Quantity], [Image] FROM [dbo].[CUSTOMTOURREQUEST] ";
+                pst = conn.prepareStatement(sql);
+                rs = pst.executeQuery();
+
+                if (rs != null) {
+                    while (rs.next()) {
+                        int requestID = rs.getInt("RequestID");
+                        int customerID = rs.getInt("CustomerID");
+                        String custName = rs.getString("FullName");
+                        String farmName = rs.getString("FarmName");
+                        String koiTypeName = rs.getString("KoiTypeName");
+                        String duration = rs.getString("Duration");
+                        int quantity = rs.getInt("Quantity");
+                        Date startDate = rs.getDate("StartDate");
+                        Date endDate = rs.getDate("EndDate");
+                        double quotationPrice = rs.getDouble("QuotationPrice");
+                        String status = rs.getString("Status");
+                        String managerApprovalStatus = rs.getString("ManagerApprovalStatus");
+                        String departureLocation = rs.getString("DepartureLocation");
+                        String image = rs.getString("Image");
+
+                        CustomTourDTO customTourDTO = new CustomTourDTO(requestID, customerID, custName, farmName, koiTypeName, duration, quotationPrice, quantity, startDate, endDate, status, managerApprovalStatus, departureLocation, image);
+                        listCustomTour.add(customTourDTO);
+                    }
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        
+        return listCustomTour;
     }
 
 //    public static void main(String[] args) throws SQLException, ClassNotFoundException {

@@ -50,6 +50,7 @@ public class GetListCustomTourController extends HttpServlet {
             ArrayList<CustomTourDTO> dtoList = services.getListCustomTour(fullName);
             HttpSession session = request.getSession();
             if (dtoList != null && !dtoList.isEmpty()) {
+                url = CUSTOMTOUR_LIST;
                 session.setAttribute("CUSTOM_LIST", dtoList);
             } else {
                 request.setAttribute("ERROR_MESSAGE", "No customs found.");
@@ -59,7 +60,7 @@ public class GetListCustomTourController extends HttpServlet {
             request.setAttribute("ERROR_MESSAGE", "An error occurred while processing your request. Please try again.");
         }
 
-        request.getRequestDispatcher(url).forward(request, response);
+        response.sendRedirect(url);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
