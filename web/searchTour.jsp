@@ -1,6 +1,6 @@
 <%-- 
-    Document   : manageTour
-    Created on : Sep 26, 2024, 3:25:30 PM
+    Document   : searchTour
+    Created on : Oct 6, 2024, 3:59:26 PM
     Author     : Nguyen Huu Khoan
 --%>
 
@@ -118,7 +118,8 @@
         </style>
     </head>
     <body>
-
+               
+        
         <!-- Menu điều hướng -->
         <!--        <div class="navbar">
                     <a href="home?action=Manager">Home</a>
@@ -128,10 +129,11 @@
                 </div>-->
         <jsp:include page="headerForManager.jsp" flush="true"/>   
         <!-- Nội dung chính -->
+
         <div class="main" style="margin-top: -216px; margin-left: 223px; margin-right: 30px;">       
             <div class="container">
                 <h1>Tour Management</h1>
-                <div class="menu-center">
+                 <div class="menu-center">
                     <ul class="nav justify-content-center">
                         <form action="SearchByTourName" method="get" class="search--box"> 
                             <input  type="text" name="txtNameTour" placeholder="Search name tour" value="<%= request.getParameter("txtNameTour")%>" style=" border: none;"/>
@@ -161,40 +163,40 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="tour" items="${tour}">
+                        <c:forEach var="SEARCH_TOUR" items="${SEARCH_TOUR}">
                             <tr>
-                                <td>${tour.tourID}</td>
-                                <td>${tour.tourName}</td>
-                                <td>${tour.duration}</td>
+                                <td>${SEARCH_TOUR.tourID}</td>
+                                <td>${SEARCH_TOUR.tourName}</td>
+                                <td>${SEARCH_TOUR.duration}</td>
                                 <td>
-                                    <div id="description-${tour.tourID}">
-                                        <span id="shortDesc-${tour.tourID}">
+                                    <div id="description-${SEARCH_TOUR.tourID}">
+                                        <span id="shortDesc-${SEARCH_TOUR.tourID}">
                                             <c:choose>
-                                                <c:when test="${fn:length(tour.description) > 100}">
-                                                    ${fn:substring(tour.description, 0, 100)}...
+                                                <c:when test="${fn:length(SEARCH_TOUR.description) > 100}">
+                                                    ${fn:substring(SEARCH_TOUR.description, 0, 100)}...
                                                 </c:when>
                                                 <c:otherwise>
-                                                    ${tour.description}
+                                                    ${SEARCH_TOUR.description}
                                                 </c:otherwise>
                                             </c:choose>
                                         </span>
-                                        <span id="dots-${tour.tourID}" style="display:none;">...</span>
-                                        <span id="moreDesc-${tour.tourID}" style="display:none;">
-                                            ${tour.description}
+                                        <span id="dots-${SEARCH_TOUR.tourID}" style="display:none;">...</span>
+                                        <span id="moreDesc-${SEARCH_TOUR.tourID}" style="display:none;">
+                                            ${SEARCH_TOUR.description}
                                         </span>
                                     </div>
-                                    <button onclick="toggleDescription(${tour.tourID})" id="toggleBtn-${tour.tourID}">
+                                    <button onclick="toggleDescription(${SEARCH_TOUR.tourID})" id="toggleBtn-${SEARCH_TOUR.tourID}">
                                         Show more
                                     </button>
                                 </td>
-                                <td>${tour.tourPrice}</td>
-                                <td>${tour.startDate}</td>
-                                <td>${tour.endDate}</td>
-                                <td><img src="${tour.tourImage}" alt="tour-image" height="150px" width="250px" style="border-radius: 20px; object-fit: contain" ></td>
-                                
+                                <td>${SEARCH_TOUR.tourPrice}</td>
+                                <td>${SEARCH_TOUR.startDate}</td>
+                                <td>${SEARCH_TOUR.endDate}</td>
+                                <td><img src="${SEARCH_TOUR.tourImage}" alt="tour-image" height="150px" width="250px" style="border-radius: 20px; object-fit: contain" ></td>
+
                                 <td>
                                     <c:choose>
-                                        <c:when test="${tour.status}">
+                                        <c:when test="${SEARCH_TOUR.status}">
                                             <span class="status-active">Active</span>
                                         </c:when>
                                         <c:otherwise>
@@ -202,9 +204,9 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
-                                <td>${tour.tourDepartLoca}</td>
+                                <td>${SEARCH_TOUR.tourDepartLoca}</td>
                                 <td>
-                                    <a href="updateStatusTour?tourID=${tour.tourID}" 
+                                    <a href="updateStatusTour?tourID=${SEARCH_TOUR.tourID}" 
                                        onclick="return confirm('Are you sure you want to change the status?');">
                                         Change Status
                                     </a>
@@ -238,5 +240,5 @@
             }
         }
     </script>
-    </body>
+</body>
 </html>

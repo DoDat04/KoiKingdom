@@ -414,5 +414,49 @@ public class TourDAO implements Serializable {
                 con.close();
             }
         }              
-    }   
+    } 
+    
+    public List<TourDTO> searchTourName(String searchValue) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<TourDTO> result = new ArrayList<>();
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT TourID, TourName, Duration, Description, TourPrice, StartDate, EndDate, Image, Status, DepartureLocation "
+                        + "FROM TOUR "
+                        + "WHERE TourName LIKE ? ";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, "%" + searchValue + "%");
+                rs = stm.executeQuery();
+                while (rs.next()) {
+
+                    int id = rs.getInt("TourID");
+                    String name = rs.getString("TourName");
+                    String duration = rs.getString("Duration");
+                    String description = rs.getString("Description");
+                    double price = rs.getDouble("TourPrice");
+                    Timestamp start = rs.getTimestamp("StartDate");
+                    Timestamp end = rs.getTimestamp("EndDate");
+                    String img = rs.getString("Image");
+                    boolean status = rs.getBoolean("Status");
+                    String loca = rs.getString("DepartureLocation");
+                    TourDTO dto = new TourDTO(id, name, duration, description, price, start, end, img, status, loca);
+                    result.add(dto);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
 }
