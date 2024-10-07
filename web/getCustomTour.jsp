@@ -100,19 +100,19 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form id="updateForm${custom.requestID}" method="post" action="update-price">
+                                            <form id="updateForm${custom.requestID}" method="post" action="update-price-status">
                                                 <div class="mb-3">
                                                     <label for="quotationPrice${custom.requestID}" class="form-label">Quotation Price</label>
                                                     <input type="number" step="0.01" class="form-control" id="quotationPrice${custom.requestID}" name="txtQuoPrice" placeholder="Enter new quotation price" required>
                                                 </div>
-                                                <!--                                                <div class="mb-3">
-                                                                                                    <label for="status${custom.requestID}" class="form-label">Status</label>
-                                                                                                    <select class="form-control" id="status${custom.requestID}" name="txtStatus" required>
-                                                                                                        <option value="Pending">Pending</option>
-                                                                                                        <option value="Approved">Approved</option>
-                                                                                                        <option value="Rejected">Rejected</option>
-                                                                                                    </select>
-                                                                                                </div>-->
+                                                <div class="mb-3">
+                                                    <label for="status${custom.requestID}" class="form-label">Status</label>
+                                                    <select class="form-control" id="status${custom.requestID}" name="txtStatus" required>
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Approved">Approved</option>
+                                                        <option value="Rejected">Rejected</option>
+                                                    </select>
+                                                </div>
                                                 <!-- Hidden input to pass the request ID -->
                                                 <input type="hidden" name="txtReq" value="${custom.requestID}">
                                             </form>

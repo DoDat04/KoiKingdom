@@ -17,7 +17,7 @@ import koikd.customtour.CustomTourDAO;
  *
  * @author ADMIN LAM
  */
-@WebServlet(name = "UpdateQuotationPriceBySalesController", urlPatterns = {"/update-price"})
+@WebServlet(name = "UpdateQuotationPriceBySalesController", urlPatterns = {"/update-price-status"})
 public class UpdateQuotationPriceAndStatusBySalesController extends HttpServlet {
 
     private static final String UPDATE_PAGE = "getCustomTour.jsp";
@@ -37,17 +37,19 @@ public class UpdateQuotationPriceAndStatusBySalesController extends HttpServlet 
         response.setContentType("text/html;charset=UTF-8");
         String url = UPDATE_PAGE;
         int reqID = Integer.parseInt(request.getParameter("txtReq"));
+        String status = request.getParameter("txtStatus");
         double quoPrice = Double.parseDouble(request.getParameter("txtQuoPrice"));
 
         try {
             CustomTourDAO dao = new CustomTourDAO();
 
+            boolean statusUpdated = dao.updateStatusCustomTourBySales(status, reqID);
             boolean priceUpdated = dao.updatePriceCustomTourBySales(quoPrice, reqID);
 
-            if (priceUpdated) {
+            if (statusUpdated && priceUpdated) {
                 HttpSession session = request.getSession();
                 session.setAttribute("CUSTOM_LIST", dao.getListCustomTour());
-                session.setAttribute("UPDATE_SUCCESS", "Successfully updated quotation price.");
+                session.setAttribute("UPDATE_SUCCESS", "Successfully updated quotation price and status.");
             } else {
                 request.setAttribute("ERROR", "Failed to update quotation price or status.");
             }
