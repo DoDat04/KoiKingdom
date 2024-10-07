@@ -1,8 +1,9 @@
 <%-- 
-    Document   : manageCustomer
-    Created on : Sep 24, 2024, 1:23:21 PM
+    Document   : searchCustomer
+    Created on : Oct 7, 2024, 9:13:15 PM
     Author     : Nguyen Huu Khoan
 --%>
+
 <%@page import="java.util.List"%>
 <%@page import="koikd.customer.CustomerDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -124,10 +125,10 @@
                     <a href="GetListEmployee">Employee</a>
                     <a href="GetListTour">Tour</a>
                 </div>-->
-         <jsp:include page="headerForManager.jsp" flush="true">
+        <jsp:include page="headerForManager.jsp" flush="true">
             <jsp:param name="searchController" value="SearchByCustomerName"/>
             <jsp:param name="placeholder" value="Search customer name"/>
-        </jsp:include>   
+        </jsp:include>    
         <!-- Nội dung chính -->
         <div class="main" style="margin-top: -216px; margin-left: 223px; margin-right: 30px;">       
             <div class="container">
@@ -147,18 +148,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="customer" items="${customer}">
+                        <c:forEach var="SEARCH_CUSTOMER" items="${SEARCH_CUSTOMER}">
                             <tr>
-                                <td>${customer.customerID}</td>
-                                <td>${customer.email}</td>
-                                <td>${customer.lastName}</td>
-                                <td>${customer.firstName}</td>
-                                <td>${customer.address}</td>
-                                <td>${customer.accountType}</td>
+                                <td>${SEARCH_CUSTOMER.customerID}</td>
+                                <td>${SEARCH_CUSTOMER.email}</td>
+                                <td>${SEARCH_CUSTOMER.lastName}</td>
+                                <td>${SEARCH_CUSTOMER.firstName}</td>
+                                <td>${SEARCH_CUSTOMER.address}</td>
+                                <td>${SEARCH_CUSTOMER.accountType}</td>
 
                                 <td>
                                     <c:choose>
-                                        <c:when test="${customer.status}">
+                                        <c:when test="${SEARCH_CUSTOMER.status}">
                                             <span class="status-active">Active</span>
                                         </c:when>
                                         <c:otherwise>
@@ -167,7 +168,7 @@
                                     </c:choose>
                                 </td>
                                 <td>
-                                    <a href="updateStatus?customerID=${customer.customerID}" 
+                                    <a href="updateStatus?customerID=${SEARCH_CUSTOMER.customerID}" 
                                        onclick="return confirm('Are you sure you want to change the status?');">
                                         Change Status
                                     </a>
@@ -188,3 +189,4 @@
         </div>
     </body>
 </html>
+

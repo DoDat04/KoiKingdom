@@ -6,7 +6,6 @@ package koikd.controllers;
 
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,17 +15,19 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import koikd.tour.TourDAO;
-import koikd.tour.TourDTO;
+import koikd.customer.CustomerDAO;
+import koikd.customer.CustomerDTO;
 
 /**
  *
  * @author Nguyen Huu Khoan
  */
-@WebServlet(name = "SearchByTourName", urlPatterns = {"/SearchByTourName"})
-public class SearchByTourName extends HttpServlet {
-    private static final String SEARCH_PAGE = "manageTour.jsp";
-    private static final String SEARCH_RESULT = "searchTour.jsp";
+@WebServlet(name = "SearchByCustomerName", urlPatterns = {"/SearchByCustomerName"})
+public class SearchByCustomerName extends HttpServlet {
+
+    private static final String SEARCH_PAGE = "manageCustomer.jsp";
+    private static final String SEARCH_RESULT = "searchCustomer.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,17 +47,16 @@ public class SearchByTourName extends HttpServlet {
                 // Trường hợp không nhập từ khóa
                 request.setAttribute("SEARCH_MESSAGE", "No keyword entered !");
             } else {
-                TourDAO dao = new TourDAO();
-                List<TourDTO> result = dao.searchTourName(searchValue);
+                CustomerDAO dao = new CustomerDAO();
+                List<CustomerDTO> result = dao.searchCustomerName(searchValue);
                 if (result != null && !result.isEmpty()) {
                     url = SEARCH_RESULT;
-                    request.setAttribute("SEARCH_TOUR", result);
+                    request.setAttribute("SEARCH_CUSTOMER", result);
                 } else {
-                    request.setAttribute("SEARCH_MESSAGE", "No tour found !");
+                    request.setAttribute("SEARCH_MESSAGE", "No customers found !");
                 }
 
             }
-           
         } catch (SQLException ex) {
             Logger.getLogger(SearchByTourName.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {

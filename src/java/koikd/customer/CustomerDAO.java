@@ -499,6 +499,48 @@ public class CustomerDAO implements Serializable {
         }
         return result;
     }
+    public List<CustomerDTO> searchCustomerName(String searchValue) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<CustomerDTO> customerList = new ArrayList<>();
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
+                        + "FROM CUSTOMER "
+                        + "WHERE LastName LIKE ? OR FirstName LIKE ? ";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, "%" + searchValue + "%");
+                stm.setString(2, "%" + searchValue + "%");
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    int customerID = rs.getInt("CustomerID");
+                    String email = rs.getString("Email");
+                    String lastName = rs.getString("LastName");
+                    String firstName = rs.getString("FirstName");
+                    String address = rs.getString("Address");
+                    String accountType = rs.getString("AccountType");
+                    boolean status = rs.getBoolean("Status");
+
+                    CustomerDTO customer = new CustomerDTO(customerID, email, "", lastName, firstName, address, accountType, status);
+                    customerList.add(customer);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return customerList;
+    }
 //    public static void main(String[] args) throws SQLException {
 //        int id = 1;
 //        CustomerDAO dao = new CustomerDAO();

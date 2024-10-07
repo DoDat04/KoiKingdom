@@ -209,6 +209,9 @@
                         </c:forEach>
                     </tbody>
                 </table>
+                <c:if test="${not empty SEARCH_MESSAGE}">
+                    <p style="color: red; text-align: center;">${SEARCH_MESSAGE}</p>
+                </c:if>
             </div>
         </div>
     </div>
