@@ -77,6 +77,11 @@ public class CreateFeedbackForCustomer extends HttpServlet {
             if (feedbackDTO != null) {
                 jsonResponse = "{\"success\": true, \"message\": \"Cảm ơn bạn đã đánh giá!\", \"feedbackID\": " + feedbackDTO.getFeedbackID() + "}";
                 HttpSession session = request.getSession();
+
+                // Set feedbackDTO in request scope
+                request.setAttribute("feedbackDTO", feedbackDTO);
+
+       
             } else {
                 jsonResponse = "{\"success\": false, \"message\": \"Đã xảy ra lỗi khi gửi đánh giá.\"}";
             }
