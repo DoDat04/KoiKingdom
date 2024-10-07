@@ -35,10 +35,8 @@ public class TourDAO implements Serializable {
                         + "(SELECT STRING_AGG(k.TypeName, ', ') FROM TOUR_KOITYPE tk "
                         + "INNER JOIN KOITYPE k ON tk.KoiTypeID = k.KoiTypeID WHERE tk.TourID = t.TourID) AS KoiType "
                         + "FROM TOUR t "
-                        + "LEFT JOIN TOUR_FEEDBACK tf ON t.TourID = tf.TourID "
-                        + "LEFT JOIN FEEDBACK f ON tf.FeedbackID = f.FeedbackID "
+                        + "LEFT JOIN FEEDBACK f ON t.TourID = f.TourID "
                         + "GROUP BY t.TourID, t.TourName, t.Duration, t.Description, t.TourPrice, t.StartDate, t.EndDate, t.Image, t.DepartureLocation";
-
                 stm = con.prepareStatement(sql);
                 rs = stm.executeQuery();
 
@@ -93,8 +91,7 @@ public class TourDAO implements Serializable {
                         + "(SELECT STRING_AGG(k.TypeName, ', ') FROM TOUR_KOITYPE tk "
                         + "INNER JOIN KOITYPE k ON tk.KoiTypeID = k.KoiTypeID WHERE tk.TourID = t.TourID) AS KoiType "
                         + "FROM TOUR t "
-                        + "LEFT JOIN TOUR_FEEDBACK tf ON t.TourID = tf.TourID "
-                        + "LEFT JOIN FEEDBACK f ON tf.FeedbackID = f.FeedbackID "
+                        + "LEFT JOIN FEEDBACK f ON t.TourID = f.TourID "
                         + "WHERE 1=1 ");
 
                 // Add dynamic filters based on non-null inputs
@@ -184,8 +181,7 @@ public class TourDAO implements Serializable {
                         + "(SELECT STRING_AGG(k.TypeName, ', ') FROM TOUR_KOITYPE tk "
                         + "INNER JOIN KOITYPE k ON tk.KoiTypeID = k.KoiTypeID WHERE tk.TourID = t.TourID) AS KoiType "
                         + "FROM TOUR t "
-                        + "LEFT JOIN TOUR_FEEDBACK tf ON t.TourID = tf.TourID "
-                        + "LEFT JOIN FEEDBACK f ON tf.FeedbackID = f.FeedbackID "
+                        + "LEFT JOIN FEEDBACK f ON t.TourID = f.TourID "
                         + "WHERE t.TourID = ? "
                         + "GROUP BY t.TourID, t.TourName, t.Duration, t.Description, "
                         + "t.TourPrice, t.StartDate, t.EndDate, t.Image, t.DepartureLocation";

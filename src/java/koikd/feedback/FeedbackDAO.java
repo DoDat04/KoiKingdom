@@ -4,7 +4,6 @@
  */
 package koikd.feedback;
 
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,9 +11,6 @@ import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Date;
 import java.sql.Statement;
-import koikd.tour.TourDTO;
-import koikd.tourbookingdetail.TourBookingDetailDAO;
-import koikd.tourbookingdetail.TourBookingDetailDTO;
 import koikd.utils.DBUtils;
 
 /**

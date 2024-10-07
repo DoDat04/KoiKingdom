@@ -59,7 +59,7 @@
                             </li>
                         </div>
                         <li class="menu-item">
-                            <a href="#" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Ship History</a>
+                            <a href="#" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Manage Booking</a>
                         </li>
                         <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
                                 <i style='font-size:24px' class='fas'>&#xf406;</i>Profile</a></li>
@@ -70,7 +70,7 @@
                 </c:when>
                 <c:otherwise>
                     <script>
-                        window.location.href = "login.jsp";
+                        window.location.href = "login";
                     </script>
                 </c:otherwise>
             </c:choose>

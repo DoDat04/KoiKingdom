@@ -6,6 +6,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     Created on : Oct 6, 2024, 5:41:58 PM
     Author     : ADMIN LAM
 */
+
 *{
     margin: 0;
     padding: 0;
@@ -239,4 +240,15 @@ textarea {
 .sidebar.collapsed + .main-content {
     margin-left: 60px; /* Adjust margin for main content when sidebar is collapsed */
 }
+
+.styled-table {
+    width: 100%;
+    min-width: 800px; /* Đảm bảo bảng không bị bóp quá nhỏ */
+    table-layout: auto;
+}
+.styled-table th, .styled-table td {
+    padding: 10px;
+    text-align: left;
+}
+
 

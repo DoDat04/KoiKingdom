@@ -70,7 +70,7 @@
                 </c:when>
                 <c:otherwise>
                     <script>
-                        window.location.href = "login.jsp";
+                        window.location.href = "login";
                     </script>
                 </c:otherwise>
             </c:choose>

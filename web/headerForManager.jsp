@@ -4,8 +4,6 @@
     Author     : Nguyen Huu Khoan
 --%>
 
-
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -41,8 +39,6 @@
             </div>
         </div>
 
-
-
         <div class="sidebar" style="margin-top: -468px; padding-top: 11px;">
             <c:choose>
                 <c:when test="${sessionScope.LOGIN_MANAGER != null}">
@@ -64,16 +60,19 @@
                             <a href="managerDashboard.jsp" style="color: black"><i class="fa-solid fa-house"></i>Home</a>
                         </li>
                         <li class="menu-item">
-                            <a href="managecustomer" style="color: black"><i class="fa-solid fa-users"></i>Customer</a>
+                            <a href="GetListCustomer" style="color: black"><i class="fa-solid fa-users"></i>Customer</a>
                         </li>
                         <li class="menu-item">
-                            <a href="manageemployee" style="color: black"><i class="fa-solid fa-user-group"></i>Employee</a>
+                            <a href="GetListEmployee" style="color: black"><i class="fa-solid fa-user-group"></i>Employee</a>
                         </li>
                         <li class="menu-item">
-                            <a href="managetour" style="color: black"><i class="fa-solid fa-list"></i>Tour</a>
+                            <a href="GetListTour" style="color: black"><i class="fa-solid fa-list"></i>Tour</a>
                         </li>
                         <li class="menu-item">
-                            <a href="createTour.jsp" style="color: black"><i class="fa-solid fa-plus"></i></i>Add Tour</a>
+                            <a href="createTour.jsp" style="color: black"><i class="fa-solid fa-plus"></i>Add Tour</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="custom-tour" style="color: black"><i class="fas fa-suitcase"></i>Custom Tour</a>
                         </li>
                         <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
                                 <i style='font-size:24px' class='fas'>&#xf406;</i>Profile</a></li>
@@ -84,7 +83,7 @@
                 </c:when>
                 <c:otherwise>
                     <script>
-                        window.location.href = "login.jsp";
+                        window.location.href = "login";
                     </script>
                 </c:otherwise>
             </c:choose>
@@ -155,50 +154,40 @@
         </div>
         <script src="js/headerForDelivery.js"></script>
 
-
-
-
         <script>
-                                    function previewAvatar() {
-                                        const file = document.getElementById('avatar').files[0];
-                                        const preview = document.getElementById('avatarPreview');
-                                        const reader = new FileReader();
+            function previewAvatar() {
+                const file = document.getElementById('avatar').files[0];
+                const preview = document.getElementById('avatarPreview');
+                const reader = new FileReader();
 
-                                        reader.onloadend = function () {
-                                            preview.src = reader.result;
-                                        };
+                reader.onloadend = function () {
+                    preview.src = reader.result;
+                };
 
-                                        if (file) {
-                                            reader.readAsDataURL(file);
-                                        } else {
-                                            preview.src = "";
-                                        }
-                                    }
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = "";
+                }
+            }
 
+            document.querySelector('.toggle-btn').addEventListener('click', function () {
+                const sidebar = document.querySelector('.sidebar');
+                const main = document.querySelector('.main');
+                const mainContent = document.querySelector('.main-content');
+                const logo = document.querySelector('.main-icon');
 
+                sidebar.classList.toggle('collapsed');
 
-
-                                    document.querySelector('.toggle-btn').addEventListener('click', function () {
-                                        const sidebar = document.querySelector('.sidebar');
-                                        const main = document.querySelector('.main');
-                                        const mainContent = document.querySelector('.main-content');
-                                        const logo = document.querySelector('.main-icon');
-
-                                        sidebar.classList.toggle('collapsed');
-
-                                        if (sidebar.classList.contains('collapsed')) {
-                                            main.style.marginLeft = '60px';
-                                            mainContent.style.marginLeft = '-80px';
-                                        } else {
-                                            main.style.marginLeft = '223px';
-                                            mainContent.style.marginLeft = '0px';
-                                        }
-                                    });
+                if (sidebar.classList.contains('collapsed')) {
+                    main.style.marginLeft = '60px';
+                    mainContent.style.marginLeft = '-80px';
+                } else {
+                    main.style.marginLeft = '223px';
+                    mainContent.style.marginLeft = '0px';
+                }
+            });
         </script>
-
-
     </body>
-
-
 </html>
 

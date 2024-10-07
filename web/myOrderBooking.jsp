@@ -85,7 +85,9 @@
             margin-top: 10px; /* Khoảng cách giữa label và h3 */
             transition: all 0.2s ease;
         }
-
+        #review {
+            cursor: pointer;
+        }
     </style>
     <body>
         <div class="colorlib-loader"></div>
@@ -121,9 +123,9 @@
                                             <div class="order_booking-status" style="font-size: 16px; margin-top: 5px; padding: 5px; border-radius: 4px;">
                                                 <span class="status-label">Status:</span> 
                                                 <span class="status-value">${orders.status}</span>
-                                                <c:if test="${orders.status == 'completed'}">
+                                                <c:if test="${orders.status == 'Completed'}">
                                                     <div class="thank-you-message" style="margin-top: 5px; color: green;">
-                                                        Cảm ơn bạn đã đặt hàng!
+                                                        Cảm ơn bạn đã đặt dịch vụ!
                                                         <br />
                                                         Xin vui lòng đánh giá dịch vụ của chúng tôi.
                                                         <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reviewTour"
