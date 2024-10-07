@@ -30,8 +30,8 @@
 
                 <div class="menu-center">
                     <ul class="nav justify-content-center">
-                        <form action="GetKoiOrder" method="get" class="search--box"> 
-                            <input oninput="searchByName(this)" type="text" name="txtNameCustomer" placeholder="Search name customer" style=" border: none;"/>
+                        <form action="${param.searchController}" method="get" class="search--box"> 
+                            <input  type="text" name="txtNameTour" placeholder="${param.placeholder}" value="<%= (request.getParameter("txtNameTour") != null) ? request.getParameter("txtNameTour") : "" %>"  style=" border: none;"/>
                             <button type="submit" style="border: none; border-radius: 4px;">  <i class="fa-solid fa-search"></i> </button>
                         </form>
                     </ul>

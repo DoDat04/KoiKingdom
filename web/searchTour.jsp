@@ -133,14 +133,6 @@
         <div class="main" style="margin-top: -216px; margin-left: 223px; margin-right: 30px;">       
             <div class="container">
                 <h1>Tour Management</h1>
-                 <div class="menu-center">
-                    <ul class="nav justify-content-center">
-                        <form action="SearchByTourName" method="get" class="search--box"> 
-                            <input  type="text" name="txtNameTour" placeholder="Search name tour" value="<%= (request.getParameter("txtNameTour") != null) ? request.getParameter("txtNameTour") : "" %>"  style=" border: none;"/>
-                            <button type="submit" style="border: none; border-radius: 4px;">  <i class="fa-solid fa-search"></i> </button>
-                        </form>
-                    </ul>
-                </div>
                 <table>
                     <c:if test="${not empty UPDATE_STATUS}">
                         <div class="alert alert-success">
