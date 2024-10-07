@@ -25,7 +25,7 @@ import koikd.employees.EmployeesDTO;
  *
  * @author Nguyen Huu Khoan
  */
-@WebServlet(name = "GetListEmployee", urlPatterns = {"/GetListEmployee"})
+@WebServlet(name = "GetListEmployee", urlPatterns = {"/manageemployee"})
 public class GetListEmployee extends HttpServlet {
     private static String MANAGE_EMPLOYEE = "manageEmployee.jsp";
     /**

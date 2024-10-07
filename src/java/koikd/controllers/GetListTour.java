@@ -21,7 +21,7 @@ import koikd.tour.TourDTO;
  *
  * @author Nguyen Huu Khoan
  */
-@WebServlet(name = "GetListTour", urlPatterns = {"/GetListTour"})
+@WebServlet(name = "GetListTour", urlPatterns = {"/managetour"})
 public class GetListTour extends HttpServlet {
     private final String MANAGE_TOUR = "manageTour.jsp";
     /**

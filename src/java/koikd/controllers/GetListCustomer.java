@@ -22,7 +22,7 @@ import koikd.customer.CustomerDTO;
  *
  * @author Nguyen Huu Khoan
  */
-@WebServlet(name = "GetListCustomer", urlPatterns = {"/GetListCustomer"})
+@WebServlet(name = "GetListCustomer", urlPatterns = {"/managecustomer"})
 public class GetListCustomer extends HttpServlet {
     private final String MANAGE_CUSTOMER = "manageCustomer.jsp";
     /**

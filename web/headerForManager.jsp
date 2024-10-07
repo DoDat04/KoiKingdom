@@ -64,13 +64,13 @@
                             <a href="managerDashboard.jsp" style="color: black"><i class="fa-solid fa-house"></i>Home</a>
                         </li>
                         <li class="menu-item">
-                            <a href="GetListCustomer" style="color: black"><i class="fa-solid fa-users"></i>Customer</a>
+                            <a href="managecustomer" style="color: black"><i class="fa-solid fa-users"></i>Customer</a>
                         </li>
                         <li class="menu-item">
-                            <a href="GetListEmployee" style="color: black"><i class="fa-solid fa-user-group"></i>Employee</a>
+                            <a href="manageemployee" style="color: black"><i class="fa-solid fa-user-group"></i>Employee</a>
                         </li>
                         <li class="menu-item">
-                            <a href="GetListTour" style="color: black"><i class="fa-solid fa-list"></i>Tour</a>
+                            <a href="managetour" style="color: black"><i class="fa-solid fa-list"></i>Tour</a>
                         </li>
                         <li class="menu-item">
                             <a href="createTour.jsp" style="color: black"><i class="fa-solid fa-plus"></i></i>Add Tour</a>
