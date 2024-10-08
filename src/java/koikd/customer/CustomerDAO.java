@@ -511,9 +511,18 @@ public class CustomerDAO implements Serializable {
                 String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
                         + "FROM CUSTOMER "
                         + "WHERE LastName LIKE ? OR FirstName LIKE ? ";
+                boolean isNumeric = searchValue.matches("\\d+");
+                if (isNumeric) {
+                    sql += "OR CustomerID = ? ";
+                }
+
                 stm = con.prepareStatement(sql);
                 stm.setString(1, "%" + searchValue + "%");
                 stm.setString(2, "%" + searchValue + "%");
+
+                if (isNumeric) {
+                    stm.setInt(3, Integer.parseInt(searchValue));
+                }
                 rs = stm.executeQuery();
                 while (rs.next()) {
                     int customerID = rs.getInt("CustomerID");
