@@ -23,7 +23,7 @@
         <!-- Search -->
          <div class="navbar-header" >
             <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -0.2%; padding-top: 31.7px; padding-right: 161px">
-                <a href="home?action=Delivery" style="margin-left: 116px">
+                <a href="home?action=Sales" style="margin-left: 116px">
                     <img src="img/logo.png" class="main-icon" >
                 </a>
 
