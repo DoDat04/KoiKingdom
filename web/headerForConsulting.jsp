@@ -58,6 +58,15 @@
                             </li>
                         </div>
                         <li class="menu-item">
+                            <a href="booking-list" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Manage Booking</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="tour-booking-detail-list" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Manage Tour Booking</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="list-tour-custom" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Manage Tour Custom</a>
+                        </li>
+                        <li class="menu-item">
                             <a href="home?action=koiOrderForm" style="color: black"><i style='font-size:24px' class='fas'>&#xF478;</i>Koi Order</a>
                         </li>
                         <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
@@ -140,52 +149,52 @@
         <script src="js/headerForDelivery.js"></script>
 
         <script>
-                                    document.querySelector('.toggle-btn').addEventListener('click', function () {
-                                        const sidebar = document.querySelector('.sidebar');
-                                        const mainFrame = document.querySelector('.main-frame');
-                                        const mainContent = document.querySelector('.main-content');
+            document.querySelector('.toggle-btn').addEventListener('click', function () {
+                const sidebar = document.querySelector('.sidebar');
+                const mainFrame = document.querySelector('.main-frame');
+                const mainContent = document.querySelector('.main-content');
 
-                                        sidebar.classList.toggle('collapsed');
+                sidebar.classList.toggle('collapsed');
 
-                                        if (sidebar.classList.contains('collapsed')) {
-                                            mainFrame.style.marginLeft = '-143px';
-                                            mainContent.style.marginLeft = '10%';
-                                        } else {
-                                            mainFrame.style.marginLeft = '-0.2%';
-                                            mainContent.style.marginLeft = '20%';
-                                        }
-                                    });
+                if (sidebar.classList.contains('collapsed')) {
+                    mainFrame.style.marginLeft = '-143px';
+                    mainContent.style.marginLeft = '10%';
+                } else {
+                    mainFrame.style.marginLeft = '-0.2%';
+                    mainContent.style.marginLeft = '20%';
+                }
+            });
 
-                                    function searchByName(param) {
-                                        var txtSearch = param.value;
-                                        $.ajax({
-                                            url: "/KoiKingdom/GetKoiOrderByAjax",
-                                            type: "GET",
-                                            data: {
-                                                txtNameCustomer: txtSearch
-                                            },
-                                            success: function (data) {
-                                                var row = document.getElementById("content");
-                                                row.innerHTML = data;
+            function searchByName(param) {
+                var txtSearch = param.value;
+                $.ajax({
+                    url: "/KoiKingdom/GetKoiOrderByAjax",
+                    type: "GET",
+                    data: {
+                        txtNameCustomer: txtSearch
+                    },
+                    success: function (data) {
+                        var row = document.getElementById("content");
+                        row.innerHTML = data;
 
-                                                // Re-attach the click event to handle "Detail" button clicks
-                                                row.addEventListener("click", function (event) {
-                                                    if (event.target && event.target.classList.contains("btn-detail")) {
-                                                        // Prevent the default form submission
-                                                        event.preventDefault();
-                                                        // Find the closest form element and submit it
-                                                        var form = event.target.closest("form");
-                                                        if (form) {
-                                                            form.submit();
-                                                        }
-                                                    }
-                                                });
-                                            },
-                                            error: function (xhr) {
-                                                console.error("Error occurred while fetching data:", xhr);
-                                            }
-                                        });
-                                    }
+                        // Re-attach the click event to handle "Detail" button clicks
+                        row.addEventListener("click", function (event) {
+                            if (event.target && event.target.classList.contains("btn-detail")) {
+                                // Prevent the default form submission
+                                event.preventDefault();
+                                // Find the closest form element and submit it
+                                var form = event.target.closest("form");
+                                if (form) {
+                                    form.submit();
+                                }
+                            }
+                        });
+                    },
+                    error: function (xhr) {
+                        console.error("Error occurred while fetching data:", xhr);
+                    }
+                });
+            }
         </script>
     </body>
 </html>

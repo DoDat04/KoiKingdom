@@ -13,6 +13,7 @@ import java.io.Serializable;
 public class TourBookingDetailDTO implements Serializable {
     private int tourBookingDetailID;
     private int customerID;
+    private String custName;
     private int tourID;
     private String tourName;
     private int quantity;
@@ -23,6 +24,19 @@ public class TourBookingDetailDTO implements Serializable {
 
     public TourBookingDetailDTO() {
     }
+
+    public TourBookingDetailDTO(int tourBookingDetailID, int customerID, String custName, int tourID, String tourName, int quantity, double unitPrice, double totalPrice, String status, String tourType) {
+        this.tourBookingDetailID = tourBookingDetailID;
+        this.customerID = customerID;
+        this.custName = custName;
+        this.tourID = tourID;
+        this.tourName = tourName;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.totalPrice = totalPrice;
+        this.status = status;
+        this.tourType = tourType;
+    }   
 
     public TourBookingDetailDTO(int tourBookingDetailID, int customerID, int tourID, String tourName, int quantity, double unitPrice, double totalPrice, String status) {
         this.tourBookingDetailID = tourBookingDetailID;
@@ -43,6 +57,14 @@ public class TourBookingDetailDTO implements Serializable {
         this.unitPrice = unitPrice;
         this.totalPrice = totalPrice;
         this.status = status;
+    }
+
+    public String getCustName() {
+        return custName;
+    }
+
+    public void setCustName(String custName) {
+        this.custName = custName;
     }
 
     public String getTourType() {

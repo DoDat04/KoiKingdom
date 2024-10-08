@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import koikd.tour.TourDTO;
 import koikd.utils.DBUtils;
 import java.sql.Timestamp;
+import java.util.List;
+import koikd.booking.BookingDTO;
 
 /**
  *
@@ -200,5 +202,73 @@ public class TourBookingDetailDAO implements Serializable {
             }
         }
         return result;
+    }
+    
+    public List<TourBookingDetailDTO> getAllTourBookingDetail() throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<TourBookingDetailDTO> listTourBookingDetail = new ArrayList<>();
+        
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT DISTINCT t.TourBookingDetail, t.CustomerID, b.Name, t.TourID, t.Quantity, t.UnitPrice, t.TotalPrice, t.Status, t.TourType "
+                        + "FROM TOURBOOKINGDETAIL t INNER JOIN BOOKING b ON "
+                        + "t.CustomerID = b.CustomerID";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    int tourBookingDetailID = rs.getInt("TourBookingDetail");
+                    int custID = rs.getInt("CustomerID");
+                    String custName = rs.getString("Name");
+                    int tourID = rs.getInt("TourID");
+                    int quantity = rs.getInt("Quantity");
+                    double unitPrice = rs.getDouble("UnitPrice");
+                    double totalPrice = rs.getDouble("TotalPrice");                  
+                    String status = rs.getString("Status");
+                    String tourType = rs.getString("TourType");
+                    
+                    TourBookingDetailDTO listDTO = new TourBookingDetailDTO(tourBookingDetailID, custID, custName, tourID, tourType, quantity, unitPrice, totalPrice, status, tourType);
+                    listTourBookingDetail.add(listDTO);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }       
+        return listTourBookingDetail;
+    }
+    
+    public void updateTourBookingDetailStatus(int tourBookingDetailID, String newStatus) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "UPDATE TOURBOOKINGDETAIL "
+                        + "SET Status = ? "
+                        + "WHERE TourBookingDetail = ?";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, newStatus);
+                stm.setInt(2, tourBookingDetailID);
+                stm.executeUpdate();
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
     }
 }
