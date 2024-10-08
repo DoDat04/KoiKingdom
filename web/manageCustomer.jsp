@@ -126,7 +126,7 @@
                 </div>-->
          <jsp:include page="headerForManager.jsp" flush="true">
             <jsp:param name="searchController" value="SearchByCustomerName"/>
-            <jsp:param name="placeholder" value="Search customer name"/>
+            <jsp:param name="placeholder" value="Search customer"/>
         </jsp:include>   
         <!-- Nội dung chính -->
           <div style="    margin-top: 25vh;
