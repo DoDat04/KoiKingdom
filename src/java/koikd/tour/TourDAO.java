@@ -423,8 +423,17 @@ public class TourDAO implements Serializable {
                 String sql = "SELECT TourID, TourName, Duration, Description, TourPrice, StartDate, EndDate, Image, Status, DepartureLocation "
                         + "FROM TOUR "
                         + "WHERE TourName LIKE ? ";
+                boolean isNumeric = searchValue.matches("\\d+");
+                if (isNumeric) {
+                    sql += "OR TourID = ? ";
+                }
+
                 stm = con.prepareStatement(sql);
                 stm.setString(1, "%" + searchValue + "%");
+
+                if (isNumeric) {
+                    stm.setInt(2, Integer.parseInt(searchValue));
+                }
                 rs = stm.executeQuery();
                 while (rs.next()) {
 

@@ -127,10 +127,15 @@
                     <a href="GetListEmployee">Employee</a>
                     <a href="GetListTour">Tour</a>
                 </div>-->
-        <jsp:include page="headerForManager.jsp" flush="true"/>   
+        <jsp:include page="headerForManager.jsp" flush="true">
+            <jsp:param name="searchController" value="SearchByTourName"/>
+            <jsp:param name="placeholder" value="Search tour name"/>
+        </jsp:include>   
         <!-- Nội dung chính -->
 
-        <div class="main" style="margin-top: -216px; margin-left: 223px; margin-right: 30px;">       
+        <div style="    margin-top: 25vh;
+             margin-left: 17%;
+             margin-right: 6%;" class="main-content">     
             <div class="container">
                 <h1>Tour Management</h1>
                 <table>
