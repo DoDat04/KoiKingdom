@@ -32,19 +32,19 @@
             <div id="orderDetails">
                 <div class="detailRow">
                     <label for="txtKoiIDs">Koi ID:</label>
-                    <input type="number" id="txtFarmID" name="txtKoiIDs" required>
+                    <input type="number" id="txtFarmID" min="1" name="txtKoiIDs" required>
 
                     <label for="txtFarmIDs">Farm ID:</label>
-                    <input type="number" id="txtFarmID" name="txtFarmIDs" required>
+                    <input type="number" id="txtFarmID" min="1" name="txtFarmIDs" required>
 
                     <label for="txtQuantity">Quantity:</label>
-                    <input type="number" id="txtQuantity" name="txtQuantity" required>
+                    <input type="number" id="txtQuantity" min="1" max="50" name="txtQuantity" required>
 
                     <label for="txtUnitPrice">Unit Price:</label>
-                    <input type="text" id="txtUnitPrice" name="txtUnitPrice" required>
+                    <input type="number" step="0.01" id="txtUnitPrice" name="txtUnitPrice" required>
 
                     <label for="txtTotalPrice">Total Price:</label>
-                    <input type="text" id="txtTotalPrice" name="txtTotalPrice" required>
+                    <input type="number" step="0.01" id="txtTotalPrice" name="txtTotalPrice" required>
                 </div>
             </div>
 
