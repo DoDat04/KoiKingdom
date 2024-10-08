@@ -280,6 +280,56 @@ public class EmployeesDAO {
         }
         return false;
     }
+    
+    public List<EmployeesDTO> searchEmployees(String searchValue) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<EmployeesDTO> result = new ArrayList<>();
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT EmployeeID, Email, Role, LastName, FirstName, Address, Status "
+                        + "FROM EMPLOYEE "
+                        + "WHERE LastName LIKE ? OR FirstName LIKE ? ";
+               boolean isNumeric = searchValue.matches("\\d+");
+                if (isNumeric) {
+                    sql += "OR EmployeeID = ? ";
+                }
+                stm = con.prepareStatement(sql);
+                stm.setString(1, "%" + searchValue + "%");
+                stm.setString(2, "%" + searchValue + "%");
+
+                if (isNumeric) {
+                    stm.setInt(3, Integer.parseInt(searchValue));
+                }
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    int id = rs.getInt("EmployeeID");
+                    String email = rs.getString("Email");
+                    String role = rs.getString("Role");
+                    String lastName = rs.getString("LastName");
+                    String firstName = rs.getString("FirstName");
+                    String address = rs.getString("Address");
+                    boolean status = rs.getBoolean("Status");
+                    EmployeesDTO dto = new EmployeesDTO(id, email, role, lastName, firstName, address, status);
+                    result.add(dto);
+                }
+
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
 
 //    public static void main(String[] args) throws SQLException {
 //        int id = 1;

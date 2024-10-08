@@ -1,6 +1,6 @@
 <%-- 
-    Document   : manageEmployee
-    Created on : Sep 26, 2024, 7:34:44 AM
+    Document   : searchEmployee
+    Created on : Oct 8, 2024, 3:26:52 PM
     Author     : Nguyen Huu Khoan
 --%>
 
@@ -128,9 +128,9 @@
         <jsp:include page="headerForManager.jsp" flush="true">
             <jsp:param name="searchController" value="searchemployee"/>
             <jsp:param name="placeholder" value="Search employee"/>
-        </jsp:include>   
+        </jsp:include>    
         <!-- Nội dung chính -->
-         <div style="    margin-top: 25vh;
+        <div style="    margin-top: 25vh;
              margin-left: 17%;
              margin-right: 6%;" class="main-content">     
 
@@ -151,17 +151,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="employee" items="${employee}">
+                        <c:forEach var="SEARCH_EMPLOYEE" items="${SEARCH_EMPLOYEE}">
                             <tr>
-                                <td>${employee.employeeID}</td>
-                                <td>${employee.email}</td>
-                                <td>${employee.role}</td>
-                                <td>${employee.lastName}</td>
-                                <td>${employee.firstName}</td>
-                                <td>${employee.address}</td>
+                                <td>${SEARCH_EMPLOYEE.employeeID}</td>
+                                <td>${SEARCH_EMPLOYEE.email}</td>
+                                <td>${SEARCH_EMPLOYEE.role}</td>
+                                <td>${SEARCH_EMPLOYEE.lastName}</td>
+                                <td>${SEARCH_EMPLOYEE.firstName}</td>
+                                <td>${SEARCH_EMPLOYEE.address}</td>
                                 <td>
                                     <c:choose>
-                                        <c:when test="${employee.status}">
+                                        <c:when test="${SEARCH_EMPLOYEE.status}">
                                             <span class="status-active">Active</span>
                                         </c:when>
                                         <c:otherwise>
@@ -170,7 +170,7 @@
                                     </c:choose>
                                 </td>
                                 <td>
-                                    <a href="updateStatusEmployee?employeeID=${employee.employeeID}" 
+                                    <a href="updateStatusEmployee?employeeID=${SEARCH_EMPLOYEE.employeeID}" 
                                        onclick="return confirm('Are you sure you want to change the status?');">
                                         Change Status
                                     </a>
@@ -183,6 +183,7 @@
                             ${UPDATE_STATUS}
                         </div>
                     </c:if>
+                    
                 </table>
                 <c:if test="${not empty SEARCH_MESSAGE}">
                     <p style="color: red; text-align: center;">${SEARCH_MESSAGE}</p>
@@ -192,3 +193,4 @@
 
     </body>
 </html>
+
