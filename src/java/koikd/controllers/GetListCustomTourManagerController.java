@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -39,8 +40,9 @@ public class GetListCustomTourManagerController extends HttpServlet {
         String url = CUSTOMTOUR_LIST;
         try {
             CustomTourDAO dao = new CustomTourDAO();
+            HttpSession session = request.getSession();
             List<CustomTourDTO> listCustomTour = dao.getListCustomTourForManager();
-            request.setAttribute("CUSTOM_LIST", listCustomTour);
+            session.setAttribute("CUSTOM_LIST", listCustomTour);
         } catch (SQLException ex) {
             Logger.getLogger(GetListCustomTourManagerController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {

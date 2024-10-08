@@ -55,12 +55,21 @@
                                     <td style="color: green; font-weight: bold">${custom.status}</td>
                                     <td>${custom.tourType}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#updateModal${custom.tourBookingDetailID}">
-                                            Update
-                                        </button>                                  
+                                        <c:choose>
+                                            <c:when test="${custom.status != 'Completed'}">
+                                                <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#updateModal${custom.tourBookingDetailID}">
+                                                    Update
+                                                </button> 
+                                            </c:when>
+                                            <c:otherwise>
+                                                <button type="button" class="btn btn-primary mb-2" disabled>
+                                                    Update
+                                                </button>
+                                            </c:otherwise>
+                                        </c:choose>                                                                       
                                     </td>     
-                            
-                            <!--Modal-->
+
+                                    <!--Modal-->
                             <div class="modal fade" id="updateModal${custom.tourBookingDetailID}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel${custom.tourBookingDetailID}" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -89,7 +98,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             </tr>
                         </c:forEach>
                     </c:when>

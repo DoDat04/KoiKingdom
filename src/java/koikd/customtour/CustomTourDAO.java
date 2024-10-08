@@ -195,7 +195,7 @@ public class CustomTourDAO implements Serializable {
             if (conn != null) {
                 String sql = "SELECT [RequestID], [CustomerID], [FullName], [Duration], [StartDate], "
                         + "[EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], "
-                        + "[KoiTypeName], [Quantity], [Image] FROM [dbo].[CUSTOMTOURREQUEST] ";
+                        + "[KoiTypeName], [Quantity], [Image], [DetailRejected], [Checked] FROM [dbo].[CUSTOMTOURREQUEST] ";
                 pst = conn.prepareStatement(sql);
                 rs = pst.executeQuery();
 
@@ -215,8 +215,9 @@ public class CustomTourDAO implements Serializable {
                         String managerApprovalStatus = rs.getString("ManagerApprovalStatus");
                         String departureLocation = rs.getString("DepartureLocation");
                         String image = rs.getString("Image");
-
-                        CustomTourDTO customTourDTO = new CustomTourDTO(requestID, customerID, custName, farmName, koiTypeName, duration, quotationPrice, quantity, startDate, endDate, status, managerApprovalStatus, departureLocation, image);
+                        boolean checked = rs.getBoolean("checked");
+                        String detailRejected = rs.getString("detailRejected");
+                        CustomTourDTO customTourDTO = new CustomTourDTO(requestID, customerID, custName, farmName, koiTypeName, duration, quotationPrice, quantity, startDate, endDate, status, managerApprovalStatus, departureLocation, image, checked, detailRejected);
                         listCustomTour.add(customTourDTO);
                     }
                 }
@@ -289,7 +290,7 @@ public class CustomTourDAO implements Serializable {
 
         return listCustomTour;
     }
-    
+
     public List<CustomTourDTO> getListCustomTourForConsulting() throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -514,13 +515,45 @@ public class CustomTourDAO implements Serializable {
         return rs;
     }
 
-    
+    public boolean updateQuotationAndRejectionDetails(int requestID, double newPrice, String rejectReason) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        boolean isUpdated = false;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "UPDATE [dbo].[CUSTOMTOURREQUEST] "
+                        + "SET [QuotationPrice] = ?, [ManagerApprovalStatus] = 'Rejected', [DetailRejected] = ? "
+                        + "WHERE [RequestID] = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setDouble(1, newPrice);
+                pst.setString(2, rejectReason);
+                pst.setInt(3, requestID);
+                int affectedRows = pst.executeUpdate();
+                if (affectedRows > 0) {
+                    isUpdated = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return isUpdated;
+    }
+
     /**
      * GetListCustomTourByID
+     *
      * @param id
      * @return
      * @throws SQLException
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     public ArrayList<CustomTourDTO> getListCustomTourByID(int id) throws SQLException, ClassNotFoundException {
         ArrayList<CustomTourDTO> list = new ArrayList<>();
@@ -581,10 +614,11 @@ public class CustomTourDAO implements Serializable {
 
     /**
      * GetCustomTourByRequest
+     *
      * @param id
      * @return
      * @throws SQLException
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     public CustomTourDTO getCustomTourByRequest(int id) throws SQLException, ClassNotFoundException {
         CustomTourDTO result = null;

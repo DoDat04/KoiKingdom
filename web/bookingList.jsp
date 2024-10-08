@@ -137,9 +137,6 @@
             });
         </script>
 
-
-
-
         <c:if test="${not empty requestScope.SEND_SUCCESS}">
             <script>
                 window.onload = function () {

@@ -43,8 +43,8 @@
                 </thead>
                 <tbody>
                     <c:choose>
-                        <c:when test="${not empty requestScope.CUSTOM_LIST}">
-                            <c:forEach var="custom" items="${requestScope.CUSTOM_LIST}" varStatus="status">
+                        <c:when test="${not empty sessionScope.CUSTOM_LIST}">
+                            <c:forEach var="custom" items="${sessionScope.CUSTOM_LIST}" varStatus="status">
                                 <tr>
                                     <td>${custom.custName}</td>
                                     <td>${custom.duration}</td>
@@ -64,18 +64,19 @@
                                             <c:choose>
                                                 <c:when test="${custom.managerApprovalStatus != 'Approved' && custom.managerApprovalStatus != 'Rejected'}">
                                                     <button type="submit" name="action" value="approve" class="btn btn-success" style="margin-bottom: 10px;">Approve</button>
-                                                    <button type="submit" name="action" value="reject" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#updateModal${custom.requestID}">Reject</button>
+                                                    <!-- Nút Reject hiển thị modal -->
+                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#updateModal${custom.requestID}">Reject</button>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <button type="submit" name="action" value="approve" class="btn btn-success" disabled style="margin-bottom: 10px;">Approve</button>
-                                                    <button type="submit" name="action" value="reject" class="btn btn-danger" disabled="">Reject</button>
+                                                    <button type="submit" name="action" value="reject" class="btn btn-danger" disabled>Reject</button>
                                                 </c:otherwise>
-                                            </c:choose>                                          
+                                            </c:choose>
                                         </form>
                                     </td>
 
-                                    <!--Modal-->
-                            <div class="modal fade" id="updateModal${custom.requestID}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel${custom.requestID}" aria-hidden="true">
+                                    <!-- Modal for Reject -->
+                            <div class="modal fade" id="updateModal${custom.requestID}" tabindex="-1" aria-labelledby="updateModalLabel${custom.requestID}" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -83,39 +84,23 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form id="updateForm${custom.requestID}" method="post" action="update-price">
+                                            <form id="updateForm${custom.requestID}" method="post" action="ManagerCustomActionController">
                                                 <div class="mb-3">
-                                                    <label for="quotationPrice${custom.requestID}" class="form-label">Quotation Price</label>
-                                                    <input type="number" step="0.01" class="form-control" id="quotationPrice${custom.requestID}" name="txtQuoPrice" placeholder="Enter new quotation price" required>
+                                                    <label for="newPrice${custom.requestID}" class="form-label">Quotation Price</label>
+                                                    <input type="number" step="0.01" class="form-control" id="newPrice${custom.requestID}" name="newPrice" placeholder="Enter new quotation price" required>
                                                 </div>
-                                                <input type="hidden" name="txtReq" value="${custom.requestID}">
+                                                <div class="mb-3">
+                                                    <label for="rejectReason${custom.requestID}" class="form-label">Rejection Reason</label>
+                                                    <textarea class="form-control" id="rejectReason${custom.requestID}" name="rejectReason" placeholder="Enter reason for rejection" required></textarea>
+                                                </div>
+                                                <input type="hidden" name="customId" value="${custom.requestID}">
+                                                <input type="hidden" name="action" value="reject">
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Reject</button>
+                                                </div>
                                             </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" form="updateForm${custom.requestID}" class="btn btn-primary">Update</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal fade" id="sendModal${custom.requestID}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Send</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure about that?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                            <form action="sales-to-manager" method="POST">
-                                                <input type="hidden" name="txtReqID" value="${custom.requestID}">
-                                                <button type="submit" class="btn btn-primary">Yes</button>
-                                            </form>
-                                        </div>
+                                        </div>                      
                                     </div>
                                 </div>
                             </div>
@@ -132,20 +117,13 @@
             </table>
         </div>
 
-        <c:if test="${not empty requestScope.MESSAGE}">
+        <c:if test="${not empty sessionScope.MESSAGE}">
             <script>
                 window.onload = function () {
-                    showToast('${requestScope.MESSAGE}', 'error');
+                    showToast('${sessionScope.MESSAGE}', 'success');
                 };
             </script>
-        </c:if>
-
-        <c:if test="${not empty requestScope.MESSAGE}">
-            <script>
-                window.onload = function () {
-                    showToast('${requestScope.MESSAGE}', 'success');
-                };
-            </script>
+            <c:set var="MESSAGE" value="${null}" scope="session"/>
         </c:if>       
 
         <div id="toastBox"></div>

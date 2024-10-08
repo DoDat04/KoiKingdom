@@ -11,13 +11,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import koikd.customtour.CustomTourDAO;
 import koikd.customtour.CustomTourDTO;
-import koikd.tour.TourDTO;
 
 /**
  *
@@ -43,35 +43,40 @@ public class ManagerCustomActionController extends HttpServlet {
         String url = CUSTOMTOUR_LIST;
         String requestIDParam = request.getParameter("customId");
         String action = request.getParameter("action");
+
         try {
             if (requestIDParam != null && !requestIDParam.isEmpty()) {
                 int requestID = Integer.parseInt(requestIDParam);
-                CustomTourDAO dao = new CustomTourDAO();               
-                
+                CustomTourDAO dao = new CustomTourDAO();
+
+                String message = "";
                 if ("approve".equals(action)) {
                     boolean updated = dao.updateManagerApprovalStatus(requestID, "Approved");
-                    if (updated) {
-                        request.setAttribute("MESSAGE", "Request approved successfully.");
-                    } else {
-                        request.setAttribute("MESSAGE", "Failed to approve request.");
-                    }
+                    message = updated ? "Request approved successfully." : "Failed to approve request.";
                 } else if ("reject".equals(action)) {
-                    boolean updated = dao.updateManagerApprovalStatus(requestID, "Rejected");
-                    if (updated) {
-                        request.setAttribute("MESSAGE", "Request rejected successfully.");
-                    } else {
-                        request.setAttribute("MESSAGE", "Failed to reject request.");
-                    }
+                    double newPrice = Double.parseDouble(request.getParameter("newPrice"));
+                    String rejectReason = request.getParameter("rejectReason");
+
+                    // Use the updateQuotationAndRejectionDetails method
+                    boolean updated = dao.updateQuotationAndRejectionDetails(requestID, newPrice, rejectReason);
+                    message = updated ? "Request rejected successfully with updated details." : "Failed to reject request.";
                 }
+                
+                HttpSession session = request.getSession();
+                session.setAttribute("MESSAGE", message);
+                
                 List<CustomTourDTO> listCustomTour = dao.getListCustomTourForManager();
-                request.setAttribute("CUSTOM_LIST", listCustomTour);
+                session.setAttribute("CUSTOM_LIST", listCustomTour);
             }
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ManagerCustomActionController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NumberFormatException e) {
+            request.setAttribute("MESSAGE", "Invalid input values.");
+            Logger.getLogger(ManagerCustomActionController.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SQLException | ClassNotFoundException e) {
+            Logger.getLogger(ManagerCustomActionController.class.getName()).log(Level.SEVERE, null, e);
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect(url);
         }
-    }
+    }      
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
