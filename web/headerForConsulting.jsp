@@ -58,7 +58,7 @@
                             </li>
                         </div>
                         <li class="menu-item">
-                            <a href="#" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Manage Booking</a>
+                            <a href="home?action=koiOrderForm" style="color: black"><i style='font-size:24px' class='fas'>&#xF478;</i>Koi Order</a>
                         </li>
                         <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
                                 <i style='font-size:24px' class='fas'>&#xf406;</i>Profile</a></li>

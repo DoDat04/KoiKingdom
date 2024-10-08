@@ -22,19 +22,18 @@ import koikd.koitype.KoiTypeDTO;
 
 /**
  *
- * @author Do Dat, Minhngo
+ * @author Do Dat, Minhngo, ADMIN LAM
  */
 @WebServlet(name = "HomeController", urlPatterns = {"/home"})
 public class HomeController extends HttpServlet {
     private static final String HOME_PAGE = "homeForCustomer.jsp";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
-    private static final String LOGOUT_MANAGER_CONTROLLER = "LogoutManagerController";
     private static final String DELIVERY_PAGE = "GetKoiOrder";
     private static final String MANAGER_PAGE = "managerDashboard.jsp";
     private static final String SALES_PAGE = "homeForSales.jsp";
     private static final String CONSULTING_PAGE = "homeForConsulting.jsp";
     private static final String CUSTOM_TOUR_PAGE = "customTour.jsp";
-    private static final String CONTACT_PAGE = "contact.jsp";
+    private static final String ORDER_KOI_PAGE = "koiOrderForm.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -82,8 +81,6 @@ public class HomeController extends HttpServlet {
                 url = LOGOUT_CONTROLLER;
             } else if (action.equals("Delivery")) {
                 url = DELIVERY_PAGE;
-            } else if(action.equals("LogoutManager")){
-                url = LOGOUT_MANAGER_CONTROLLER;
             } else if (action.equals("Manager")) {
                 url = MANAGER_PAGE;
             } else if (action.equals("Sales")){               
@@ -92,8 +89,8 @@ public class HomeController extends HttpServlet {
                 url = CONSULTING_PAGE;
             } else if (action.equals("customTour")){
                 url = CUSTOM_TOUR_PAGE;
-            } else if(action.equals("contact")){
-                url = CONTACT_PAGE;
+            } else if(action.equals("koiOrderForm")){
+                url = ORDER_KOI_PAGE;
             }
         } catch (SQLException ex) {
             Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);

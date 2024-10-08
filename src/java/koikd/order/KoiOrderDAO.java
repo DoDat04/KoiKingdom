@@ -17,7 +17,7 @@ import koikd.utils.DBUtils;
 
 /**
  *
- * @author Minhngo
+ * @author Minhngo, ADMIN LAM
  */
 public class KoiOrderDAO {
 
@@ -82,7 +82,7 @@ public class KoiOrderDAO {
     }
 
     /**
-     *  Get Customer By CustomerID
+     * Get Customer By CustomerID
      *
      * @param customerId
      * @return
@@ -99,7 +99,7 @@ public class KoiOrderDAO {
             if (conn != null) {
                 String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
                         + "FROM CUSTOMER "
-                        + "WHERE CustomerID = ?"; 
+                        + "WHERE CustomerID = ?";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, customerId);
                 rs = pst.executeQuery();
@@ -296,10 +296,11 @@ public class KoiOrderDAO {
 
     /**
      * Get KoiOrderList By Id
+     *
      * @param customerID
      * @return
      * @throws SQLException
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     public ArrayList<KoiOrderDTO> getKoiOrderListByID(int customerID) throws SQLException, ClassNotFoundException {
         ArrayList<KoiOrderDTO> list = new ArrayList<>();
@@ -323,15 +324,15 @@ public class KoiOrderDAO {
                         + "WHERE O.CustomerID = ?";
 
                 pst = conn.prepareStatement(sql);
-                pst.setInt(1, customerID);  
+                pst.setInt(1, customerID);
 
                 rs = pst.executeQuery();
                 while (rs.next()) {
                     int KoiOrderID = rs.getInt("KoiOrderID");
                     int customerId = rs.getInt("CustomerID");
                     Date deliveryDate = rs.getDate("DeliveryDate");
-                    boolean status = rs.getBoolean("Status");  
-                    Date estimatedDelivery = rs.getDate("EstimatedDelivery");  
+                    boolean status = rs.getBoolean("Status");
+                    Date estimatedDelivery = rs.getDate("EstimatedDelivery");
                     // Tạo DTO từ dữ liệu lấy được
                     KoiOrderDTO dao = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery);
                     list.add(dao);
@@ -356,9 +357,10 @@ public class KoiOrderDAO {
 
     /**
      * Get KoiOrderDetailList By ID
+     *
      * @param orderKoiId
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
     public ArrayList<KoiOrderDetailDTO> getKoiOrderDetaiListById(int orderKoiId) throws SQLException {
         ArrayList<KoiOrderDetailDTO> detail = new ArrayList<>();
@@ -419,10 +421,11 @@ public class KoiOrderDAO {
 
     /**
      * GetKoiOrderListByOrderID
+     *
      * @param koiOrderID
      * @return
      * @throws SQLException
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     public ArrayList<KoiOrderDTO> getKoiOrderListByOrderID(int koiOrderID) throws SQLException, ClassNotFoundException {
         ArrayList<KoiOrderDTO> list = new ArrayList<>();
@@ -446,7 +449,7 @@ public class KoiOrderDAO {
                         + "WHERE O.KoiOrderID = ?";
 
                 pst = conn.prepareStatement(sql);
-                pst.setInt(1, koiOrderID); 
+                pst.setInt(1, koiOrderID);
 
                 rs = pst.executeQuery();
                 while (rs.next()) {
@@ -476,4 +479,106 @@ public class KoiOrderDAO {
         return list;
     }
 
+    /**
+     *
+     * @param koiOrderDTO
+     * @return create koi order form
+     * @throws java.sql.SQLException
+     */
+    public int createKoiOrder(KoiOrderDTO koiOrderDTO) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        int koiOrderID = -1;  // -1 để chỉ ra rằng chưa có giá trị KoiOrderID được lấy
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "INSERT INTO [dbo].[KOIORDER]([CustomerID], [DeliveryDate], [Status], [EstimatedDelivery]) "
+                        + "VALUES(?, ?, ?, ?)";
+                pst = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);  // Lấy giá trị khóa tự động sinh
+                pst.setInt(1, koiOrderDTO.getCustomerID());
+                pst.setTimestamp(2, new java.sql.Timestamp(koiOrderDTO.getDeliveryDate().getTime()));
+                pst.setBoolean(3, koiOrderDTO.isStatus());
+                pst.setTimestamp(4, new java.sql.Timestamp(koiOrderDTO.getEstimatedDelivery().getTime()));
+
+                int affectedRows = pst.executeUpdate();
+                if (affectedRows > 0) {
+                    // Lấy KoiOrderID tự động sinh
+                    rs = pst.getGeneratedKeys();
+                    if (rs.next()) {
+                        koiOrderID = rs.getInt(1);  // Lấy giá trị KoiOrderID từ kết quả
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+
+            if (conn != null) {
+                conn.close();
+            }
+
+        }
+        return koiOrderID;  // Trả về KoiOrderID hoặc -1 nếu có lỗi
+    }
+
+//    public static void main(String[] args) {
+//        KoiOrderDTO koiOrderDTO = new KoiOrderDTO();
+//        koiOrderDTO.setCustomerID(1);
+//        koiOrderDTO.setDeliveryDate(new Date());
+//        koiOrderDTO.setEstimatedDelivery(new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000)); // Ngày dự kiến sau 7 ngày
+//        koiOrderDTO.setStatus(true);
+//        KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
+//        boolean result = koiOrderDAO.createKoiOrder(koiOrderDTO);
+//        if (result) {
+//            System.out.println("Success.");
+//        } else {
+//            System.out.println("Fail.");
+//        }
+//    }
+    
+    /**
+     *
+     * @param koiOrderDetailDTO
+     * @return create koi order detail
+     * @throws SQLException
+     * @throws java.lang.ClassNotFoundException
+     */
+    public boolean createKoiOrderDetail(KoiOrderDetailDTO koiOrderDetailDTO) throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        boolean result = false;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "INSERT INTO [dbo].[KOIORDERDETAIL]([KoiOrderID], [KoiID], [FarmID], [Quantity], [UnitPrice], [TotalPrice]) "
+                        + "VALUES (?, ?, ?, ?, ?, ?)";
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, koiOrderDetailDTO.getKoiOrderID());
+                pst.setInt(2, koiOrderDetailDTO.getKoiID());
+                pst.setInt(3, koiOrderDetailDTO.getFarmID());
+                pst.setInt(4, koiOrderDetailDTO.getQuantity());
+                pst.setDouble(5, koiOrderDetailDTO.getUnitPrice());
+                pst.setDouble(6, koiOrderDetailDTO.getTotalPrice());
+                int affectedRows = pst.executeUpdate();
+                if (affectedRows > 0) {
+                    result = true;
+                }
+            }
+        } finally {
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return result;
+    }
 }

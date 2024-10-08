@@ -132,8 +132,8 @@ public class CustomTourDAO implements Serializable {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 String sql = "SELECT [RequestID], [CustomerID], [FullName], [Duration], [StartDate], "
-                        + "                        [EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], "
-                        + "                        [KoiTypeName], [Quantity], [Image], [DetailRejected],[Checked] FROM [dbo].[CUSTOMTOURREQUEST] ";
+                        + " [EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], "
+                        + " [KoiTypeName], [Quantity], [Image], [DetailRejected],[Checked] FROM [dbo].[CUSTOMTOURREQUEST] ";
                 if (fullName != null && !fullName.isEmpty()) {
                     sql += " WHERE [FullName] LIKE ?";
                 }
