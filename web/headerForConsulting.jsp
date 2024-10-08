@@ -22,8 +22,7 @@
     <body>  
 
         <div class="navbar-header">           
-            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -80px; padding-top: 32.7px">
-                <a href="home?action=Delivery" style="margin-left: 116px">
+            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -0.2%; padding-top: 31.7px; padding-right: 161px">     <a href="home?action=Delivery" style="margin-left: 116px">
                     <img src="img/logo.png" class="main-icon" >
                 </a>
 
@@ -41,7 +40,7 @@
 
 
 
-        <div class="sidebar" style="margin-top: -468px; padding-top: 11px;">
+        <div class="sidebar" style="margin-top: -79px;">
             <c:choose>
                 <c:when test="${sessionScope.LOGIN_CONSULTING != null}">
                     <ul class="menu">
@@ -141,52 +140,52 @@
         <script src="js/headerForDelivery.js"></script>
 
         <script>
-            document.querySelector('.toggle-btn').addEventListener('click', function () {
-                const sidebar = document.querySelector('.sidebar');
-                const mainFrame = document.querySelector('.main-frame');
-                const mainContent = document.querySelector('.main-content');
+                                    document.querySelector('.toggle-btn').addEventListener('click', function () {
+                                        const sidebar = document.querySelector('.sidebar');
+                                        const mainFrame = document.querySelector('.main-frame');
+                                        const mainContent = document.querySelector('.main-content');
 
-                sidebar.classList.toggle('collapsed');
+                                        sidebar.classList.toggle('collapsed');
 
-                if (sidebar.classList.contains('collapsed')) {
-                    mainFrame.style.marginLeft = '-10%';
-                    mainContent.style.marginLeft = '10%';
-                } else {
-                    mainFrame.style.marginLeft = '-5.2%'; // Reset the content frame
-                    mainContent.style.marginLeft = '17%'; // Adjust the main content
-                }
-            });
+                                        if (sidebar.classList.contains('collapsed')) {
+                                            mainFrame.style.marginLeft = '-143px';
+                                            mainContent.style.marginLeft = '10%';
+                                        } else {
+                                            mainFrame.style.marginLeft = '-0.2%';
+                                            mainContent.style.marginLeft = '20%';
+                                        }
+                                    });
 
-            function searchByName(param) {
-                var txtSearch = param.value;
-                $.ajax({
-                    url: "/KoiKingdom/GetKoiOrderByAjax",
-                    type: "GET",
-                    data: {
-                        txtNameCustomer: txtSearch
-                    },
-                    success: function (data) {
-                        var row = document.getElementById("content");
-                        row.innerHTML = data;
+                                    function searchByName(param) {
+                                        var txtSearch = param.value;
+                                        $.ajax({
+                                            url: "/KoiKingdom/GetKoiOrderByAjax",
+                                            type: "GET",
+                                            data: {
+                                                txtNameCustomer: txtSearch
+                                            },
+                                            success: function (data) {
+                                                var row = document.getElementById("content");
+                                                row.innerHTML = data;
 
-                        // Re-attach the click event to handle "Detail" button clicks
-                        row.addEventListener("click", function (event) {
-                            if (event.target && event.target.classList.contains("btn-detail")) {
-                                // Prevent the default form submission
-                                event.preventDefault();
-                                // Find the closest form element and submit it
-                                var form = event.target.closest("form");
-                                if (form) {
-                                    form.submit();
-                                }
-                            }
-                        });
-                    },
-                    error: function (xhr) {
-                        console.error("Error occurred while fetching data:", xhr);
-                    }
-                });
-            }
+                                                // Re-attach the click event to handle "Detail" button clicks
+                                                row.addEventListener("click", function (event) {
+                                                    if (event.target && event.target.classList.contains("btn-detail")) {
+                                                        // Prevent the default form submission
+                                                        event.preventDefault();
+                                                        // Find the closest form element and submit it
+                                                        var form = event.target.closest("form");
+                                                        if (form) {
+                                                            form.submit();
+                                                        }
+                                                    }
+                                                });
+                                            },
+                                            error: function (xhr) {
+                                                console.error("Error occurred while fetching data:", xhr);
+                                            }
+                                        });
+                                    }
         </script>
     </body>
 </html>
