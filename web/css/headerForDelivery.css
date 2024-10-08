@@ -8,9 +8,14 @@
 body {
     min-height: 100vh;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    height: 100vh;
 }
 
 .sidebar {
+
     position: sticky;
     top: 0;
     width: 200px;
@@ -128,7 +133,7 @@ body {
 .user-frame{
     border-bottom: 1px solid #b4b5b6;
     margin-top: 20px;
-    padding: 33.5px;
+    padding: 17.65px;
 }
 
 .main-frame{
@@ -140,7 +145,7 @@ body {
 .main-icon{
     width: 130px;
     height: 130px;
-    margin-left: 200px;
+    margin-left: 36px;
 }
 
 .ship-history {
@@ -205,12 +210,20 @@ textarea {
 }
 
 .navbar-header {
+    margin-left: 203px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: white;
     transition: margin-left 0.3s ease;
 }
 
 .main-frame {
-    transition: margin-left 0.3s ease; /* Smooth transition for content area */
-    margin-left: 200px; /* Default margin for main content area */
+    margin-left: 200px;
+    padding-top: 32.7px;
+    transition: margin-left 0.3s ease;
+    margin-left: 200px;
 }
 
 .main-content {
@@ -220,15 +233,24 @@ textarea {
     margin-right: 6%;
 }
 
+.sidebar {
+    position: fixed;
+    top: 80px;
+    padding-top: 11px;
+    background-color: #f8f9fa;
+    margin-top: -79px;
+}
+
+
 .sidebar.collapsed + .navbar-header {
-    margin-left: 60px; /* Adjust margin when sidebar is collapsed */
+    margin-left: 180px; /* Adjust margin when sidebar is collapsed */
 }
 
 .sidebar.collapsed + .main-frame {
-    margin-left: 60px; /* Adjust margin when sidebar is collapsed */
+    margin-left: 80px; /* Adjust margin when sidebar is collapsed */
 }
 
 .sidebar.collapsed + .main-content {
-    margin-left: 60px; /* Adjust margin for main content when sidebar is collapsed */
+    margin-left: 80px; /* Adjust margin for main content when sidebar is collapsed */
 }
 

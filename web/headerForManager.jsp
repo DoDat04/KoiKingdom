@@ -20,10 +20,10 @@
         <title>Header</title>
     </head>
     <body>   
-        
-        <div class="navbar-header">           
-            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -80px; padding-top: 32.7px">
-                <a href="managerDashboard.jsp" style="margin-left: 116px">
+
+        <div class="navbar-header" >
+            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -0.2%; padding-top: 31.7px; padding-right: 161px">
+                <a href="home?action=Delivery" style="margin-left: 116px">
                     <img src="img/logo.png" class="main-icon" >
                 </a>
 
@@ -31,7 +31,7 @@
                 <div class="menu-center">
                     <ul class="nav justify-content-center">
                         <form action="${param.searchController}" method="get" class="search--box"> 
-                            <input  type="text" name="txtSearchValue" placeholder="${param.placeholder}" value="<%= (request.getParameter("txtSearchValue") != null) ? request.getParameter("txtSearchValue") : "" %>"  style=" border: none;"/>
+                            <input  type="text" name="txtSearchValue" placeholder="${param.placeholder}" value="<%= (request.getParameter("txtSearchValue") != null) ? request.getParameter("txtSearchValue") : ""%>"  style=" border: none;"/>
                             <button type="submit" style="border: none; border-radius: 4px;">  <i class="fa-solid fa-search"></i> </button>
                         </form>
                     </ul>
@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <div class="sidebar" style="margin-top: -468px; padding-top: 11px;">
+        <div class="sidebar" style="margin-top: -79px;">
             <c:choose>
                 <c:when test="${sessionScope.LOGIN_MANAGER != null}">
                     <ul class="menu">
@@ -155,38 +155,38 @@
         <script src="js/headerForDelivery.js"></script>
 
         <script>
-            function previewAvatar() {
-                const file = document.getElementById('avatar').files[0];
-                const preview = document.getElementById('avatarPreview');
-                const reader = new FileReader();
+                                    function previewAvatar() {
+                                        const file = document.getElementById('avatar').files[0];
+                                        const preview = document.getElementById('avatarPreview');
+                                        const reader = new FileReader();
 
-                reader.onloadend = function () {
-                    preview.src = reader.result;
-                };
+                                        reader.onloadend = function () {
+                                            preview.src = reader.result;
+                                        };
 
-                if (file) {
-                    reader.readAsDataURL(file);
-                } else {
-                    preview.src = "";
-                }
-            }
+                                        if (file) {
+                                            reader.readAsDataURL(file);
+                                        } else {
+                                            preview.src = "";
+                                        }
+                                    }
 
-            document.querySelector('.toggle-btn').addEventListener('click', function () {
-                const sidebar = document.querySelector('.sidebar');
-                const main = document.querySelector('.main');
-                const mainContent = document.querySelector('.main-content');
-                const logo = document.querySelector('.main-icon');
+                                    document.querySelector('.toggle-btn').addEventListener('click', function () {
+                                        const sidebar = document.querySelector('.sidebar');
+                                        const mainFrame = document.querySelector('.main-frame');
+                                        const mainContent = document.querySelector('.main-content');
 
-                sidebar.classList.toggle('collapsed');
+                                        sidebar.classList.toggle('collapsed');
 
-                if (sidebar.classList.contains('collapsed')) {
-                    main.style.marginLeft = '60px';
-                    mainContent.style.marginLeft = '-80px';
-                } else {
-                    main.style.marginLeft = '223px';
-                    mainContent.style.marginLeft = '0px';
-                }
-            });
+                                        if (sidebar.classList.contains('collapsed')) {
+                                            mainFrame.style.marginLeft = '-143px';
+                                            mainContent.style.marginLeft = '10%';
+                                        } else {
+                                            mainFrame.style.marginLeft = '-0.2%';
+                                            mainContent.style.marginLeft = '20%';
+                                        }
+                                    });
+
         </script>
     </body>
 </html>

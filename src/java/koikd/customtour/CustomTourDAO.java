@@ -460,6 +460,133 @@ public class CustomTourDAO implements Serializable {
         return rs;
     }
 
+    
+    /**
+     * GetListCustomTourByID
+     * @param id
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException 
+     */
+    public ArrayList<CustomTourDTO> getListCustomTourByID(int id) throws SQLException, ClassNotFoundException {
+        ArrayList<CustomTourDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT [RequestID], [CustomerID], [FullName], [Duration], [StartDate],\n"
+                        + "[EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], \n"
+                        + " [KoiTypeName], [Quantity], [Image], [DetailRejected],[Checked] \n"
+                        + " FROM [dbo].[CUSTOMTOURREQUEST] \n"
+                        + " WHERE [CustomerID] = ? AND [Status] = N'Approve'";
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, id);
+                rs = pst.executeQuery();
+
+                if (rs != null) {
+                    while (rs.next()) {
+                        int requestID = rs.getInt("RequestID");
+                        int customerID = rs.getInt("CustomerID");
+                        String custName = rs.getString("FullName");
+                        String farmName = rs.getString("FarmName");
+                        String koiTypeName = rs.getString("KoiTypeName");
+                        String duration = rs.getString("Duration");
+                        int quantity = rs.getInt("Quantity");
+                        Date startDate = rs.getDate("StartDate");
+                        Date endDate = rs.getDate("EndDate");
+                        double quotationPrice = rs.getDouble("QuotationPrice");
+                        String status = rs.getString("Status");
+                        String managerApprovalStatus = rs.getString("ManagerApprovalStatus");
+                        String departureLocation = rs.getString("DepartureLocation");
+                        String image = rs.getString("Image");
+                        boolean checked = rs.getBoolean("checked");
+                        String detailRejected = rs.getString("detailRejected");
+                        CustomTourDTO customTourDTO = new CustomTourDTO(requestID, customerID, custName, farmName, koiTypeName, duration, quotationPrice, quantity, startDate, endDate, status, managerApprovalStatus, departureLocation, image, checked, detailRejected);
+                        list.add(customTourDTO);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+
+        }
+        return list;
+    }
+
+    /**
+     * GetCustomTourByRequest
+     * @param id
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException 
+     */
+    public CustomTourDTO getCustomTourByRequest(int id) throws SQLException, ClassNotFoundException {
+        CustomTourDTO result = null;
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT [RequestID], [CustomerID], [FullName], [Duration], [StartDate],\n"
+                        + "[EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], \n"
+                        + " [KoiTypeName], [Quantity], [Image], [DetailRejected],[Checked] \n"
+                        + " FROM [dbo].[CUSTOMTOURREQUEST] \n"
+                        + " WHERE [RequestID] = ? AND [Status] = N'Approve'";
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, id);
+                rs = pst.executeQuery();
+
+                if (rs != null) {
+                    while (rs.next()) {
+                        int requestID = rs.getInt("RequestID");
+                        int customerID = rs.getInt("CustomerID");
+                        String custName = rs.getString("FullName");
+                        String farmName = rs.getString("FarmName");
+                        String koiTypeName = rs.getString("KoiTypeName");
+                        String duration = rs.getString("Duration");
+                        int quantity = rs.getInt("Quantity");
+                        Date startDate = rs.getDate("StartDate");
+                        Date endDate = rs.getDate("EndDate");
+                        double quotationPrice = rs.getDouble("QuotationPrice");
+                        String status = rs.getString("Status");
+                        String managerApprovalStatus = rs.getString("ManagerApprovalStatus");
+                        String departureLocation = rs.getString("DepartureLocation");
+                        String image = rs.getString("Image");
+                        boolean checked = rs.getBoolean("checked");
+                        String detailRejected = rs.getString("detailRejected");
+                        result = new CustomTourDTO(requestID, customerID, custName, farmName, koiTypeName, duration, quotationPrice, quantity, startDate, endDate, status, managerApprovalStatus, departureLocation, image, checked, detailRejected);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) throws SQLException {
         int reqID = 2;
         CustomTourDAO dao = new CustomTourDAO();

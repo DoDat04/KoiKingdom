@@ -20,9 +20,8 @@
         <title>Header For Delivery</title>
     </head>
     <body>  
-
-        <div class="navbar-header">           
-            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -80px; padding-top: 32.7px">
+        <div class="navbar-header" >
+            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -0.2%; padding-top: 31.7px; padding-right: 161px">
                 <a href="home?action=Delivery" style="margin-left: 116px">
                     <img src="img/logo.png" class="main-icon" >
                 </a>
@@ -41,7 +40,7 @@
 
 
 
-        <div class="sidebar" style="margin-top: -468px; padding-top: 11px;">
+        <div class="sidebar"  style=" margin-top: -79px;">
             <c:choose>
                 <c:when test="${sessionScope.LOGIN_DELIVERY != null}">
                     <ul class="menu">
@@ -75,7 +74,6 @@
                 </c:otherwise>
             </c:choose>
         </div>
-
 
         <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -142,7 +140,6 @@
         <script src="js/headerForDelivery.js"></script>
 
         <script>
-
                                     document.querySelector('.toggle-btn').addEventListener('click', function () {
                                         const sidebar = document.querySelector('.sidebar');
                                         const mainFrame = document.querySelector('.main-frame');
@@ -151,11 +148,11 @@
                                         sidebar.classList.toggle('collapsed');
 
                                         if (sidebar.classList.contains('collapsed')) {
-                                            mainFrame.style.marginLeft = '-10%';
+                                            mainFrame.style.marginLeft = '-143px';
                                             mainContent.style.marginLeft = '10%';
                                         } else {
-                                            mainFrame.style.marginLeft = '-5.2%'; // Reset the content frame
-                                            mainContent.style.marginLeft = '17%'; // Adjust the main content
+                                            mainFrame.style.marginLeft = '-0.2%';
+                                            mainContent.style.marginLeft = '20%';
                                         }
                                     });
 

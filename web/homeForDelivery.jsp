@@ -16,9 +16,9 @@
 
     <body>
         <jsp:include page="headerForDelivery.jsp" flush="true"/>
-        <div style="    margin-top: -26vh;
+        <div style="    margin-top: 25vh;
              margin-left: 17%;
-             margin-right: 6%;max-height: 422px; overflow-y: auto;" class="main-content">          
+             margin-right: 6%;" class="main-content">         
 
             <table id="content" class="styled-table">
                 <thead>

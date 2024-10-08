@@ -23,9 +23,9 @@
     </head>
     <body>
         <jsp:include page="headerForSales.jsp" flush="true"/>
-        <div style="    margin-top: -26vh;
-             margin-left: 13%;
-             margin-right: 6%" class="main-content">          
+           <div style="    margin-top: 25vh;
+             margin-left: 17%;
+             margin-right: 6%;" class="main-content">          
 
             <table id="content" class="styled-table">
                 <thead>

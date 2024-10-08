@@ -127,7 +127,9 @@
                 </div>-->
         <jsp:include page="headerForManager.jsp" flush="true"/>   
         <!-- Nội dung chính -->
-        <div class="main" style="margin-top: -216px; margin-left: 223px; margin-right: 30px;">       
+         <div style="    margin-top: 25vh;
+             margin-left: 17%;
+             margin-right: 6%;" class="main-content">     
 
             <div class="container">
                 <h1>Employee Management</h1>

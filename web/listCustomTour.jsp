@@ -22,7 +22,9 @@
     </head>
     <body>
         <jsp:include page="headerForManager.jsp" flush="true"/>
-        <div style="margin-top: -26vh; margin-left: 13%; margin-right: 6%" class="main-content">          
+        <div style="    margin-top: 25vh;
+             margin-left: 17%;
+             margin-right: 6%;" class="main-content">          
             <table id="content" class="styled-table">
                 <thead>
                     <tr>
@@ -73,51 +75,51 @@
                                     </td>
 
                                     <!--Modal-->
-                                    <div class="modal fade" id="updateModal${custom.requestID}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel${custom.requestID}" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="updateModalLabel${custom.requestID}">Update Section</h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div class="modal fade" id="updateModal${custom.requestID}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel${custom.requestID}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="updateModalLabel${custom.requestID}">Update Section</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="updateForm${custom.requestID}" method="post" action="update-price">
+                                                <div class="mb-3">
+                                                    <label for="quotationPrice${custom.requestID}" class="form-label">Quotation Price</label>
+                                                    <input type="number" step="0.01" class="form-control" id="quotationPrice${custom.requestID}" name="txtQuoPrice" placeholder="Enter new quotation price" required>
                                                 </div>
-                                                <div class="modal-body">
-                                                    <form id="updateForm${custom.requestID}" method="post" action="update-price">
-                                                        <div class="mb-3">
-                                                            <label for="quotationPrice${custom.requestID}" class="form-label">Quotation Price</label>
-                                                            <input type="number" step="0.01" class="form-control" id="quotationPrice${custom.requestID}" name="txtQuoPrice" placeholder="Enter new quotation price" required>
-                                                        </div>
-                                                        <input type="hidden" name="txtReq" value="${custom.requestID}">
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" form="updateForm${custom.requestID}" class="btn btn-primary">Update</button>
-                                                </div>
-                                            </div>
+                                                <input type="hidden" name="txtReq" value="${custom.requestID}">
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" form="updateForm${custom.requestID}" class="btn btn-primary">Update</button>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
 
-                                    <div class="modal fade" id="sendModal${custom.requestID}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Send</h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Are you sure about that?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                                    <form action="sales-to-manager" method="POST">
-                                                        <input type="hidden" name="txtReqID" value="${custom.requestID}">
-                                                        <button type="submit" class="btn btn-primary">Yes</button>
-                                                    </form>
-                                                </div>
-                                            </div>
+                            <div class="modal fade" id="sendModal${custom.requestID}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Send</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure about that?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                            <form action="sales-to-manager" method="POST">
+                                                <input type="hidden" name="txtReqID" value="${custom.requestID}">
+                                                <button type="submit" class="btn btn-primary">Yes</button>
+                                            </form>
                                         </div>
                                     </div>
-                                </tr>
+                                </div>
+                            </div>
+                            </tr>
                         </c:forEach>
                     </c:when>
                     <c:otherwise>
