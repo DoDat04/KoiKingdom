@@ -74,7 +74,7 @@ public class ManagerCustomActionController extends HttpServlet {
         } catch (SQLException | ClassNotFoundException e) {
             Logger.getLogger(ManagerCustomActionController.class.getName()).log(Level.SEVERE, null, e);
         } finally {
-            response.sendRedirect(url);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }      
 

@@ -567,7 +567,7 @@ public class CustomTourDAO implements Serializable {
                         + "[EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], \n"
                         + " [KoiTypeName], [Quantity], [Image], [DetailRejected],[Checked] \n"
                         + " FROM [dbo].[CUSTOMTOURREQUEST] \n"
-                        + " WHERE [CustomerID] = ? AND [Status] = N'Approved' AND [ManagerApprovalStatus] = N'Approve' AND [Checked] = N'True'";
+                        + " WHERE [CustomerID] = ? AND [Status] = N'Approved' AND [ManagerApprovalStatus] = N'Approved' AND [Checked] = N'True'";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, id);
                 rs = pst.executeQuery();
@@ -632,7 +632,7 @@ public class CustomTourDAO implements Serializable {
                         + "[EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], \n"
                         + " [KoiTypeName], [Quantity], [Image], [DetailRejected],[Checked] \n"
                         + " FROM [dbo].[CUSTOMTOURREQUEST] \n"
-                        + " WHERE [RequestID] = ? AND [Status] = N'Approved' AND [ManagerApprovalStatus] = N'Approve' AND [Checked] = N'True'";
+                        + " WHERE [RequestID] = ? AND [Status] = N'Approved' AND [ManagerApprovalStatus] = N'Approved' AND [Checked] = N'True'";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, id);
                 rs = pst.executeQuery();
@@ -674,6 +674,4 @@ public class CustomTourDAO implements Serializable {
         }
         return result;
     }
-
-//s
 }
