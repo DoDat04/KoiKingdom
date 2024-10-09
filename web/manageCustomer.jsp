@@ -145,7 +145,7 @@
                             <th>Address</th>
                             <th>Account Type</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th>Change Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -169,9 +169,9 @@
                                     </c:choose>
                                 </td>
                                 <td>
-                                    <a href="updateStatus?customerID=${customer.customerID}" 
+                                    <a class="btn btn-primary" href="updateStatus?customerID=${customer.customerID}" 
                                        onclick="return confirm('Are you sure you want to change the status?');">
-                                        Change Status
+                                        Change
                                     </a>
                                 </td>
                             </tr>
