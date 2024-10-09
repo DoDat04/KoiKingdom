@@ -567,7 +567,7 @@ public class CustomTourDAO implements Serializable {
                         + "[EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], \n"
                         + " [KoiTypeName], [Quantity], [Image], [DetailRejected],[Checked] \n"
                         + " FROM [dbo].[CUSTOMTOURREQUEST] \n"
-                        + " WHERE [CustomerID] = ? AND [Status] = N'Approve'";
+                        + " WHERE [CustomerID] = ? AND [Status] = N'Approved' AND [ManagerApprovalStatus] = N'Approve' AND [Checked] = N'True'";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, id);
                 rs = pst.executeQuery();
@@ -632,7 +632,7 @@ public class CustomTourDAO implements Serializable {
                         + "[EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], \n"
                         + " [KoiTypeName], [Quantity], [Image], [DetailRejected],[Checked] \n"
                         + " FROM [dbo].[CUSTOMTOURREQUEST] \n"
-                        + " WHERE [RequestID] = ? AND [Status] = N'Approve'";
+                        + " WHERE [RequestID] = ? AND [Status] = N'Approved' AND [ManagerApprovalStatus] = N'Approve' AND [Checked] = N'True'";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, id);
                 rs = pst.executeQuery();
@@ -675,14 +675,5 @@ public class CustomTourDAO implements Serializable {
         return result;
     }
 
-    public static void main(String[] args) throws SQLException {
-        int reqID = 2;
-        CustomTourDAO dao = new CustomTourDAO();
-        boolean dto = dao.sendDetailCustomTourFromSalesToManager(reqID);
-        if (dto) {
-            System.out.println("Updated.");
-        } else {
-            System.out.println("Fail.");
-        }
-    }
+//s
 }
