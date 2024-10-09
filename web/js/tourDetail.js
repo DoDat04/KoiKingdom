@@ -40,17 +40,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function toggleMoreFeedback(event) {
     event.preventDefault();
-    const moreFeedback = document.querySelector('.more-feedback');
+    
+    // Chọn tất cả các phần tử có class 'more-feedback'
+    const moreFeedbackItems = document.querySelectorAll('.more-feedback');
     const link = event.target;
 
-    if (moreFeedback.style.display === "none") {
-        moreFeedback.style.display = "block";
+    // Lặp qua tất cả các phần tử và thay đổi trạng thái hiển thị
+    moreFeedbackItems.forEach(item => {
+        if (item.style.display === "none" || item.style.display === "") {
+            item.style.display = "block"; // Hiển thị phần tử
+        } else {
+            item.style.display = "none";  // Ẩn phần tử
+        }
+    });
+
+    // Thay đổi văn bản của link
+    if (link.innerHTML === "Show More") {
         link.innerHTML = "Show Less";
     } else {
-        moreFeedback.style.display = "none";
         link.innerHTML = "Show More";
     }
 }
+
 
 
 

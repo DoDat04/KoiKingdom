@@ -22,6 +22,17 @@
         <link rel="stylesheet" href="css/tour-detail.css">
 
     </head>
+
+    <style>
+        .star {
+            color: #FFD700; /* Màu vàng cho ngôi sao */
+            font-size: 20px; /* Kích thước ngôi sao */
+            transition: color 0.2s ease; /* Hiệu ứng chuyển màu */
+        }
+        .star:hover {
+            color: #FFEA00; /* Màu vàng nhạt hơn khi hover */
+        }
+    </style>
     <body>
         <div class="colorlib-loader"></div>
 
@@ -152,31 +163,49 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="feedback-list" id="feedbackContainer">
-                            <div class="feedback-item">
-                                <p class="user-name"><strong>John Doe:</strong></p>
-                                <p class="feedback-text">The tour was fantastic! Highly recommend.</p>
-                            </div>
-                            <div class="feedback-item">
-                                <p class="user-name"><strong>Jane Smith:</strong></p>
-                                <p class="feedback-text">Great experience! Will come back for more.</p>
-                            </div>
-                            <!-- More feedback items -->
-                            <div class="more-feedback" style="display: none;">
-                                <div class="feedback-item">
-                                    <p class="user-name"><strong>Mike Johnson:</strong></p>
-                                    <p class="feedback-text">An unforgettable experience!</p>
+                            <c:forEach var="feedbackTour" items="${requestScope.feedbackTour}" varStatus="feedbackID">
+                                <div class="feedback-item <c:if test="${feedbackID.index > 2}">more-feedback</c:if>" 
+                                     style="<c:if test='${feedbackID.index > 2}'>display: none;</c:if>">
+                                         <p class="user-name"><strong>                              
+                                             ${requestScope.customerList[feedbackID.index].lastName} ${requestScope.customerList[feedbackID.index].firstName}</strong>
+                                     </p>
+                                     <p class="feedback-text">${feedbackTour.feedbackText}</p>
+                                     <p class="feedback-text">
+                                         <span id="rating-stars-${feedbackID.index}"></span>
+                                     </p>
                                 </div>
-                                <div class="feedback-item">
-                                    <p class="user-name"><strong>Emily Davis:</strong></p>
-                                    <p class="feedback-text">Highly informative and enjoyable.</p>
-                                </div>
-                            </div>
+                                <script>
+                                    updateStars();
+
+                                    function updateStars() {
+                                        const rating = ${feedbackTour.rating}; // Giả sử giá trị này từ backend
+                                        const starContainer = document.getElementById('rating-stars-${feedbackID.index}');
+
+                                        // Reset nội dung của starContainer
+                                        starContainer.innerHTML = '';
+
+                                        // Tạo ra các ngôi sao dựa trên rating
+                                        for (let i = 1; i <= 5; i++) {
+                                            if (i <= rating) {
+                                                starContainer.innerHTML += '<i class="fas fa-star star"></i>'; // Ngôi sao đầy
+                                            } else {
+                                                starContainer.innerHTML += '<i class="far fa-star star"></i>'; // Ngôi sao rỗng
+                                            }
+                                        }
+                                    }
+                                </script>
+                            </c:forEach>
+
+
+
                         </div>
                         <a href="#" onclick="toggleMoreFeedback(event)" class="show-more-link">Show More</a>
                     </div>
                 </div>
             </div>
         </section>       
+
+
 
         <!-- Back to Top Button -->
         <button id="backToTop" class="btn btn-primary" style="display: none;">

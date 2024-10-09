@@ -12,8 +12,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import koikd.customer.CustomerDTO;
+import koikd.feedback.FeedbackDAO;
+import koikd.feedback.FeedbackDTO;
 import koikd.tour.TourDAO;
 import koikd.tour.TourDTO;
 
@@ -23,7 +27,9 @@ import koikd.tour.TourDTO;
  */
 @WebServlet(name = "TourDetailController", urlPatterns = {"/tour-detail"})
 public class TourDetailController extends HttpServlet {
+
     private static final String TOUR_DETAIL_PAGE = "tour-detail.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,17 +45,30 @@ public class TourDetailController extends HttpServlet {
         String url = TOUR_DETAIL_PAGE;
         String tourIDParam = request.getParameter("tourID");
         try {
+            FeedbackDAO feedbackDAO = new FeedbackDAO();
             TourDAO dao = new TourDAO();
             if (tourIDParam != null && !tourIDParam.isEmpty()) {
                 int tourID = Integer.parseInt(tourIDParam);
-
                 TourDTO selectedTour = dao.getTourByID(tourID);
+                CustomerDTO customer = new CustomerDTO();
+                ArrayList<CustomerDTO> customerList = new ArrayList<>();
+                ArrayList<FeedbackDTO> feedbackTour = feedbackDAO.getListFeedback(tourID);
+                for (FeedbackDTO feedbackDTO : feedbackTour) {
+                    customer = feedbackDAO.getCustomerByCustomerID(feedbackDTO.getCustomerID());
+                    customerList.add(customer);
+                }
+                if (feedbackTour != null) {
+                    request.setAttribute("feedbackTour", feedbackTour);
+                    request.setAttribute("customerList", customerList);
+                    url = TOUR_DETAIL_PAGE;
+                }
 
                 if (selectedTour != null) {
                     request.setAttribute("selectedTour", selectedTour);
-                    url = TOUR_DETAIL_PAGE; 
+                    url = TOUR_DETAIL_PAGE;
                 }
             }
+
         } catch (SQLException ex) {
             Logger.getLogger(TourDetailController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
