@@ -131,12 +131,12 @@
             <jsp:param name="placeholder" value="Search tour"/>
         </jsp:include>
         <!-- Nội dung chính -->
-         <div style="    margin-top: 25vh;
+        <div style="    margin-top: 25vh;
              margin-left: 17%;
              margin-right: 6%;" class="main-content">     
             <div class="container">
                 <h1>Tour Management</h1>
-                
+
                 <table>
                     <c:if test="${not empty UPDATE_STATUS}">
                         <div class="alert alert-success">
@@ -188,8 +188,8 @@
                                 <td>${tour.tourPrice}</td>
                                 <td>${tour.startDate}</td>
                                 <td>${tour.endDate}</td>
-                                <td><img src="${tour.tourImage}" alt="tour-image" height="150px" width="250px" style="border-radius: 20px; object-fit: contain" ></td>
-                                
+                                <td style="width: 200px"><img src="${tour.tourImage}" alt="tour-image" height="100px" width="100%" style="border-radius: 20px; object-fit: contain" ></td>
+
                                 <td>
                                     <c:choose>
                                         <c:when test="${tour.status}">
@@ -239,5 +239,5 @@
             }
         }
     </script>
-    </body>
+</body>
 </html>
