@@ -129,7 +129,6 @@
                 </div>-->
         <jsp:include page="headerForManager.jsp" flush="true">
             <jsp:param name="searchController" value="SearchByTourName"/>
-            <jsp:param name="placeholder" value="Search tour name"/>
         </jsp:include>   
         <!-- Nội dung chính -->
 

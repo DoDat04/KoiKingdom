@@ -330,7 +330,82 @@ public class EmployeesDAO {
         }
         return result;
     }
+    
+    public boolean addEmployee(String email, String password, String role, String lastName,
+            String firstName, String address, boolean status) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        boolean result = false;
 
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "INSERT INTO EMPLOYEE (Email, Password, Role, LastName, FirstName, Address, Status) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, email);
+                stm.setString(2, password);
+                stm.setString(3, role);
+                stm.setString(4, lastName);
+                stm.setString(5, firstName);
+                stm.setString(6, address);
+                stm.setBoolean(7, true); 
+                int affectedRows = stm.executeUpdate();
+                if (affectedRows > 0) {
+                    result = true;
+                }
+
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
+    
+    public EmployeesDTO getEmployeeByEmail(String email) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        EmployeesDTO result = null;
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT Email, Password, Role, LastName, FirstName, Address, Status "
+                        + "FROM EMPLOYEE "
+                        + "WHERE Email = ? AND Status = 1";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, email);
+                rs = stm.executeQuery();
+
+                if (rs.next()) {
+                    String password = rs.getString("Password");
+                    String role = rs.getString("Role");
+                    String lastName = rs.getString("LastName");
+                    String firstName = rs.getString("FirstName");
+                    String address = rs.getString("Address");
+                    boolean status = rs.getBoolean("Status");
+                    result = new EmployeesDTO(email, password, role, lastName, firstName, address, status);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
 //    public static void main(String[] args) throws SQLException {
 //        int id = 1;
 //        EmployeesDAO dao = new EmployeesDAO();

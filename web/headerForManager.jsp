@@ -31,7 +31,7 @@
                 <div class="menu-center">
                     <ul class="nav justify-content-center">
                         <form action="${param.searchController}" method="get" class="search--box"> 
-                            <input  type="text" name="txtSearchValue" placeholder="${param.placeholder}" value="<%= (request.getParameter("txtSearchValue") != null) ? request.getParameter("txtSearchValue") : ""%>"  style=" border: none;"/>
+                            <input  type="text" name="txtSearchValue" placeholder="Search" value="<%= (request.getParameter("txtSearchValue") != null) ? request.getParameter("txtSearchValue") : ""%>"  style=" border: none;"/>
                             <button type="submit" style="border: none; border-radius: 4px;">  <i class="fa-solid fa-search"></i> </button>
                         </form>
                     </ul>
@@ -70,6 +70,9 @@
                         </li>
                         <li class="menu-item">
                             <a href="createTour.jsp" style="color: black"><i class="fa-solid fa-plus"></i>Add Tour</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="addEmployee.jsp" style="color: black"><i class="fas fa-user-plus"></i>Add Employee</a>
                         </li>
                         <li class="menu-item">
                             <a href="custom-tour" style="color: black"><i class="fas fa-suitcase"></i>Custom Tour</a>

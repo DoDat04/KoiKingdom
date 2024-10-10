@@ -127,10 +127,9 @@
                 </div>-->
         <jsp:include page="headerForManager.jsp" flush="true">
             <jsp:param name="searchController" value="searchemployee"/>
-            <jsp:param name="placeholder" value="Search employee"/>
         </jsp:include>   
         <!-- Nội dung chính -->
-         <div style="    margin-top: 25vh;
+        <div style="    margin-top: 25vh;
              margin-left: 17%;
              margin-right: 6%;" class="main-content">     
 
@@ -147,7 +146,7 @@
                             <th>First Name</th>
                             <th>Address</th>
                             <th>Status</th>
-                            <th>Change Status</th>
+                            <th>Change status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -170,7 +169,7 @@
                                     </c:choose>
                                 </td>
                                 <td>
-                                    <a class="btn btn-success" href="updateStatusEmployee?employeeID=${employee.employeeID}" 
+                                    <a class="btn btn-primary" href="updateStatusEmployee?employeeID=${employee.employeeID}" 
                                        onclick="return confirm('Are you sure you want to change the status?');">
                                         Change
                                     </a>

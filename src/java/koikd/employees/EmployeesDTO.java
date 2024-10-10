@@ -62,6 +62,15 @@ public class EmployeesDTO implements Serializable {
         this.status = status;
     }
     
+    public EmployeesDTO(String email, String password, String role, String lastName, String firstName, String address, boolean status) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.address = address;
+        this.status = status;
+    }
 
     /**
      * Getter / Setter* @return

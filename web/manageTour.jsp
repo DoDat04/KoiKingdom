@@ -9,6 +9,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -120,7 +121,6 @@
     <body>
         <jsp:include page="headerForManager.jsp" flush="true">
             <jsp:param name="searchController" value="SearchByTourName"/>
-            <jsp:param name="placeholder" value="Search tour"/>
         </jsp:include>
         <!-- Nội dung chính -->
         <div style="    margin-top: 25vh;
@@ -144,10 +144,10 @@
                             <th>Tour Price</th>
                             <th>Start Date</th>
                             <th>End Date</th>
-                            <th>Image</th>
+                            
                             <th>Status</th>
                             <th>Departure Location</th>
-                            <th>Actions</th>
+                            <th>Change status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -157,8 +157,8 @@
                                 <td>${tour.tourName}</td>
                                 <td>${tour.duration}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal${tour.tourID}">
-                                        Show more
+                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal${tour.tourID}">
+                                        View detail
                                     </button>
                                 </td>
                                 <!-- Modal -->
@@ -179,9 +179,10 @@
                             </div>
                         </div>
                         <td>${tour.tourPrice}</td>
-                        <td>${tour.startDate}</td>
-                        <td>${tour.endDate}</td>
-                        <td style="width: 200px"><img src="${tour.tourImage}" alt="tour-image" height="100px" width="100%" style="border-radius: 20px; object-fit: contain" ></td>
+                        <td><fmt:formatDate value="${tour.startDate}" pattern="dd-MM-yyyy" /></td>
+                        <td><fmt:formatDate value="${tour.endDate}" pattern="dd-MM-yyyy" /></td>
+
+<!--                        <td style="width: 200px"><img src="${tour.tourImage}" alt="tour-image" height="100px" width="100%" style="border-radius: 20px; object-fit: contain" ></td>-->
 
                         <td>
                             <c:choose>
@@ -195,9 +196,9 @@
                         </td>
                         <td>${tour.tourDepartLoca}</td>
                         <td>
-                            <a class="btn btn-secondary" href="updateStatusTour?tourID=${tour.tourID}" 
+                            <a class="btn btn-primary" href="updateStatusTour?tourID=${tour.tourID}" 
                                onclick="return confirm('Are you sure you want to change the status?');">
-                                Change Status
+                                Change
                             </a>
                         </td>
                         </tr>
@@ -210,5 +211,5 @@
             </div>
         </div>
     </div>
-    </body>
+</body>
 </html>
