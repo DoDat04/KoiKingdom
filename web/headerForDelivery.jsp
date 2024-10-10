@@ -10,14 +10,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+         <title>Header For Delivery</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-        <!-- Font Awesome for Icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <link rel="stylesheet" href="css/headerForDelivery.css">
-        <title>Header For Delivery</title>
+        <link rel="stylesheet" href="css/headerForDelivery.css"> 
     </head>
     <body>  
         <div class="navbar-header" >
@@ -58,7 +57,7 @@
                             </li>
                         </div>
                         <li class="menu-item">
-                            <a href="#" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Ship History</a>
+                            <a href="home?action=Delivery" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Ship History</a>
                         </li>
                         <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
                                 <i style='font-size:24px' class='fas'>&#xf406;</i>Profile</a></li>
@@ -167,13 +166,12 @@
                                             success: function (data) {
                                                 var row = document.getElementById("content");
                                                 row.innerHTML = data;
-
-                                                // Re-attach the click event to handle "Detail" button clicks
+      
                                                 row.addEventListener("click", function (event) {
                                                     if (event.target && event.target.classList.contains("btn-detail")) {
-                                                        // Prevent the default form submission
+                                                       
                                                         event.preventDefault();
-                                                        // Find the closest form element and submit it
+                                                
                                                         var form = event.target.closest("form");
                                                         if (form) {
                                                             form.submit();

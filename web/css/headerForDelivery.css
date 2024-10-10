@@ -1,3 +1,12 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Sep 21, 2024, 3:57:03 PM
+    Author     : Minhngo
+*/
+
 *{
     margin: 0;
     padding: 0;
@@ -14,8 +23,8 @@ body {
     height: 100vh;
 }
 
-.sidebar {
 
+.sidebar {
     position: sticky;
     top: 0;
     width: 200px;
@@ -27,16 +36,11 @@ body {
 }
 
 .sidebar.collapsed {
-    width: 60px; /* Reduced width */
+    width: 60px; 
 }
 
 .sidebar.collapsed .menu-item a {
-    font-size: 0; /* Hide text */
-    white-space: nowrap;
-}
-
-.sidebar.collapsed .user-details span {
-    font-size: 0; /* Hide text */
+    font-size: 0;
     white-space: nowrap;
 }
 
@@ -44,12 +48,12 @@ body {
     font-size: 24px;
 }
 .sidebar.collapsed .toggle-btn {
-    transform: rotate(180deg); /* Rotate the icon */
     margin-left: -43px;
     padding: 18.3px;
 }
 
-.menu-item{
+
+.sidebar .menu-item{
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 18px;
@@ -59,11 +63,10 @@ body {
     margin-bottom: 30px;
 }
 .user-details {
-    display: flex; /* Flexbox for horizontal alignment */
-    align-items: center; /* Vertically center the icon and text */
-    gap: 25px; /* Space between icon and text */
+    display: flex; 
+    align-items: center;
+    gap: 25px;
 }
-
 
 .user-name {
     font-size: 20px;
@@ -148,20 +151,6 @@ body {
     margin-left: 36px;
 }
 
-.ship-history {
-    font-weight: bold; /* Đậm */
-    text-decoration: none; /* Xóa gạch chân */
-    color: black; /* Màu chữ */
-    font-size: 24px; /* Kích thước chữ */
-    transition: color 0.3s; /* Hiệu ứng chuyển màu */
-}
-
-/* Hiệu ứng khi hover */
-.ship-history:hover {
-    color: blue; /* Màu khi hover */
-}
-
-
 form .search--box {
     background-color: #fff;
     padding: 20px;
@@ -227,8 +216,8 @@ textarea {
 }
 
 .main-content {
-    transition: margin-left 0.3s ease; /* Smooth transition for main content */
-    margin-left: 17%; /* Default margin-left as per your original design */
+    transition: margin-left 0.3s ease; 
+    margin-left: 17%; 
     margin-top: -26vh;
     margin-right: 6%;
 }
@@ -240,17 +229,3 @@ textarea {
     background-color: #f8f9fa;
     margin-top: -79px;
 }
-
-
-.sidebar.collapsed + .navbar-header {
-    margin-left: 180px; /* Adjust margin when sidebar is collapsed */
-}
-
-.sidebar.collapsed + .main-frame {
-    margin-left: 80px; /* Adjust margin when sidebar is collapsed */
-}
-
-.sidebar.collapsed + .main-content {
-    margin-left: 80px; /* Adjust margin for main content when sidebar is collapsed */
-}
-

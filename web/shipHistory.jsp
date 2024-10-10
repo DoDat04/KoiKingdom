@@ -1,10 +1,12 @@
 <%--    Document   : shipHistory
     Created on : Sep 26, 2024, 7:10:01 AM
-    Author     : Admin
+    Author     : Minhngo
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -20,7 +22,7 @@
         <jsp:include page="headerForDelivery.jsp" flush="true"/>
         <div style="    margin-top: 25vh;
              margin-left: 17%;
-             margin-right: 6%;" class="main-content">
+             margin-right: 6%;" class="main-content">   
             <c:if test="${not empty requestScope.koiOrderDetails}">
                 <div class="container">
                     <div class="row">
@@ -44,7 +46,6 @@
                                                     <td>${details.koiOrderID}</td>
                                                     <td>${requestScope.koiNames[koiOrderID.index].koiName}</td>
                                                     <td>${requestScope.farmNames[koiOrderID.index].farmName}</td>
-
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
@@ -71,9 +72,9 @@
                                         <tbody>
                                             <c:forEach var="details" items="${requestScope.koiOrderDetails}" varStatus="koiOrderID">
                                                 <tr>
-                                                    <td>${details.quantity}</td>
-                                                    <td>${details.unitPrice}</td>
-                                                    <td>${details.totalPrice}</td>
+                                                    <td> <fmt:formatNumber type="currency" currencySymbol="$" value="${details.quantity}"/></td>
+                                                    <td>  <fmt:formatNumber type="currency" currencySymbol="$" value="${details.unitPrice}"/></td>
+                                                    <td> <fmt:formatNumber type="currency" currencySymbol="$" value="${details.totalPrice}"/></td>
                                                 </tr>
                                             </c:forEach>
                                         </tbody>

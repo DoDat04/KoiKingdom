@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import koikd.customer.CustomerDTO;
 import koikd.farm.FarmDTO;
 import koikd.koi.KoiDTO;
@@ -28,7 +30,7 @@ public class KoiOrderDAO {
      * @return
      * @throws SQLException
      */
-    public ArrayList<KoiOrderDTO> getKoiOrderListByNameCustomer(String nameCustomer) throws SQLException {
+    public ArrayList<KoiOrderDTO> getKoiOrderListByNameCustomer(String nameCustomer, int index) throws SQLException {
         ArrayList<KoiOrderDTO> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement pst = null;
@@ -37,32 +39,50 @@ public class KoiOrderDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
+                // Base query
                 String sql = "SELECT \n"
                         + "    O.KoiOrderID, \n"
-                        + "    C.CustomerID,\n"
+                        + "    C.CustomerID, \n"
                         + "    O.DeliveryDate, \n"
-                        + "    O.Status,\n"
+                        + "    O.Status, \n"
                         + "    O.EstimatedDelivery \n"
                         + "FROM \n"
-                        + "    [dbo].[KOIORDER] O\n"
+                        + "    [dbo].[KOIORDER] O \n"
                         + "INNER JOIN \n"
-                        + "    [dbo].[CUSTOMER] C ON O.CustomerID = C.CustomerID";
+                        + "    [dbo].[CUSTOMER] C ON O.CustomerID = C.CustomerID \n";
+
+                // Add condition for customer name if it's provided
                 if (nameCustomer != null && !nameCustomer.isEmpty()) {
-                    sql += " WHERE c.LastName + ' ' + c.FirstName LIKE ?";
+                    sql += "WHERE C.LastName + ' ' + C.FirstName LIKE ? \n";
                 }
+
+                // Add pagination
+                sql += "ORDER BY O.KoiOrderID \n"
+                        + "OFFSET ? ROWS \n"
+                        + "FETCH NEXT 5 ROWS ONLY;";
+
                 pst = conn.prepareStatement(sql);
+
+                int paramIndex = 1;
+                // If nameCustomer is provided, set it in the prepared statement
                 if (nameCustomer != null && !nameCustomer.isEmpty()) {
-                    pst.setString(1, "%" + nameCustomer + "%");
+                    pst.setString(paramIndex++, "%" + nameCustomer + "%");
                 }
+
+                // Set index for pagination
+                pst.setInt(paramIndex, (index - 1) * 5);
+
                 rs = pst.executeQuery();
                 while (rs.next()) {
-                    int KoiOrderID = rs.getInt("KoiOrderID");
-                    int customerId = rs.getInt("CustomerID");
+                    int koiOrderID = rs.getInt("KoiOrderID");
+                    int customerID = rs.getInt("CustomerID");
                     Date deliveryDate = rs.getDate("DeliveryDate");
                     boolean status = rs.getBoolean("Status");
                     Date estimatedDelivery = rs.getDate("EstimatedDelivery");
-                    KoiOrderDTO dao = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery);
-                    list.add(dao);
+
+                    // Create the DTO and add to the list
+                    KoiOrderDTO orderDTO = new KoiOrderDTO(koiOrderID, customerID, deliveryDate, status, estimatedDelivery);
+                    list.add(orderDTO);
                 }
             }
         } catch (Exception e) {
@@ -542,7 +562,6 @@ public class KoiOrderDAO {
 //            System.out.println("Fail.");
 //        }
 //    }
-    
     /**
      *
      * @param koiOrderDetailDTO
@@ -581,4 +600,98 @@ public class KoiOrderDAO {
         }
         return result;
     }
+
+    /**
+     * Get Number Page
+     *
+     * @param nameCustomer
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public int getNumberPage(String nameCustomer) throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        int countPage = 0;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT COUNT(*) FROM KoiOrder O "
+                        + "INNER JOIN Customer C ON O.CustomerID = C.CustomerID ";
+
+                if (nameCustomer != null && !nameCustomer.isEmpty()) {
+                    sql += "WHERE C.LastName + ' ' + C.FirstName LIKE ?";
+                }
+                pst = conn.prepareStatement(sql);
+                if (nameCustomer != null && !nameCustomer.isEmpty()) {
+                    pst.setString(1, "%" + nameCustomer + "%");
+                }
+                rs = pst.executeQuery();
+                if (rs.next()) {
+                    int total = rs.getInt(1);
+                    countPage = total / 5;
+
+                    if (total % 5 != 0) {
+                        countPage++;
+                    }
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return countPage;
+    }
+
+    /**
+     * Update Status Order
+     *
+     * @param koiOrderID
+     * @param status
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public KoiOrderDTO updateStatusOrder(int koiOrderID, boolean status) throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        KoiOrderDTO updatedOrder = new KoiOrderDTO();
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "UPDATE [dbo].[KOIORDER] SET [Status] = ? WHERE [KoiOrderID] = ?;";
+                pst = conn.prepareStatement(sql);
+                pst.setBoolean(1, status);
+                pst.setInt(2, koiOrderID);
+
+                int affectedRows = pst.executeUpdate();
+
+                if (affectedRows > 0) {
+                    updatedOrder.setStatus(status);
+
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return updatedOrder;
+    }
+
 }

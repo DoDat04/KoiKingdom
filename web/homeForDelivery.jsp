@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,6 +9,7 @@
         <!-- Font Awesome for Icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
         <link href="css/homeForDelivery.css" rel="stylesheet">
         <link href="css/toast.css" rel="stylesheet">
         <title>Delivery Home</title>
@@ -16,9 +18,7 @@
 
     <body>
         <jsp:include page="headerForDelivery.jsp" flush="true"/>
-        <div style="    margin-top: 25vh;
-             margin-left: 17%;
-             margin-right: 6%;" class="main-content">         
+        <div style="margin-top: 25vh; margin-left: 17%; margin-right: 6%;" class="main-content">         
 
             <table id="content" class="styled-table">
                 <thead>
@@ -41,22 +41,16 @@
                                     <td>${requestScope.customerNames[status.index]}</td>
                                     <td>${order.deliveryDate}</td>
                                     <td>
-                                        <c:choose>
-                                            <c:when test="${order.status == true}">
-                                                Complete
-                                            </c:when>
-                                            <c:when test="${order.status == false}">
-                                                On-going
-                                            </c:when>
-                                        </c:choose>
-
+                                        <select id="orderStatus_${order.koiOrderID}" onchange="updateStatus(${order.koiOrderID}, this.value)">
+                                            <option value="true" ${order.status ? 'selected' : ''}>Complete</option>
+                                            <option value="false" ${!order.status ? 'selected' : ''}>On-going</option>
+                                        </select>
                                     </td>
                                     <td style="padding-left: 4%;">
                                         <form action="GetKoiOrderDetail" method="GET" style="display:inline;">
                                             <input type="hidden" name="orderID" value="${order.koiOrderID}">
                                             <input type="hidden" name="customerID" value="${order.customerID}">
-                                            <button class="btn-detail" type="submit" style="    border: none;
-                                                    background: none">Detail</button>
+                                            <button class="btn-detail" type="submit" style="border: none; background: none;">Detail</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -70,7 +64,38 @@
                     </c:choose>
                 </tbody>
             </table>
+
+            <jsp:useBean id="a" class="koikd.order.KoiOrderDAO" scope="request"></jsp:useBean>
+                <nav style="position: fixed; top: 75%; margin-left: 32%; background-color: white; padding: 10px 0;">
+                    <ul class="pagination pagination-lg">
+                    <c:forEach begin="1" end="${numberOfPages}" var="i">
+                        <li class="page-item ${pageIndex == i ? 'active' : ''}">
+                            <a class="page-link" href="GetKoiOrder?index=${i}&txtNameCustomer=${param.txtNameCustomer}">${i}</a>
+                        </li>
+                    </c:forEach>
+                </ul> 
+            </nav>
         </div>
+
+        <script>
+            function updateStatus(koiOrderID, status) {
+                $.ajax({
+                    url: "/KoiKingdom/updatestatuskoiorder", // Change this to your servlet's URL
+                    type: "POST",
+                    data: {
+                        koiOrderID: koiOrderID,
+                        status: status
+                    },
+                    success: function (response) {
+                        showToast('Order status updated!', 'success'); // Notify user
+                    },
+                    error: function (xhr) {
+                        console.error("Error occurred while updating order status:", xhr);
+                        showToast('Failed to update order status.', 'error'); // Notify user
+                    }
+                });
+            }
+        </script>
 
         <c:if test="${not empty sessionScope.updateSuccess}">
             <script>

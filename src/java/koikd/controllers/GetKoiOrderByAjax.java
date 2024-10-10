@@ -40,8 +40,13 @@ public class GetKoiOrderByAjax extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String nameOrder = request.getParameter("txtNameCustomer");
+            String index = request.getParameter("index");
             KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
-            ArrayList<KoiOrderDTO> koiList = koiOrderDAO.getKoiOrderListByNameCustomer(nameOrder);
+            if (index == null || index.isEmpty()) {
+                index = "1";
+            }
+              int pageIndex = Integer.parseInt(index);
+            ArrayList<KoiOrderDTO> koiList = koiOrderDAO.getKoiOrderListByNameCustomer(nameOrder, pageIndex);
 
             if (koiList != null && !koiList.isEmpty()) {
                 out.print("<table class=\"styled-table\">");
@@ -80,6 +85,7 @@ public class GetKoiOrderByAjax extends HttpServlet {
 
                 out.print("</tbody>");
                 out.print("</table>");
+                
             } else {
                 out.print("<p>No orders found for this customer.</p>");
             }

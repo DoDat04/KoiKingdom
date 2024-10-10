@@ -1,7 +1,7 @@
 <%-- 
     Document   : myOrderBooking
     Created on : Oct 2, 2024, 9:20:36 PM
-    Author     : Admin
+    Author     : Minhngo
 --%>
 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -11,84 +11,20 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>My Booking - Koi Kingdom</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
         <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">   
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
         <link href="css/toast.css" rel="stylesheet">
         <link rel="stylesheet" href="css/myOrderBooking.css"/>
-        <title>My Booking - Koi Kingdom</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
     </head>
-    <style>
-        .star-widget {
-            text-align: center; 
-        }
-
-        .star-widget input {
-            display: none; 
-        }
-
-        .star-widget label {
-            font-size: 40px;
-            color: #444;
-            padding: 10px;
-            cursor: pointer; 
-            transition: all 0.2s ease;
-        }
-
-        input:not(:checked) ~ label:hover,
-        input:not(:checked) ~ label:hover ~ label {
-            color: #fd4;
-        }
-
-        input:checked ~ label {
-            color: #fd4;
-        }
-
-        input#rate-5:checked ~ label {
-            color: #fe7;
-            text-shadow: 0 0 20px #952;
-        }
-
-        /* Cập nhật nội dung cho h3 khi chọn */
-        input#rate-5:checked ~ .content::before {
-            content: "I just hate it";
-        }
-
-        input#rate-4:checked ~ .content::before {
-            content: "I don't like it";
-        }
-
-        input#rate-3:checked ~ .content::before {
-            content: "It is awesome";
-        }
-
-        input#rate-2:checked ~ .content::before {
-            content: "I just like it";
-        }
-
-        input#rate-1:checked ~ .content::before {
-            content: "I just love it";
-        }
-
-        .content {
-            display: block; /* Đảm bảo h3 luôn hiển thị */
-            font-size: 25px;
-            color: #fe7;
-            font-weight: 500;
-            margin-top: 10px; /* Khoảng cách giữa label và h3 */
-            transition: all 0.2s ease;
-        }
-        #review {
-            cursor: pointer;
-        }
-    </style>
     <body>
         <div class="colorlib-loader"></div>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>       

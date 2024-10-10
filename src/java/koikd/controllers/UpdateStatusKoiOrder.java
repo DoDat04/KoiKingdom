@@ -12,68 +12,40 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import koikd.customer.CustomerDTO;
 import koikd.order.KoiOrderDAO;
 import koikd.order.KoiOrderDTO;
 
 /**
  *
- * @author Minhngo
+ * @author Admin
  */
+@WebServlet(name = "UpdateStatusKoiOrder", urlPatterns = {"/updatestatuskoiorder"})
+public class UpdateStatusKoiOrder extends HttpServlet {
 
-public class GetKoiOrder extends HttpServlet {
-
-    private final String SHIPHISTORYPAGE = "homeForDelivery.jsp";
-
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = SHIPHISTORYPAGE;
-
-        try {
-            // Retrieve the input parameters
-            String nameOrder = request.getParameter("txtNameCustomer");
-            String index = request.getParameter("index");
-            
-            // Default to 1 if no index is provided
-            if (index == null || index.isEmpty()) {
-                index = "1";
-            }
-
-            // Parse index as an integer
-            int pageIndex = Integer.parseInt(index);
-
-            // Call DAO to get order list
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+       String koiOrderID = request.getParameter("koiOrderID");
+            String status = request.getParameter("status");
             KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
-            int numberOfPages = koiOrderDAO.getNumberPage(nameOrder);
-            request.setAttribute("numberOfPages", numberOfPages);
-            
-            ArrayList<KoiOrderDTO> koiList = koiOrderDAO.getKoiOrderListByNameCustomer(nameOrder, pageIndex);
-            ArrayList<String> customerNames = new ArrayList<>();
-
-            // If list is not empty, populate customer names
-            if (koiList != null && !koiList.isEmpty()) {
-                for (KoiOrderDTO koiOrderDTO : koiList) {
-                    CustomerDTO customer = koiOrderDAO.getCustomerByCustomerID(koiOrderDTO.getCustomerID());
-                    customerNames.add(customer.getLastName() + " " + customer.getFirstName());
-                }
-                request.setAttribute("koiList", koiList);
-                request.setAttribute("pageIndex", pageIndex);
-                request.setAttribute("customerNames", customerNames);
-            } else {
-                // No orders found case
-                request.setAttribute("errorMessage", "No orders found.");
-            }
-
-            // Forward the request to the JSP page
-            request.getRequestDispatcher(url).forward(request, response);
+            KoiOrderDTO updatedOrder = koiOrderDAO.updateStatusOrder(Integer.parseInt(koiOrderID), Boolean.parseBoolean(status));
         } catch (SQLException ex) {
-            Logger.getLogger(GetKoiOrder.class.getName()).log(Level.SEVERE, null, ex);
-            request.setAttribute("errorMessage", "An error occurred while retrieving the orders.");
-            request.getRequestDispatcher(url).forward(request, response);
+            Logger.getLogger(UpdateStatusKoiOrder.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UpdateStatusKoiOrder.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
