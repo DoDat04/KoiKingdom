@@ -46,36 +46,36 @@
                         <div class="user-frame">
                             <li class="user-info">
                                 <div class="user-details">   
-                                    <div>
-                                        <span class="user-name">
+                                    <div style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <span class="user-name" \>
                                             ${sessionScope.LOGIN_MANAGER.firstName} ${sessionScope.LOGIN_MANAGER.lastName}
                                         </span><br>
                                         <span class="user-role">${sessionScope.LOGIN_MANAGER.role}</span>
                                     </div>
-                                    <i style="font-size:18px" class="fa fa-angle-double-left toggle-btn" style="font-size:18px;"></i>
+                                    <i class="fa-solid fa-angles-right toggle-btn" style="font-size:18px;"></i>
                                 </div>
                             </li>                 
                         </div>
                         <li class="menu-item">
-                            <a href="managerDashboard.jsp" style="color: black"><i class="fa-solid fa-house"></i>Home</a>
+                            <a href="managerDashboard.jsp" style="color: black"><i class="fa-solid fa-house" style='font-size:24px'></i>Home</a>
                         </li>
                         <li class="menu-item">
-                            <a href="managecustomer" style="color: black"><i class="fa-solid fa-users"></i>Customer</a>
+                            <a href="managecustomer" style="color: black"><i class="fa-solid fa-users" style='font-size:24px'></i>Customer</a>
                         </li>
                         <li class="menu-item">
-                            <a href="manageemployee" style="color: black"><i class="fa-solid fa-user-group"></i>Employee</a>
+                            <a href="manageemployee" style="color: black"><i class="fa-solid fa-user-group" style='font-size:24px'></i>Employee</a>
                         </li>
                         <li class="menu-item">
-                            <a href="managetour" style="color: black"><i class="fa-solid fa-list"></i>Tour</a>
+                            <a href="managetour" style="color: black"><i class="fa-solid fa-list" style='font-size:24px'></i>Tour</a>
                         </li>
                         <li class="menu-item">
-                            <a href="createTour.jsp" style="color: black"><i class="fa-solid fa-plus"></i>Add Tour</a>
+                            <a href="createTour.jsp" style="color: black"><i class="fa-solid fa-plus" style='font-size:24px'></i>Add Tour</a>
                         </li>
                         <li class="menu-item">
-                            <a href="addEmployee.jsp" style="color: black"><i class="fas fa-user-plus"></i>Add Employee</a>
+                            <a href="addEmployee.jsp" style="color: black"><i class="fas fa-user-plus" style='font-size:24px'></i>Add Employee</a>
                         </li>
                         <li class="menu-item">
-                            <a href="custom-tour" style="color: black"><i class="fas fa-suitcase"></i>Custom Tour</a>
+                            <a href="custom-tour" style="color: black"><i class="fas fa-suitcase" style='font-size:24px'></i>Custom Tour</a>
                         </li>
                         <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
                                 <i style='font-size:24px' class='fas'>&#xf406;</i>Profile</a></li>
@@ -91,7 +91,6 @@
                 </c:otherwise>
             </c:choose>
         </div>
-
 
         <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -177,19 +176,26 @@
                                     document.querySelector('.toggle-btn').addEventListener('click', function () {
                                         const sidebar = document.querySelector('.sidebar');
                                         const mainFrame = document.querySelector('.main-frame');
+                                        // Ensure 'main-content' exists in your HTML or adjust the selector
                                         const mainContent = document.querySelector('.main-content');
+                                        const toggleIcon = this; // 'this' refers to the clicked '.toggle-btn' element
 
                                         sidebar.classList.toggle('collapsed');
 
                                         if (sidebar.classList.contains('collapsed')) {
                                             mainFrame.style.marginLeft = '-143px';
-                                            mainContent.style.marginLeft = '10%';
+                                            if (mainContent)
+                                                mainContent.style.marginLeft = '10%';
+                                            toggleIcon.classList.remove('fa-angles-left');
+                                            toggleIcon.classList.add('fa-angles-right');
                                         } else {
                                             mainFrame.style.marginLeft = '-0.2%';
-                                            mainContent.style.marginLeft = '20%';
+                                            if (mainContent)
+                                                mainContent.style.marginLeft = '20%';
+                                            toggleIcon.classList.remove('fa-angles-right');
+                                            toggleIcon.classList.add('fa-angles-left');
                                         }
                                     });
-
         </script>
     </body>
 </html>

@@ -44,16 +44,16 @@
                     <ul class="menu">
                         <div class="user-frame">
                             <li class="user-info">
-                                <div class="user-details">      
+                                <div class="user-details">   
                                     <div style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                         <span class="user-name" \>
                                             ${sessionScope.LOGIN_SALES.firstName} ${sessionScope.LOGIN_SALES.lastName}
                                         </span><br>
                                         <span class="user-role">${sessionScope.LOGIN_SALES.role}</span>
                                     </div>
-                                    <i style="font-size:18px" class="fa fa-angle-double-left toggle-btn" style="font-size:18px;"></i>
+                                    <i class="fa-solid fa-angles-left toggle-btn" style="font-size:18px;"></i>
                                 </div>
-                            </li>
+                            </li>                 
                         </div>
                         <li class="menu-item">
                             <a href="list-customTour" style="color: black"><i style='font-size:24px' class='fas'><i class="fas fa-suitcase"></i></i>Custom Tour</a>
@@ -141,20 +141,27 @@
                                     document.querySelector('.toggle-btn').addEventListener('click', function () {
                                         const sidebar = document.querySelector('.sidebar');
                                         const mainFrame = document.querySelector('.main-frame');
+                                        // Ensure 'main-content' exists in your HTML or adjust the selector
                                         const mainContent = document.querySelector('.main-content');
+                                        const toggleIcon = this; // 'this' refers to the clicked '.toggle-btn' element
 
                                         sidebar.classList.toggle('collapsed');
 
                                         if (sidebar.classList.contains('collapsed')) {
                                             mainFrame.style.marginLeft = '-143px';
-                                            mainContent.style.marginLeft = '10%';
+                                            if (mainContent)
+                                                mainContent.style.marginLeft = '10%';
+                                            toggleIcon.classList.remove('fa-angles-left');
+                                            toggleIcon.classList.add('fa-angles-right');
                                         } else {
-                                            mainFrame.style.marginLeft = '-0.2%'; // Reset the content frame
-                                            mainContent.style.marginLeft = '20%'; // Adjust the main content
+                                            mainFrame.style.marginLeft = '-0.2%';
+                                            if (mainContent)
+                                                mainContent.style.marginLeft = '20%';
+                                            toggleIcon.classList.remove('fa-angles-right');
+                                            toggleIcon.classList.add('fa-angles-left');
                                         }
                                     });
                                     
-
                                     function searchByName(param) {
                                         var txtSearch = param.value;
                                         $.ajax({

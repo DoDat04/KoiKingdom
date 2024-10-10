@@ -5,9 +5,7 @@
 package koikd.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -74,6 +72,8 @@ public class GetKoiOrder extends HttpServlet {
             Logger.getLogger(GetKoiOrder.class.getName()).log(Level.SEVERE, null, ex);
             request.setAttribute("errorMessage", "An error occurred while retrieving the orders.");
             request.getRequestDispatcher(url).forward(request, response);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GetKoiOrder.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

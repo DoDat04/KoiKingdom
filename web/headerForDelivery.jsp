@@ -52,7 +52,7 @@
                                         </span><br>
                                         <span class="user-role">${sessionScope.LOGIN_DELIVERY.role}</span>
                                     </div>
-                                    <i style="font-size:18px" class="fa fa-angle-double-left toggle-btn" style="font-size:18px;"></i>
+                                    <i class="fa-solid fa-angles-left toggle-btn" style="font-size:18px;"></i>
                                 </div>
                             </li>
                         </div>
@@ -142,16 +142,24 @@
                                     document.querySelector('.toggle-btn').addEventListener('click', function () {
                                         const sidebar = document.querySelector('.sidebar');
                                         const mainFrame = document.querySelector('.main-frame');
+                                        // Ensure 'main-content' exists in your HTML or adjust the selector
                                         const mainContent = document.querySelector('.main-content');
+                                        const toggleIcon = this; // 'this' refers to the clicked '.toggle-btn' element
 
                                         sidebar.classList.toggle('collapsed');
 
                                         if (sidebar.classList.contains('collapsed')) {
                                             mainFrame.style.marginLeft = '-143px';
-                                            mainContent.style.marginLeft = '10%';
+                                            if (mainContent)
+                                                mainContent.style.marginLeft = '10%';
+                                            toggleIcon.classList.remove('fa-angles-left');
+                                            toggleIcon.classList.add('fa-angles-right');
                                         } else {
                                             mainFrame.style.marginLeft = '-0.2%';
-                                            mainContent.style.marginLeft = '20%';
+                                            if (mainContent)
+                                                mainContent.style.marginLeft = '20%';
+                                            toggleIcon.classList.remove('fa-angles-right');
+                                            toggleIcon.classList.add('fa-angles-left');
                                         }
                                     });
 
