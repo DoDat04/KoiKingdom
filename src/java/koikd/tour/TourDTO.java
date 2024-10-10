@@ -69,9 +69,7 @@ public class TourDTO implements Serializable{
         this.status = status;
         this.tourDepartLoca = tourDepartLoca;
     }
-    
-    
-    
+         
     public String getTourDepartLoca() {
         return tourDepartLoca;
     }

@@ -7,6 +7,7 @@ package koikd.cart;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import koikd.customtour.CustomTourDTO;
 import koikd.tour.TourDTO;
 
 /**
@@ -37,7 +38,22 @@ public class CartBean implements Serializable {
         } else {
             this.items.put(tourID, new CartItem(tour, numberOfPeople));
         }
-    }       
+    }   
+
+    public void addItemToCartt(CustomTourDTO customTour, int numberOfPeople) {
+        if (customTour == null || numberOfPeople <= 0) {
+            return;
+        }
+
+        int tourID = customTour.getRequestID(); // Assuming CustomTourDTO has getTourID() method
+
+        if (this.items.containsKey(tourID)) {
+            CartItem existingItem = this.items.get(tourID);
+            existingItem.setNumberOfPeople(existingItem.getNumberOfPeople() + numberOfPeople);
+        } else {
+            this.items.put(tourID, new CartItem(customTour, numberOfPeople));
+        }
+    }  
     
     public void removeItemFromCart(TourDTO tour, int numberOfPeople) {
         if (tour == null || numberOfPeople <= 0) {

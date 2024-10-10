@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,7 +25,8 @@
         <jsp:include page="headerForManager.jsp" flush="true"/>
         <div style="    margin-top: 25vh;
              margin-left: 17%;
-             margin-right: 6%;" class="main-content">          
+             margin-right: 6%;" class="main-content">  
+            <h1 style="text-align: center">Custom Tour Management</h1>
             <table id="content" class="styled-table">
                 <thead>
                     <tr>
@@ -48,8 +50,8 @@
                                 <tr>
                                     <td>${custom.custName}</td>
                                     <td>${custom.duration}</td>
-                                    <td>${custom.startDate}</td>
-                                    <td>${custom.endDate}</td>                                   
+                                    <td><fmt:formatDate value="${custom.startDate}" pattern="dd-MM-yyyy" /></td>
+                                    <td><fmt:formatDate value="${custom.endDate}" pattern="dd-MM-yyyy" /></td>                                   
                                     <td>${custom.departureLocation}</td>
                                     <td>${custom.farmName}</td>
                                     <td>${custom.koiTypeName}</td>

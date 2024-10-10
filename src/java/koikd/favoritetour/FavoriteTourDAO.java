@@ -35,8 +35,7 @@ public class FavoriteTourDAO implements Serializable {
                         + "(SELECT STRING_AGG(k.TypeName, ', ') FROM TOUR_KOITYPE tk INNER JOIN KOITYPE k ON tk.KoiTypeID = k.KoiTypeID WHERE tk.TourID = t.TourID) AS KoiType "
                         + "FROM FAVORITETOUR fa "
                         + "INNER JOIN TOUR t ON fa.TourID = t.TourID "
-                        + "LEFT JOIN TOUR_FEEDBACK tf ON t.TourID = tf.TourID "
-                        + "LEFT JOIN FEEDBACK f ON tf.FeedbackID = f.FeedbackID "
+                        + "LEFT JOIN FEEDBACK f ON t.TourID = f.TourID "
                         + "WHERE fa.CustomerID = ? "
                         + "GROUP BY fa.FavoriteTourID, t.TourID, t.TourName, t.Duration, t.Description, t.TourPrice, t.StartDate, t.EndDate, t.Image, t.DepartureLocation";
 
@@ -45,7 +44,7 @@ public class FavoriteTourDAO implements Serializable {
                 rs = stm.executeQuery();
 
                 while (rs.next()) {
-                    int favoriteTourID = rs.getInt("FavoriteTourID"); 
+                    int favoriteTourID = rs.getInt("FavoriteTourID");
                     int tourID = rs.getInt("TourID");
                     String tourName = rs.getString("TourName");
                     String tourDuration = rs.getString("Duration");
@@ -118,11 +117,11 @@ public class FavoriteTourDAO implements Serializable {
             }
         }
     }
-    
+
     public void deleteFavoriteTour(int favoriteTourID) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
-        
+
         try {
             con = DBUtils.getConnection();
             if (con != null) {
@@ -140,5 +139,5 @@ public class FavoriteTourDAO implements Serializable {
                 con.close();
             }
         }
-    }
+    }    
 }

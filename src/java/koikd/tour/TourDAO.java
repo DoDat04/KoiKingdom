@@ -36,6 +36,7 @@ public class TourDAO implements Serializable {
                         + "INNER JOIN KOITYPE k ON tk.KoiTypeID = k.KoiTypeID WHERE tk.TourID = t.TourID) AS KoiType "
                         + "FROM TOUR t "
                         + "LEFT JOIN FEEDBACK f ON t.TourID = f.TourID "
+                        + "WHERE t.Status = 1 "
                         + "GROUP BY t.TourID, t.TourName, t.Duration, t.Description, t.TourPrice, t.StartDate, t.EndDate, t.Image, t.DepartureLocation";
                 stm = con.prepareStatement(sql);
                 rs = stm.executeQuery();
@@ -92,7 +93,7 @@ public class TourDAO implements Serializable {
                         + "INNER JOIN KOITYPE k ON tk.KoiTypeID = k.KoiTypeID WHERE tk.TourID = t.TourID) AS KoiType "
                         + "FROM TOUR t "
                         + "LEFT JOIN FEEDBACK f ON t.TourID = f.TourID "
-                        + "WHERE 1=1 ");
+                        + "WHERE 1=1 AND Status = 1");
 
                 // Add dynamic filters based on non-null inputs
                 if (farmID != null && !farmID.isEmpty()) {

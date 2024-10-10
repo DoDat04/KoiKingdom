@@ -30,6 +30,7 @@
             <table id="content" class="styled-table">
                 <thead>
                     <tr>
+                        <th>Request ID</th>
                         <th>Customer Name</th>
                         <th>Duration</th>
                         <th>Start Date</th>
@@ -42,7 +43,6 @@
                         <th>Detail Rejected</th>
                         <th>Quantity</th>
                         <th>Quotation Price</th>
-                        <th>Image</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -51,6 +51,7 @@
                         <c:when test="${not empty sessionScope.CUSTOM_LIST}">
                             <c:forEach var="custom" items="${sessionScope.CUSTOM_LIST}" varStatus="status">
                                 <tr>
+                                    <td>${custom.requestID}</td>
                                     <td>${custom.custName}</td>
                                     <td>${custom.duration}</td>
                                     <td>${custom.startDate}</td>
@@ -66,8 +67,7 @@
                                     <td>${custom.koiTypeName}</td>
                                     <td>${custom.detailRejected}</td>
                                     <td>${custom.quantity}</td>
-                                    <td><fmt:formatNumber value="${custom.quotationPrice}" type="currency" currencySymbol="$" /></td>
-                                    <td><img src="${custom.image}" class="custom-tour" alt="" style="height: 100px; width: 150px; border-radius: 10px;"/></td>
+                                    <td><fmt:formatNumber value="${custom.quotationPrice}" type="currency" currencySymbol="$" /></td>                                    
                                     <td>
                                         <c:choose>
                                             <c:when test="${custom.status != 'Approved' && custom.status != 'Rejected'}">
@@ -125,7 +125,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Send</h1>
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Send To Manager</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">

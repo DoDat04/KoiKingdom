@@ -18,7 +18,9 @@
     </head>
     <body>
         <jsp:include page="headerForDelivery.jsp" flush="true"/>
-        <div class="main" style="margin-top: -216px; margin-left: 223px; margin-right: 30px;">
+        <div style="    margin-top: 25vh;
+             margin-left: 17%;
+             margin-right: 6%;" class="main-content">
             <c:if test="${not empty requestScope.koiOrderDetails}">
                 <div class="container">
                     <div class="row">

@@ -30,6 +30,7 @@ import koikd.booking.BookingDAO;
 import koikd.booking.BookingDTO;
 import koikd.cart.CartBean;
 import koikd.cart.CartItem;
+import koikd.customtour.CustomTourDTO;
 import koikd.tour.TourDTO;
 import koikd.tourbookingdetail.TourBookingDetailDAO;
 import koikd.tourbookingdetail.TourBookingDetailDTO;
@@ -101,41 +102,70 @@ public class VNPayCallBackController extends HttpServlet {
                         message = "Giao dịch thành công!";
                         mail_message = "Đơn xác nhận đã được gửi qua email. Vui lòng kiểm tra email!";
                         notificationSvg = "<svg viewBox='0 0 52 52'><path class='checkmark' fill='none' stroke='green' stroke-width='4' d='M14 27 L22 35 L38 19' /></svg>";
-                        // Lặp qua cái cartItem để insert từng tour
-                        
+
+                        // Iterate through the cart items to insert each tour
                         Map<Integer, CartItem> items = cart.getItems();
                         for (CartItem item : items.values()) {
-                            TourDTO tour = item.getTour();
+                            TourDTO tour = item.getTour(); 
+                            CustomTourDTO customTour = item.getCustomTour(); 
                             int numberOfPeople = item.getNumberOfPeople();
 
                             BookingDTO booking = new BookingDTO();
+                            TourBookingDetailDTO tourBookingDetail = new TourBookingDetailDTO();
+
                             booking.setCustomerID(custID);
-                            booking.setTourID(tour.getTourID());
                             booking.setCustName(fullName);
                             booking.setCustEmail(custEmail);
                             booking.setBookingDate(today);
                             booking.setShippingAddress(custAddress);
                             booking.setQuantity(numberOfPeople);
-                            booking.setStatus("Paid");
-                            booking.setTourType("Available");
 
                             BookingDAO bookingDAO = new BookingDAO();
-                            bookingDAO.addBooking(booking);
-                            
-                            TourBookingDetailDTO dto = new TourBookingDetailDTO();
-                            dto.setCustomerID(custID);
-                            dto.setTourID(tour.getTourID());
-                            dto.setQuantity(numberOfPeople);
-                            dto.setUnitPrice(tour.getTourPrice());
-                            dto.setTotalPrice(tour.getTourPrice() * numberOfPeople);
-                            dto.setStatus("Confirmed");
-                            dto.setTourType("Available");
-                            
-                            TourBookingDetailDAO dao = new TourBookingDetailDAO();
-                            dao.addTourBookingDetail(dto);
+                            TourBookingDetailDAO tourBookingDetailDAO = new TourBookingDetailDAO();
+
+                            if (customTour != null) {
+                                booking.setTourID(customTour.getRequestID());
+                                booking.setStatus("Paid");
+
+                                // Add the booking for the custom tour
+                                bookingDAO.addBooking(booking, customTour);
+
+                                tourBookingDetail.setCustomerID(custID);
+                                tourBookingDetail.setTourID(customTour.getRequestID());
+                                tourBookingDetail.setQuantity(numberOfPeople);
+                                tourBookingDetail.setUnitPrice(customTour.getQuotationPrice());
+                                tourBookingDetail.setTotalPrice(customTour.getQuotationPrice() * numberOfPeople);
+                                tourBookingDetail.setStatus("Confirmed");
+                                tourBookingDetail.setTourType("Custom");
+
+                                tourBookingDetailDAO.addTourBookingDetail(tourBookingDetail, customTour);
+
+                            } else if (tour != null) {
+                                booking.setTourID(tour.getTourID());
+                                booking.setStatus("Paid");
+                                booking.setTourType("Available");
+
+                                // Add the booking for the standard tour
+                                bookingDAO.addBooking(booking, customTour);
+
+                                // Set properties for TourBookingDetailDTO
+                                tourBookingDetail.setCustomerID(custID);
+                                tourBookingDetail.setTourID(tour.getTourID());
+                                tourBookingDetail.setQuantity(numberOfPeople);
+                                tourBookingDetail.setUnitPrice(tour.getTourPrice());
+                                tourBookingDetail.setTotalPrice(tour.getTourPrice() * numberOfPeople);
+                                tourBookingDetail.setStatus("Confirmed");
+
+                                // Add the tour booking detail
+                                tourBookingDetailDAO.addTourBookingDetail(tourBookingDetail, customTour);
+                            }
                         }
+
+                        // Clear the cart from the session
                         session.removeAttribute("cart");
                         session.removeAttribute("cartItemCount");
+
+                        // Send confirmation email
                         sendBillForCustomer(email, custID, fullName, custAddress, custEmail);
                     } else {
                         url = FAIL_VNPAY;
@@ -182,55 +212,54 @@ public class VNPayCallBackController extends HttpServlet {
 
         TourBookingDetailDAO dao = new TourBookingDetailDAO();
         TourBookingDetailDTO dto = dao.getTourBookingDetailByCustomerID(custID);
-        if(dto!=null){
-        String emailContent = "<div style='font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>"
-                + "<h1 style='color: #4CAF50; text-align: center;'>Thank you for your purchase!</h1>"
-                + "<p style='font-size: 16px;'>Here are your bill details:</p>"
-                + "<table style='width: 100%; border-collapse: collapse;'>"
-                + "<tr>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Fullname:</td>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + fullName + "</td>"
-                + "</tr>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Email:</td>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + custEmail + "</td>"
-                + "</tr>"
-                + "<tr>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>ID Tour:</td>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + dto.getTourID() + "</td>"
-                + "</tr>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Tour Name:</td>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + dto.getTourName() + "</td>"
-                + "</tr>"
-                + "<tr>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Quantity:</td>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + dto.getQuantity() + " person(s)" + "</td>"
-                + "</tr>"
-                + "<tr>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Unit Price:</td>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>$" + dto.getUnitPrice() + "</td>"
-                + "</tr>"
-                + "<tr>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Total Price:</td>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold;'>$" + dto.getTotalPrice() + "</td>"
-                + "</tr>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Address:</td>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold;'>" + custAddress + "</td>"
-                + "</tr>"
-                + "<tr>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Status:</td>"
-                + "<td style='padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold;'>" + dto.getStatus() + "</td>"
-                + "</tr>"
-                + "</table>"
-                + "<p style='margin-top: 20px;'>If you have any questions, please contact us at <a href='mailto:koikingdomsystem@gmail.com' style='color: #4CAF50; text-decoration: none;'>koikingdomsystem@gmail.com</a></p>"
-                + "<p style='font-size: 14px; color: #888; text-align: center;'>Thank you for choosing Koi Kingdom!</p>"
-                + "</div>";
+        if (dto != null) {
+            String emailContent = "<div style='font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>"
+                    + "<h1 style='color: #4CAF50; text-align: center;'>Thank you for your purchase!</h1>"
+                    + "<p style='font-size: 16px;'>Here are your bill details:</p>"
+                    + "<table style='width: 100%; border-collapse: collapse;'>"
+                    + "<tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Fullname:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + fullName + "</td>"
+                    + "</tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Email:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + custEmail + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>ID Tour:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + dto.getTourID() + "</td>"
+                    + "</tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Tour Name:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + dto.getTourName() + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Quantity:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + dto.getQuantity() + " person(s)" + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Unit Price:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>$" + dto.getUnitPrice() + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Total Price:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold;'>$" + dto.getTotalPrice() + "</td>"
+                    + "</tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Address:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold;'>" + custAddress + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Status:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold;'>" + dto.getStatus() + "</td>"
+                    + "</tr>"
+                    + "</table>"
+                    + "<p style='margin-top: 20px;'>If you have any questions, please contact us at <a href='mailto:koikingdomsystem@gmail.com' style='color: #4CAF50; text-decoration: none;'>koikingdomsystem@gmail.com</a></p>"
+                    + "<p style='font-size: 14px; color: #888; text-align: center;'>Thank you for choosing Koi Kingdom!</p>"
+                    + "</div>";
 
+            // Đặt nội dung của email
+            message.setContent(emailContent, "text/html; charset=UTF-8");
 
-        // Đặt nội dung của email
-        message.setContent(emailContent, "text/html; charset=UTF-8");
-
-        // Gửi email
-        Transport.send(message);
+            // Gửi email
+            Transport.send(message);
         }
     }
 

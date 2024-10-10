@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -159,53 +160,59 @@
             <div class="container">
                 <h2 class="section-title text-center mb-4">Tour Feedback</h2>
 
-                <!-- Card for Feedback -->
-                <div class="card">
-                    <div class="card-body">
-                        <div class="feedback-list" id="feedbackContainer">
-                            <c:forEach var="feedbackTour" items="${requestScope.feedbackTour}" varStatus="feedbackID">
-                                <div class="feedback-item <c:if test="${feedbackID.index > 2}">more-feedback</c:if>" 
-                                     style="<c:if test='${feedbackID.index > 2}'>display: none;</c:if>">
-                                         <p class="user-name"><strong>                              
-                                             ${requestScope.customerList[feedbackID.index].lastName} ${requestScope.customerList[feedbackID.index].firstName}</strong>
-                                     </p>
-                                     <p class="feedback-text">${feedbackTour.feedbackText}</p>
-                                     <p class="feedback-text">
-                                         <span id="rating-stars-${feedbackID.index}"></span>
-                                     </p>
-                                </div>
-                                <script>
-                                    updateStars();
+                <c:if test="${empty requestScope.feedbackTour}">
+                    <!-- Nếu không có feedback, chỉ hiển thị tiêu đề -->
+                </c:if>
 
-                                    function updateStars() {
-                                        const rating = ${feedbackTour.rating}; // Giả sử giá trị này từ backend
-                                        const starContainer = document.getElementById('rating-stars-${feedbackID.index}');
+                <c:if test="${not empty requestScope.feedbackTour}">
+                    <!-- Card for Feedback -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="feedback-list" id="feedbackContainer">
+                                <c:forEach var="feedbackTour" items="${requestScope.feedbackTour}" varStatus="feedbackID">
+                                    <div class="feedback-item <c:if test="${feedbackID.index > 2}">more-feedback</c:if>" 
+                                         style="<c:if test='${feedbackID.index > 2}'>display: none;</c:if>">
+                                             <p class="user-name"><strong>                              
+                                                 ${requestScope.customerList[feedbackID.index].lastName} ${requestScope.customerList[feedbackID.index].firstName}</strong>
+                                         </p>
+                                         <p class="feedback-text">${feedbackTour.feedbackText}</p>
+                                         <p class="feedback-text">
+                                             <span id="rating-stars-${feedbackID.index}"></span>
+                                         </p>
+                                    </div>
+                                    <script>
+                                        updateStars();
 
-                                        // Reset nội dung của starContainer
-                                        starContainer.innerHTML = '';
+                                        function updateStars() {
+                                            const rating = ${feedbackTour.rating};
+                                            const starContainer = document.getElementById('rating-stars-${feedbackID.index}');
 
-                                        // Tạo ra các ngôi sao dựa trên rating
-                                        for (let i = 1; i <= 5; i++) {
-                                            if (i <= rating) {
-                                                starContainer.innerHTML += '<i class="fas fa-star star"></i>'; // Ngôi sao đầy
-                                            } else {
-                                                starContainer.innerHTML += '<i class="far fa-star star"></i>'; // Ngôi sao rỗng
+                                            // Reset starContainer content
+                                            starContainer.innerHTML = '';
+
+                                            // Create stars based on rating
+                                            for (let i = 1; i <= 5; i++) {
+                                                if (i <= rating) {
+                                                    starContainer.innerHTML += '<i class="fas fa-star star"></i>';
+                                                } else {
+                                                    starContainer.innerHTML += '<i class="far fa-star star"></i>';
+                                                }
                                             }
                                         }
-                                    }
-                                </script>
-                            </c:forEach>
+                                    </script>
+                                </c:forEach>
+                            </div>
 
-
+                            <!-- Chỉ hiển thị nút Show More nếu có hơn 3 feedback -->
+                            <c:if test="${fn:length(requestScope.feedbackTour) > 3}">
+                                <a href="#" onclick="toggleMoreFeedback(event)" class="show-more-link">Show More</a>
+                            </c:if>
 
                         </div>
-                        <a href="#" onclick="toggleMoreFeedback(event)" class="show-more-link">Show More</a>
                     </div>
-                </div>
+                </c:if>
             </div>
-        </section>       
-
-
+        </section>
 
         <!-- Back to Top Button -->
         <button id="backToTop" class="btn btn-primary" style="display: none;">

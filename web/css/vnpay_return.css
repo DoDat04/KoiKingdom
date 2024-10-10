@@ -23,7 +23,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     position: fixed;
     z-index: 1000;
     left: 50%;
-    top: 25%;
+    top: 27%;
     transform: translate(-50%, -50%);
     background-color: #fff;
     padding: 20px;
@@ -45,7 +45,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     position: fixed;
     color: black;
     top: 40%;
-    left: 41%;
+    left: 39%;
     font-size: 28px;
     text-decoration: none;
 }

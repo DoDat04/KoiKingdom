@@ -10,6 +10,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import koikd.cart.CartBean;
+import koikd.customtour.CustomTourDAO;
+import koikd.customtour.CustomTourDTO;
 
 /**
  *
@@ -31,9 +38,40 @@ public class CheckOutController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = VIEW_ORDER_PAGE;
-        try {           
-            url = VIEW_ORDER_PAGE;
-        } finally {
+        String requestIDParam = request.getParameter("requestid");
+        String numberOfPeopleParam = request.getParameter("numberofpeople");
+        try {
+            HttpSession session = request.getSession();
+            if (requestIDParam != null && numberOfPeopleParam != null) {
+                int requestID = Integer.parseInt(requestIDParam);
+                int numberOfPeople = Integer.parseInt(numberOfPeopleParam); // Convert to integer
+
+                // Fetch the tour details using the requestID
+                CustomTourDAO tourDAO = new CustomTourDAO();
+                CustomTourDTO selectedTour = tourDAO.getCustomTourByRequest(requestID);
+
+                if (selectedTour != null && numberOfPeople > 0) {
+                    CartBean cart = (CartBean) session.getAttribute("cart");
+
+                    if (cart == null) {
+                        cart = new CartBean();
+                    }
+
+                    // Add the selected tour to the cart with the specified number of people
+                    cart.addItemToCartt(selectedTour, numberOfPeople);
+                    session.setAttribute("cart", cart);
+
+                    // Optionally, forward to the checkout page
+                    url = VIEW_ORDER_PAGE; // Redirect or forward to the checkout page
+                } else {
+                    request.setAttribute("ERROR", "Tour not found or invalid number of people!");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CheckOutController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CheckOutController.class.getName()).log(Level.SEVERE, null, ex);
+        }  finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }

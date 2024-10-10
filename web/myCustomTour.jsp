@@ -33,24 +33,51 @@
                     <table class="table table-bordered table-striped">
                         <thead class="thead-dark">
                             <tr>
+                                <th>Image</th>
                                 <th>Departure Location</th>
                                 <th>Quotation Price</th>
+                                <th>Quantity</th>
                                 <th>Duration</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
+                                <th>Status</th>
+                                <th>Details</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <c:forEach var="customerTourList" items="${requestScope.customerTourList}">
                                 <tr> 
+                                    <td><img src="${customerTourList.image}" class="custom-tour" alt="" style="height: 100px; width: 150px; border-radius: 10px;"/></td>
                                     <td>${customerTourList.departureLocation}</td> 
-                                    <td>${customerTourList.quotationPrice}</td> 
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${customerTourList.status == 'Approved'}">
+                                                ${customerTourList.quotationPrice}
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span style="color: gray; font-style: italic;">Awaiting Quotation Price</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>${customerTourList.quantity}</td> 
                                     <td>${customerTourList.duration}</td> 
                                     <td>${customerTourList.startDate}</td> 
                                     <td>${customerTourList.endDate}</td>
+                                    <c:choose>
+                                        <c:when test="${customerTourList.status == 'Approved'}">
+                                            <td style="color: green; font-weight: bold">${customerTourList.status}</td>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <td style="color: brown; font-weight: bold">${customerTourList.status}</td>
+                                        </c:otherwise>
+                                    </c:choose>                                    
                                     <td><a href="my-detail-custom-tour?requestid=${customerTourList.requestID}">Detail</a></td>
-
+                                    <td>
+                                        <c:if test="${customerTourList.status == 'Approved'}">
+                                            <a href="checkout?requestid=${customerTourList.requestID}&numberofpeople=${customerTourList.quantity}" class="btn btn-success">Check Out</a>
+                                        </c:if>
+                                    </td>
                                 </tr>
                             </c:forEach>
                         </tbody>

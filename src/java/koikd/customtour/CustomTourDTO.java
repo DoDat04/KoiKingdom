@@ -203,5 +203,4 @@ public class CustomTourDTO implements Serializable{
     public String toString() {
         return "CustomTourDTO{" + "requestID=" + requestID + ", customerID=" + customerID + ", custName=" + custName + ", farmName=" + farmName + ", koiTypeName=" + koiTypeName + ", duration=" + duration + ", quotationPrice=" + quotationPrice + ", quantity=" + quantity + ", startDate=" + startDate + ", endDate=" + endDate + ", status=" + status + ", managerApprovalStatus=" + managerApprovalStatus + ", departureLocation=" + departureLocation + ", image=" + image + ", checked=" + checked + ", detailRejected=" + detailRejected + '}';
     }
-
 }

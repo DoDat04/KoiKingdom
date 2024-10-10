@@ -14,7 +14,7 @@ import koikd.tour.TourDTO;
 import koikd.utils.DBUtils;
 import java.sql.Timestamp;
 import java.util.List;
-import koikd.booking.BookingDTO;
+import koikd.customtour.CustomTourDTO;
 
 /**
  *
@@ -22,7 +22,7 @@ import koikd.booking.BookingDTO;
  */
 public class TourBookingDetailDAO implements Serializable {
 
-    public boolean addTourBookingDetail(TourBookingDetailDTO tourBookingDetail) throws SQLException, ClassNotFoundException {
+    public boolean addTourBookingDetail(TourBookingDetailDTO tourBookingDetail, CustomTourDTO customTour) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         boolean result = false;
@@ -34,12 +34,22 @@ public class TourBookingDetailDAO implements Serializable {
                         + "VALUES (?, ?, ?, ?, ?, ?, ?)";
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, tourBookingDetail.getCustomerID());
-                stm.setInt(2, tourBookingDetail.getTourID());
+
+                // Set TourID based on whether customTour is null or not
+                if (customTour != null) {
+                    stm.setInt(2, customTour.getRequestID());  // Use custom tour's RequestID
+                    // Optionally, you might set other fields based on CustomTourDTO here
+                } else {
+                    stm.setInt(2, tourBookingDetail.getTourID()); // Use the TourID from tourBookingDetail
+                }
+
                 stm.setInt(3, tourBookingDetail.getQuantity());
-                stm.setDouble(4, tourBookingDetail.getUnitPrice());
-                stm.setDouble(5, tourBookingDetail.getTotalPrice());
+                stm.setDouble(4, customTour != null ? customTour.getQuotationPrice() : tourBookingDetail.getUnitPrice());
+                stm.setDouble(5, (customTour != null ? customTour.getQuotationPrice() : tourBookingDetail.getUnitPrice()) * tourBookingDetail.getQuantity());
                 stm.setString(6, tourBookingDetail.getStatus());
-                stm.setString(7, tourBookingDetail.getTourType());
+
+                // Set TourType based on whether customTour is null or not
+                stm.setString(7, customTour != null ? "Custom" : "Available"); // You can modify the type as needed
 
                 int affectedRows = stm.executeUpdate();
                 if (affectedRows > 0) {
@@ -185,7 +195,7 @@ public class TourBookingDetailDAO implements Serializable {
                     String departureLocation = rs.getString("DepartureLocation");
 
                     // Create the TourDTO object with retrieved data
-                    result = new TourDTO(tourID, tourName, tourDuration, tourDescription, tourPrice, startDate, endDate, tourImage, true, tourDuration);
+                    result = new TourDTO(tourID, tourName, tourDuration, tourDescription, tourPrice, startDate, endDate, tourImage, true, departureLocation);
                 }
             }
         } catch (Exception e) {
@@ -203,13 +213,13 @@ public class TourBookingDetailDAO implements Serializable {
         }
         return result;
     }
-    
+
     public List<TourBookingDetailDTO> getAllTourBookingDetail() throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
         List<TourBookingDetailDTO> listTourBookingDetail = new ArrayList<>();
-        
+
         try {
             con = DBUtils.getConnection();
             if (con != null) {
@@ -225,10 +235,10 @@ public class TourBookingDetailDAO implements Serializable {
                     int tourID = rs.getInt("TourID");
                     int quantity = rs.getInt("Quantity");
                     double unitPrice = rs.getDouble("UnitPrice");
-                    double totalPrice = rs.getDouble("TotalPrice");                  
+                    double totalPrice = rs.getDouble("TotalPrice");
                     String status = rs.getString("Status");
                     String tourType = rs.getString("TourType");
-                    
+
                     TourBookingDetailDTO listDTO = new TourBookingDetailDTO(tourBookingDetailID, custID, custName, tourID, tourType, quantity, unitPrice, totalPrice, status, tourType);
                     listTourBookingDetail.add(listDTO);
                 }
@@ -243,14 +253,14 @@ public class TourBookingDetailDAO implements Serializable {
             if (con != null) {
                 con.close();
             }
-        }       
+        }
         return listTourBookingDetail;
     }
-    
+
     public void updateTourBookingDetailStatus(int tourBookingDetailID, String newStatus) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
-        
+
         try {
             con = DBUtils.getConnection();
             if (con != null) {

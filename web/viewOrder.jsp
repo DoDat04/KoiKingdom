@@ -42,33 +42,31 @@
                         </tr>
                     </thead>
                     <tbody>
-
-                        <!-- Hiển thị giỏ hàng nếu không có tour nào được chọn qua "Book Now" -->
                         <c:forEach var="entry" items="${cart.items}">
                             <tr>
                                 <td>
-                                    <img class="tour-img" src="${entry.value.tour.tourImage}" alt="${entry.value.tour.tourName}">
+                                    <img class="tour-img" src="${entry.value.tour != null ? entry.value.tour.tourImage : entry.value.customTour.image}" alt="${entry.value.tour.tourName}">
                                 </td>
                                 <td>
                                     <div class="tour-info">
                                         <div class="tour-name">${entry.value.tour.tourName}</div>
                                         <div class="tour-dates">
                                             <span>Start Date: 
-                                                <fmt:formatDate value="${entry.value.tour.startDate}" pattern="dd-MM-yyyy" />
+                                                <fmt:formatDate value="${entry.value.tour != null ? entry.value.tour.startDate : entry.value.customTour.startDate}" pattern="dd-MM-yyyy" />
                                             </span>
                                             <span>End Date: 
-                                                <fmt:formatDate value="${entry.value.tour.endDate}" pattern="dd-MM-yyyy" />
+                                                <fmt:formatDate value="${entry.value.tour != null ? entry.value.tour.endDate : entry.value.customTour.endDate}" pattern="dd-MM-yyyy" />
                                             </span>
                                             <span>Departure Location: 
-                                                ${entry.value.tour.tourDepartLoca}
+                                                ${entry.value.tour != null ? entry.value.tour.tourDepartLoca : entry.value.customTour.departureLocation}
                                             </span>
                                         </div>
                                     </div>
                                 </td>
                                 <td>${entry.value.numberOfPeople}</td>
-                                <td>$${entry.value.tour.tourPrice}</td>
+                                <td>$${entry.value.tour != null ? entry.value.tour.tourPrice : entry.value.customTour.quotationPrice}</td>
                                 <td>
-                                    <fmt:formatNumber value="${entry.value.totalPrice}" type="number" maxFractionDigits="2" minFractionDigits="2" />
+                                    <fmt:formatNumber value="${entry.value.getTotalPrice()}" type="number" maxFractionDigits="2" minFractionDigits="2" />
                                 </td>
                             </tr>
                         </c:forEach>                         
@@ -109,7 +107,7 @@
 
                 <div class="mb-3">
                     <label for="homeAddress" class="form-label"><strong>Shipping Address</strong></label>
-                    <input type="text" class="form-control" id="homeAddresss" name="homeAddress" placeholder="House number, street name">
+                    <input type="text" class="form-control" id="homeAddresss" name="homeAddress" placeholder="House number, street name" required>
                 </div>
 
                 <div class="mb-3 select-group">

@@ -101,7 +101,7 @@
                                 <a href="tour-detail?tourID=${requestScope.tours[tourBookingDetailID.index].tourID}" style="text-decoration: none; color: black;">
                                     <div class="d-flex align-items-center justify-content-between mb-3">
                                         <div class="d-flex align-items-center">
-                                            <img src="${requestScope.tours[tourBookingDetailID.index].tourImage}" alt="Picture of TOUR" class="rounded" style="width: 80px; height: 80px; object-fit: cover; margin-right: 15px;"/>
+                                            <img src="img/TourImage/1.jpg" alt="Picture of TOUR" class="rounded" style="width: 80px; height: 80px; object-fit: cover; margin-right: 15px;"/>
                                             <div class="order_booking-name" style="font-size: 18px; font-weight: 600; color: #333; margin-right: 20px;">
                                                 ${requestScope.tours[tourBookingDetailID.index].tourName}
                                                 <!-- Display the number of people and price per person -->
@@ -141,7 +141,6 @@
                     </div>                         
                 </c:forEach>
             </c:if>
-
 
             <script>
                 document.addEventListener('DOMContentLoaded', function () {

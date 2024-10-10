@@ -19,6 +19,7 @@ import koikd.booking.BookingDAO;
 import koikd.booking.BookingDTO;
 import koikd.customer.CustomerDAO;
 import koikd.customer.CustomerDTO;
+import koikd.customtour.CustomTourDAO;
 import koikd.tour.TourDAO;
 import koikd.tour.TourDTO;
 import koikd.tourbookingdetail.TourBookingDetailDAO;
@@ -51,6 +52,7 @@ public class GetBookingController extends HttpServlet {
             String url = ORDERBOOKING_PAGE;
             String customerID = request.getParameter("customerID");
             TourBookingDetailDAO bookingDetailDao = new TourBookingDetailDAO();
+            //CustomTourDAO dao = new CustomTourDAO();
             TourDAO tourDAO = new TourDAO();
             CustomerDAO customerDAO = new CustomerDAO();
       
