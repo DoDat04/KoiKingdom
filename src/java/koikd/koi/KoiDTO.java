@@ -99,6 +99,10 @@ public class KoiDTO implements Serializable {
     public void setImage(String image) {
         this.image = image;
     }
-    
+
+    @Override
+    public String toString() {
+        return "KoiDTO{" + "koiID=" + koiID + ", koiName=" + koiName + ", koiTypeID=" + koiTypeID + ", age=" + age + ", length=" + length + ", weight=" + weight + ", price=" + price + ", image=" + image + '}';
+    }
     
 }

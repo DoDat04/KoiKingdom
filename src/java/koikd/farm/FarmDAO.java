@@ -33,8 +33,8 @@ public class FarmDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT [FarmID], [FarmName], [Location], [Description], [Image], [Status]\n"
-                        + " FROM [dbo].[FARM]\n"
+                String sql = "SELECT [FarmID], [FarmName], [Location], [Description], [Image], [Status] "
+                        + " FROM [dbo].[FARM] "
                         + " WHERE [Status] = 'TRUE'";
                 if (nameFarm != null && !nameFarm.isEmpty()) {
                     sql += " AND [FarmName] LIKE ?";
@@ -72,8 +72,9 @@ public class FarmDAO {
         }
         return list;
     }
+    
 //    public static void main(String[] args) throws SQLException {
-//        String nameFarm = "Koi Dreamland";
+//        String nameFarm = "";
 //        FarmDAO services = new FarmDAO();
 //        ArrayList<FarmDTO> dto = services.getFarmList(nameFarm);
 //        for (FarmDTO farmDTO : dto) {

@@ -4,6 +4,7 @@
  */
 package koikd.order;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,7 +22,7 @@ import koikd.utils.DBUtils;
  *
  * @author Minhngo, ADMIN LAM
  */
-public class KoiOrderDAO {
+public class KoiOrderDAO implements Serializable {
 
     /**
      * Get order list by customer's name
@@ -694,4 +695,69 @@ public class KoiOrderDAO {
         return updatedOrder;
     }
 
+    /**
+     * getListKoi for consulting staff when they insert koiOrder
+     *
+     * @param searchKoi
+     * @return
+     * @throws java.sql.SQLException
+     */
+    public ArrayList<KoiDTO> getListKoi(String searchKoi) throws SQLException {
+        ArrayList<KoiDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT [KoiID], [KoiName], [KoiTypeID], [Age], [Length], [Weight], [Price], [Image] "
+                        + " FROM [dbo].[KOI]";
+                if (searchKoi != null && !searchKoi.isEmpty()) {
+                    sql += "WHERE [KoiName] LIKE ?";
+                }
+                pst = conn.prepareStatement(sql);
+                if (searchKoi != null && !searchKoi.isEmpty()) {
+                    pst.setString(1, "%" + searchKoi + "%");
+                }
+                rs = pst.executeQuery();
+                if (rs != null) {
+                    while (rs.next()) {
+                        int koiID = rs.getInt("KoiID");
+                        String koiName = rs.getString("KoiName");
+                        int koiTypeID = rs.getInt("KoiTypeID");
+                        int age = rs.getInt("Age");
+                        double length = rs.getDouble("Length");
+                        double weight = rs.getDouble("Weight");
+                        double price = rs.getDouble("Price");
+                        String image = rs.getString("Image");
+                        KoiDTO dto = new KoiDTO(koiID, koiName, koiTypeID, age, length, weight, price, image);
+                        list.add(dto);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            if(rs!=null){
+                rs.close();
+            }
+            if(pst!=null){
+                pst.close();
+            }
+            if(conn!=null){
+                conn.close();
+            }
+        }
+        return list;
+    }
+
+    public static void main(String[] args) throws SQLException {
+        KoiOrderDAO services = new KoiOrderDAO();
+        ArrayList<KoiDTO> list = services.getListKoi("");
+        for (KoiDTO koiDTO : list) {
+            if (koiDTO != null) {
+                System.out.println(koiDTO);
+            }
+        }
+    }
 }

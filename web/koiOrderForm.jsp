@@ -16,75 +16,83 @@
 
     </head>
     <body>
-        <h2 style="text-align: center; color: #4CAF50;">Create Koi Order</h2>
-
-        <form class="form-center" action="create-koi-order" method="POST" style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
-            <div class="mb-3" style="margin-bottom: 15px;">
-                <label for="txtCustID" style="font-weight: bold;">Customer ID</label>
-                <input type="number" id="txtCustID" name="txtCustID" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-            </div>
-            <div class="mb-3" style="margin-bottom: 15px;">
-                <label for="txtDelivery" style="font-weight: bold;">Delivery Date</label>
-                <input type="date" id="txtDelivery" name="txtDelivery" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-            </div>
-            <div class="mb-3" style="margin-bottom: 15px;">
-                <label for="txtEstimate" style="font-weight: bold;">Estimated Delivery Date</label>
-                <input type="date" id="txtEstimate" name="txtEstimate" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-            </div>
-
-            <h3 style="text-align: center; color: #4CAF50;">Koi Order Details</h3>
-            <div id="orderDetails">
-                <div class="detailRow" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between;">
-                    <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
-                        <label for="txtKoiIDs" style="font-weight: bold;">Koi ID</label>
-                        <input type="number" id="txtKoiIDs" min="1" name="txtKoiIDs" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+        <jsp:include flush="true" page="headerForConsulting.jsp"/>
+        <div style="margin-top: 25vh; margin-left: 17%;" class="main-content">  
+            <div class="container">
+                <h2 style="text-align: center; color: #4CAF50;"><strong>Create Koi Order</strong></h2>
+                <form class="form-center" action="create-koi-order" method="POST" style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                    <div class="mb-3" style="margin-bottom: 15px;">
+                        <label for="txtCustID" style="font-weight: bold;">Customer ID</label>
+                        <input type="number" id="txtCustID" name="txtCustID" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
                     </div>
-                    <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
-                        <label for="txtFarmIDs" style="font-weight: bold;">Farm ID</label>
-                        <input type="number" id="txtFarmIDs" min="1" name="txtFarmIDs" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                    <div class="mb-3" style="margin-bottom: 15px;">
+                        <label for="txtDelivery" style="font-weight: bold;">Delivery Date</label>
+                        <input type="date" id="txtDelivery" name="txtDelivery" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
                     </div>
-                    <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
-                        <label for="txtQuantity" style="font-weight: bold;">Quantity</label>
-                        <input type="number" id="txtQuantity" min="1" max="50" name="txtQuantity" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                    <div class="mb-3" style="margin-bottom: 15px;">
+                        <label for="txtEstimate" style="font-weight: bold;">Estimated Delivery Date</label>
+                        <input type="date" id="txtEstimate" name="txtEstimate" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
                     </div>
-                    <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
-                        <label for="txtUnitPrice" style="font-weight: bold;">Unit Price</label>
-                        <input type="number" step="0.01" id="txtUnitPrice" name="txtUnitPrice" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+
+                    <h3 style="text-align: center; color: #4CAF50;">Koi Order Details</h3>
+                    <div id="orderDetails">
+                        <div class="detailRow" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between;">
+                            <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
+                                <label for="txtKoiIDs" style="font-weight: bold;">Koi ID</label>
+                                <input type="number" id="txtKoiIDs" min="1" name="txtKoiIDs" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                            </div>
+                            <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
+                                <label for="txtFarmIDs" style="font-weight: bold;">Farm ID</label>
+                                <input type="number" id="txtFarmIDs" min="1" name="txtFarmIDs" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                            </div>
+                            <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
+                                <label for="txtQuantity" style="font-weight: bold;">Quantity</label>
+                                <input type="number" id="txtQuantity" min="1" max="50" name="txtQuantity" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                            </div>
+                            <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
+                                <label for="txtUnitPrice" style="font-weight: bold;">Unit Price</label>
+                                <input type="number" step="0.01" id="txtUnitPrice" name="txtUnitPrice" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                            </div>
+                            <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
+                                <label for="txtTotalPrice" style="font-weight: bold;">Total Price</label>
+                                <input type="number" step="0.01" id="txtTotalPrice" name="txtTotalPrice" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
-                        <label for="txtTotalPrice" style="font-weight: bold;">Total Price</label>
-                        <input type="number" step="0.01" id="txtTotalPrice" name="txtTotalPrice" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+
+
+                    <div class="d-flex justify-content-between">
+                        <div class="col-md-6 d-flex justify-content-center">
+                            <a class="btn btn-secondary" href="home?action=Consulting" style="color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Return</a>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-center">
+                            <input type="submit" value="Submit Order" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
+        </div>
 
-            <br>
-            <div style="text-align: center;">
-                <input type="submit" value="Submit Order" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
-            </div>
-        </form>
+        <c:if test="${not empty sessionScope.message}">
+            <script>
+                window.onload = function () {
+                    showToast('${sessionScope.message}', 'success');
+                };
+            </script>
+            <c:set var="message" value="${null}" scope="session"/>
+        </c:if>
 
+        <c:if test="${not empty sessionScope.errorMessage}">
+            <script>
+                window.onload = function () {
+                    showToast('${sessionScope.errorMessage}', 'error');
+                };
+            </script>
+            <c:set var="errorMessage" value="${null}" scope="session"/>
+        </c:if>
+        <div id="toastBox"></div>
+        <script src="js/showToast.js"></script>
 
-    <c:if test="${not empty sessionScope.message}">
-        <script>
-            window.onload = function () {
-                showToast('${sessionScope.message}', 'success');
-            };
-        </script>
-        <c:set var="message" value="${null}" scope="session"/>
-    </c:if>
-
-    <c:if test="${not empty sessionScope.errorMessage}">
-        <script>
-            window.onload = function () {
-                showToast('${sessionScope.errorMessage}', 'error');
-            };
-        </script>
-        <c:set var="errorMessage" value="${null}" scope="session"/>
-    </c:if>
-    <div id="toastBox"></div>
-    <script src="js/showToast.js"></script>
-
-</body>
+    </body>
 </html>
 

@@ -22,7 +22,8 @@
     <body>  
 
         <div class="navbar-header">           
-            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -0.2%; padding-top: 31.7px; padding-right: 161px">     <a href="home?action=Delivery" style="margin-left: 116px">
+            <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -0.2%; padding-top: 31.7px; padding-right: 161px">     
+                <a href="home?action=Consulting" style="margin-left: 116px">
                     <img src="img/logo.png" class="main-icon" >
                 </a>
 
@@ -67,7 +68,13 @@
                             <a href="list-tour-custom" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Manage Tour Custom</a>
                         </li>
                         <li class="menu-item">
-                            <a href="home?action=koiOrderForm" style="color: black"><i style='font-size:24px' class='fas'>&#xF478;</i>Koi Order</a>
+                            <a href="create-koi-order" style="color: black"><i style='font-size:24px' class='fas'>&#xF478;</i>Koi Order</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="list-farm-consulting" style="color: black"><i style='font-size:24px' class='fas'>&#xF433;</i>Farm Information</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="koi-list" style="color: black"><i style='font-size:24px' class='fas'>&#xF433;</i>Koi Information</a>
                         </li>
                         <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
                                 <i style='font-size:24px' class='fas'>&#xf406;</i>Profile</a></li>
