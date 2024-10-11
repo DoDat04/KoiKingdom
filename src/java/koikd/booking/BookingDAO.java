@@ -20,25 +20,24 @@ import koikd.utils.DBUtils;
  * @author Do Dat
  */
 public class BookingDAO implements Serializable {
-    public boolean addBooking(BookingDTO booking, CustomTourDTO customTour) throws SQLException, ClassNotFoundException {
+
+    public int addBooking(BookingDTO booking, CustomTourDTO customTour) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
-        boolean result = false;
+        ResultSet generatedKeys = null;
+        int bookingID = -1;  // Giá trị mặc định cho bookingID nếu không thành công
 
         try {
             con = DBUtils.getConnection();
             if (con != null) {
                 String sql = "INSERT INTO BOOKING (CustomerID, TourID, Name, Email, BookingDate, ShippingAddress, Quantity, Status, TourType) "
                         + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                stm = con.prepareStatement(sql);
+                stm = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);  // Thêm RETURN_GENERATED_KEYS để lấy khóa tự tăng
                 stm.setInt(1, booking.getCustomerID());
 
-                // Determine if this is a custom tour
                 if (customTour != null) {
-                    // Use requestID as TourID for custom tours
                     stm.setInt(2, customTour.getRequestID());
                 } else {
-                    // Use TourID for regular tours
                     stm.setInt(2, booking.getTourID());
                 }
 
@@ -52,10 +51,16 @@ public class BookingDAO implements Serializable {
 
                 int affectedRows = stm.executeUpdate();
                 if (affectedRows > 0) {
-                    result = true;
+                    generatedKeys = stm.getGeneratedKeys();  // Lấy các khóa vừa được sinh
+                    if (generatedKeys.next()) {
+                        bookingID = generatedKeys.getInt(1);  // Lấy giá trị bookingID
+                    }
                 }
             }
         } finally {
+            if (generatedKeys != null) {
+                generatedKeys.close();
+            }
             if (stm != null) {
                 stm.close();
             }
@@ -63,7 +68,7 @@ public class BookingDAO implements Serializable {
                 con.close();
             }
         }
-        return result;
+        return bookingID;
     }
 
     public List<BookingDTO> getAllBooking() throws SQLException, ClassNotFoundException {

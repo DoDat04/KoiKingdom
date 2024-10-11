@@ -128,7 +128,8 @@ public class VNPayCallBackController extends HttpServlet {
                                 booking.setStatus("Paid");
 
                                 // Add the booking for the custom tour
-                                bookingDAO.addBooking(booking, customTour);
+                                int bookingID = bookingDAO.addBooking(booking, customTour);
+                                
 
                                 tourBookingDetail.setCustomerID(custID);
                                 tourBookingDetail.setTourID(customTour.getRequestID());
@@ -138,7 +139,7 @@ public class VNPayCallBackController extends HttpServlet {
                                 tourBookingDetail.setStatus("Confirmed");
                                 tourBookingDetail.setTourType("Custom");
 
-                                tourBookingDetailDAO.addTourBookingDetail(tourBookingDetail, customTour);
+                                tourBookingDetailDAO.addTourBookingDetail(bookingID, tourBookingDetail, customTour);
 
                             } else if (tour != null) {
                                 booking.setTourID(tour.getTourID());
@@ -146,7 +147,7 @@ public class VNPayCallBackController extends HttpServlet {
                                 booking.setTourType("Available");
 
                                 // Add the booking for the standard tour
-                                bookingDAO.addBooking(booking, customTour);
+                                int bookingID = bookingDAO.addBooking(booking, customTour);
 
                                 // Set properties for TourBookingDetailDTO
                                 tourBookingDetail.setCustomerID(custID);
@@ -157,7 +158,7 @@ public class VNPayCallBackController extends HttpServlet {
                                 tourBookingDetail.setStatus("Confirmed");
 
                                 // Add the tour booking detail
-                                tourBookingDetailDAO.addTourBookingDetail(tourBookingDetail, customTour);
+                                tourBookingDetailDAO.addTourBookingDetail(bookingID, tourBookingDetail, customTour);
                             }
                         }
 

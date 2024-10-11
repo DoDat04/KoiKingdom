@@ -119,7 +119,7 @@ a.swiper-button-prev, a.swiper-button-next {
 .login-form input[type="email"],
 .login-form input[type="text"],
 .login-form input[type="password"] {
-    width: 105%;
+    width: 108%;
     padding: 0.5rem;
     margin-bottom: 1rem;
     border: 1px solid #ccc;

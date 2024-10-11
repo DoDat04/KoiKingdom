@@ -22,7 +22,7 @@ import koikd.customtour.CustomTourDTO;
  */
 public class TourBookingDetailDAO implements Serializable {
 
-    public boolean addTourBookingDetail(TourBookingDetailDTO tourBookingDetail, CustomTourDTO customTour) throws SQLException, ClassNotFoundException {
+    public boolean addTourBookingDetail(int bookingID, TourBookingDetailDTO tourBookingDetail, CustomTourDTO customTour) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         boolean result = false;
@@ -30,26 +30,23 @@ public class TourBookingDetailDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "INSERT INTO TOURBOOKINGDETAIL (CustomerID, TourID, Quantity, UnitPrice, TotalPrice, Status, TourType) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO TOURBOOKINGDETAIL (BookingID, CustomerID, TourID, Quantity, UnitPrice, TotalPrice, Status, TourType) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 stm = con.prepareStatement(sql);
-                stm.setInt(1, tourBookingDetail.getCustomerID());
+                stm.setInt(1, bookingID);  // Sử dụng bookingID được truyền vào
+                stm.setInt(2, tourBookingDetail.getCustomerID());
 
-                // Set TourID based on whether customTour is null or not
                 if (customTour != null) {
-                    stm.setInt(2, customTour.getRequestID());  // Use custom tour's RequestID
-                    // Optionally, you might set other fields based on CustomTourDTO here
+                    stm.setInt(3, customTour.getRequestID());  
                 } else {
-                    stm.setInt(2, tourBookingDetail.getTourID()); // Use the TourID from tourBookingDetail
+                    stm.setInt(3, tourBookingDetail.getTourID()); 
                 }
 
-                stm.setInt(3, tourBookingDetail.getQuantity());
-                stm.setDouble(4, customTour != null ? customTour.getQuotationPrice() : tourBookingDetail.getUnitPrice());
-                stm.setDouble(5, (customTour != null ? customTour.getQuotationPrice() : tourBookingDetail.getUnitPrice()) * tourBookingDetail.getQuantity());
-                stm.setString(6, tourBookingDetail.getStatus());
-
-                // Set TourType based on whether customTour is null or not
-                stm.setString(7, customTour != null ? "Custom" : "Available"); // You can modify the type as needed
+                stm.setInt(4, tourBookingDetail.getQuantity());
+                stm.setDouble(5, customTour != null ? customTour.getQuotationPrice() : tourBookingDetail.getUnitPrice());
+                stm.setDouble(6, (customTour != null ? customTour.getQuotationPrice() : tourBookingDetail.getUnitPrice()) * tourBookingDetail.getQuantity());
+                stm.setString(7, tourBookingDetail.getStatus());
+                stm.setString(8, customTour != null ? "Custom" : "Available");  // Set TourType
 
                 int affectedRows = stm.executeUpdate();
                 if (affectedRows > 0) {

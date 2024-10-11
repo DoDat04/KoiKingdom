@@ -21,9 +21,24 @@ public class TourBookingDetailDTO implements Serializable {
     private double totalPrice;
     private String status;
     private String tourType;
+    private int bookingID;
 
     public TourBookingDetailDTO() {
     }
+
+    public TourBookingDetailDTO(int tourBookingDetailID, int customerID, String custName, int tourID, String tourName, int quantity, double unitPrice, double totalPrice, String status, String tourType, int bookingID) {
+        this.tourBookingDetailID = tourBookingDetailID;
+        this.customerID = customerID;
+        this.custName = custName;
+        this.tourID = tourID;
+        this.tourName = tourName;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.totalPrice = totalPrice;
+        this.status = status;
+        this.tourType = tourType;
+        this.bookingID = bookingID;
+    }   
 
     public TourBookingDetailDTO(int tourBookingDetailID, int customerID, String custName, int tourID, String tourName, int quantity, double unitPrice, double totalPrice, String status, String tourType) {
         this.tourBookingDetailID = tourBookingDetailID;
@@ -36,7 +51,7 @@ public class TourBookingDetailDTO implements Serializable {
         this.totalPrice = totalPrice;
         this.status = status;
         this.tourType = tourType;
-    }   
+    }
 
     public TourBookingDetailDTO(int tourBookingDetailID, int customerID, int tourID, String tourName, int quantity, double unitPrice, double totalPrice, String status) {
         this.tourBookingDetailID = tourBookingDetailID;
@@ -57,6 +72,14 @@ public class TourBookingDetailDTO implements Serializable {
         this.unitPrice = unitPrice;
         this.totalPrice = totalPrice;
         this.status = status;
+    }
+
+    public int getBookingID() {
+        return bookingID;
+    }
+
+    public void setBookingID(int bookingID) {
+        this.bookingID = bookingID;
     }
 
     public String getCustName() {
