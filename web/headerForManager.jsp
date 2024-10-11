@@ -17,13 +17,14 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <link rel="stylesheet" href="css/headerForDelivery.css">
+        <link href="css/toast.css" rel="stylesheet">
         <title>Header</title>
     </head>
     <body>   
 
         <div class="navbar-header" >
             <div class="d-flex justify-content-between align-items-center main-frame" style="margin-left: -0.2%; padding-top: 31.7px; padding-right: 161px">
-                <a href="home?action=Delivery" style="margin-left: 116px">
+                <a href="home?action=Manager" style="margin-left: 116px">
                     <img src="img/logo.png" class="main-icon" >
                 </a>
 
@@ -100,7 +101,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="UpdateProfileDeliveryController" method="post" enctype="multipart/form-data" id="profileForm">
+                        <form action="UpdateProfileManagerController" method="post" enctype="multipart/form-data" id="profileForm">
                             <div class="text-center mb-4">
                                 <div class="avatar-container">
                                     <img id="avatarPreview" 
@@ -155,7 +156,27 @@
             </div>
         </div>
         <script src="js/headerForDelivery.js"></script>
+        <c:if test="${not empty sessionScope.updateSuccess}">
+            <script>
+                                    window.onload = function () {
+                                        showToast('${sessionScope.updateSuccess}', 'success');
+                                    };
+            </script>
+            <c:set var="updateSuccess" value="${null}" scope="session"/>
+        </c:if>
 
+        <c:if test="${not empty sessionScope.updateError}">
+            <script>
+                window.onload = function () {
+                    showToast('${sessionScope.updateError}', 'error');
+                };
+            </script>
+            <c:set var="updateError" value="${null}" scope="session"/>
+        </c:if>
+
+        <div id="toastBox"></div>
+        <script src="js/homeForDelivery.js"></script>
+        <script src="js/showToast.js"></script>
         <script>
                                     function previewAvatar() {
                                         const file = document.getElementById('avatar').files[0];
