@@ -58,7 +58,7 @@
                             </li>                 
                         </div>
                         <li class="menu-item">
-                            <a href="managerDashboard.jsp" style="color: black"><i class="fa-solid fa-house" style='font-size:24px'></i>Home</a>
+                            <a href="count" style="color: black"><i class="fa-solid fa-house" style='font-size:24px'></i>Home</a>
                         </li>
                         <li class="menu-item">
                             <a href="managecustomer" style="color: black"><i class="fa-solid fa-users" style='font-size:24px'></i>Customer</a>

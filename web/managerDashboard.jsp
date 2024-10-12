@@ -5,6 +5,7 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,29 +18,13 @@
         <link href="css/homeForDelivery.css" rel="stylesheet">
         <title>Manager Dashboard</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
-
+    </head>
+    <body>
         <jsp:include page="headerForManager.jsp" flush="true"/>   
-    <div class="main" style="margin-top: -216px; margin-left: 223px; margin-right: 30px;">       
-
-        <c:choose>                       
-            <c:when test="${sessionScope.LOGIN_MANAGER != null}"> 
-                <div class="container">
-                    <h1>
-                        Welcome
-                        @<span>${sessionScope.LOGIN_MANAGER.firstName} ${sessionScope.LOGIN_MANAGER.lastName}</span> 
-                        to Manager Dashboard.
-                    </h1>
-                </div>
-                <style>
-                    .container{
-                        text-align: center;
-                    }
-                </style>
-
-            </c:when>
-        </c:choose>
-    </div>
-</body>
+        <div style="margin-top: 25vh; margin-left: 17%; margin-right: 6%;" class="main-content">          
+                <h1>Number of Bookings: ${BOOKING_COUNT}</h1>
+        </div>
+    </body>
 
 </html>
 

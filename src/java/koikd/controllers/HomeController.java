@@ -29,7 +29,7 @@ public class HomeController extends HttpServlet {
     private static final String HOME_PAGE = "homeForCustomer.jsp";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
     private static final String DELIVERY_PAGE = "GetKoiOrder";
-    private static final String MANAGER_PAGE = "managerDashboard.jsp";
+    private static final String MANAGER_PAGE = "/count";
     private static final String SALES_PAGE = "homeForSales.jsp";
     private static final String CONSULTING_PAGE = "homeForConsulting.jsp";
     private static final String CUSTOM_TOUR_PAGE = "customTour.jsp";

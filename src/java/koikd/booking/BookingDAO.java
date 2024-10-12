@@ -113,4 +113,48 @@ public class BookingDAO implements Serializable {
         }
         return listBooking;
     }
+    public int countBooking() {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        int bookingCount = 0;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT COUNT([BookingID]) FROM [dbo].[BOOKING]";
+                pst = conn.prepareStatement(sql);
+                rs = pst.executeQuery();
+
+                if (rs.next()) {
+                    bookingCount = rs.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return bookingCount;
+    }
+    
+    public static void main(String[] args) {
+        BookingDAO mainApp = new BookingDAO();
+        
+        int bookingCount = mainApp.countBooking();
+        
+        System.out.println("Number: " + bookingCount);
+    }
 }

@@ -68,7 +68,7 @@
                             <a href="list-tour-custom" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Manage Tour Custom</a>
                         </li>
                         <li class="menu-item">
-                            <a href="create-koi-order" style="color: black"><i style='font-size:24px' class='fas'>&#xF478;</i>Koi Order</a>
+                            <a href="home?action=koiOrderForm" style="color: black"><i style='font-size:24px' class='fas'>&#xF478;</i>Koi Order</a>
                         </li>
                         <li class="menu-item">
                             <a href="list-farm-consulting" style="color: black"><i style='font-size:24px' class='fas'>&#xF433;</i>Farm Information</a>
