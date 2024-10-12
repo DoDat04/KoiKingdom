@@ -113,7 +113,7 @@ public class BookingDAO implements Serializable {
         }
         return listBooking;
     }
-    public int countBooking() {
+    public int countBooking(String startDate, String endDate) {
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
@@ -150,11 +150,56 @@ public class BookingDAO implements Serializable {
         return bookingCount;
     }
     
-    public static void main(String[] args) {
-        BookingDAO mainApp = new BookingDAO();
-        
-        int bookingCount = mainApp.countBooking();
-        
-        System.out.println("Number: " + bookingCount);
+    public int countCustomer(String startDate, String endDate) {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        int customerCount = 0;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql;
+                if (startDate != null && endDate != null) {
+                    sql = "SELECT COUNT(DISTINCT [CustomerID]) FROM [dbo].[BOOKING]"
+                            + "WHERE CAST(BookingDate AS DATE) BETWEEN ? AND ? ";
+                    pst = conn.prepareStatement(sql);
+                    pst.setString(1, startDate);
+                    pst.setString(2, endDate);
+                } else {
+                    sql = "SELECT COUNT(DISTINCT [CustomerID]) FROM [dbo].[BOOKING]";
+                    pst = conn.prepareStatement(sql);
+                }
+               rs = pst.executeQuery();
+
+                if (rs.next()) {
+                    customerCount = rs.getInt(1); // ta phải lấy ở cột đầu tiên của result set mặc dù nó chỉ có đúng 1 cột
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return customerCount;
     }
+//    public static void main(String[] args) {
+//        BookingDAO mainApp = new BookingDAO();
+//        
+//        int bookingCount = mainApp.countBooking();
+//        
+//        System.out.println("Number: " + bookingCount);
+//    }
 }

@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import koikd.booking.BookingDAO;
+import koikd.order.KoiOrderDAO;
 
 /**
  *
@@ -36,16 +37,51 @@ public class StatisticController extends HttpServlet {
         String url = COUNT_BOOKING;
         response.setContentType("text/html;charset=UTF-8");
         
+       String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
         /**
          * Count Booking
          */
-        BookingDAO services = new BookingDAO();
-        int countBooking = services.countBooking();
+        BookingDAO daotour = new BookingDAO();
+        int countBooking = daotour.countBooking(startDate, endDate);
         if (countBooking > 0) {
-            System.out.println("Booking count: " + countBooking);
+//            System.out.println("Booking count: " + countBooking);
             request.setAttribute("BOOKING_COUNT", countBooking);
-        } else{
-            request.setAttribute("BOOKING_COUNT", "CANNOT INSERT FOR SOME REASON.");
+        } else {
+            request.setAttribute("BOOKING_COUNT", 0);
+        }
+        /**
+         * Count customer
+         */
+
+        int countCustomer = daotour.countCustomer(startDate, endDate);
+        if (countCustomer > 0) {
+//            System.out.println("Booking count: " + countBooking);
+            request.setAttribute("CUSTOMER_COUNT", countCustomer);
+        } else {
+            request.setAttribute("CUSTOMER_COUNT", 0);
+        }
+        /**
+         * Count Koi order
+         */
+        KoiOrderDAO daoorder = new KoiOrderDAO();
+        int countOrder = daoorder.countKoiOrder(startDate, endDate);
+        if (countOrder > 0) {
+//            System.out.println("Booking count: " + countBooking);
+            request.setAttribute("ORDER_COUNT", countOrder);
+        } else {
+            request.setAttribute("ORDER_COUNT",0);
+        }
+
+        /**
+         * Count revenue
+         */
+        double countRevenue = daoorder.countRevenue(startDate, endDate);
+        if (countRevenue > 0) {
+//            System.out.println("Booking count: " + countBooking);
+            request.setAttribute("REVENUE_COUNT", countRevenue);
+        } else {
+            request.setAttribute("REVENUE_COUNT", 0);
         }
         
         
