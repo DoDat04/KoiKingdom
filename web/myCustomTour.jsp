@@ -27,7 +27,7 @@
     <body>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
         <c:if test="${not empty requestScope.customerTourList}">
-            <div style=" margin: 20px;">  
+            <div style="margin: 20px;">  
                 <div class="container mt-5">
                     <h2 class="mb-4">Quotation Information</h2>
                     <table class="table table-bordered table-striped">
@@ -47,7 +47,7 @@
                         </thead>
                         <tbody>
                             <c:forEach var="customerTourList" items="${requestScope.customerTourList}">
-                                <tr> 
+                                <tr class="customer-tour-row" data-requestid="${customerTourList.requestID}"> 
                                     <td><img src="${customerTourList.image}" class="custom-tour" alt="" style="height: 100px; width: 150px; border-radius: 10px;"/></td>
                                     <td>${customerTourList.departureLocation}</td> 
                                     <td>
@@ -75,7 +75,11 @@
                                     <td><a href="my-detail-custom-tour?requestid=${customerTourList.requestID}">Detail</a></td>
                                     <td>
                                         <c:if test="${customerTourList.status == 'Approved'}">
-                                            <a href="checkout?requestid=${customerTourList.requestID}&numberofpeople=${customerTourList.quantity}" class="btn btn-success">Check Out</a>
+                                            <p style="color: red; font-weight: bold; font-size: 20px">Time left to decide: <span class="decision-timer">30</span></p>
+                                            <div class="decision-buttons">
+                                                <a href="checkout?requestid=${customerTourList.requestID}&numberofpeople=${customerTourList.quantity}" class="btn btn-success mb-2 d-block">Check Out</a>
+                                                <a href="reject-tour?requestid=${customerTourList.requestID}" class="btn btn-danger d-block">Reject</a>
+                                            </div>
                                         </c:if>
                                     </td>
                                 </tr>
@@ -83,9 +87,11 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </c:if>
+
+        <script src="js/customTimer.js"></script> 
+
         <c:if test="${empty requestScope.customerTourList}">
             <p class="alert alert-danger" style="margin-top: 31px">${errorMessage}</p>
         </c:if>

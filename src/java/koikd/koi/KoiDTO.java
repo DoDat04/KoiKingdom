@@ -21,9 +21,7 @@ public class KoiDTO implements Serializable {
     private String image; // Đường dẫn đến hình ảnh có thể là kiểu String
 
     public KoiDTO() {
-    }
-
-    
+    }   
     
     public KoiDTO(int koiID, String koiName, int koiTypeID, int age, double length, double weight, double price, String image) {
         this.koiID = koiID;
