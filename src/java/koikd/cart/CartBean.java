@@ -49,7 +49,7 @@ public class CartBean implements Serializable {
 
         if (this.items.containsKey(tourID)) {
             CartItem existingItem = this.items.get(tourID);
-            existingItem.setNumberOfPeople(existingItem.getNumberOfPeople() + numberOfPeople);
+            //existingItem.setNumberOfPeople(existingItem.getNumberOfPeople() + numberOfPeople);
         } else {
             this.items.put(tourID, new CartItem(customTour, numberOfPeople));
         }
