@@ -5,6 +5,7 @@
 package koikd.feedback;
 
 import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  *
@@ -16,13 +17,13 @@ public class FeedbackDTO {
     private int customerID;
     private int rating;
     private String feedbackText;
-    private Date createdAt;
+    private Timestamp createdAt;
     private int tourID;
 
     public FeedbackDTO() {
     }
 
-    public FeedbackDTO(int feedbackID, int customerID, int rating, String feedbackText, Date createdAt, int tourID) {
+    public FeedbackDTO(int feedbackID, int customerID, int rating, String feedbackText, Timestamp createdAt, int tourID) {
         this.feedbackID = feedbackID;
         this.customerID = customerID;
         this.rating = rating;
@@ -65,9 +66,9 @@ public class FeedbackDTO {
 
     public Date getCreatedAt() {
         return createdAt;
-    }
+    }    
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 

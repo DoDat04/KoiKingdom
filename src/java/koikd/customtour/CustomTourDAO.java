@@ -674,4 +674,25 @@ public class CustomTourDAO implements Serializable {
         }
         return result;
     }
+    
+    public void deleteCustomTour(int requestID) throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement stm = null;
+
+        try {
+            conn = DBUtils.getConnection(); // Hàm kết nối cơ sở dữ liệu
+            String sql = "DELETE FROM CUSTOMTOURREQUEST "
+                    + "WHERE RequestID = ?";
+            stm = conn.prepareStatement(sql);
+            stm.setInt(1, requestID);
+            stm.executeUpdate();
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+    }
 }

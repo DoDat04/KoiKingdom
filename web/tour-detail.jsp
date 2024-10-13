@@ -172,8 +172,14 @@
                                 <c:forEach var="feedbackTour" items="${requestScope.feedbackTour}" varStatus="feedbackID">
                                     <div class="feedback-item <c:if test="${feedbackID.index > 2}">more-feedback</c:if>" 
                                          style="<c:if test='${feedbackID.index > 2}'>display: none;</c:if>">
-                                             <p class="user-name"><strong>                              
-                                                 ${requestScope.customerList[feedbackID.index].lastName} ${requestScope.customerList[feedbackID.index].firstName}</strong>
+                                             <p class="user-name">
+                                                 <strong>                              
+                                                 ${requestScope.customerList[feedbackID.index].lastName} 
+                                                 ${requestScope.customerList[feedbackID.index].firstName}
+                                             </strong>
+                                             <span class="feedback-date">
+                                                 (<fmt:formatDate value="${feedbackTour.createdAt}" pattern="dd-MM-yyyy HH:mm:ss" />)
+                                             </span>
                                          </p>
                                          <p class="feedback-text">${feedbackTour.feedbackText}</p>
                                          <p class="feedback-text">

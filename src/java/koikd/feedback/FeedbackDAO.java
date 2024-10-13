@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Date;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import koikd.customer.CustomerDTO;
 import koikd.utils.DBUtils;
@@ -64,7 +65,7 @@ public class FeedbackDAO implements Serializable {
                         Date createdAt = new Date(); // Có thể thay đổi tùy theo yêu cầu, nếu bạn muốn lấy ngày hiện tại
                         
                         // Tạo đối tượng FeedbackDTO
-                        feedbackDTO = new FeedbackDTO(feedbackID, customerID, rating, feedbackText, createdAt, tourID);
+                        feedbackDTO = new FeedbackDTO(feedbackID, customerID, rating, feedbackText, (Timestamp) createdAt, tourID);
                     }
                 }
                 
@@ -142,7 +143,7 @@ public class FeedbackDAO implements Serializable {
                     int customerID = rs.getInt("CustomerID");
                     int rating = rs.getInt("Rating");
                     String feedbackText = rs.getString("FeedbackText");
-                    Date createdAt = rs.getDate("CreatedAt");
+                    Timestamp createdAt = rs.getTimestamp("CreatedAt");
                     // Fixed constructor call
                     FeedbackDTO feedback = new FeedbackDTO(feedbackID, customerID, rating, feedbackText, createdAt, tourID);
                     feedbackList.add(feedback);
@@ -166,7 +167,7 @@ public class FeedbackDAO implements Serializable {
             }
         }
         return feedbackList;
-    }
+    }    
 
     public CustomerDTO getCustomerByCustomerID(int customerId) throws SQLException {
         Connection conn = null;
@@ -177,7 +178,7 @@ public class FeedbackDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType "
+                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
                         + "FROM CUSTOMER "
                         + "WHERE CustomerID = ?";
                 pst = conn.prepareStatement(sql);
@@ -236,7 +237,7 @@ public class FeedbackDAO implements Serializable {
                         int tourID = rs.getInt("TourID");
                         int rating = rs.getInt("Rating");
                         String feedbackText = rs.getString("FeedbackText");
-                        Date createdAt = rs.getDate("CreatedAt");
+                        Timestamp createdAt = rs.getTimestamp("CreatedAt");
 
                         feedbackDTO = new FeedbackDTO(feedbackID, customerID, rating, feedbackText, createdAt, tourID);
                     }

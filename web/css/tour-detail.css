@@ -271,6 +271,12 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
 }
 
+.feedback-date {
+    font-size: 0.9rem;
+    color: #6c757d; /* Light gray color for the date */
+    margin-left: 10px; /* Adds some space between the name and the date */
+}
+
 .user-name {
     font-weight: bold; 
     color: black; 
