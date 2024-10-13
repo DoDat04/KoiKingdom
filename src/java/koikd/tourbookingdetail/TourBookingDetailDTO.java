@@ -11,6 +11,7 @@ import java.io.Serializable;
  * @author Do Dat
  */
 public class TourBookingDetailDTO implements Serializable {
+
     private int tourBookingDetailID;
     private int customerID;
     private String custName;
@@ -22,11 +23,25 @@ public class TourBookingDetailDTO implements Serializable {
     private String status;
     private String tourType;
     private int bookingID;
+    private boolean feedbackStatus;
 
     public TourBookingDetailDTO() {
     }
 
-    public TourBookingDetailDTO(int tourBookingDetailID, int customerID, String custName, int tourID, String tourName, int quantity, double unitPrice, double totalPrice, String status, String tourType, int bookingID) {
+    public TourBookingDetailDTO(int tourBookingDetailID, int customerID, int tourID, int quantity, double unitPrice, double totalPrice, String status, String tourType, int bookingID, boolean feedbackStatus) {
+        this.tourBookingDetailID = tourBookingDetailID;
+        this.customerID = customerID;
+        this.tourID = tourID;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.totalPrice = totalPrice;
+        this.status = status;
+        this.tourType = tourType;
+        this.bookingID = bookingID;
+        this.feedbackStatus = feedbackStatus;
+    }
+
+    public TourBookingDetailDTO(int tourBookingDetailID, int customerID, String custName, int tourID, String tourName, int quantity, double unitPrice, double totalPrice, String status, String tourType, int bookingID, boolean feedbackStatus) {
         this.tourBookingDetailID = tourBookingDetailID;
         this.customerID = customerID;
         this.custName = custName;
@@ -38,7 +53,8 @@ public class TourBookingDetailDTO implements Serializable {
         this.status = status;
         this.tourType = tourType;
         this.bookingID = bookingID;
-    }   
+        this.feedbackStatus = feedbackStatus;
+    }
 
     public TourBookingDetailDTO(int tourBookingDetailID, int customerID, String custName, int tourID, String tourName, int quantity, double unitPrice, double totalPrice, String status, String tourType) {
         this.tourBookingDetailID = tourBookingDetailID;
@@ -72,6 +88,14 @@ public class TourBookingDetailDTO implements Serializable {
         this.unitPrice = unitPrice;
         this.totalPrice = totalPrice;
         this.status = status;
+    }
+
+    public boolean isFeedbackStatus() {
+        return feedbackStatus;
+    }
+
+    public void setFeedbackStatus(boolean feedbackStatus) {
+        this.feedbackStatus = feedbackStatus;
     }
 
     public int getBookingID() {
@@ -167,5 +191,4 @@ public class TourBookingDetailDTO implements Serializable {
         return "TourBookingDetailDTO{" + "tourBookingDetailID=" + tourBookingDetailID + ", customerID=" + customerID + ", tourID=" + tourID + ", tourName=" + tourName + ", quantity=" + quantity + ", unitPrice=" + unitPrice + ", totalPrice=" + totalPrice + ", status=" + status + '}';
     }
 
-    
 }

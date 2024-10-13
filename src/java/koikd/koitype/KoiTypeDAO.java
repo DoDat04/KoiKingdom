@@ -10,6 +10,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import koikd.customer.CustomerDTO;
+import koikd.farm.FarmDTO;
+import koikd.koi.KoiDTO;
+import koikd.order.KoiOrderDAO;
+import koikd.order.KoiOrderDTO;
+import koikd.order.KoiOrderDetailDTO;
 import koikd.utils.DBUtils;
 
 /**
@@ -17,6 +23,7 @@ import koikd.utils.DBUtils;
  * @author ADMIN LAM
  */
 public class KoiTypeDAO {
+
     /**
      *
      * @param nameKoiType
@@ -74,7 +81,7 @@ public class KoiTypeDAO {
     }
 
 //    public static void main(String[] args) throws ClassNotFoundException, SQLException {
-//        String nameKoiType = "Chagoi";
+//        String nameKoiType = "Benigoi";
 //        KoiTypeDAO services = new KoiTypeDAO();
 //        ArrayList<KoiTypeDTO> dto = services.getKoiTypeList(nameKoiType);
 //        for (KoiTypeDTO koiTypeDTO : dto) {
@@ -159,7 +166,7 @@ public class KoiTypeDAO {
         PreparedStatement stm = null;
         ResultSet rs = null;
         List<KoiTypeDTO> koiTypeList = new ArrayList<>();
-        
+
         try {
             con = DBUtils.getConnection();
             if (con != null) {
@@ -189,5 +196,56 @@ public class KoiTypeDAO {
             }
         }
         return koiTypeList;
+    }
+
+    /** 
+     *  Get Koi Type
+     * @param id
+     * @return
+     * @throws ClassNotFoundException
+     * @throws SQLException 
+     */
+    public KoiTypeDTO getKoiType(int id) throws ClassNotFoundException, SQLException {
+        KoiTypeDTO dto = null;
+        Connection conn = DBUtils.getConnection();
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            if (conn != null) {
+                String sql = "SELECT t.KoiTypeID, t.TypeName, t.Description, t.Image, t.KoiTypeStatus "
+                        + "FROM dbo.KOITYPE t "
+                        + "INNER JOIN dbo.KOI k ON t.KoiTypeID = k.KoiTypeID "
+                        + "WHERE k.KoiTypeID = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, id); 
+
+                rs = pst.executeQuery();
+
+                // Retrieve results
+                if (rs.next()) {
+                    int koiTypeID = rs.getInt("KoiTypeID");
+                    String typeName = rs.getString("TypeName");
+                    String description = rs.getString("Description");
+                    String koiImageURL = rs.getString("Image");
+                    boolean koiTypeStatus = rs.getBoolean("KoiTypeStatus");
+                    dto = new KoiTypeDTO(koiTypeID, typeName, description, koiImageURL, koiTypeStatus);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Ensure resources are closed in reverse order of their creation
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return dto; // Return the retrieved KoiTypeDTO
     }
 }

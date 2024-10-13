@@ -863,13 +863,13 @@ public class KoiOrderDAO implements Serializable {
         return revenueCount;
     }
 
-    public static void main(String[] args) throws SQLException {
-        KoiOrderDAO services = new KoiOrderDAO();
-        ArrayList<KoiDTO> list = services.getListKoi("");
-        for (KoiDTO koiDTO : list) {
-            if (koiDTO != null) {
-                System.out.println(koiDTO);
-            }
-        }
-    }
+//    public static void main(String[] args) throws SQLException {
+//        KoiOrderDAO services = new KoiOrderDAO();
+//        ArrayList<KoiDTO> list = services.getListKoi("");
+//        for (KoiDTO koiDTO : list) {
+//            if (koiDTO != null) {
+//                System.out.println(koiDTO);
+//            }
+//        }
+//    }
 }

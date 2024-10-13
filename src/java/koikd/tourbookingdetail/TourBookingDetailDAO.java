@@ -30,16 +30,16 @@ public class TourBookingDetailDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "INSERT INTO TOURBOOKINGDETAIL (BookingID, CustomerID, TourID, Quantity, UnitPrice, TotalPrice, Status, TourType) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO TOURBOOKINGDETAIL (BookingID, CustomerID, TourID, Quantity, UnitPrice, TotalPrice, Status, TourType, FeedbackStatus) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, bookingID);  // Sử dụng bookingID được truyền vào
                 stm.setInt(2, tourBookingDetail.getCustomerID());
 
                 if (customTour != null) {
-                    stm.setInt(3, customTour.getRequestID());  
+                    stm.setInt(3, customTour.getRequestID());
                 } else {
-                    stm.setInt(3, tourBookingDetail.getTourID()); 
+                    stm.setInt(3, tourBookingDetail.getTourID());
                 }
 
                 stm.setInt(4, tourBookingDetail.getQuantity());
@@ -47,7 +47,7 @@ public class TourBookingDetailDAO implements Serializable {
                 stm.setDouble(6, (customTour != null ? customTour.getQuotationPrice() : tourBookingDetail.getUnitPrice()) * tourBookingDetail.getQuantity());
                 stm.setString(7, tourBookingDetail.getStatus());
                 stm.setString(8, customTour != null ? "Custom" : "Available");  // Set TourType
-
+                stm.setBoolean(9, tourBookingDetail.isFeedbackStatus());
                 int affectedRows = stm.executeUpdate();
                 if (affectedRows > 0) {
                     result = true;
@@ -131,7 +131,7 @@ public class TourBookingDetailDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT [TourBookingDetail], [CustomerID], [TourID], [Quantity], [UnitPrice], [TotalPrice], [Status]\n"
+                String sql = "SELECT [TourBookingDetail], [CustomerID], [TourID], [Quantity], [UnitPrice], [TotalPrice], [Status], [TourType] ,[FeedbackStatus], [bookingID] \n"
                         + "FROM [dbo].[TOURBOOKINGDETAIL]\n"
                         + "WHERE [CustomerID] = ?";
                 pst = conn.prepareStatement(sql);
@@ -145,7 +145,10 @@ public class TourBookingDetailDAO implements Serializable {
                     double unitPrice = rs.getDouble("unitPrice");
                     double totalPrice = rs.getDouble("totalPrice");
                     String status = rs.getString("status");
-                    dto = new TourBookingDetailDTO(tourBookingDetail, customerID, tourID, quantity, unitPrice, totalPrice, status);
+                    String tourType = rs.getString("tourType");
+                    boolean feedbackStatus = rs.getBoolean("FeedbackStatus");
+                    int bookingID = rs.getInt("bookingID");
+                    dto = new TourBookingDetailDTO(tourBookingDetail, customerID, tourID, quantity, unitPrice, totalPrice, status, tourType, bookingID, feedbackStatus);
                     list.add(dto);
                 }
 
@@ -164,6 +167,35 @@ public class TourBookingDetailDAO implements Serializable {
             }
         }
         return list;
+    }
+
+    public static void main(String[] args) {
+        TourBookingDetailDAO tourBookingDetailDAO = new TourBookingDetailDAO();
+        int customerID = 12; // Thay đổi ID khách hàng nếu cần
+
+        try {
+            ArrayList<TourBookingDetailDTO> tourBookingDetails = tourBookingDetailDAO.getTourBookingDetailListByCustomerID(customerID);
+
+            // Kiểm tra và in ra danh sách chi tiết đặt tour
+            if (tourBookingDetails.isEmpty()) {
+                System.out.println("Không có chi tiết đặt tour nào cho khách hàng với ID: " + customerID);
+            } else {
+                for (TourBookingDetailDTO detail : tourBookingDetails) {
+                    System.out.println("TourBookingDetail: " + detail.getTourBookingDetailID());
+                    System.out.println("CustomerID: " + detail.getCustomerID());
+                    System.out.println("TourID: " + detail.getTourID());
+                    System.out.println("Quantity: " + detail.getQuantity());
+                    System.out.println("UnitPrice: " + detail.getUnitPrice());
+                    System.out.println("TotalPrice: " + detail.getTotalPrice());
+                    System.out.println("Status: " + detail.getStatus());
+                    System.out.println("FeedbackStatus: " + detail.isFeedbackStatus());
+                    System.out.println("----------------------------------------");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Có lỗi xảy ra khi lấy danh sách chi tiết đặt tour: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public TourDTO getTourByID(int tourID) throws SQLException {
@@ -278,4 +310,5 @@ public class TourBookingDetailDAO implements Serializable {
             }
         }
     }
+
 }

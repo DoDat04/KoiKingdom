@@ -106,8 +106,8 @@ public class VNPayCallBackController extends HttpServlet {
                         // Iterate through the cart items to insert each tour
                         Map<Integer, CartItem> items = cart.getItems();
                         for (CartItem item : items.values()) {
-                            TourDTO tour = item.getTour(); 
-                            CustomTourDTO customTour = item.getCustomTour(); 
+                            TourDTO tour = item.getTour();
+                            CustomTourDTO customTour = item.getCustomTour();
                             int numberOfPeople = item.getNumberOfPeople();
 
                             BookingDTO booking = new BookingDTO();
@@ -129,7 +129,6 @@ public class VNPayCallBackController extends HttpServlet {
 
                                 // Add the booking for the custom tour
                                 int bookingID = bookingDAO.addBooking(booking, customTour);
-                                
 
                                 tourBookingDetail.setCustomerID(custID);
                                 tourBookingDetail.setTourID(customTour.getRequestID());
@@ -138,7 +137,7 @@ public class VNPayCallBackController extends HttpServlet {
                                 tourBookingDetail.setTotalPrice(customTour.getQuotationPrice() * numberOfPeople);
                                 tourBookingDetail.setStatus("Confirmed");
                                 tourBookingDetail.setTourType("Custom");
-
+                                tourBookingDetail.setFeedbackStatus(false);
                                 tourBookingDetailDAO.addTourBookingDetail(bookingID, tourBookingDetail, customTour);
 
                             } else if (tour != null) {
@@ -156,7 +155,7 @@ public class VNPayCallBackController extends HttpServlet {
                                 tourBookingDetail.setUnitPrice(tour.getTourPrice());
                                 tourBookingDetail.setTotalPrice(tour.getTourPrice() * numberOfPeople);
                                 tourBookingDetail.setStatus("Confirmed");
-
+                                tourBookingDetail.setFeedbackStatus(false);
                                 // Add the tour booking detail
                                 tourBookingDetailDAO.addTourBookingDetail(bookingID, tourBookingDetail, customTour);
                             }

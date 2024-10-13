@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 import koikd.customer.CustomerDTO;
 import koikd.farm.FarmDTO;
 import koikd.koi.KoiDTO;
+import koikd.koitype.KoiTypeDAO;
+import koikd.koitype.KoiTypeDTO;
 import koikd.order.KoiOrderDAO;
 import koikd.order.KoiOrderDTO;
 import koikd.order.KoiOrderDetailDTO;
@@ -53,15 +55,21 @@ public class GetMyOrder extends HttpServlet {
                 CustomerDTO customer = new CustomerDTO();
                 FarmDTO farm = new FarmDTO();
                 KoiDTO koiFish = new KoiDTO();
+                KoiTypeDTO koiType = new KoiTypeDTO();
+
+                KoiTypeDAO koiTypeDao = new KoiTypeDAO();
 
                 ArrayList<KoiOrderDTO> koiOrderList = dao.getKoiOrderListByID(Integer.parseInt(customerID));
                 ArrayList<FarmDTO> farmCollection = new ArrayList<>();
                 ArrayList<KoiDTO> koiFishCollection = new ArrayList<>();
                 ArrayList<KoiOrderDetailDTO> koiOrderDetailCollection = new ArrayList<>();
-
+                ArrayList<KoiOrderDTO> koiOrderListByOrderList = new ArrayList<>();
+                ArrayList<KoiTypeDTO> koiTypeListByOrderList = new ArrayList<>();
                 if (koiOrderList != null && !koiOrderList.isEmpty()) {
 
                     for (KoiOrderDTO koiOrder : koiOrderList) {
+                        koiOrderListByOrderList = dao.getKoiOrderListByOrderID(koiOrder.getKoiOrderID());
+
                         ArrayList<KoiOrderDetailDTO> koiOrderDetailList = dao.getKoiOrderDetaiListById(koiOrder.getKoiOrderID());
                         if (!koiOrderDetailList.isEmpty()) {
 
@@ -73,15 +81,22 @@ public class GetMyOrder extends HttpServlet {
                                 koiFishCollection.add(koiFish);
                                 koiOrderDetailCollection.add(koiOrderDetailItem);
                             }
+
                         } else {
                             request.setAttribute("Error", "Some orders do not have details");
                         }
                         customer = dao.getCustomerByCustomerID(koiOrder.getCustomerID());
                     }
-
+                    for (KoiDTO koiList : koiFishCollection) {
+                        koiType = koiTypeDao.getKoiType(koiList.getKoiTypeID());
+                        koiTypeListByOrderList.add(koiType);
+                    }
                 } else {
                     request.setAttribute("Error", "No orders found.");
                 }
+
+                request.setAttribute("koiType", koiTypeListByOrderList);
+                request.setAttribute("koiOrderListByOrderList", koiOrderListByOrderList);
                 request.setAttribute("koiOrderDetails", koiOrderDetailCollection);
                 request.setAttribute("koiNames", koiFishCollection);
                 request.setAttribute("customerNames", customer);

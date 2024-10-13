@@ -124,7 +124,7 @@
                                         <li><a class="dropdown-item" href="get-booking?customerID=${sessionScope.LOGIN_USER.customerID}"><i class="fa fa-history"></i> My Order Booking </a></li>
                                         <li>
                                             <a class="dropdown-item" href="my-custom-tour?customerID=${sessionScope.LOGIN_USER.customerID}">
-                                                <i class="fa fa-history"></i> My Booking Custom Tour
+                                                <i class="fa fa-history"></i> Quotation Information
                                             </a>
                                         </li>
                                         <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>      

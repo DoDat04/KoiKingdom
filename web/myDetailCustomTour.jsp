@@ -52,12 +52,12 @@
                                 </thead>
                                 <tbody>                     
                                     <tr>
-                                        <td>${requestScope.customerTourDetail.duration}</td>
-                                        <td>${requestScope.customerTourDetail.quotationPrice}</td>
-                                        <td>${requestScope.customerTourDetail.startDate}</td>
-                                        <td>${requestScope.customerTourDetail.endDate}</td>
-                                        <td>${requestScope.customerTourDetail.departureLocation}</td>
-                                        <td>${requestScope.customerTourDetail.quantity}</td>
+                                        <td>${customerTourDetail.duration}</td>
+                                        <td>${customerTourDetail.quotationPrice}</td>
+                                        <td>${customerTourDetail.startDate}</td>
+                                        <td>${customerTourDetail.endDate}</td>
+                                        <td>${customerTourDetail.departureLocation}</td>
+                                        <td>${customerTourDetail.quantity}</td>
                                     </tr>     
                                 </tbody>
                             </table>

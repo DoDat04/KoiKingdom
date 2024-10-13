@@ -34,7 +34,11 @@
                     <div class="order_booking" style="display: flex; justify-content: center; margin-bottom: 20px;">
                         <div class="order_booking-section card" style="width: 100%; max-width: 900px;">
                             <div class="card-body">
-                                <a href="tour-detail?tourID=${requestScope.tours[tourBookingDetailID.index].tourID}" style="text-decoration: none; color: black;">
+
+                                <c:if test="${orders.tourType == 'Available'}">
+                                    <a href="tour-detail?tourID=${requestScope.tours[tourBookingDetailID.index].tourID}" style="text-decoration: none; color: black;">
+                                    </c:if>
+                                    <div style="font-size: 16px; font-weight: 500; color: #ff6f61; margin-top: 5px;" >${orders.tourType}</div>
                                     <div class="d-flex align-items-center justify-content-between mb-3">
                                         <div class="d-flex align-items-center">
                                             <img src="img/TourImage/1.jpg" alt="Picture of TOUR" class="rounded" style="width: 80px; height: 80px; object-fit: cover; margin-right: 15px;"/>
@@ -64,14 +68,18 @@
                                                         Cảm ơn bạn đã đặt dịch vụ!
                                                         <br />
                                                         Xin vui lòng đánh giá dịch vụ của chúng tôi.
-                                                        <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reviewTour"
-                                                           data-tourid="${orders.tourID}" data-customerid="${orders.customerID}" id="review">Review</a>
+                                                        <c:if test="${orders.feedbackStatus == 'false'}">
+                                                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reviewTour"
+                                                               data-tourid="${orders.tourID}" data-customerid="${orders.customerID}"  href="check_feedback?feedbackID=${sessionScope.feedbackID}""id="review">Review</a>
+                                                        </c:if>
                                                     </div>
                                                 </c:if>
                                             </div>
                                         </div>
                                     </div>
-                                </a>
+                                    <c:if test="${orders.tourType == 'Available'}">
+                                    </a>
+                                </c:if>
                             </div>
                         </div>
                     </div>                         
@@ -110,7 +118,7 @@
                             <form action="CreateFeedbackForCustomer" method="post" enctype="multipart/form-data" id="reviewForm">
                                 <input type="hidden" name="customerID" value="">
                                 <input type="hidden" name="tourID" value="">
-
+                                <input type="" name="feedbackID" value="">
                                 <div class="mb-3">
                                     <label for="feedback" class="form-label">Phản hồi của bạn</label>
                                     <textarea class="form-control" id="feedback"  name="feedback" rows="3" required></textarea>
@@ -157,7 +165,10 @@
                                 $('#close').click();
                                 $('#reviewForm')[0].reset();
 
-
+                                $('#review').attr('data-feedbackid', response.feedbackID);
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 6001);
                             } else {
                                 showToast(response.message, 'error');
                             }
@@ -171,23 +182,7 @@
         </script>
 
         <div id="toastBox"></div>
-        <script src="js/showToast.js"></script>
-        <script>
-            const btn = document.querySelector("button");
-            const post = document.querySelector(".post");
-            const widget = document.querySelector(".star-widget");
-            const editBtn = document.querySelector(".edit");
-            btn.onclick = () => {
-                widget.style.display = "none";
-                post.style.display = "block";
-                editBtn.onclick = () => {
-                    widget.style.display = "block";
-                    post.style.display = "none";
-                }
-                return false;
-            }
-        </script>
-
+        <script src="js/showToast.js"></script> 
         <c:if test="${empty requestScope.orders}">
             <p class="alert alert-danger">${Error}</p>
         </c:if>
@@ -195,6 +190,4 @@
 
     <jsp:include page="footer.jsp" flush="true"/>
 </body>
-
-
 </html>
