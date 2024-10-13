@@ -19,6 +19,32 @@
         <title>Manager Dashboard</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
     </head>
+    <style>
+        .colorlib-product {
+            padding: 50px 0;
+            background-color: #f8f9fa;
+        }
+        .product-entry {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .product-entry:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 16px rgba(0, 0, 0, 0.2);
+        }
+        .product-entry .title {
+            font-size: 24px;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .product-entry .value {
+            font-size: 36px;
+            font-weight: bold;
+        }
+    </style>
     <body>
         <jsp:include page="headerForManager.jsp" flush="true"/>   
         <div style="margin-top: 25vh; margin-left: 17%; margin-right: 6%;" class="main-content">         
@@ -51,33 +77,40 @@
                                 </div>
                             </div> <!-- End row -->
                         </form>                           
-                        <div class="dashboard d-flex flex-wrap justify-content-center">
-
-                            <div class="row d-flex w-100">
-                                <div class="card col-md-6">
-                                    <h3>Total Sold Tours</h3>
-                                    <div class="number">${BOOKING_COUNT}</div>
-                                </div>
-                                <div class="card col-md-6">
-                                    <h3>Total KOI Orders</h3>
-                                    <div class="number">${ORDER_COUNT}</div>
+                        <div class="colorlib-product">
+                            <div class="container">
+                                <div class="row row-pb-md">
+                                    <div class="col-md-6 col-lg-6 mb-4 text-center">
+                                        <div class="product-entry">
+                                            <div class="icon"><i class="fas fa-box-open"></i></div>
+                                            <div class="title">Total Booking Tours</div>
+                                            <div class="value">${BOOKING_COUNT}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-4 text-center">
+                                        <div class="product-entry">
+                                            <div class="icon"><i class="fas fa-users"></i></div>
+                                            <div class="title">Total Customers</div>
+                                            <div class="value">${CUSTOMER_COUNT}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-4 text-center">
+                                        <div class="product-entry">
+                                            <div class="icon"><i class="fas fa-box-open"></i></div>
+                                            <div class="title">Total Koi Orders</div>
+                                            <div class="value">${ORDER_COUNT}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-4 text-center">
+                                        <div class="product-entry">
+                                            <div class="icon"><i class="fas fa-dollar-sign"></i></div>
+                                            <div class="title">Total Revenues</div>
+                                            <div class="value">$${REVENUE_COUNT}</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="row d-flex w-100">
-                                <div class="card col-md-6">
-                                    <h3>Total Customers</h3>
-                                    <div class="number">${CUSTOMER_COUNT}</div>
-                                </div>
-                                <div class="card col-md-6">
-                                    <h3>Total Revenue</h3>
-                                    <div class="number" >$${REVENUE_COUNT}</div>
-                                </div>
-                            </div>
-
                         </div>
-
-
 
                     </div>
                     <script>
