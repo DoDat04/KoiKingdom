@@ -144,7 +144,7 @@
                             <th>Address</th>
                             <th>Account Type</th>
                             <th>Status</th>
-                            <th>Change Status</th>
+                            <th>Change status</th>
                         </tr>
                     </thead>
                     <tbody>

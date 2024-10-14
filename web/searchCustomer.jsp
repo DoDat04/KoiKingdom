@@ -16,7 +16,7 @@
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
         <style>
             /* Tổng quan */
-            body {
+           body {
                 font-family: Arial, sans-serif;
                 margin: 0;
                 padding: 0;
@@ -143,7 +143,7 @@
                             <th>Address</th>
                             <th>Account Type</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th>Change status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -167,9 +167,9 @@
                                     </c:choose>
                                 </td>
                                 <td>
-                                    <a href="updateStatus?customerID=${SEARCH_CUSTOMER.customerID}" 
+                                    <a class="btn btn-primary" href="updateStatus?customerID=${SEARCH_CUSTOMER.customerID}" 
                                        onclick="return confirm('Are you sure you want to change the status?');">
-                                        Change Status
+                                        Change
                                     </a>
                                 </td>
                             </tr>

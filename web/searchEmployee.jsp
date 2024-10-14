@@ -146,7 +146,7 @@
                             <th>First Name</th>
                             <th>Address</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <th>Change status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -169,9 +169,9 @@
                                     </c:choose>
                                 </td>
                                 <td>
-                                    <a href="updateStatusEmployee?employeeID=${SEARCH_EMPLOYEE.employeeID}" 
+                                    <a class="btn btn-primary" href="updateStatusEmployee?employeeID=${SEARCH_EMPLOYEE.employeeID}" 
                                        onclick="return confirm('Are you sure you want to change the status?');">
-                                        Change Status
+                                        Change
                                     </a>
                                 </td>
                             </tr>

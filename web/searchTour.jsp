@@ -9,6 +9,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -118,8 +119,8 @@
         </style>
     </head>
     <body>
-               
-        
+
+
         <!-- Menu điều hướng -->
         <!--        <div class="navbar">
                     <a href="home?action=Manager">Home</a>
@@ -152,10 +153,9 @@
                             <th>Tour Price</th>
                             <th>Start Date</th>
                             <th>End Date</th>
-                            <th>Image</th>
                             <th>Status</th>
                             <th>Departure Location</th>
-                            <th>Actions</th>
+                            <th>Change status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -165,50 +165,51 @@
                                 <td>${SEARCH_TOUR.tourName}</td>
                                 <td>${SEARCH_TOUR.duration}</td>
                                 <td>
-                                    <div id="description-${SEARCH_TOUR.tourID}">
-                                        <span id="shortDesc-${SEARCH_TOUR.tourID}">
-                                            <c:choose>
-                                                <c:when test="${fn:length(SEARCH_TOUR.description) > 100}">
-                                                    ${fn:substring(SEARCH_TOUR.description, 0, 100)}...
-                                                </c:when>
-                                                <c:otherwise>
-                                                    ${SEARCH_TOUR.description}
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </span>
-                                        <span id="dots-${SEARCH_TOUR.tourID}" style="display:none;">...</span>
-                                        <span id="moreDesc-${SEARCH_TOUR.tourID}" style="display:none;">
-                                            ${SEARCH_TOUR.description}
-                                        </span>
-                                    </div>
-                                    <button onclick="toggleDescription(${SEARCH_TOUR.tourID})" id="toggleBtn-${SEARCH_TOUR.tourID}">
-                                        Show more
+                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal${SEARCH_TOUR.tourID}">
+                                        View detail
                                     </button>
                                 </td>
-                                <td>${SEARCH_TOUR.tourPrice}</td>
-                                <td>${SEARCH_TOUR.startDate}</td>
-                                <td>${SEARCH_TOUR.endDate}</td>
-                                <td><img src="${SEARCH_TOUR.tourImage}" alt="tour-image" height="150px" width="250px" style="border-radius: 20px; object-fit: contain" ></td>
+                                <!-- Modal -->
+                        <div class="modal fade" id="exampleModal${SEARCH_TOUR.tourID}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Descriptions</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ${SEARCH_TOUR.description}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <td>${SEARCH_TOUR.tourPrice}</td>
+                        <td><fmt:formatDate value="${SEARCH_TOUR.startDate}" pattern="dd-MM-yyyy" /></td>
+                        <td><fmt:formatDate value="${SEARCH_TOUR.endDate}" pattern="dd-MM-yyyy" /></td>
+<!--                        <td><img src="${SEARCH_TOUR.tourImage}" alt="tour-image" height="150px" width="250px" style="border-radius: 20px; object-fit: contain" ></td>-->
 
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${SEARCH_TOUR.status}">
-                                            <span class="status-active">Active</span>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span class="status-inactive">Inactive</span>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </td>
-                                <td>${SEARCH_TOUR.tourDepartLoca}</td>
-                                <td>
-                                    <a href="updateStatusTour?tourID=${SEARCH_TOUR.tourID}" 
-                                       onclick="return confirm('Are you sure you want to change the status?');">
-                                        Change Status
-                                    </a>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <td>
+                            <c:choose>
+                                <c:when test="${SEARCH_TOUR.status}">
+                                    <span class="status-active">Active</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="status-inactive">Inactive</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td>${SEARCH_TOUR.tourDepartLoca}</td>
+                        <td>
+                            <a class="btn btn-primary" href="updateStatusTour?tourID=${SEARCH_TOUR.tourID}" 
+                               onclick="return confirm('Are you sure you want to change the status?');">
+                                Change
+                            </a>
+                        </td>
+                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
                 <c:if test="${not empty SEARCH_MESSAGE}">
