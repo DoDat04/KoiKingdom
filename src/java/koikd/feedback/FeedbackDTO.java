@@ -19,7 +19,8 @@ public class FeedbackDTO {
     private String feedbackText;
     private Timestamp createdAt;
     private int tourID;
-
+   private int bookingID;
+   
     public FeedbackDTO() {
     }
 
@@ -32,6 +33,14 @@ public class FeedbackDTO {
         this.tourID = tourID;
     }
 
+    public int getBookingID() {
+        return bookingID;
+    }
+
+    public void setBookingID(int bookingID) {
+        this.bookingID = bookingID;
+    }
+    
     public int getFeedbackID() {
         return feedbackID;
     }

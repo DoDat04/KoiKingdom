@@ -55,7 +55,7 @@ public class GetBookingController extends HttpServlet {
             //CustomTourDAO dao = new CustomTourDAO();
             TourDAO tourDAO = new TourDAO();
             CustomerDAO customerDAO = new CustomerDAO();
-      
+
             ArrayList<TourBookingDetailDTO> orders = bookingDetailDao.getTourBookingDetailListByCustomerID(Integer.parseInt(customerID));
             ArrayList<TourDTO> tourList = new ArrayList<>();
             ArrayList<CustomerDTO> customerList = new ArrayList<>();
@@ -72,9 +72,6 @@ public class GetBookingController extends HttpServlet {
                         customerList.add(customer);
                     }
                 }
-
-                request.setAttribute("customer", customer);
-                request.setAttribute("tour", tour);
 
                 request.setAttribute("customers", customerList);
                 request.setAttribute("tours", tourList);

@@ -43,7 +43,9 @@
                                         <div class="d-flex align-items-center">
                                             <img src="img/TourImage/1.jpg" alt="Picture of TOUR" class="rounded" style="width: 80px; height: 80px; object-fit: cover; margin-right: 15px;"/>
                                             <div class="order_booking-name" style="font-size: 18px; font-weight: 600; color: #333; margin-right: 20px;">
-                                                ${requestScope.tours[tourBookingDetailID.index].tourName}
+                                                <c:if test="${orders.tourType != 'Custom'}">
+                                                    ${requestScope.tours[tourBookingDetailID.index].tourName}
+                                                </c:if>
                                                 <!-- Display the number of people and price per person -->
                                                 <div style="font-size: 16px; font-weight: 500; color: #666; margin-top: 5px;">
                                                     <span style="font-weight: bold; color: #ff6f61;">
@@ -70,8 +72,18 @@
                                                         Xin vui lòng đánh giá dịch vụ của chúng tôi.
                                                         <c:if test="${orders.feedbackStatus == 'false'}">
                                                             <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reviewTour"
-                                                               data-tourid="${orders.tourID}" data-customerid="${orders.customerID}"  href="check_feedback?feedbackID=${sessionScope.feedbackID}""id="review">Review</a>
+                                                               data-tourid="${orders.tourID}" data-customerid="${orders.customerID}"  data-bookingid="${orders.bookingID}" id="review">Review</a>
                                                         </c:if>
+                                                        <c:if test="${orders.feedbackStatus == 'true'}">
+
+                                                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editReviewTour"
+                                                               data-tourid="${orders.tourID}" data-customerid="${orders.customerID}"  data-bookingid="${orders.bookingID}" id="review"
+                                                               onclick="fetchFeedbackData(${orders.tourID}, ${orders.customerID}, ${orders.bookingID})"
+                                                               >
+                                                                Edit Review
+                                                            </a>
+                                                        </c:if>
+
                                                     </div>
                                                 </c:if>
                                             </div>
@@ -95,17 +107,18 @@
 
                         var tourID = button.getAttribute('data-tourid');
                         var customerID = button.getAttribute('data-customerid');
+                        var bookingID = button.getAttribute('data-bookingid');
 
                         var tourIDInput = reviewModal.querySelector('input[name="tourID"]');
                         var customerIDInput = reviewModal.querySelector('input[name="customerID"]');
-
+                        var bookingIDInput = reviewModal.querySelector('input[name="bookingID"]');
                         tourIDInput.value = tourID;
                         customerIDInput.value = customerID;
+                        bookingIDInput.value = bookingID;
                     });
                 });
             </script>
-
-
+            .
             <div class="modal fade" id="reviewTour" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -116,24 +129,26 @@
 
                         <div class="modal-body">
                             <form action="CreateFeedbackForCustomer" method="post" enctype="multipart/form-data" id="reviewForm">
-                                <input type="hidden" name="customerID" value="">
-                                <input type="hidden" name="tourID" value="">
-                                <input type="" name="feedbackID" value="">
+                                <input type="" name="customerID" value="">
+                                <input type="" name="tourID" value="">
+                                <input type="" name="bookingID" value="">
+
                                 <div class="mb-3">
                                     <label for="feedback" class="form-label">Phản hồi của bạn</label>
-                                    <textarea class="form-control" id="feedback"  name="feedback" rows="3" required></textarea>
+                                    <textarea class="form-control" id="feedback" name="feedback" rows="3" required></textarea>
                                 </div>
+
                                 <div class="star-widget">
-                                    <input type="radio" name="rate" id="rate-1" value="5">
-                                    <label for="rate-1" class="fas fa-star"></label>
-                                    <input type="radio" name="rate" id="rate-2" value="4">
-                                    <label for="rate-2" class="fas fa-star"></label>
-                                    <input type="radio" name="rate" id="rate-3" value="3">
-                                    <label for="rate-3" class="fas fa-star"></label>
-                                    <input type="radio" name="rate" id="rate-4" value="2">
-                                    <label for="rate-4" class="fas fa-star"></label>
-                                    <input type="radio" name="rate" id="rate-5" value="1">
-                                    <label for="rate-5" class="fas fa-star"></label>
+                                    <input type="radio" name="rate" id="rate-review-1" value="5">
+                                    <label for="rate-review-1" class="fas fa-star"></label>
+                                    <input type="radio" name="rate" id="rate-review-2" value="4">
+                                    <label for="rate-review-2" class="fas fa-star"></label>
+                                    <input type="radio" name="rate" id="rate-review-3" value="3">
+                                    <label for="rate-review-3" class="fas fa-star"></label>
+                                    <input type="radio" name="rate" id="rate-review-4" value="2">
+                                    <label for="rate-review-4" class="fas fa-star"></label>
+                                    <input type="radio" name="rate" id="rate-review-5" value="1">
+                                    <label for="rate-review-5" class="fas fa-star"></label>
                                     <h3 class="content"></h3> 
                                 </div>                                  
 
@@ -146,48 +161,173 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <script>
-            $(document).ready(function () {
-                $('#reviewForm').on('submit', function (e) {
-                    e.preventDefault();
-                    var formData = new FormData(this);
-                    $.ajax({
-                        url: $(this).attr('action'),
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function (response) {
-                            if (response.success) {
-                                showToast(response.message, 'success');
-                                $('#close').click();
-                                $('#reviewForm')[0].reset();
 
-                                $('#review').attr('data-feedbackid', response.feedbackID);
-                                setTimeout(function () {
-                                    location.reload();
-                                }, 6001);
-                            } else {
-                                showToast(response.message, 'error');
+            <script>
+                $(document).ready(function () {
+                    $('#reviewForm').on('submit', function (e) {
+                        e.preventDefault();
+                        var formData = new FormData(this);
+                        $.ajax({
+                            url: $(this).attr('action'),
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                if (response.success) {
+                                    showToast(response.message, 'success');
+                                    $('#close').click();
+                                    $('#reviewForm')[0].reset();
+
+                                    $('#review').attr('data-feedbackid', response.feedbackID);
+                                    setTimeout(function () {
+                                        location.reload();
+                                    }, 6001);
+                                } else {
+                                    showToast(response.message, 'error');
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                showToast('Đánh giá của bạn đã được gửi thất bại!', 'error');
                             }
-                        },
-                        error: function (xhr, status, error) {
-                            showToast('Đánh giá của bạn đã được gửi thất bại!', 'error');
-                        }
+                        });
                     });
                 });
-            });
-        </script>
+            </script>
 
-        <div id="toastBox"></div>
-        <script src="js/showToast.js"></script> 
-        <c:if test="${empty requestScope.orders}">
-            <p class="alert alert-danger">${Error}</p>
-        </c:if>
-    </div>  
+            <!-- comment -->
 
-    <jsp:include page="footer.jsp" flush="true"/>
-</body>
+
+            <script>
+                function fetchFeedbackData(tourID, customerID, bookingID) {
+                    $.ajax({
+                        url: '/KoiKingdom/get_feedback',
+                        type: 'GET',
+                        data: {
+                            tourID: tourID,
+                            customerID: customerID,
+                            bookingID: bookingID
+                        },
+                        success: function (response) {
+                            console.log('Booking ID:', bookingID);
+                            // Populate the inputs in the editReviewTour modal
+                            $('#editReviewTour input[name="customerID"]').val(response.customerID);
+                            $('#editReviewTour input[name="tourID"]').val(response.tourID);
+                            $('#editReviewTour input[name="bookingID"]').val(response.bookingID);
+                            $('#editReviewTour input[name="feedbackID"]').val(response.feedbackID);
+                            $('#editReviewTour #feedback').val(response.feedbackText);
+                            $('#editReviewTour input[name="rate"]').prop('checked', false);
+                            $('#editReviewTour input[name="rate"][value="' + response.rating + '"]').prop('checked', true);
+                            $('#editReviewTour').modal('show'); // Show the modal with populated data
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error fetching feedback data:', error);
+                            alert('Could not fetch feedback data. Please try again.');
+                        }
+                    });
+                }
+            </script>
+
+            <div class="modal fade" id="editReviewTour" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Đánh Giá Dịch Vụ</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form action="/KoiKingdom/update_feedback" method="post" enctype="multipart/form-data" id="editReviewForm">
+
+                                <input type="" name="customerID" value="">
+                                <input type="" name="tourID" value="">
+                                <input type="" name="bookingID" value="">
+                                <div class="mb-3">
+                                    <label for="feedback" class="form-label">Phản hồi của bạn</label>
+                                    <textarea class="form-control" id="feedback" name="feedback" rows="3" required></textarea>
+                                </div>
+                                <div class="star-widget">
+                                    <input type="radio" name="rate" id="rate-edit-1" value="5" required>
+                                    <label for="rate-edit-1" class="fas fa-star"></label>
+                                    <input type="radio" name="rate" id="rate-edit-2" value="4" required>
+                                    <label for="rate-edit-2" class="fas fa-star"></label>
+                                    <input type="radio" name="rate" id="rate-edit-3" value="3" required>
+                                    <label for="rate-edit-3" class="fas fa-star"></label>
+                                    <input type="radio" name="rate" id="rate-edit-4" value="2" required>
+                                    <label for="rate-edit-4" class="fas fa-star"></label>
+                                    <input type="radio" name="rate" id="rate-edit-5" value="1" required>
+                                    <label for="rate-edit-5" class="fas fa-star"></label>
+                                    <h3 class="content"></h3> 
+                                </div>                                  
+
+                                <div class="modal-footer">
+                                    <button type="button" id="closemodal" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                    <button type="submit" class="btn btn-primary" id="submitReview">Gửi Đánh Giá</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <script>
+                $(document).ready(function () {
+                    $('#editReviewForm').on('submit', function (e) {
+                        e.preventDefault();
+                        var formData = new FormData(this);
+                        console.log([...formData]);
+                        $.ajax({
+                            url: $(this).attr('action'),
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                if (response.success) {
+                                    showToast(response.message, 'success');
+                                    $('#closemodal').click();
+                                    $('#editReviewForm')[0].reset();
+
+                                    setTimeout(function () {
+                                        location.reload();
+                                    }, 6001);
+                                } else {
+                                    showToast(response.message, 'error');
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                showToast('Đánh giá của bạn đã được gửi thất bại!', 'error');
+                            }
+                        });
+                    });
+                });
+            </script>
+
+
+            <script>
+                const btn = document.querySelector("button");
+                const post = document.querySelector(".post");
+                const widget = document.querySelector(".star-widget");
+                const editBtn = document.querySelector(".edit");
+                btn.onclick = () => {
+                    widget.style.display = "none";
+                    post.style.display = "block";
+                    editBtn.onclick = () => {
+                        widget.style.display = "block";
+                        post.style.display = "none";
+                    }
+                    return false;
+                }
+            </script>
+            <div id="toastBox"></div>
+            <script src="js/showToast.js"></script> 
+            <c:if test="${empty requestScope.orders}">
+                <p class="alert alert-danger">${Error}</p>
+            </c:if>
+        </div>  
+
+        <jsp:include page="footer.jsp" flush="true"/>
+    </body>
 </html>

@@ -4,8 +4,6 @@
  */
 package koikd.controllers;
 
-import com.google.gson.Gson;
-import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,7 +12,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,9 +22,9 @@ import koikd.feedback.FeedbackDTO;
  *
  * @author Admin
  */
-@WebServlet(name = "CreateFeedbackForCustomer", urlPatterns = {"/CreateFeedbackForCustomer"})
+@WebServlet(name = "UpdateFeedbackController", urlPatterns = {"/update_feedback"})
 @MultipartConfig
-public class CreateFeedbackForCustomer extends HttpServlet {
+public class UpdateFeedbackController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,57 +39,51 @@ public class CreateFeedbackForCustomer extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-
         try (PrintWriter out = response.getWriter()) {
-            String customerIDStr = request.getParameter("customerID");
-            String tourIDStr = request.getParameter("tourID");
-            String bookingIDStr = request.getParameter("bookingID");
-            String feedback = request.getParameter("feedback");
-            String ratingStr = request.getParameter("rate");
+            // Retrieve and validate input parameters
+          String customerIDStr = request.getParameter("customerID");
+    String tourIDStr = request.getParameter("tourID");
+    String bookingIDStr = request.getParameter("bookingID");
+    String feedback = request.getParameter("feedback");
+    String ratingStr = request.getParameter("rate");
 
-            // Validate input parameters
-            if (customerIDStr == null || tourIDStr == null || feedback == null || ratingStr == null) {
-                String jsonResponse = "{\"success\": false, \"message\": \"Tất cả các trường đều là bắt buộc.\"}";
-                out.print(jsonResponse);
+    // Kiểm tra xem các tham số có nhận được giá trị không
+    System.out.println("customerID: " + customerIDStr);
+    System.out.println("tourID: " + tourIDStr);
+    System.out.println("bookingID: " + bookingIDStr);
+    System.out.println("feedback: " + feedback);
+    System.out.println("rating: " + ratingStr);
+
+            if (customerIDStr == null || tourIDStr == null || bookingIDStr == null || feedback == null || ratingStr == null) {
+                out.print("{\"success\": false, \"message\": \"Tất cả các trường đều là bắt buộc.\"}");
                 return;
             }
 
-            int customerID;
-            int tourID;
-            int bookingID;
-            int rating;
+            int customerID, tourID, bookingID, rating;
 
             try {
                 customerID = Integer.parseInt(customerIDStr);
                 tourID = Integer.parseInt(tourIDStr);
                 bookingID = Integer.parseInt(bookingIDStr);
                 rating = Integer.parseInt(ratingStr);
-            } catch (NumberFormatException ex) {
-                String jsonResponse = "{\"success\": false, \"message\": \"ID và đánh giá phải là số hợp lệ.\"}";
-                out.print(jsonResponse);
+            } catch (NumberFormatException e) {
+                out.print("{\"success\": false, \"message\": \"ID và đánh giá phải là số hợp lệ.\"}");
                 return;
             }
 
             FeedbackDAO feedbackDAO = new FeedbackDAO();
+            FeedbackDTO feedbackDTO = feedbackDAO.updateFeedbackForCustomer(customerID, tourID, rating, feedback, bookingID);
 
-            FeedbackDTO feedbackDTO = feedbackDAO.createFeedbackForCustomer(customerID, tourID, rating, feedback, bookingID);
-            String jsonResponse;
             if (feedbackDTO != null) {
-                jsonResponse = "{\"success\": true, \"message\": \"Cảm ơn bạn đã đánh giá!\", \"feedbackID\": " + feedbackDTO.getFeedbackID() + "}";
+                String jsonResponse = "{\"success\": true, \"message\": \"Cảm ơn bạn đã đánh giá!\", \"feedbackID\": " + feedbackDTO.getFeedbackID() + "}";
+                out.print(jsonResponse);
             } else {
-                jsonResponse = "{\"success\": false, \"message\": \"Đã xảy ra lỗi khi gửi đánh giá.\"}";
+                out.print("{\"success\": false, \"message\": \"Đã xảy ra lỗi khi gửi đánh giá.\"}");
             }
-            out.print(jsonResponse);
-            out.flush();
 
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(CreateFeedbackForCustomer.class.getName()).log(Level.SEVERE, null, ex);
-            String jsonResponse = "{\"success\": false, \"message\": \"Lỗi hệ thống: không tìm thấy lớp cần thiết.\"}";
-            response.getWriter().print(jsonResponse);
-        } catch (SQLException ex) {
-            Logger.getLogger(CreateFeedbackForCustomer.class.getName()).log(Level.SEVERE, null, ex);
-            String jsonResponse = "{\"success\": false, \"message\": \"Lỗi hệ thống: không thể truy cập cơ sở dữ liệu.\"}";
-            response.getWriter().print(jsonResponse);
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UpdateFeedbackController.class.getName()).log(Level.SEVERE, null, ex);
+            response.getWriter().print("{\"success\": false, \"message\": \"Đã xảy ra lỗi hệ thống.\"}");
         }
     }
 

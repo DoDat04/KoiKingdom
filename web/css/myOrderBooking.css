@@ -106,29 +106,58 @@ input:checked ~ label {
     color: #fd4;
 }
 
-input#rate-5:checked ~ label {
+input#rate-review-5:checked ~ label {
     color: #fe7;
     text-shadow: 0 0 20px #952;
 }
 
 /* Cập nhật nội dung cho h3 khi chọn */
-input#rate-5:checked ~ .content::before {
+input#rate-review-5:checked ~ .content::before {
     content: "I just hate it";
 }
 
-input#rate-4:checked ~ .content::before {
+input#rate-review-4:checked ~ .content::before {
     content: "I don't like it";
 }
 
-input#rate-3:checked ~ .content::before {
+input#rate-review-3:checked ~ .content::before {
     content: "It is awesome";
 }
 
-input#rate-2:checked ~ .content::before {
+input#rate-review-2:checked ~ .content::before {
     content: "I just like it";
 }
 
-input#rate-1:checked ~ .content::before {
+input#rate-review-1:checked ~ .content::before {
+    content: "I just love it";
+}
+
+
+
+input#rate-edit-5:checked ~ label {
+    color: #fe7;
+    text-shadow: 0 0 20px #952;
+}
+
+
+/* Cập nhật nội dung cho h3 khi chọn */
+input#rate-edit-5:checked ~ .content::before {
+    content: "I just hate it";
+}
+
+input#rate-edit-4:checked ~ .content::before {
+    content: "I don't like it";
+}
+
+input#rate-edit-3:checked ~ .content::before {
+    content: "It is awesome";
+}
+
+input#rate-edit-2:checked ~ .content::before {
+    content: "I just like it";
+}
+
+input#rate-edit-1:checked ~ .content::before {
     content: "I just love it";
 }
 
