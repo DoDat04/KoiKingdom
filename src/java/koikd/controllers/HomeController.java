@@ -17,8 +17,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import koikd.farm.FarmDAO;
 import koikd.farm.FarmDTO;
+import koikd.koi.KoiDTO;
 import koikd.koitype.KoiTypeDAO;
 import koikd.koitype.KoiTypeDTO;
+import koikd.order.KoiOrderDAO;
 
 /**
  *
@@ -50,6 +52,13 @@ public class HomeController extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             KoiTypeDAO services = new KoiTypeDAO();
+            KoiOrderDAO daoo = new KoiOrderDAO();
+            List<KoiDTO> dtoListt = daoo.getKoiList();
+            if (dtoListt != null && !dtoListt.isEmpty()) {
+                session.setAttribute("LIST_KOI", dtoListt);
+            } else {
+                request.setAttribute("ERROR_NULL", "No Koi types found.");
+            }
             List<KoiTypeDTO> dtoList = services.getKoiTypeList();
             if (dtoList != null && !dtoList.isEmpty()) {
                 session.setAttribute("LIST_KOITYPE", dtoList);

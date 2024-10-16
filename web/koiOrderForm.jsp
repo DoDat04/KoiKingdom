@@ -38,28 +38,36 @@
                     <div id="orderDetails">
                         <div class="detailRow" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between;">
                             <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
-                                <label for="txtKoiIDs" style="font-weight: bold;">Koi ID</label>
-                                <input type="number" id="txtKoiIDs" min="1" name="txtKoiIDs" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                                <label for="txtKoiTypeID" style="font-weight: bold;">Select Koi Type</label>
+                                <select id="txtKoiTypeID" name="txtKoiTypeID" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                                    <option value="">-- Select Koi Type --</option>
+                                    <c:forEach var="koiType" items="${LIST_KOITYPE}">
+                                        <option value="${koiType.koiTypeID}">${koiType.typeName}</option>
+                                    </c:forEach>
+                                </select>
                             </div>
                             <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
-                                <label for="txtFarmIDs" style="font-weight: bold;">Farm ID</label>
-                                <input type="number" id="txtFarmIDs" min="1" name="txtFarmIDs" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                                <label for="txtKoiIDs" style="font-weight: bold;">Select Koi</label>
+                                <select id="txtKoiIDs" name="txtKoiIDs" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                                    <c:forEach var="koi" items="${LIST_KOI}">
+                                        <option value="${koi.koiID}">${koi.koiName}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
+                                <label for="txtFarmIDs" style="font-weight: bold;">Select Farm</label>
+                                <select id="txtFarmIDs" name="txtFarmIDs" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                                    <c:forEach var="farm" items="${LIST_FARM}">
+                                        <option value="${farm.farmID}">${farm.farmName}</option>
+                                    </c:forEach>
+                                </select>
                             </div>
                             <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
                                 <label for="txtQuantity" style="font-weight: bold;">Quantity</label>
                                 <input type="number" id="txtQuantity" min="1" max="50" name="txtQuantity" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
                             </div>
-                            <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
-                                <label for="txtUnitPrice" style="font-weight: bold;">Unit Price</label>
-                                <input type="number" step="0.01" id="txtUnitPrice" name="txtUnitPrice" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                            </div>
-                            <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
-                                <label for="txtTotalPrice" style="font-weight: bold;">Total Price</label>
-                                <input type="number" step="0.01" id="txtTotalPrice" name="txtTotalPrice" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                            </div>
                         </div>
                     </div>
-
 
                     <div class="d-flex justify-content-between">
                         <div class="col-md-6 d-flex justify-content-center">
@@ -95,4 +103,3 @@
 
     </body>
 </html>
-

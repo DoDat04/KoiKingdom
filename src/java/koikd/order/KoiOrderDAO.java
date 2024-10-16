@@ -11,8 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import koikd.customer.CustomerDTO;
 import koikd.farm.FarmDTO;
 import koikd.koi.KoiDTO;
@@ -861,6 +860,78 @@ public class KoiOrderDAO implements Serializable {
             }
         }
         return revenueCount;
+    }
+    
+    public List<KoiDTO> getKoiList() throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<KoiDTO> koiList = new ArrayList<>();
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT KoiID, KoiName, KoiTypeID, Age, Length, Weight, Price, Image "
+                        + "FROM KOI";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    int koiID = rs.getInt("KoiID");
+                    String koiName = rs.getString("KoiName");
+                    int koiTypeID = rs.getInt("KoiTypeID");
+                    int age = rs.getInt("Age");
+                    double length = rs.getDouble("Length");
+                    double weight = rs.getDouble("Weight");
+                    double price = rs.getDouble("Price");
+                    String image = rs.getString("Image");
+
+                    KoiDTO dto = new KoiDTO(koiID, koiName, koiTypeID, age, length, weight, price, image);
+                    koiList.add(dto);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return koiList;
+    }
+    
+    public double getKoiUnitPrice(int koiID) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        double unitPrice = 0;
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT Price FROM KOI WHERE KoiID = ?";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, koiID);
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    unitPrice = rs.getDouble("Price");
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return unitPrice;
     }
 
 //    public static void main(String[] args) throws SQLException {
