@@ -46,7 +46,7 @@ public class GetListTour extends HttpServlet {
             // Parse index as an integer
            int pageIndex = Integer.parseInt(index);
            TourDAO dao = new TourDAO();
-           int numberOfPages = dao.getNumberPage();
+           int numberOfPages = dao.getNumberPageInManagePage();
            request.setAttribute("numberOfPages", numberOfPages);
            request.setAttribute("pageIndex", pageIndex);
            List<TourDTO> tour = dao.getAllTour(pageIndex);

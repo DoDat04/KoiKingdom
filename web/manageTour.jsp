@@ -150,7 +150,7 @@
     </head>
     <body>
         <jsp:include page="headerForManager.jsp" flush="true">
-            <jsp:param name="searchController" value="SearchByTourName"/>
+            <jsp:param name="searchController" value="searchtour"/>
         </jsp:include>
         <!-- Nội dung chính -->
         <div style="    margin-top: 25vh;
@@ -249,14 +249,14 @@
                         </c:if>
 
                         <!-- Các trang phân trang -->
-                        <c:forEach begin="1" end="${a.numberPage}" var="i">
+                        <c:forEach begin="1" end="${numberOfPages}" var="i">
                             <li class="page-item ${pageIndex == i ? 'active' : ''}">
                                 <a class="page-link" href="managetour?index=${i}">${i}</a>
                             </li>
                         </c:forEach>
 
                         <!-- Nút Next -->
-                        <c:if test="${pageIndex < a.numberPage}">
+                        <c:if test="${pageIndex < numberOfPages}">
                             <li class="page-item">
                                 <a class="page-link" href="managetour?index=${nextPage}">Next</a>
                             </li>

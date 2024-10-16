@@ -23,7 +23,7 @@ import koikd.tour.TourDTO;
  *
  * @author Nguyen Huu Khoan
  */
-@WebServlet(name = "SearchByTourName", urlPatterns = {"/SearchByTourName"})
+@WebServlet(name = "SearchByTourName", urlPatterns = {"/searchtour"})
 public class SearchByTourName extends HttpServlet {
     private static final String SEARCH_PAGE = "manageTour.jsp";
     private static final String SEARCH_RESULT = "searchTour.jsp";
@@ -40,17 +40,29 @@ public class SearchByTourName extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String searchValue = request.getParameter("txtSearchValue");
+        String index = request.getParameter("index");
         String url = SEARCH_PAGE;
-        try {
+         try {
+            // Default to 1 if no index is provided
+            if (index == null || index.isEmpty()) {
+                index = "1";
+            }
+
+            // Parse index as an integer
+            int pageIndex = Integer.parseInt(index);
             if (searchValue == null || searchValue.trim().isEmpty()) {
                 // Trường hợp không nhập từ khóa
                 request.setAttribute("SEARCH_MESSAGE", "No keyword entered !");
             } else {
                 TourDAO dao = new TourDAO();
-                List<TourDTO> result = dao.searchTourName(searchValue);
+                int numberOfPages = dao.getNumberPageInSearchPage(searchValue);
+                request.setAttribute("numberOfPages", numberOfPages);
+                List<TourDTO> result = dao.searchTourName(searchValue,pageIndex);
                 if (result != null && !result.isEmpty()) {
                     url = SEARCH_RESULT;
                     request.setAttribute("SEARCH_TOUR", result);
+                    request.setAttribute("pageIndex", pageIndex);
+               
                 } else {
                     request.setAttribute("SEARCH_MESSAGE", "No tour found !");
                 }

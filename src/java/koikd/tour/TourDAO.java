@@ -269,7 +269,75 @@ public class TourDAO implements Serializable {
         return result;
     }
     
-    public int getNumberPage() throws SQLException, ClassNotFoundException {
+    public List<TourDTO> searchTourName(String searchValue, int index) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<TourDTO> result = new ArrayList<>();
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT TourID, TourName, Duration, Description, TourPrice, StartDate, EndDate, Image, Status, DepartureLocation "
+                        + "FROM TOUR ";
+
+                // Xử lý điều kiện tìm kiếm theo TourName và TourID
+                boolean hasSearchValue = searchValue != null && !searchValue.trim().isEmpty();
+                boolean isNumeric = hasSearchValue && searchValue.matches("\\d+");
+
+                if (hasSearchValue) {
+                    sql += "WHERE TourName LIKE ? "; // Điều kiện tìm kiếm theo tên tour
+                    if (isNumeric) {
+                        sql += "OR TourID = ? "; // Điều kiện tìm kiếm theo ID nếu searchValue là số
+                    }
+                }
+
+                // Add pagination
+                sql += "ORDER BY TourID OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY;";
+                stm = con.prepareStatement(sql);
+
+                int paramIndex = 1;
+                if (hasSearchValue) {
+                    stm.setString(paramIndex++, "%" + searchValue + "%"); // Tìm kiếm theo tên tour
+                    if (isNumeric) {
+                        stm.setInt(paramIndex++, Integer.parseInt(searchValue)); // Tìm kiếm theo ID nếu searchValue là số
+                    }
+                }
+
+                // Set index for pagination
+                stm.setInt(paramIndex, (index - 1) * 5);
+
+                rs = stm.executeQuery();
+                while (rs.next()) {
+
+                    int id = rs.getInt("TourID");
+                    String name = rs.getString("TourName");
+                    String duration = rs.getString("Duration");
+                    String description = rs.getString("Description");
+                    double price = rs.getDouble("TourPrice");
+                    Timestamp start = rs.getTimestamp("StartDate");
+                    Timestamp end = rs.getTimestamp("EndDate");
+                    String img = rs.getString("Image");
+                    boolean status = rs.getBoolean("Status");
+                    String loca = rs.getString("DepartureLocation");
+                    TourDTO dto = new TourDTO(id, name, duration, description, price, start, end, img, status, loca);
+                    result.add(dto);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
+    
+    public int getNumberPageInManagePage() throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -306,6 +374,65 @@ public class TourDAO implements Serializable {
         return countPage;
     }
 
+    public int getNumberPageInSearchPage(String searchValue) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int countPage = 0;
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                // Khởi tạo câu SQL đếm tổng số tour theo điều kiện tìm kiếm
+                String sql = "SELECT COUNT(*) FROM TOUR ";
+
+                // Kiểm tra điều kiện tìm kiếm
+                boolean hasSearchValue = searchValue != null && !searchValue.trim().isEmpty();
+                boolean isNumeric = hasSearchValue && searchValue.matches("\\d+");
+
+                // Nếu có từ khóa tìm kiếm
+                if (hasSearchValue) {
+                    sql += "WHERE TourName LIKE ? "; // Điều kiện tìm kiếm theo tên tour
+                    if (isNumeric) {
+                        sql += "OR TourID = ? "; // Điều kiện tìm kiếm theo ID nếu searchValue là số
+                    }
+                }
+
+                stm = con.prepareStatement(sql);
+
+                // Thiết lập tham số cho PreparedStatement
+                int paramIndex = 1;
+                if (hasSearchValue) {
+                    stm.setString(paramIndex++, "%" + searchValue + "%"); // Tìm kiếm theo tên tour
+                    if (isNumeric) {
+                        stm.setInt(paramIndex++, Integer.parseInt(searchValue)); // Tìm kiếm theo ID nếu searchValue là số
+                    }
+                }
+
+                // Thực hiện câu truy vấn
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    int total = rs.getInt(1); // Tổng số bản ghi
+                    countPage = total / 5;
+
+                    // Nếu không chia hết cho 5, thì tăng thêm 1 trang
+                    if (total % 5 != 0) {
+                        countPage++;
+                    }
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return countPage; // Trả về số trang
+    }
     /**
      *
      * @param id
@@ -455,56 +582,5 @@ public class TourDAO implements Serializable {
         }              
     } 
     
-    public List<TourDTO> searchTourName(String searchValue) throws SQLException, ClassNotFoundException {
-        Connection con = null;
-        PreparedStatement stm = null;
-        ResultSet rs = null;
-        List<TourDTO> result = new ArrayList<>();
-        try {
-            con = DBUtils.getConnection();
-            if (con != null) {
-                String sql = "SELECT TourID, TourName, Duration, Description, TourPrice, StartDate, EndDate, Image, Status, DepartureLocation "
-                        + "FROM TOUR "
-                        + "WHERE TourName LIKE ? ";
-                boolean isNumeric = searchValue.matches("\\d+");
-                if (isNumeric) {
-                    sql += "OR TourID = ? ";
-                }
-
-                stm = con.prepareStatement(sql);
-                stm.setString(1, "%" + searchValue + "%");
-
-                if (isNumeric) {
-                    stm.setInt(2, Integer.parseInt(searchValue));
-                }
-                rs = stm.executeQuery();
-                while (rs.next()) {
-
-                    int id = rs.getInt("TourID");
-                    String name = rs.getString("TourName");
-                    String duration = rs.getString("Duration");
-                    String description = rs.getString("Description");
-                    double price = rs.getDouble("TourPrice");
-                    Timestamp start = rs.getTimestamp("StartDate");
-                    Timestamp end = rs.getTimestamp("EndDate");
-                    String img = rs.getString("Image");
-                    boolean status = rs.getBoolean("Status");
-                    String loca = rs.getString("DepartureLocation");
-                    TourDTO dto = new TourDTO(id, name, duration, description, price, start, end, img, status, loca);
-                    result.add(dto);
-                }
-            }
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (stm != null) {
-                stm.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
-        return result;
-    }
+    
 }
