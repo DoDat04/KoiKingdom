@@ -22,7 +22,7 @@ import org.mindrot.jbcrypt.BCrypt;
  */
 public class CustomerDAO implements Serializable {
 
-    public List<CustomerDTO> getAllCustomers() throws SQLException, ClassNotFoundException {
+    public List<CustomerDTO> getAllCustomers(int index) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -32,8 +32,13 @@ public class CustomerDAO implements Serializable {
             con = DBUtils.getConnection();
             if (con != null) {
                 String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
-                        + "FROM CUSTOMER";
+                        + "FROM CUSTOMER ";
+                // Add pagination
+                sql += "ORDER BY CustomerID \n"
+                        + "OFFSET ? ROWS \n"
+                        + "FETCH NEXT 5 ROWS ONLY;";
                 stm = con.prepareStatement(sql);
+                stm.setInt(1, (index - 1) * 5);
                 rs = stm.executeQuery();
                 while (rs.next()) {
                     int customerID = rs.getInt("CustomerID");
@@ -60,6 +65,43 @@ public class CustomerDAO implements Serializable {
             }
         }
         return customerList;
+    }
+    
+    public int getNumberPageInManagePage() throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int countPage = 0;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT COUNT(*) "
+                        + "FROM CUSTOMER ";
+                stm = conn.prepareStatement(sql);
+
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    int total = rs.getInt(1);
+                    countPage = total / 5;
+
+                    if (total % 5 != 0) {
+                        countPage++;
+                    }
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return countPage;
     }
 
     public CustomerDTO checkLogin(String email, String password) throws SQLException, ClassNotFoundException {

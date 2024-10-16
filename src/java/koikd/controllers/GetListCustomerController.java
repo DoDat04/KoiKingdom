@@ -39,8 +39,18 @@ public class GetListCustomerController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = MANAGE_CUSTOMER;
         try {
+            String index = request.getParameter("index");
+            // Default to 1 if no index is provided
+            if (index == null || index.isEmpty()) {
+                index = "1";
+            }
+            // Parse index as an integer
+            int pageIndex = Integer.parseInt(index);
             CustomerDAO dao = new CustomerDAO();
-            List<CustomerDTO> cus = dao.getAllCustomers();
+            int numberOfPages = dao.getNumberPageInManagePage();
+            request.setAttribute("numberOfPages", numberOfPages);
+            request.setAttribute("pageIndex", pageIndex);
+            List<CustomerDTO> cus = dao.getAllCustomers(pageIndex);
             request.setAttribute("customer", cus);
         } catch (SQLException ex) {
             ex.printStackTrace();
