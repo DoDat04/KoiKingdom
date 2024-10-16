@@ -115,7 +115,37 @@
             .status-inactive {
                 color: red;
                 font-weight: bold;
-            }     
+            }
+            
+            /* Pagination */
+            .pagination {
+                justify-content: center; /* Canh giữa */
+                margin-top: 20px; /* Khoảng cách phía trên */
+            }
+
+            .pagination .page-item {
+                margin: 0 5px; /* Khoảng cách giữa các ô */
+            }
+
+            .pagination .page-link {
+                padding: 10px 15px; /* Padding cho các ô phân trang */
+                border: 1px solid #04AA6D; /* Viền cho các ô */
+                border-radius: 5px; /* Bo tròn các góc */
+                background-color: #f4f4f9; /* Màu nền cho các ô */
+                color: #333; /* Màu chữ */
+                transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+            }
+
+            .pagination .page-link:hover {
+                background-color: #04AA6D; /* Màu nền khi hover */
+                color: white; /* Màu chữ khi hover */
+            }
+
+            .pagination .active .page-link {
+                background-color: #04AA6D; /* Màu nền cho ô đang hoạt động */
+                color: white; /* Màu chữ cho ô đang hoạt động */
+                border: 1px solid #04AA6D; /* Viền cho ô đang hoạt động */
+            }
         </style>
     </head>
     <body>
@@ -144,7 +174,7 @@
                             <th>Tour Price</th>
                             <th>Start Date</th>
                             <th>End Date</th>
-                            
+
                             <th>Status</th>
                             <th>Departure Location</th>
                             <th>Change status</th>
@@ -205,6 +235,34 @@
                     </c:forEach>
                     </tbody>
                 </table>
+                <jsp:useBean id="a" class="koikd.tour.TourDAO" scope="request"></jsp:useBean>
+                    <nav>
+                        <ul class="pagination pagination-lg">
+                        <c:set var="prevPage" value="${pageIndex - 1}" />
+                        <c:set var="nextPage" value="${pageIndex + 1}" />
+
+                        <!-- Nút Back -->
+                        <c:if test="${pageIndex > 1}">
+                            <li class="page-item">
+                                <a class="page-link" href="managetour?index=${prevPage}">Back</a>
+                            </li>
+                        </c:if>
+
+                        <!-- Các trang phân trang -->
+                        <c:forEach begin="1" end="${a.numberPage}" var="i">
+                            <li class="page-item ${pageIndex == i ? 'active' : ''}">
+                                <a class="page-link" href="managetour?index=${i}">${i}</a>
+                            </li>
+                        </c:forEach>
+
+                        <!-- Nút Next -->
+                        <c:if test="${pageIndex < a.numberPage}">
+                            <li class="page-item">
+                                <a class="page-link" href="managetour?index=${nextPage}">Next</a>
+                            </li>
+                        </c:if>
+                    </ul>
+                </nav>
                 <c:if test="${not empty SEARCH_MESSAGE}">
                     <p style="color: red; text-align: center;">${SEARCH_MESSAGE}</p>
                 </c:if>

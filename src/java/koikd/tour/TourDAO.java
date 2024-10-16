@@ -222,7 +222,7 @@ public class TourDAO implements Serializable {
         return tour;
     }
 
-    public List<TourDTO> getAllTour() throws SQLException, ClassNotFoundException {
+    public List<TourDTO> getAllTour(int index) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -232,10 +232,15 @@ public class TourDAO implements Serializable {
             if (con != null) {
                 String sql = "SELECT TourID, TourName, Duration, Description, TourPrice, StartDate, EndDate, Image, Status, DepartureLocation "
                         + "FROM TOUR ";
+                // Add pagination
+                sql += "ORDER BY TourID \n"
+                        + "OFFSET ? ROWS \n"
+                        + "FETCH NEXT 5 ROWS ONLY;";
+
                 stm = con.prepareStatement(sql);
+                stm.setInt(1, (index - 1) * 5);
                 rs = stm.executeQuery();
                 while (rs.next()) {
-
                     int id = rs.getInt("TourID");
                     String name = rs.getString("TourName");
                     String duration = rs.getString("Duration");
@@ -262,6 +267,43 @@ public class TourDAO implements Serializable {
             }
         }
         return result;
+    }
+    
+    public int getNumberPage() throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int countPage = 0;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT COUNT(*) "
+                        + "FROM TOUR ";
+                stm = conn.prepareStatement(sql);
+                
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    int total = rs.getInt(1);
+                    countPage = total / 5;
+
+                    if (total % 5 != 0) {
+                        countPage++;
+                    }
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return countPage;
     }
 
     /**

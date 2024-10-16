@@ -38,8 +38,18 @@ public class GetListTour extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = MANAGE_TOUR;
         try {
+            String index = request.getParameter("index");
+            // Default to 1 if no index is provided
+            if (index == null || index.isEmpty()) {
+                index = "1";
+            }
+            // Parse index as an integer
+           int pageIndex = Integer.parseInt(index);
            TourDAO dao = new TourDAO();
-           List<TourDTO> tour = dao.getAllTour();
+           int numberOfPages = dao.getNumberPage();
+           request.setAttribute("numberOfPages", numberOfPages);
+           request.setAttribute("pageIndex", pageIndex);
+           List<TourDTO> tour = dao.getAllTour(pageIndex);
            request.setAttribute("tour", tour);
         } catch (SQLException ex) {
             ex.printStackTrace();
