@@ -6,7 +6,6 @@ package koikd.controllers;
 
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,16 +13,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.List;
-import koikd.tour.TourDAO;
-import koikd.tour.TourDTO;
+import koikd.employees.EmployeesDAO;
+import koikd.employees.EmployeesDTO;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Nguyen Huu Khoan
  */
-@WebServlet(name = "GetListTour", urlPatterns = {"/managetour"})
-public class GetListTour extends HttpServlet {
-    private final String MANAGE_TOUR = "manageTour.jsp";
+@WebServlet(name = "SearchEmployee", urlPatterns = {"/searchemployee"})
+public class SearchEmployeeController extends HttpServlet {
+    
+    private static final String SEARCH_PAGE = "manageEmployee.jsp";
+    private static final String SEARCH_RESULT = "searchEmployee.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,26 +39,28 @@ public class GetListTour extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = MANAGE_TOUR;
+        String searchValue = request.getParameter("txtSearchValue");
+        String url = SEARCH_PAGE;
         try {
-            String index = request.getParameter("index");
-            // Default to 1 if no index is provided
-            if (index == null || index.isEmpty()) {
-                index = "1";
+            if (searchValue == null || searchValue.trim().isEmpty()) {
+                // Trường hợp không nhập từ khóa
+                request.setAttribute("SEARCH_MESSAGE", "No keyword entered !");
+            } else {
+                EmployeesDAO dao = new EmployeesDAO();
+                List<EmployeesDTO> result = dao.searchEmployees(searchValue);
+                if (result != null && !result.isEmpty()) {
+                    url = SEARCH_RESULT;
+                    request.setAttribute("SEARCH_EMPLOYEE", result);
+                } else {
+                    request.setAttribute("SEARCH_MESSAGE", "No employee found !");
+                }
+
             }
-            // Parse index as an integer
-           int pageIndex = Integer.parseInt(index);
-           TourDAO dao = new TourDAO();
-           int numberOfPages = dao.getNumberPageInManagePage();
-           request.setAttribute("numberOfPages", numberOfPages);
-           request.setAttribute("pageIndex", pageIndex);
-           List<TourDTO> tour = dao.getAllTour(pageIndex);
-           request.setAttribute("tour", tour);
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(SearchTourController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }  finally {
+            Logger.getLogger(SearchTourController.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
         }

@@ -6,6 +6,7 @@ package koikd.controllers;
 
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,18 +14,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import koikd.customer.CustomerDAO;
-import koikd.customer.CustomerDTO;
+import koikd.tour.TourDAO;
+import koikd.tour.TourDTO;
 
 /**
  *
  * @author Nguyen Huu Khoan
  */
-@WebServlet(name = "GetListCustomer", urlPatterns = {"/managecustomer"})
-public class GetListCustomer extends HttpServlet {
-    private final String MANAGE_CUSTOMER = "manageCustomer.jsp";
+@WebServlet(name = "GetListTour", urlPatterns = {"/managetour"})
+public class GetListTourController extends HttpServlet {
+    private final String MANAGE_TOUR = "manageTour.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,18 +34,28 @@ public class GetListCustomer extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = MANAGE_CUSTOMER;
+        String url = MANAGE_TOUR;
         try {
-            CustomerDAO dao = new CustomerDAO();
-            List<CustomerDTO> cus = dao.getAllCustomers();
-            request.setAttribute("customer", cus);
+            String index = request.getParameter("index");
+            // Default to 1 if no index is provided
+            if (index == null || index.isEmpty()) {
+                index = "1";
+            }
+            // Parse index as an integer
+           int pageIndex = Integer.parseInt(index);
+           TourDAO dao = new TourDAO();
+           int numberOfPages = dao.getNumberPageInManagePage();
+           request.setAttribute("numberOfPages", numberOfPages);
+           request.setAttribute("pageIndex", pageIndex);
+           List<TourDTO> tour = dao.getAllTour(pageIndex);
+           request.setAttribute("tour", tour);
         } catch (SQLException ex) {
             ex.printStackTrace();
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(GetListCustomer.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
+            ex.printStackTrace();
+        }  finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
         }

@@ -6,6 +6,7 @@ package koikd.controllers;
 
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,17 +18,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import koikd.customer.CustomerDAO;
 import koikd.customer.CustomerDTO;
+import koikd.employees.EmployeesDAO;
+import koikd.employees.EmployeesDTO;
 
 /**
  *
  * @author Nguyen Huu Khoan
  */
-@WebServlet(name = "SearchByCustomerName", urlPatterns = {"/SearchByCustomerName"})
-public class SearchByCustomerName extends HttpServlet {
-
-    private static final String SEARCH_PAGE = "manageCustomer.jsp";
-    private static final String SEARCH_RESULT = "searchCustomer.jsp";
-
+@WebServlet(name = "GetListEmployee", urlPatterns = {"/manageemployee"})
+public class GetListEmployeeController extends HttpServlet {
+    private static String MANAGE_EMPLOYEE = "manageEmployee.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,27 +40,15 @@ public class SearchByCustomerName extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String searchValue = request.getParameter("txtSearchValue");
-        String url = SEARCH_PAGE;
+        String url = MANAGE_EMPLOYEE;
         try {
-            if (searchValue == null || searchValue.trim().isEmpty()) {
-                // Trường hợp không nhập từ khóa
-                request.setAttribute("SEARCH_MESSAGE", "No keyword entered !");
-            } else {
-                CustomerDAO dao = new CustomerDAO();
-                List<CustomerDTO> result = dao.searchCustomerName(searchValue);
-                if (result != null && !result.isEmpty()) {
-                    url = SEARCH_RESULT;
-                    request.setAttribute("SEARCH_CUSTOMER", result);
-                } else {
-                    request.setAttribute("SEARCH_MESSAGE", "No customers found !");
-                }
-
-            }
+            EmployeesDAO dao = new EmployeesDAO();
+            List<EmployeesDTO> em = dao.getAllEmployees();
+            request.setAttribute("employee", em);
         } catch (SQLException ex) {
-            Logger.getLogger(SearchByTourName.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(SearchByTourName.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GetListCustomerController.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

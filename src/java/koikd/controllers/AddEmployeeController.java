@@ -24,7 +24,7 @@ import org.mindrot.jbcrypt.BCrypt;
  */
 @WebServlet(name = "AddEmployee", urlPatterns = {"/addemployee"})
 
-public class AddEmployee extends HttpServlet {
+public class AddEmployeeController extends HttpServlet {
     private static final String ADD_EMPLOYEE_PAGE = "addEmployee.jsp";
     private static final String RESULT_PAGE = "manageEmployee.jsp";
     /**
@@ -129,9 +129,9 @@ public class AddEmployee extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(AddEmployee.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AddEmployee.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -149,9 +149,9 @@ public class AddEmployee extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(AddEmployee.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AddEmployee.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
