@@ -22,7 +22,7 @@ import koikd.customer.CustomerDTO;
  *
  * @author Nguyen Huu Khoan
  */
-@WebServlet(name = "SearchByCustomerName", urlPatterns = {"/SearchByCustomerName"})
+@WebServlet(name = "SearchByCustomerName", urlPatterns = {"/searchcustomer"})
 public class SearchCustomerController extends HttpServlet {
 
     private static final String SEARCH_PAGE = "manageCustomer.jsp";
@@ -41,17 +41,29 @@ public class SearchCustomerController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String searchValue = request.getParameter("txtSearchValue");
+        String index = request.getParameter("index");
         String url = SEARCH_PAGE;
         try {
+            // Default to 1 if no index is provided
+            if (index == null || index.isEmpty()) {
+                index = "1";
+            }
+
+            // Parse index as an integer
+            int pageIndex = Integer.parseInt(index);
             if (searchValue == null || searchValue.trim().isEmpty()) {
                 // Trường hợp không nhập từ khóa
                 request.setAttribute("SEARCH_MESSAGE", "No keyword entered !");
             } else {
                 CustomerDAO dao = new CustomerDAO();
-                List<CustomerDTO> result = dao.searchCustomerName(searchValue);
+                int numberOfPages = dao.getNumberPageInSearchPage(searchValue);
+                request.setAttribute("numberOfPages", numberOfPages);
+                List<CustomerDTO> result = dao.searchCustomerName(searchValue, pageIndex);
                 if (result != null && !result.isEmpty()) {
                     url = SEARCH_RESULT;
                     request.setAttribute("SEARCH_CUSTOMER", result);
+                    request.setAttribute("pageIndex", pageIndex);
+
                 } else {
                     request.setAttribute("SEARCH_MESSAGE", "No customers found !");
                 }

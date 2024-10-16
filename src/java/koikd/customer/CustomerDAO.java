@@ -103,7 +103,132 @@ public class CustomerDAO implements Serializable {
         }
         return countPage;
     }
+    
+    public List<CustomerDTO> searchCustomerName(String searchValue, int index) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<CustomerDTO> customerList = new ArrayList<>();
 
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
+                        + "FROM CUSTOMER ";
+                // Xử lý điều kiện tìm kiếm theo TourName và TourID
+                boolean hasSearchValue = searchValue != null && !searchValue.trim().isEmpty();
+                boolean isNumeric = hasSearchValue && searchValue.matches("\\d+");
+
+                if (hasSearchValue) {
+                    sql += "WHERE LastName LIKE ? OR FirstName LIKE ? "; // Điều kiện tìm kiếm theo tên customer
+                    if (isNumeric) {
+                        sql += "OR CustomerID = ? "; // Điều kiện tìm kiếm theo ID nếu searchValue là số
+                    }
+                }
+                // Add pagination
+                sql += "ORDER BY CustomerID OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY;";
+                stm = con.prepareStatement(sql);
+                int paramIndex = 1;
+                if (hasSearchValue) {
+                    stm.setString(paramIndex++, "%" + searchValue + "%"); // Tìm kiếm theo tên tour
+                    stm.setString(paramIndex++, "%" + searchValue + "%"); // Tìm kiếm theo tên tour
+
+                    if (isNumeric) {
+                        stm.setInt(paramIndex++, Integer.parseInt(searchValue)); // Tìm kiếm theo ID nếu searchValue là số
+                    }
+                }
+
+                // Set index for pagination
+                stm.setInt(paramIndex, (index - 1) * 5);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    int customerID = rs.getInt("CustomerID");
+                    String email = rs.getString("Email");
+                    String lastName = rs.getString("LastName");
+                    String firstName = rs.getString("FirstName");
+                    String address = rs.getString("Address");
+                    String accountType = rs.getString("AccountType");
+                    boolean status = rs.getBoolean("Status");
+
+                    CustomerDTO customer = new CustomerDTO(customerID, email, "", lastName, firstName, address, accountType, status);
+                    customerList.add(customer);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return customerList;
+    }
+    
+    public int getNumberPageInSearchPage(String searchValue) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int countPage = 0;
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                // Khởi tạo câu SQL đếm tổng số tour theo điều kiện tìm kiếm
+                String sql = "SELECT COUNT(*) FROM CUSTOMER ";
+
+                // Kiểm tra điều kiện tìm kiếm
+                boolean hasSearchValue = searchValue != null && !searchValue.trim().isEmpty();
+                boolean isNumeric = hasSearchValue && searchValue.matches("\\d+");
+
+                // Nếu có từ khóa tìm kiếm
+                if (hasSearchValue) {
+                    sql += "WHERE LastName LIKE ? OR FirstName LIKE ? "; // Điều kiện tìm kiếm theo tên tour
+                    if (isNumeric) {
+                        sql += "OR CustomerID = ? "; // Điều kiện tìm kiếm theo ID nếu searchValue là số
+                    }
+                }
+
+                stm = con.prepareStatement(sql);
+
+                // Thiết lập tham số cho PreparedStatement
+                int paramIndex = 1;
+                if (hasSearchValue) {
+                    stm.setString(paramIndex++, "%" + searchValue + "%"); // Tìm kiếm theo tên tour
+                    stm.setString(paramIndex++, "%" + searchValue + "%"); // Tìm kiếm theo tên tour
+                    if (isNumeric) {
+                        stm.setInt(paramIndex++, Integer.parseInt(searchValue)); // Tìm kiếm theo ID nếu searchValue là số
+                    }
+                }
+
+                // Thực hiện câu truy vấn
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    int total = rs.getInt(1); // Tổng số bản ghi
+                    countPage = total / 5;
+
+                    // Nếu không chia hết cho 5, thì tăng thêm 1 trang
+                    if (total % 5 != 0) {
+                        countPage++;
+                    }
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return countPage; // Trả về số trang
+    }
+    
     public CustomerDTO checkLogin(String email, String password) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -541,57 +666,7 @@ public class CustomerDAO implements Serializable {
         }
         return result;
     }
-    public List<CustomerDTO> searchCustomerName(String searchValue) throws SQLException, ClassNotFoundException {
-        Connection con = null;
-        PreparedStatement stm = null;
-        ResultSet rs = null;
-        List<CustomerDTO> customerList = new ArrayList<>();
-
-        try {
-            con = DBUtils.getConnection();
-            if (con != null) {
-                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
-                        + "FROM CUSTOMER "
-                        + "WHERE LastName LIKE ? OR FirstName LIKE ? ";
-                boolean isNumeric = searchValue.matches("\\d+");
-                if (isNumeric) {
-                    sql += "OR CustomerID = ? ";
-                }
-
-                stm = con.prepareStatement(sql);
-                stm.setString(1, "%" + searchValue + "%");
-                stm.setString(2, "%" + searchValue + "%");
-
-                if (isNumeric) {
-                    stm.setInt(3, Integer.parseInt(searchValue));
-                }
-                rs = stm.executeQuery();
-                while (rs.next()) {
-                    int customerID = rs.getInt("CustomerID");
-                    String email = rs.getString("Email");
-                    String lastName = rs.getString("LastName");
-                    String firstName = rs.getString("FirstName");
-                    String address = rs.getString("Address");
-                    String accountType = rs.getString("AccountType");
-                    boolean status = rs.getBoolean("Status");
-
-                    CustomerDTO customer = new CustomerDTO(customerID, email, "", lastName, firstName, address, accountType, status);
-                    customerList.add(customer);
-                }
-            }
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (stm != null) {
-                stm.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
-        return customerList;
-    }
+    
 //    public static void main(String[] args) throws SQLException {
 //        int id = 1;
 //        CustomerDAO dao = new CustomerDAO();

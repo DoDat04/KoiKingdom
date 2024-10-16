@@ -154,7 +154,7 @@
                     <a href="GetListTour">Tour</a>
                 </div>-->
          <jsp:include page="headerForManager.jsp" flush="true">
-            <jsp:param name="searchController" value="SearchByCustomerName"/>
+            <jsp:param name="searchController" value="searchcustomer"/>
         </jsp:include>   
         <!-- Nội dung chính -->
           <div style="    margin-top: 25vh;

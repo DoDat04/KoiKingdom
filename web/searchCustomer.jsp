@@ -114,6 +114,35 @@
                 color: red;
                 font-weight: bold;
             }
+            /* Pagination */
+            .pagination {
+                justify-content: center; /* Canh giữa */
+                margin-top: 20px; /* Khoảng cách phía trên */
+            }
+
+            .pagination .page-item {
+                margin: 0 5px; /* Khoảng cách giữa các ô */
+            }
+
+            .pagination .page-link {
+                padding: 10px 15px; /* Padding cho các ô phân trang */
+                border: 1px solid #04AA6D; /* Viền cho các ô */
+                border-radius: 5px; /* Bo tròn các góc */
+                background-color: #f4f4f9; /* Màu nền cho các ô */
+                color: #333; /* Màu chữ */
+                transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+            }
+
+            .pagination .page-link:hover {
+                background-color: #04AA6D; /* Màu nền khi hover */
+                color: white; /* Màu chữ khi hover */
+            }
+
+            .pagination .active .page-link {
+                background-color: #04AA6D; /* Màu nền cho ô đang hoạt động */
+                color: white; /* Màu chữ cho ô đang hoạt động */
+                border: 1px solid #04AA6D; /* Viền cho ô đang hoạt động */
+            }
         </style>
     </head>
     <body>
@@ -126,7 +155,7 @@
                     <a href="GetListTour">Tour</a>
                 </div>-->
         <jsp:include page="headerForManager.jsp" flush="true">
-            <jsp:param name="searchController" value="SearchByCustomerName"/>
+            <jsp:param name="searchController" value="searchcustomer"/>
         </jsp:include>    
         <!-- Nội dung chính -->
         <div style="margin-top: 25vh; margin-left: 17%;" class="main-content">      
@@ -176,6 +205,36 @@
                         </c:forEach>
                     </tbody>
                 </table>
+                <jsp:useBean id="a" class="koikd.customer.CustomerDAO" scope="request"></jsp:useBean>
+
+                    <nav>
+                        <ul class="pagination pagination-lg">
+                            <!-- Thiết lập trang trước và trang sau -->
+                        <c:set var="prevPage" value="${pageIndex - 1}" />
+                        <c:set var="nextPage" value="${pageIndex + 1}" />
+
+                        <!-- Nút Back: chỉ hiển thị khi pageIndex > 1 -->
+                        <c:if test="${pageIndex > 1}">
+                            <li class="page-item">
+                                <a class="page-link" href="searchcustomer?index=${prevPage}&txtSearchValue=${param.txtSearchValue}">Back</a>
+                            </li>
+                        </c:if>
+
+                        <!-- Hiển thị các trang phân trang -->
+                        <c:forEach begin="1" end="${numberOfPages}" var="i">
+                            <li class="page-item ${pageIndex == i ? 'active' : ''}">
+                                <a class="page-link" href="searchcustomer?index=${i}&txtSearchValue=${param.txtSearchValue}">${i}</a>
+                            </li>
+                        </c:forEach>
+
+                        <!-- Nút Next: chỉ hiển thị khi pageIndex < totalPage -->
+                        <c:if test="${pageIndex < numberOfPages}">
+                            <li class="page-item">
+                                <a class="page-link" href="searchcustomer?index=${nextPage}&txtSearchValue=${param.txtSearchValue}">Next</a>
+                            </li>
+                        </c:if>
+                    </ul>
+                </nav>
                 <c:if test="${not empty UPDATE_STATUS}">
                     <div class="alert alert-success">
                         ${UPDATE_STATUS}
