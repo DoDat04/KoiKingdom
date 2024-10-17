@@ -199,7 +199,7 @@ public class EmployeesDAO {
         }
     }
 
-    public List<EmployeesDTO> getAllEmployees() throws SQLException, ClassNotFoundException {
+    public List<EmployeesDTO> getAllEmployees(int index) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -209,7 +209,12 @@ public class EmployeesDAO {
             if (con != null) {
                 String sql = "SELECT EmployeeID, Email, Role, LastName, FirstName, Address, Status "
                         + "FROM EMPLOYEE ";
+                // Add pagination
+                sql += "ORDER BY EmployeeID \n"
+                        + "OFFSET ? ROWS \n"
+                        + "FETCH NEXT 5 ROWS ONLY;";
                 stm = con.prepareStatement(sql);
+                stm.setInt(1, (index - 1) * 5);
                 rs = stm.executeQuery();
                 while (rs.next()) {
                     int id = rs.getInt("EmployeeID");
@@ -236,6 +241,43 @@ public class EmployeesDAO {
             }
         }
         return result;
+    }
+    
+    public int getNumberPageInManagePage() throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int countPage = 0;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT COUNT(*) "
+                        + "FROM EMPLOYEE ";
+                stm = conn.prepareStatement(sql);
+
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    int total = rs.getInt(1);
+                    countPage = total / 5;
+
+                    if (total % 5 != 0) {
+                        countPage++;
+                    }
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return countPage;
     }
 
     /**

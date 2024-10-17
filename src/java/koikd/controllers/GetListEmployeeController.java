@@ -42,8 +42,18 @@ public class GetListEmployeeController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = MANAGE_EMPLOYEE;
         try {
+            String index = request.getParameter("index");
+            // Default to 1 if no index is provided
+            if (index == null || index.isEmpty()) {
+                index = "1";
+            }
+            // Parse index as an integer
+            int pageIndex = Integer.parseInt(index);
             EmployeesDAO dao = new EmployeesDAO();
-            List<EmployeesDTO> em = dao.getAllEmployees();
+            int numberOfPages = dao.getNumberPageInManagePage();
+            request.setAttribute("numberOfPages", numberOfPages);
+            request.setAttribute("pageIndex", pageIndex);
+            List<EmployeesDTO> em = dao.getAllEmployees(pageIndex);
             request.setAttribute("employee", em);
         } catch (SQLException ex) {
             ex.printStackTrace();
