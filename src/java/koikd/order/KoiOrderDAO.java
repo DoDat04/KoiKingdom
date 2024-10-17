@@ -175,6 +175,7 @@ public class KoiOrderDAO implements Serializable {
                         + "    OD.Quantity, \n"
                         + "    OD.UnitPrice, \n"
                         + "    OD.TotalPrice, \n"
+                        + "    OD.KoiTypeID, \n"
                         + "    O.DeliveryDate, \n"
                         + "    O.Status \n"
                         + "FROM \n"
@@ -195,7 +196,8 @@ public class KoiOrderDAO implements Serializable {
                     int quantity = rs.getInt("Quantity");
                     double unitPrice = rs.getDouble("UnitPrice");
                     double totalPrice = rs.getDouble("TotalPrice");
-                    detail = new KoiOrderDetailDTO(koiOrderDetailID, koiOrderID, koiID, farmID, quantity, unitPrice, totalPrice);
+                    int koiTypeId = rs.getInt("KoiTypeID");
+                    detail = new KoiOrderDetailDTO(koiOrderDetailID, koiOrderID, koiID, farmID, quantity, unitPrice, totalPrice, koiTypeId);
                 }
             }
         } catch (Exception e) {
@@ -341,7 +343,8 @@ public class KoiOrderDAO implements Serializable {
                         + "    [dbo].[KOIORDER] O\n"
                         + "INNER JOIN \n"
                         + "    [dbo].[CUSTOMER] C ON O.CustomerID = C.CustomerID\n"
-                        + "WHERE O.CustomerID = ?";
+                        + "WHERE O.CustomerID = ? "
+                        + "ORDER BY O.DeliveryDate";
 
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, customerID);
@@ -399,6 +402,7 @@ public class KoiOrderDAO implements Serializable {
                         + "    OD.Quantity, \n"
                         + "    OD.UnitPrice, \n"
                         + "    OD.TotalPrice, \n"
+                        + "    OD.KoiTypeID, \n"
                         + "    O.DeliveryDate, \n"
                         + "    O.Status \n"
                         + "FROM \n"
@@ -419,7 +423,8 @@ public class KoiOrderDAO implements Serializable {
                     int quantity = rs.getInt("Quantity");
                     double unitPrice = rs.getDouble("UnitPrice");
                     double totalPrice = rs.getDouble("TotalPrice");
-                    KoiOrderDetailDTO orderDetail = new KoiOrderDetailDTO(koiOrderDetailID, koiOrderID, koiID, farmID, quantity, unitPrice, totalPrice);
+                    int koiTypeId = rs.getInt("KoiTypeID");
+                    KoiOrderDetailDTO orderDetail = new KoiOrderDetailDTO(koiOrderDetailID, koiOrderID, koiID, farmID, quantity, unitPrice, totalPrice, koiTypeId);
                     detail.add(orderDetail);
                 }
             }
@@ -466,7 +471,8 @@ public class KoiOrderDAO implements Serializable {
                         + "    [dbo].[KOIORDER] O\n"
                         + "INNER JOIN \n"
                         + "    [dbo].[CUSTOMER] C ON O.CustomerID = C.CustomerID\n"
-                        + "WHERE O.KoiOrderID = ?";
+                        + "WHERE O.KoiOrderID = ? "
+                        + "ORDER BY O.DeliveryDate ASC";
 
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, koiOrderID);
@@ -576,8 +582,8 @@ public class KoiOrderDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "INSERT INTO [dbo].[KOIORDERDETAIL]([KoiOrderID], [KoiID], [FarmID], [Quantity], [UnitPrice], [TotalPrice]) "
-                        + "VALUES (?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO [dbo].[KOIORDERDETAIL]([KoiOrderID], [KoiID], [FarmID], [Quantity], [UnitPrice], [TotalPrice], [KoiTypeID] ) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?)";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, koiOrderDetailDTO.getKoiOrderID());
                 pst.setInt(2, koiOrderDetailDTO.getKoiID());
@@ -585,6 +591,7 @@ public class KoiOrderDAO implements Serializable {
                 pst.setInt(4, koiOrderDetailDTO.getQuantity());
                 pst.setDouble(5, koiOrderDetailDTO.getUnitPrice());
                 pst.setDouble(6, koiOrderDetailDTO.getTotalPrice());
+                pst.setInt(7, koiOrderDetailDTO.getKoiTypeID());
                 int affectedRows = pst.executeUpdate();
                 if (affectedRows > 0) {
                     result = true;

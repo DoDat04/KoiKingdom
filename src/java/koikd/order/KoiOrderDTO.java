@@ -12,7 +12,6 @@ import java.util.Date;
  * @author Minhngo
  */
 public class KoiOrderDTO implements Serializable {
-
     private int koiOrderID;
     private int customerID;
     private Date deliveryDate;

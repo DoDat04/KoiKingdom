@@ -11,7 +11,6 @@ import java.io.Serializable;
  * @author Minhngo
  */
 public class KoiOrderDetailDTO implements Serializable {
-
     private int koiOrderDetailID;
     private int koiOrderID;
     private int koiID;
@@ -19,13 +18,12 @@ public class KoiOrderDetailDTO implements Serializable {
     private int quantity;
     private double unitPrice;
     private double totalPrice;
+    private int koiTypeID;
 
     public KoiOrderDetailDTO() {
-    }
+    }   
 
-    
-    
-    public KoiOrderDetailDTO(int koiOrderDetailID, int koiOrderID, int koiID, int farmID, int quantity, double unitPrice, double totalPrice) {
+    public KoiOrderDetailDTO(int koiOrderDetailID, int koiOrderID, int koiID, int farmID, int quantity, double unitPrice, double totalPrice, int koiTypeID) {
         this.koiOrderDetailID = koiOrderDetailID;
         this.koiOrderID = koiOrderID;
         this.koiID = koiID;
@@ -33,6 +31,15 @@ public class KoiOrderDetailDTO implements Serializable {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
         this.totalPrice = totalPrice;
+        this.koiTypeID = koiTypeID;
+    }
+
+    public int getKoiTypeID() {
+        return koiTypeID;
+    }
+
+    public void setKoiTypeID(int koiTypeID) {
+        this.koiTypeID = koiTypeID;
     }
 
     public int getKoiOrderDetailID() {

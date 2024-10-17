@@ -57,6 +57,7 @@ public class CreateKoiOrderFormController extends HttpServlet {
                 // Lấy các giá trị từ form (mảng) cho farmID, quantity, unitPrice, totalPrice
                 String[] farmIDs = request.getParameterValues("txtFarmIDs");
                 String[] koiIDs = request.getParameterValues("txtKoiIDs");
+                String[] koiTypeIDs = request.getParameterValues("txtKoiTypeID");
                 String[] quantities = request.getParameterValues("txtQuantity");
 
                 // Duyệt qua các mảng và lưu chi tiết đơn hàng
@@ -66,6 +67,7 @@ public class CreateKoiOrderFormController extends HttpServlet {
                     int quantity = Integer.parseInt(quantities[i]);
                     double unitPrice = koiOrderDAO.getKoiUnitPrice(koiID);
                     double totalPrice = unitPrice * quantity;
+                    int koiTypeID = Integer.parseInt(koiTypeIDs[i]);
 
                     // Tạo đối tượng KoiOrderDetailDTO và lưu chi tiết đơn hàng
                     KoiOrderDetailDTO koiOrderDetailDTO = new KoiOrderDetailDTO();
@@ -75,6 +77,7 @@ public class CreateKoiOrderFormController extends HttpServlet {
                     koiOrderDetailDTO.setQuantity(quantity);
                     koiOrderDetailDTO.setUnitPrice(unitPrice);
                     koiOrderDetailDTO.setTotalPrice(totalPrice);
+                    koiOrderDetailDTO.setKoiTypeID(koiTypeID);
 
                     koiOrderDAO.createKoiOrderDetail(koiOrderDetailDTO);
                 }
