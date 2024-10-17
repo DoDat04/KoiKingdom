@@ -42,20 +42,31 @@
                     </div>
                     <div class="koi-section" style="max-height: 450px; overflow-y: auto;">
                         <c:forEach var="koiOrderDetails" items="${requestScope.koiOrderDetails}" varStatus="koiOrderID">
-
-                            <div style="font-size: 20px;">${requestScope.farmNames[koiOrderID.index].farmName}</div>
-                            <div class="koi-item">
-                                <div class="koi-row">
-                                    <img src="${requestScope.koiNames[koiOrderID.index].image}" alt="Picture of KOI" style="width: 58px"/>
-                                    <div class="koi-name">${requestScope.koiNames[koiOrderID.index].koiName}</div>
-                                    <div>
-                                        <div class="koi-price price">
-                                            <fmt:formatNumber type="currency" currencySymbol="$" value="${requestScope.koiNames[koiOrderID.index].price}"/>
+                                <div style="font-size: 20px;">${requestScope.farmNames[koiOrderID.index].farmName}</div>
+                                <div class="koi-item">
+                                    <div class="koi-row">
+                                        <img src="${requestScope.koiNames[koiOrderID.index].image}" alt="Picture of KOI" style="width: 58px"/>
+                                        <div class="koi-name" style="position: relative; left: -111px;">${requestScope.koiNames[koiOrderID.index].koiName}
+                                            <div>
+                                                <span style="font-weight: normal;">
+                                                    <!-- Hiển thị loại koi -->
+                                                    <c:forEach var="koiType" items="${requestScope.koiTypeList}">
+                                                        <c:if test="${koiType.koiTypeID == koiOrderDetails.koiTypeID}">
+                                                            ${koiType.typeName}
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div class="item-koi">${koiOrderDetails.quantity} items</div>
+
+                                        <div>
+                                            <div class="koi-price price">
+                                                <fmt:formatNumber type="currency" currencySymbol="$" value="${requestScope.koiNames[koiOrderID.index].price}"/>
+                                            </div>
+                                            <div class="item-koi">${koiOrderDetails.quantity} items</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                         </c:forEach>
                     </div>
                 </div>

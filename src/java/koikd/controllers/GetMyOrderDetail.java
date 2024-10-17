@@ -18,6 +18,8 @@ import java.util.logging.Logger;
 import koikd.customer.CustomerDTO;
 import koikd.farm.FarmDTO;
 import koikd.koi.KoiDTO;
+import koikd.koitype.KoiTypeDAO;
+import koikd.koitype.KoiTypeDTO;
 import koikd.order.KoiOrderDAO;
 import koikd.order.KoiOrderDTO;
 import koikd.order.KoiOrderDetailDTO;
@@ -73,8 +75,19 @@ public class GetMyOrderDetail extends HttpServlet {
                         }
                     }
                 }
+                KoiTypeDTO koiType = new KoiTypeDTO();
+                KoiTypeDAO koiTypeDao = new KoiTypeDAO();
+                ArrayList<KoiTypeDTO> koiTypeListByOrderList = new ArrayList<>();
+
+                for (KoiOrderDetailDTO koiOrderDetailDTO : koiOrderDetailCollection) {
+                    koiType = koiTypeDao.getKoiType(koiOrderDetailDTO.getKoiTypeID());
+                    System.out.println(koiOrderDetailDTO.getKoiTypeID());
+                    koiTypeListByOrderList.add(koiType);
+                }
+
                 customer = dao.getCustomerByCustomerID(Integer.parseInt(customerID));
 
+                request.setAttribute("koiTypeList", koiTypeListByOrderList);
                 request.setAttribute("koiOrderListByOrderList", koiOrderListByOrderList);
                 request.setAttribute("koiOrderDetails", koiOrderDetailCollection);
                 request.setAttribute("koiNames", koiFishCollection);

@@ -66,7 +66,7 @@
             </table>
 
             <jsp:useBean id="a" class="koikd.order.KoiOrderDAO" scope="request"></jsp:useBean>
-                <nav style="position: fixed; top: 75%; margin-left: 32%; background-color: white; padding: 10px 0;">
+                <nav style="position: fixed; top:  81%; margin-left: 32%; background-color: white; padding: 10px 0;">
                     <ul class="pagination pagination-lg">
                     <c:forEach begin="1" end="${numberOfPages}" var="i">
                         <li class="page-item ${pageIndex == i ? 'active' : ''}">

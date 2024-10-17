@@ -85,7 +85,7 @@ body {
 /* Koi Name and Price */
 .koi-name, .koi-price {
     font-weight: bold;
-    font-size: 18px; /* Tăng kích thước font */
+    font-size: 18px; 
     margin-right: 20px;
 }
 

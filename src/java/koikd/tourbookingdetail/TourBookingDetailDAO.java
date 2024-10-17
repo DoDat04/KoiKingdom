@@ -133,7 +133,7 @@ public class TourBookingDetailDAO implements Serializable {
             if (conn != null) {
                 String sql = "SELECT [TourBookingDetail], [CustomerID], [TourID], [Quantity], [UnitPrice], [TotalPrice], [Status], [TourType] ,[FeedbackStatus], [bookingID] \n"
                         + "FROM [dbo].[TOURBOOKINGDETAIL]\n"
-                        + "WHERE [CustomerID] = ?";
+                        + "WHERE [CustomerID] = ? AND ([Status] = 'Completed' OR [Status] = 'Confirmed')";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, custID);
                 rs = pst.executeQuery();
@@ -169,35 +169,12 @@ public class TourBookingDetailDAO implements Serializable {
         return list;
     }
 
-    public static void main(String[] args) {
-        TourBookingDetailDAO tourBookingDetailDAO = new TourBookingDetailDAO();
-        int customerID = 12; // Thay đổi ID khách hàng nếu cần
-
-        try {
-            ArrayList<TourBookingDetailDTO> tourBookingDetails = tourBookingDetailDAO.getTourBookingDetailListByCustomerID(customerID);
-
-            // Kiểm tra và in ra danh sách chi tiết đặt tour
-            if (tourBookingDetails.isEmpty()) {
-                System.out.println("Không có chi tiết đặt tour nào cho khách hàng với ID: " + customerID);
-            } else {
-                for (TourBookingDetailDTO detail : tourBookingDetails) {
-                    System.out.println("TourBookingDetail: " + detail.getTourBookingDetailID());
-                    System.out.println("CustomerID: " + detail.getCustomerID());
-                    System.out.println("TourID: " + detail.getTourID());
-                    System.out.println("Quantity: " + detail.getQuantity());
-                    System.out.println("UnitPrice: " + detail.getUnitPrice());
-                    System.out.println("TotalPrice: " + detail.getTotalPrice());
-                    System.out.println("Status: " + detail.getStatus());
-                    System.out.println("FeedbackStatus: " + detail.isFeedbackStatus());
-                    System.out.println("----------------------------------------");
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Có lỗi xảy ra khi lấy danh sách chi tiết đặt tour: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Get Tour By ID
+     * @param tourID
+     * @return
+     * @throws SQLException 
+     */
     public TourDTO getTourByID(int tourID) throws SQLException {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -243,6 +220,12 @@ public class TourBookingDetailDAO implements Serializable {
         return result;
     }
 
+    /**
+     * Get All Tour Booking Detail
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException 
+     */
     public List<TourBookingDetailDTO> getAllTourBookingDetail() throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -286,6 +269,13 @@ public class TourBookingDetailDAO implements Serializable {
         return listTourBookingDetail;
     }
 
+    /**
+     * Update Tour Booking Detail Status
+     * @param tourBookingDetailID
+     * @param newStatus
+     * @throws SQLException
+     * @throws ClassNotFoundException 
+     */
     public void updateTourBookingDetailStatus(int tourBookingDetailID, String newStatus) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -310,5 +300,42 @@ public class TourBookingDetailDAO implements Serializable {
             }
         }
     }
+    
+    /**
+     * Cancel Tour Booking DetailByID
+     * @param ID
+     * @return
+     * @throws SQLException 
+     */
+    public TourBookingDetailDTO cancelTourBookingDetailByID(int ID) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        TourBookingDetailDTO dto = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "UPDATE TOURBOOKINGDETAIL\n"
+                        + "SET Status = 'Canceled', CancelAt = GETDATE()\n"
+                        + " WHERE TourBookingDetail = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, ID);
+                int rowsUpdated = pst.executeUpdate(); 
 
+                if (rowsUpdated > 0) {
+                    Timestamp cancelAt = new Timestamp(System.currentTimeMillis());
+                    dto = new TourBookingDetailDTO(rowsUpdated, sql, cancelAt);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return dto; 
+    }
 }

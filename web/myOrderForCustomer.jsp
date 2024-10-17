@@ -58,20 +58,22 @@
                                 <div class="koi-item">
                                     <div class="koi-row" style="display: flex; align-items: center;">
                                         <img src="${requestScope.koiNames[koiOrderID.index].image}" alt="Picture of KOI" style="width: 58px; margin-right: 10px;" />
-                                        <div class="koi-name" style="margin-right: 400px;">
+                                        <div class="koi-name"  style="position: relative; left: -111px;">
                                             ${requestScope.koiNames[koiOrderID.index].koiName}
-                                            <span style="font-weight: normal;">
-                                                <!-- Hiển thị loại koi -->
-                                                <c:set var="koiTypeDisplayed" value="false" />
-                                                <c:forEach var="koiType" items="${requestScope.koiType}">
-                                                    <c:if test="${koiType.koiTypeID == requestScope.koiNames[koiOrderID.index].koiTypeID}">
-                                                        <c:if test="${not koiTypeDisplayed}">
-                                                            ${koiType.typeName}
-                                                            <c:set var="koiTypeDisplayed" value="true" />
+                                            <div>
+                                                <span style="font-weight: normal;">
+                                                    <!-- Hiển thị loại koi -->
+                                                    <c:set var="koiTypeDisplayed" value="false" />
+                                                    <c:forEach var="koiType" items="${requestScope.koiType}">
+                                                        <c:if test="${koiType.koiTypeID == requestScope.koiNames[koiOrderID.index].koiTypeID}">
+                                                            <c:if test="${not koiTypeDisplayed}">
+                                                                ${koiType.typeName}
+                                                                <c:set var="koiTypeDisplayed" value="true" />
+                                                            </c:if>
                                                         </c:if>
-                                                    </c:if>
-                                                </c:forEach>
-                                            </span>
+                                                    </c:forEach>
+                                                </span>
+                                            </div>
                                         </div>
 
                                         <div>

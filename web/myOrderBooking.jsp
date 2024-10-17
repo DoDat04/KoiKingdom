@@ -65,6 +65,12 @@
                                             <div class="order_booking-status" style="font-size: 16px; margin-top: 5px; padding: 5px; border-radius: 4px;">
                                                 <span class="status-label">Status:</span> 
                                                 <span class="status-value">${orders.status}</span>
+
+                                                <c:if test="${orders.status != 'Completed'}">
+                                                    <div>
+                                                        <a href="cancel_booking?bookingid=${orders.tourBookingDetailID}&customerID=${orders.customerID}" class="btn btn-danger" onclick="return confirm('Are you sure?')">Cancel</a>
+                                                    </div>
+                                                </c:if>
                                                 <c:if test="${orders.status == 'Completed'}">
                                                     <div class="thank-you-message" style="margin-top: 5px; color: green;">
                                                         Cảm ơn bạn đã đặt dịch vụ!
@@ -321,6 +327,19 @@
                     return false;
                 }
             </script>
+            
+            <c:if test="${not empty requestScope.Successfully}">
+                <script>
+                    window.onload = function () {
+                        showToast('${requestScope.Successfully}', 'success');
+                    };
+                </script>
+            </c:if>
+
+            <c:if test="${empty requestScope.orders}">
+                <p class="alert alert-success">${Error}</p>
+            </c:if>
+
             <div id="toastBox"></div>
             <script src="js/showToast.js"></script> 
             <c:if test="${empty requestScope.orders}">
