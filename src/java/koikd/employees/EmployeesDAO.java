@@ -279,6 +279,132 @@ public class EmployeesDAO {
         }
         return countPage;
     }
+    
+    public List<EmployeesDTO> searchEmployees(String searchValue, int index) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<EmployeesDTO> result = new ArrayList<>();
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT EmployeeID, Email, Role, LastName, FirstName, Address, Status "
+                        + "FROM EMPLOYEE ";
+                        
+                // Xử lý điều kiện tìm kiếm theo TourName và TourID
+                boolean hasSearchValue = searchValue != null && !searchValue.trim().isEmpty();
+                boolean isNumeric = hasSearchValue && searchValue.matches("\\d+");
+
+                if (hasSearchValue) {
+                    sql += "WHERE LastName LIKE ? OR FirstName LIKE ? "; // Điều kiện tìm kiếm theo tên customer
+                    if (isNumeric) {
+                        sql += "OR EmployeeID = ? "; // Điều kiện tìm kiếm theo ID nếu searchValue là số
+                    }
+                }
+                // Add pagination
+                sql += "ORDER BY EmployeeID OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY;";
+                stm = con.prepareStatement(sql);
+                int paramIndex = 1;
+                if (hasSearchValue) {
+                    stm.setString(paramIndex++, "%" + searchValue + "%"); // Tìm kiếm theo tên tour
+                    stm.setString(paramIndex++, "%" + searchValue + "%"); // Tìm kiếm theo tên tour
+
+                    if (isNumeric) {
+                        stm.setInt(paramIndex++, Integer.parseInt(searchValue)); // Tìm kiếm theo ID nếu searchValue là số
+                    }
+                }
+
+                // Set index for pagination
+                stm.setInt(paramIndex, (index - 1) * 5);
+                       
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    int id = rs.getInt("EmployeeID");
+                    String email = rs.getString("Email");
+                    String role = rs.getString("Role");
+                    String lastName = rs.getString("LastName");
+                    String firstName = rs.getString("FirstName");
+                    String address = rs.getString("Address");
+                    boolean status = rs.getBoolean("Status");
+                    EmployeesDTO dto = new EmployeesDTO(id, email, role, lastName, firstName, address, status);
+                    result.add(dto);
+                }
+
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
+    
+    public int getNumberPageInSearchPage(String searchValue) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int countPage = 0;
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                // Khởi tạo câu SQL đếm tổng số tour theo điều kiện tìm kiếm
+                String sql = "SELECT COUNT(*) FROM EMPLOYEE ";
+
+                // Kiểm tra điều kiện tìm kiếm
+                boolean hasSearchValue = searchValue != null && !searchValue.trim().isEmpty();
+                boolean isNumeric = hasSearchValue && searchValue.matches("\\d+");
+
+                // Nếu có từ khóa tìm kiếm
+                if (hasSearchValue) {
+                    sql += "WHERE LastName LIKE ? OR FirstName LIKE ? "; // Điều kiện tìm kiếm theo tên tour
+                    if (isNumeric) {
+                        sql += "OR EmployeeID = ? "; // Điều kiện tìm kiếm theo ID nếu searchValue là số
+                    }
+                }
+
+                stm = con.prepareStatement(sql);
+
+                // Thiết lập tham số cho PreparedStatement
+                int paramIndex = 1;
+                if (hasSearchValue) {
+                    stm.setString(paramIndex++, "%" + searchValue + "%"); // Tìm kiếm theo tên tour
+                    stm.setString(paramIndex++, "%" + searchValue + "%"); // Tìm kiếm theo tên tour
+                    if (isNumeric) {
+                        stm.setInt(paramIndex++, Integer.parseInt(searchValue)); // Tìm kiếm theo ID nếu searchValue là số
+                    }
+                }
+
+                // Thực hiện câu truy vấn
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    int total = rs.getInt(1); // Tổng số bản ghi
+                    countPage = total / 5;
+
+                    // Nếu không chia hết cho 5, thì tăng thêm 1 trang
+                    if (total % 5 != 0) {
+                        countPage++;
+                    }
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return countPage; // Trả về số trang
+    }
 
     /**
      *
@@ -323,55 +449,7 @@ public class EmployeesDAO {
         return false;
     }
     
-    public List<EmployeesDTO> searchEmployees(String searchValue) throws SQLException, ClassNotFoundException {
-        Connection con = null;
-        PreparedStatement stm = null;
-        ResultSet rs = null;
-        List<EmployeesDTO> result = new ArrayList<>();
-        try {
-            con = DBUtils.getConnection();
-            if (con != null) {
-                String sql = "SELECT EmployeeID, Email, Role, LastName, FirstName, Address, Status "
-                        + "FROM EMPLOYEE "
-                        + "WHERE LastName LIKE ? OR FirstName LIKE ? ";
-               boolean isNumeric = searchValue.matches("\\d+");
-                if (isNumeric) {
-                    sql += "OR EmployeeID = ? ";
-                }
-                stm = con.prepareStatement(sql);
-                stm.setString(1, "%" + searchValue + "%");
-                stm.setString(2, "%" + searchValue + "%");
-
-                if (isNumeric) {
-                    stm.setInt(3, Integer.parseInt(searchValue));
-                }
-                rs = stm.executeQuery();
-                while (rs.next()) {
-                    int id = rs.getInt("EmployeeID");
-                    String email = rs.getString("Email");
-                    String role = rs.getString("Role");
-                    String lastName = rs.getString("LastName");
-                    String firstName = rs.getString("FirstName");
-                    String address = rs.getString("Address");
-                    boolean status = rs.getBoolean("Status");
-                    EmployeesDTO dto = new EmployeesDTO(id, email, role, lastName, firstName, address, status);
-                    result.add(dto);
-                }
-
-            }
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (stm != null) {
-                stm.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
-        return result;
-    }
+    
     
     public boolean addEmployee(String email, String password, String role, String lastName,
             String firstName, String address, boolean status) throws SQLException, ClassNotFoundException {
