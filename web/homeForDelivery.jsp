@@ -66,15 +66,16 @@
             </table>
 
             <jsp:useBean id="a" class="koikd.order.KoiOrderDAO" scope="request"></jsp:useBean>
-                <nav style="position: fixed; top:  81%; margin-left: 32%; background-color: white; padding: 10px 0;">
+                <nav class="navbar fixed-bottom justify-content-center">
                     <ul class="pagination pagination-lg">
                     <c:forEach begin="1" end="${numberOfPages}" var="i">
                         <li class="page-item ${pageIndex == i ? 'active' : ''}">
                             <a class="page-link" href="GetKoiOrder?index=${i}&txtNameCustomer=${param.txtNameCustomer}">${i}</a>
                         </li>
                     </c:forEach>
-                </ul> 
+                </ul>
             </nav>
+
         </div>
 
         <script>

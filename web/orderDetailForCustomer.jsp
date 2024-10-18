@@ -1,7 +1,7 @@
 <%-- 
-    Document   : homeForCustomer
+    Document   : orderDetailForCustomer
     Created on : Sep 14, 2024, 7:15:52 AM
-    Author     : ADMIN LAM
+    Author     : ADMIN
 --%>
 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -42,31 +42,31 @@
                     </div>
                     <div class="koi-section" style="max-height: 450px; overflow-y: auto;">
                         <c:forEach var="koiOrderDetails" items="${requestScope.koiOrderDetails}" varStatus="koiOrderID">
-                                <div style="font-size: 20px;">${requestScope.farmNames[koiOrderID.index].farmName}</div>
-                                <div class="koi-item">
-                                    <div class="koi-row">
-                                        <img src="${requestScope.koiNames[koiOrderID.index].image}" alt="Picture of KOI" style="width: 58px"/>
-                                        <div class="koi-name" style="position: relative; left: -111px;">${requestScope.koiNames[koiOrderID.index].koiName}
-                                            <div>
-                                                <span style="font-weight: normal;">
-                                                    <!-- Hiển thị loại koi -->
-                                                    <c:forEach var="koiType" items="${requestScope.koiTypeList}">
-                                                        <c:if test="${koiType.koiTypeID == koiOrderDetails.koiTypeID}">
-                                                            ${koiType.typeName}
-                                                        </c:if>
-                                                    </c:forEach>
-                                                </span>
-                                            </div>
-                                        </div>
-
+                            <div style="font-size: 20px;">${requestScope.farmNames[koiOrderID.index].farmName}</div>
+                            <div class="koi-item">
+                                <div class="koi-row">
+                                    <img src="${requestScope.koiNames[koiOrderID.index].image}" alt="Picture of KOI" style="width: 58px"/>
+                                    <div class="koi-name" style="position: relative; left: -111px;">${requestScope.koiNames[koiOrderID.index].koiName}
                                         <div>
-                                            <div class="koi-price price">
-                                                <fmt:formatNumber type="currency" currencySymbol="$" value="${requestScope.koiNames[koiOrderID.index].price}"/>
-                                            </div>
-                                            <div class="item-koi">${koiOrderDetails.quantity} items</div>
+                                            <span style="font-weight: normal;">
+                                                <!-- Hiển thị loại koi -->
+                                                <c:forEach var="koiType" items="${requestScope.koiTypeList}">
+                                                    <c:if test="${koiType.koiTypeID == koiOrderDetails.koiTypeID}">
+                                                        ${koiType.typeName}
+                                                    </c:if>
+                                                </c:forEach>
+                                            </span>
                                         </div>
                                     </div>
+
+                                    <div>
+                                        <div class="koi-price price">
+                                            <fmt:formatNumber type="currency" currencySymbol="$" value="${requestScope.koiNames[koiOrderID.index].price}"/>
+                                        </div>
+                                        <div class="item-koi">${koiOrderDetails.quantity} items</div>
+                                    </div>
                                 </div>
+                            </div>
                         </c:forEach>
                     </div>
                 </div>
@@ -86,8 +86,12 @@
                         <c:forEach var="koiOrderDetails" items="${requestScope.koiOrderDetails}" varStatus="koiOrderID">
                             <c:set var="totalPriceSum" value="${totalPriceSum + koiOrderDetails.totalPrice}" />
                         </c:forEach>
-                        <h2>Total: <span class="price"><fmt:formatNumber type="currency" currencySymbol="$" value="${totalPriceSum}"/></span></h2>
 
+                        <c:set var="paidAmount" value="${totalPriceSum * 0.3}" />
+                        <c:set var="remainingAmount" value="${totalPriceSum - paidAmount}" />
+
+                        <h3>Paid Amount: <span class="price"><fmt:formatNumber type="currency" currencySymbol="$" value="${paidAmount}"/></span></h3>
+                        <h3>Remaining Amount: <span class="price"><fmt:formatNumber type="currency" currencySymbol="$" value="${remainingAmount}"/></span></h3>
                     </div>
 
                 </div>
