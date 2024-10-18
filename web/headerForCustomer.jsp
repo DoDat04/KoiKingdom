@@ -124,7 +124,7 @@
                                         <li><a class="dropdown-item" href="get-booking?customerID=${sessionScope.LOGIN_USER.customerID}"><i class="fa fa-history"></i> My Order Booking </a></li>
                                         <li>
                                             <a class="dropdown-item" href="my-custom-tour?customerID=${sessionScope.LOGIN_USER.customerID}">
-                                                <i class="fa fa-history"></i> Quotation Information
+                                                <i class="fa fa-history"></i> My Custom Tour
                                             </a>
                                         </li>
                                         <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>      
@@ -146,7 +146,7 @@
 
                                         <li>
                                             <a class="dropdown-item" href="my-custom-tour?customerID=${sessionScope.custID}">
-                                                <i class="fa fa-history"></i> My Booking Custom Tour
+                                                <i class="fa fa-history"></i> My Custom Tour
                                             </a>
                                         </li>
 
@@ -227,7 +227,7 @@
                                             <div class="text-center">
                                                 <button type="submit" class="btn btn-primary" name="action">Update</button>
                                             </div>
-                                            <script src="js/address.js" ></script>
+                                            <script src="js/address.js" defer></script>
                                         </form>
                                     </div>
                                 </div>

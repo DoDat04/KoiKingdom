@@ -219,9 +219,9 @@
         <c:set var="success" value="${sessionScope.updateSuccess}"/>
         <c:if test="${not empty success}">
             <script defer>
-                window.onload = function () {
+                document.addEventListener('DOMContentLoaded', function () {
                     showToast('${success}', 'success');
-                };
+                });
             </script>
             <c:remove var="updateSuccess" scope="session"/>
         </c:if>

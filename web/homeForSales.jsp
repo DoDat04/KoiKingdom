@@ -23,5 +23,22 @@
     <body>
         <jsp:include page="headerForSales.jsp" flush="true"/>
         
+        <c:if test="${not empty sessionScope.updateSuccess}">
+            <script defer>
+                document.addEventListener('DOMContentLoaded', function () {
+                    showToast('${success}', 'success');
+                });
+            </script>
+            <c:set var="updateSuccess" value="${null}" scope="session"/>
+        </c:if>
+
+        <c:if test="${not empty sessionScope.updateError}">
+            <script>
+                window.onload = function () {
+                    showToast('${sessionScope.updateError}', 'error');
+                };
+            </script>
+            <c:set var="updateError" value="${null}" scope="session"/>
+        </c:if>
     </body>
 </html>

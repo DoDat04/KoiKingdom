@@ -155,6 +155,24 @@
             </div>
         </section>
 
+        <section class="tour-schedule py-5">
+            <div class="container">
+                <h2 class="section-title text-center mb-4">Tour Price</h2>
+
+                <!-- Schedule Card -->
+                <div class="card schedule-card">
+                    <div class="card-body">
+                        <p><strong style="font-size: 1.2rem;">The tour price includes the following:</strong></p>
+                        <ul>
+                            <li>Farm visit tickets</li>
+                            <li>Airfare</li>
+                            <li>Hotel accommodation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Tour Feedback Section -->
         <section class="tour-feedback py-5">
             <div class="container">

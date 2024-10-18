@@ -18,10 +18,10 @@
         <jsp:include page="headerForConsulting.jsp" flush="true"/>
 
         <c:if test="${not empty sessionScope.updateSuccess}">
-            <script>
-                window.onload = function () {
-                    showToast('${sessionScope.updateSuccess}', 'success');
-                };
+            <script defer>
+                document.addEventListener('DOMContentLoaded', function () {
+                    showToast('${success}', 'success');
+                });
             </script>
             <c:set var="updateSuccess" value="${null}" scope="session"/>
         </c:if>
