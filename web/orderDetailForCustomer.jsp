@@ -57,8 +57,12 @@
                                                 </c:forEach>
                                             </span>
                                         </div>
+                                        <div style="font-weight: normal;">
+                                            <div>Age: ${requestScope.koiNames[koiOrderID.index].age} years</div>
+                                            <div>Length: ${requestScope.koiNames[koiOrderID.index].length} cm</div>
+                                            <div>Weight: ${requestScope.koiNames[koiOrderID.index].weight} kg</div>
+                                        </div>
                                     </div>
-
                                     <div>
                                         <div class="koi-price price">
                                             <fmt:formatNumber type="currency" currencySymbol="$" value="${requestScope.koiNames[koiOrderID.index].price}"/>
