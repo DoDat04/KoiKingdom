@@ -101,21 +101,21 @@
                             <div class="mb-3 select-group" id="addressSelectDiv" style="display: none;">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label for="city" class="form-label">Tỉnh / Thành:</label>
+                                        <label for="city" class="form-label">Province:</label>
                                         <select class="form-select" id="city" name="city">
-                                            <option value="">Chọn tỉnh / thành</option>
+                                            <option value="">Select province</option>
                                         </select>
                                     </div>
                                     <div class="col-md-4">
-                                        <label for="district" class="form-label">Quận / Huyện:</label>
+                                        <label for="district" class="form-label">District:</label>
                                         <select class="form-select" id="district" name="district">
-                                            <option value="">Chọn quận / huyện</option>
+                                            <option value="">Select district</option>
                                         </select>
                                     </div>
                                     <div class="col-md-4">
-                                        <label for="ward" class="form-label">Phường / Xã:</label>
+                                        <label for="ward" class="form-label">Ward:</label>
                                         <select class="form-select" id="ward" name="ward">
-                                            <option value="">Chọn phường / xã</option>
+                                            <option value="">Select ward</option>
                                         </select>
                                     </div>
                                 </div>

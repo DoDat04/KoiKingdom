@@ -235,10 +235,10 @@ public class TourDAO implements Serializable {
                 // Add pagination
                 sql += "ORDER BY TourID \n"
                         + "OFFSET ? ROWS \n"
-                        + "FETCH NEXT 5 ROWS ONLY;";
+                        + "FETCH NEXT 8 ROWS ONLY;";
 
                 stm = con.prepareStatement(sql);
-                stm.setInt(1, (index - 1) * 5);
+                stm.setInt(1, (index - 1) * 8);
                 rs = stm.executeQuery();
                 while (rs.next()) {
                     int id = rs.getInt("TourID");
@@ -352,9 +352,9 @@ public class TourDAO implements Serializable {
                 rs = stm.executeQuery();
                 if (rs.next()) {
                     int total = rs.getInt(1);
-                    countPage = total / 5;
+                    countPage = total / 8;
 
-                    if (total % 5 != 0) {
+                    if (total % 8 != 0) {
                         countPage++;
                     }
 

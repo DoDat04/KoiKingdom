@@ -3,72 +3,80 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
  */
 document.addEventListener("DOMContentLoaded", function() {
-    // Lấy danh sách tất cả các yêu cầu theo requestID
     var rows = document.querySelectorAll(".customer-tour-row");
-    
+
     rows.forEach(function(row) {
         var requestID = row.getAttribute("data-requestid");
-        var countdownTime = 30 * 1000; // 30 giây 
-        var countdownEndTimestamp = localStorage.getItem('countdownEndTimestamp_' + requestID);
+        var countdownTime = 30 * 1000; // 30 giây
         var currentTime = new Date().getTime();
+        var countdownEndTimestamp = localStorage.getItem('countdownEndTimestamp_' + requestID);
         var expired = localStorage.getItem('expired_' + requestID);
 
         var timerElement = row.querySelector(".decision-timer");
 
-        // Nếu không tìm thấy countdownEndTimestamp, tạo một cái mới
-        if (!countdownEndTimestamp) {
-            // Thiết lập thời gian đếm ngược mới cho tour mới
-            countdownEndTimestamp = currentTime + countdownTime;
-            localStorage.setItem('countdownEndTimestamp_' + requestID, countdownEndTimestamp);
-            expired = 'false'; // Đặt trạng thái chưa hết thời gian
-        }
+        // Lấy giá trị của customerTourList.status và customerTourList.managerApprovalStatus từ các attribute HTML
+        var status = row.getAttribute("data-status");
+        var managerApprovalStatus = row.getAttribute("data-managerApprovalStatus");
 
-        // Nếu thời gian đã hết trước khi trang tải lại (hoặc trạng thái đã được lưu là hết hạn)
-        if (expired === 'true' || (countdownEndTimestamp <= currentTime)) {
-            // Vô hiệu hóa nút "Check Out"
-            var checkoutButton = row.querySelector('.btn-success');
-            checkoutButton.classList.add('disabled');
-            checkoutButton.setAttribute('disabled', 'true');
+        // Chỉ tạo countdownEndTimestamp và expired khi cả hai trạng thái là 'Approved'
+        if (status === 'Approved' && managerApprovalStatus === 'Approved') {
+            // Nếu không tìm thấy countdownEndTimestamp, tạo một cái mới và reset expired
+            if (!countdownEndTimestamp) {
+                countdownEndTimestamp = currentTime + countdownTime;
+                localStorage.setItem('countdownEndTimestamp_' + requestID, countdownEndTimestamp);
+                expired = 'false'; // Đặt trạng thái chưa hết thời gian
+                localStorage.setItem('expired_' + requestID, expired);
+            }
 
-            // Hiển thị thông báo hết thời gian
-            timerElement.textContent = "Time's up!";
+            // Kiểm tra trạng thái expired và thời gian còn lại
+            if (expired === 'true') {
+                // Nếu trạng thái đã hết
+                var checkoutButton = row.querySelector('.btn-success');
+                checkoutButton.classList.add('disabled');
+                checkoutButton.setAttribute('disabled', 'true');
 
-            // Thay đổi nút "Reject" thành "Delete"
-            var rejectButton = row.querySelector('.btn-danger');
-            rejectButton.textContent = "Delete"; // Thay đổi văn bản
-        } else {
-            // Nếu thời gian chưa hết, tính toán thời gian còn lại
-            var timeLeft = Math.floor((countdownEndTimestamp - currentTime) / 1000);
+                timerElement.textContent = "Time's up!";
 
-            // Hiển thị thời gian ban đầu lên giao diện
-            timerElement.textContent = timeLeft;
+                var rejectButton = row.querySelector('.btn-danger');
+                rejectButton.textContent = "Delete"; 
+            } else {
+                // Nếu expired là false, kiểm tra thời gian còn lại
+                if (countdownEndTimestamp > currentTime) {
+                    var timeLeft = Math.floor((countdownEndTimestamp - currentTime) / 1000);
+                    timerElement.textContent = timeLeft;
 
-            // Cập nhật đồng hồ đếm ngược mỗi giây
-            var countdown = setInterval(function() {
-                timeLeft--;
-                timerElement.textContent = timeLeft;
+                    var countdown = setInterval(function() {
+                        timeLeft--;
+                        timerElement.textContent = timeLeft;
 
-                if (timeLeft <= 0) {
-                    clearInterval(countdown);
-                    localStorage.setItem('expired_' + requestID, 'true'); // Lưu trạng thái hết thời gian vào localStorage
-                    localStorage.removeItem('countdownEndTimestamp_' + requestID); // Xóa thời gian hết hạn sau khi hết
+                        if (timeLeft <= 0) {
+                            clearInterval(countdown);
+                            localStorage.setItem('expired_' + requestID, 'true'); 
 
-                    // Vô hiệu hóa nút "Check Out"
+                            var checkoutButton = row.querySelector('.btn-success');
+                            checkoutButton.classList.add('disabled');
+                            checkoutButton.setAttribute('disabled', 'true');
+
+                            timerElement.textContent = "Time's up!";
+
+                            var rejectButton = row.querySelector('.btn-danger');
+                            rejectButton.textContent = "Delete"; // Thay đổi văn bản
+                        }
+                    }, 1000);
+                } else {
+                    localStorage.setItem('expired_' + requestID, 'true');
+
                     var checkoutButton = row.querySelector('.btn-success');
                     checkoutButton.classList.add('disabled');
                     checkoutButton.setAttribute('disabled', 'true');
 
-                    // Hiển thị thông báo hết thời gian
                     timerElement.textContent = "Time's up!";
 
-                    // Thay đổi nút "Reject" thành "Delete"
                     var rejectButton = row.querySelector('.btn-danger');
-                    rejectButton.textContent = "Delete"; // Thay đổi văn bản
+                    rejectButton.textContent = "Delete"; 
                 }
-            }, 1000);
+            }
         }
     });
 });
-
-
 

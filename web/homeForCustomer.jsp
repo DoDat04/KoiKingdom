@@ -218,7 +218,7 @@
 
         <c:set var="success" value="${sessionScope.updateSuccess}"/>
         <c:if test="${not empty success}">
-            <script>
+            <script defer>
                 window.onload = function () {
                     showToast('${success}', 'success');
                 };

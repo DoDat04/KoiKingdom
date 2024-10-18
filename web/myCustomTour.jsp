@@ -47,9 +47,14 @@
                         </thead>
                         <tbody>
                             <c:forEach var="customerTourList" items="${requestScope.customerTourList}">
-                                <tr class="customer-tour-row" data-requestid="${customerTourList.requestID}"> 
+                                <tr class="customer-tour-row" 
+                                    data-requestid="${customerTourList.requestID}" 
+                                    data-status="${customerTourList.status}" 
+                                    data-managerApprovalStatus="${customerTourList.managerApprovalStatus}"> <!-- Thêm thuộc tính status và managerApprovalStatus -->
+
                                     <td><img src="${customerTourList.image}" class="custom-tour" alt="" style="height: 100px; width: 150px; border-radius: 10px;"/></td>
-                                    <td>${customerTourList.departureLocation}</td> 
+                                    <td>${customerTourList.departureLocation}</td>
+
                                     <td>
                                         <c:choose>
                                             <c:when test="${customerTourList.status == 'Approved'}">
@@ -60,10 +65,12 @@
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
-                                    <td>${customerTourList.quantity}</td> 
-                                    <td>${customerTourList.duration}</td> 
-                                    <td>${customerTourList.startDate}</td> 
+
+                                    <td>${customerTourList.quantity}</td>
+                                    <td>${customerTourList.duration}</td>
+                                    <td>${customerTourList.startDate}</td>
                                     <td>${customerTourList.endDate}</td>
+
                                     <c:choose>
                                         <c:when test="${customerTourList.status == 'Approved'}">
                                             <td style="color: green; font-weight: bold">${customerTourList.status}</td>
@@ -71,10 +78,12 @@
                                         <c:otherwise>
                                             <td style="color: brown; font-weight: bold">${customerTourList.status}</td>
                                         </c:otherwise>
-                                    </c:choose>                                    
+                                    </c:choose>
+
                                     <td><a href="my-detail-custom-tour?requestid=${customerTourList.requestID}">Detail</a></td>
+
                                     <td>
-                                        <c:if test="${customerTourList.status == 'Approved'}">
+                                        <c:if test="${customerTourList.status == 'Approved' && customerTourList.managerApprovalStatus == 'Approved'}">
                                             <p style="color: red; font-weight: bold; font-size: 17px">Time left to decide: <span class="decision-timer">30</span></p>
                                             <div class="decision-buttons">
                                                 <a href="checkout?requestid=${customerTourList.requestID}&numberofpeople=${customerTourList.quantity}" class="btn btn-success mb-2 d-block">Check Out</a>
