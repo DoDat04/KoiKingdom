@@ -13,6 +13,7 @@
         <title>Koi Kingdom</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
         <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
         <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -24,6 +25,28 @@
         <link href="css/toast.css" rel="stylesheet">
         <script src="js/login.js"></script>     
         <script src="js/load.js"></script>
+        <style type="text/css">
+            .img_box img{
+                max-width: 100%;
+                border-radius: 20px;
+            }
+            .slider_container .container{
+                padding: 0 15px;
+                max-width: 1230px;
+                margin: 0 auto;
+            }
+            .card_slider{
+                padding: 50px;
+            }
+            .slider_container .img_box img {
+                width: 100%; /* Hoặc bạn có thể chọn một kích thước cố định, ví dụ: 300px */
+                height: auto; /* Đảm bảo giữ tỷ lệ ảnh */
+                max-width: 300px; /* Đặt kích thước tối đa nếu cần thu nhỏ ảnh */
+                max-height: 200px; /* Giới hạn chiều cao tối đa cho ảnh */
+                object-fit: cover; /* Cắt ảnh nếu vượt quá kích thước */
+            }
+
+        </style>
     </head>
     <body>
         <div class="colorlib-loader"></div>
@@ -72,131 +95,140 @@
             <!-- Where do you want to go? -->
             <h1><strong class="welcome-text">Where do you want to go?</strong></h1>
             <!-- Available Tours -->
-            <div id="multiCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-                <div class="carousel-inner">
-                    <!-- Slide 1 -->
-                    <div class="carousel-item active">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <img src="img/hiroshima.jpg" class="d-block w-100" alt="Hiroshima">
+            <section class="slider_container">
+                <div class="container">
+                    <div class="swiper card_slider">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/hiroshima.jpg">
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <img src="img/tokyo.jpg" class="d-block w-100" alt="Tokyo">
+
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/kyoto.jpg">
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <img src="img/kyoto.jpg" class="d-block w-100" alt="Kyoto">
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/kyushu.jpg">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/nagoya.jpg">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/osaka.jpg">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/tokyo.jpg">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Slide 2 -->
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <img src="img/osaka.jpg" class="d-block w-100" alt="Osaka">
-                            </div>
-                            <div class="col-md-4">
-                                <img src="img/nagoya.jpg" class="d-block w-100" alt="Nagoya">
-                            </div>
-                            <div class="col-md-4">
-                                <img src="img/kyushu.jpg" class="d-block w-100" alt="Kyushu">
-                            </div>
-                        </div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-pagination"></div>
                     </div>
                 </div>
-
-                <button class="carousel-control-prev" type="button" data-bs-target="#multiCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#multiCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
+            </section>
 
             <!-- Popular Tour -->
             <h1><strong class="welcome-text" id="popularTour">Popular Tour</strong></h1>
-            <div id="popularTourCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <img src="img/hiroshima.jpg" alt="Hiroshima" class="d-block w-100">
+            <!-- Popular Tours -->
+            <section class="slider_container">
+                <div class="container">
+                    <div class="swiper card_slider">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/hiroshima.jpg">
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <img src="img/kyoto.jpg" alt="Kyoto" class="d-block w-100">
-                            </div>
-                            <div class="col-md-4">
-                                <img src="img/kyushu.jpg" alt="Kyusu" class="d-block w-100">
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <img src="img/nagoya.jpg" alt="Nagoya" class="d-block w-100">
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/kyoto.jpg">
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <img src="img/osaka.jpg" alt="Osaka" class="d-block w-100">
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/kyushu.jpg">
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <img src="img/tokyo.jpg" alt="Tokyo" class="d-block w-100">
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/nagoya.jpg">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/osaka.jpg">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/tokyo.jpg">
+                                </div>
                             </div>
                         </div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-pagination"></div>
                     </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#popularTourCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#popularTourCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
+            </section>
 
             <!-- Popular Koi Fish Breeds -->
             <h1><strong class="welcome-text" id="popularKoi">Popular Koi Fish Breeds</strong></h1>
-            <div id="koiFIshBreeds" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <img src="img/Kohaku.jpg" alt="Kohaku" class="d-block w-100">
+            <!-- Popular Koi Fish -->
+            <section class="slider_container">
+                <div class="container">
+                    <div class="swiper card_slider">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/Kohaku.jpg">
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <img src="img/Shiro Utsuri.jpg" alt="Shiro Utsuri" class="d-block w-100">
-                            </div>
-                            <div class="col-md-4">
-                                <img src="img/Koi Showa Sanshoku.jpg" alt="Koi Showa Sanshoku" class="d-block w-100">
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <img src="img/Koi Showa Sanshoku.jpg" alt="Showa Sanshoku" class="d-block w-100">
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/Kohaku.jpg">
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <img src="img/Kohaku.jpg" alt="Kohaku" class="d-block w-100">
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/Kohaku.jpg">
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <img src="img/Shiro Utsuri.jpg" alt="Shiro Utsuri" class="d-block w-100">
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/Kohaku.jpg">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/Kohaku.jpg">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="img_box">
+                                    <img src="img/Kohaku.jpg">
+                                </div>
                             </div>
                         </div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-pagination"></div>
                     </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#koiFIshBreeds" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#koiFIshBreeds" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
+            </section>
 
             <!-- The reason why should you choose our Koi Kingdom -->
             <h1><strong class="welcome-text">Why should you choose our Koi Kingdom?</strong></h1>
@@ -261,6 +293,29 @@
         </c:if>
         <div id="toastBox"></div>
 
+        <!-- Swiper JS -->
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <script type="text/javascript">
+                var swiper = new Swiper('.card_slider', {
+                    slidesPerView: 3, // Hiển thị 3 ảnh một lần
+                    spaceBetween: 30, // Khoảng cách giữa các ảnh (tuỳ chỉnh theo ý muốn)
+                    slidesPerGroup: 1, // Kéo 1 ảnh mỗi lần
+                    loop: true, // Đặt vòng lặp nếu muốn
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+
+                    },
+                    autoplay: {
+                        delay: 3000, // Thời gian giữa các lần chuyển cảnh (tính bằng mili giây)
+                        disableOnInteraction: false, // Vẫn tiếp tục autoplay ngay cả khi người dùng tương tác
+                    },
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                });
+        </script>
         <script src="js/showToast.js"></script>
 
         <!-- Back to Top Button -->
