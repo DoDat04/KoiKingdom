@@ -111,6 +111,22 @@ public class StatisticController extends HttpServlet {
         } else {
             request.setAttribute("COMMISSION", 0);
         }
+        
+        // đếm số tour có sẵn
+        int availableTour = daotour.countAvailableTour(startDate, endDate);
+        if (availableTour > 0) {
+            request.setAttribute("AVAILABLE_TOUR", availableTour);
+        } else {
+            request.setAttribute("AVAILABLE_TOUR", 0);
+        }
+        
+        // đếm số tour custom
+        int customTour = daotour.countCustomTour(startDate, endDate);
+        if (customTour > 0) {
+            request.setAttribute("CUSTOM_TOUR", customTour);
+        } else {
+            request.setAttribute("CUSTOM_TOUR", 0);
+        }
 
         request.getRequestDispatcher(url).forward(request, response);
     }

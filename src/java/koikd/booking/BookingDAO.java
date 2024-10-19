@@ -122,8 +122,18 @@ public class BookingDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT COUNT([BookingID]) FROM [dbo].[BOOKING]";
-                pst = conn.prepareStatement(sql);
+                if(startDate != null && endDate != null) {
+                    String sql = "SELECT COUNT([BookingID]) FROM [dbo].[BOOKING] "
+                            + "WHERE CAST(BookingDate AS DATE) BETWEEN ? AND ? ";
+                    pst = conn.prepareStatement(sql);
+                    pst.setString(1, startDate);
+                    pst.setString(2, endDate);
+                } else {
+                    String sql = "SELECT COUNT([BookingID]) FROM [dbo].[BOOKING]";
+                    pst = conn.prepareStatement(sql);
+                }
+                
+                
                 rs = pst.executeQuery();
 
                 if (rs.next()) {
@@ -194,6 +204,102 @@ public class BookingDAO implements Serializable {
             }
         }
         return customerCount;
+    }
+    
+    public int countAvailableTour(String startDate, String endDate) {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        int avaiTour = 0;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                if(startDate != null && endDate != null) {
+                    String sql = "SELECT COUNT([BookingID]) FROM [dbo].[BOOKING] "
+                            + "WHERE TourType = 'Available' AND CAST(BookingDate AS DATE) BETWEEN ? AND ? ";
+                    pst = conn.prepareStatement(sql);
+                    pst.setString(1, startDate);
+                    pst.setString(2, endDate);
+                } else {
+                    String sql = "SELECT COUNT([BookingID]) FROM [dbo].[BOOKING] "
+                            + "WHERE TourType = 'Available' ";
+                    pst = conn.prepareStatement(sql);
+                }
+                
+                
+                rs = pst.executeQuery();
+
+                if (rs.next()) {
+                    avaiTour = rs.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return avaiTour;
+    }
+    
+    public int countCustomTour(String startDate, String endDate) {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        int cusTour = 0;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                if(startDate != null && endDate != null) {
+                    String sql = "SELECT COUNT([BookingID]) FROM [dbo].[BOOKING] "
+                            + "WHERE TourType = 'Custom' AND CAST(BookingDate AS DATE) BETWEEN ? AND ? ";
+                    pst = conn.prepareStatement(sql);
+                    pst.setString(1, startDate);
+                    pst.setString(2, endDate);
+                } else {
+                    String sql = "SELECT COUNT([BookingID]) FROM [dbo].[BOOKING] "
+                            + "WHERE TourType = 'Custom' ";
+                    pst = conn.prepareStatement(sql);
+                }
+                
+                
+                rs = pst.executeQuery();
+
+                if (rs.next()) {
+                    cusTour = rs.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return cusTour;
     }
 //    public static void main(String[] args) {
 //        BookingDAO mainApp = new BookingDAO();

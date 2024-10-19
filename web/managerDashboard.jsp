@@ -81,14 +81,20 @@
     Map<Object, Object> colmap = null;
     List<Map<Object, Object>> collist = new ArrayList<Map<Object, Object>>();
 
+    Object availableTourObj = request.getAttribute("AVAILABLE_TOUR");
+    int availableTour = (Integer) availableTourObj;
+
+    Object customTourObj = request.getAttribute("CUSTOM_TOUR");
+    int customTour = (Integer) customTourObj;
+
     colmap = new HashMap<Object, Object>();
     colmap.put("label", "Available Tour");
-    colmap.put("y", 8);
+    colmap.put("y", availableTour);
     collist.add(colmap);
 
     colmap = new HashMap<Object, Object>();
     colmap.put("label", "Custom Tour");
-    colmap.put("y", 8);
+    colmap.put("y", customTour);
     collist.add(colmap);
 
     String coldataPoints = colgsonObj.toJson(collist);
@@ -108,8 +114,9 @@
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
         <!-- chart -->
         <script type="text/javascript">
-            document.addEventListener('DOMContentLoaded', function() {
-                var pieChart = new CanvasJS.Chart("pieChartContainer", {
+            var pieChart, colChart;
+            document.addEventListener('DOMContentLoaded', function () {
+                pieChart = new CanvasJS.Chart("pieChartContainer", {
                     animationEnabled: true,
                     title: {
                         text: "Revenue Breakdown"
@@ -130,7 +137,7 @@
                 });
                 pieChart.render();
 
-                var colChart = new CanvasJS.Chart("colChartContainer", {
+                colChart = new CanvasJS.Chart("colChartContainer", {
                     title: {
                         text: "Tour"
                     },
@@ -138,19 +145,19 @@
                         title: "Type of tour"
                     },
                     axisY: {
-                        title: "Imports (in billion USD)",
+                        title: "Number of bookings", // Đổi tên để phù hợp với nội dung
                         includeZero: true
                     },
                     data: [{
                             type: "column",
-                            yValueFormatString: "$#,##0.0# billion",
+                            yValueFormatString: "#,##0", // Định dạng số lượng (không có dấu $ và billion)
                             dataPoints: <%out.print(coldataPoints);%>
                         }]
                 });
                 colChart.render();
 
 
-});
+            });
         </script>
     </head>
     <style>
@@ -178,6 +185,22 @@
             font-size: 36px;
             font-weight: bold;
         }
+
+        .chart-container {
+            border: 2px solid #007bff; /* Đường viền màu xanh dương */
+            border-radius: 10px; /* Bo tròn các góc */
+            padding: 20px; /* Khoảng cách bên trong */
+            margin-bottom: 30px; /* Khoảng cách giữa các biểu đồ */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+            background-color: #f8f9fa; /* Màu nền cho container */
+        }
+
+        .date-range {
+            margin-top: 10px; /* Khoảng cách giữa biểu đồ và khoảng thời gian */
+            font-weight: bold; /* In đậm văn bản */
+            color: #333; /* Màu chữ */
+        }
+
     </style>
     <body>
         <jsp:include page="headerForManager.jsp" flush="true"/>   
@@ -293,9 +316,62 @@
 
                 </c:when>
             </c:choose>
-            <div id="pieChartContainer" style="height: 370px; width: 100%;"></div>
-            <div id="colChartContainer" style="height: 370px; width: 100%;"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <div id="pieChartContainer" style="height: 370px; width: 100%;"></div>
+                            <!-- Hiển thị khoảng thời gian nếu có -->
+                            <c:if test="${not empty param.startDate || not empty param.endDate}">
+                                <div class="date-range mt-2">
+                                    <p>
+                                        From: <strong>${param.startDate}</strong> 
+                                        To: <strong>${param.endDate}</strong>
+                                    </p>
+                                </div>
+                            </c:if>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <div id="colChartContainer" style="height: 370px; width: 100%;"></div>
+                            <!-- Hiển thị khoảng thời gian nếu có -->
+                            <c:if test="${not empty param.startDate || not empty param.endDate}">
+                                <div class="date-range mt-2">
+                                    <p>
+                                        From: <strong>${param.startDate}</strong> 
+                                        To: <strong>${param.endDate}</strong>
+                                    </p>
+                                </div>
+                            </c:if>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tải ảnh, in biểu đồ -->
+                <div class="row mt-4">
+                    <div class="col-md-6 text-center">
+                        <button class="btn btn-primary" onclick="exportChart('pieChartContainer', 'PieChart')">Download</button>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <button class="btn btn-primary" onclick="exportChart('colChartContainer', 'ColumnChart')">Download</button>
+                    </div>
+                </div>
+            </div>
+
+
             <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+            <script>
+                            // Hàm export
+                            function exportChart(containerId, fileName) {
+                                if (containerId == "pieChartContainer") {
+                                    pieChart.exportChart({format: "png", fileName: fileName});
+                                } else if (containerId == "colChartContainer") {
+                                    colChart.exportChart({format: "png", fileName: fileName});
+                                }
+                            }
+
+
+            </script>
         </div>
 
 
