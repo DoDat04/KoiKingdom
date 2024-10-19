@@ -36,8 +36,8 @@ public class StatisticController extends HttpServlet {
             throws ServletException, IOException {
         String url = COUNT_BOOKING;
         response.setContentType("text/html;charset=UTF-8");
-        
-       String startDate = request.getParameter("startDate");
+
+        String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
         /**
          * Count Booking
@@ -70,7 +70,7 @@ public class StatisticController extends HttpServlet {
 //            System.out.println("Booking count: " + countBooking);
             request.setAttribute("ORDER_COUNT", countOrder);
         } else {
-            request.setAttribute("ORDER_COUNT",0);
+            request.setAttribute("ORDER_COUNT", 0);
         }
 
         /**
@@ -84,7 +84,34 @@ public class StatisticController extends HttpServlet {
             request.setAttribute("REVENUE_COUNT", 0);
         }
         
+        // tính tiền từ available tour
+        double avRevenue = daoorder.revenueFromAvailableTour(startDate, endDate);
+        if (avRevenue > 0) {
+//            System.out.println("Booking count: " + countBooking);
+            request.setAttribute("AVAILABLE_REVENUE", avRevenue);
+        } else {
+            request.setAttribute("AVAILABLE_REVENUE", 0);
+        }
         
+        
+        // tính tiền từ custom tour
+        double cuRevenue = daoorder.revenueFromCustomTour(startDate, endDate);
+        if (avRevenue > 0) {
+//            System.out.println("Booking count: " + countBooking);
+            request.setAttribute("CUSTOM_REVENUE", cuRevenue);
+        } else {
+            request.setAttribute("CUSTOM_REVENUE", 0);
+        }
+        
+        // tính tiền hoa hồng
+        double commission = daoorder.commission(startDate, endDate);
+        if (commission > 0) {
+//            System.out.println("Booking count: " + countBooking);
+            request.setAttribute("COMMISSION", commission);
+        } else {
+            request.setAttribute("COMMISSION", 0);
+        }
+
         request.getRequestDispatcher(url).forward(request, response);
     }
 

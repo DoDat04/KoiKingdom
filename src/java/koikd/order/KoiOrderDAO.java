@@ -869,6 +869,170 @@ public class KoiOrderDAO implements Serializable {
         return revenueCount;
     }
     
+    public double revenueFromAvailableTour(String startDate, String endDate) {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        double revenueCount = 0;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql;
+                if (startDate != null && endDate != null) {
+                    sql = "SELECT \n"
+                            + "    (COALESCE((SELECT SUM(tbd.TotalPrice)\n"
+                            + "     FROM TOURBOOKINGDETAIL tbd\n"
+                            + "     INNER JOIN BOOKING b ON tbd.bookingID = b.BookingID\n"
+                            + "     WHERE b.TourType = 'Available' AND CAST(b.BookingDate AS DATE) BETWEEN ? AND ?), 0)) ";
+                    pst = conn.prepareStatement(sql);
+                    pst.setString(1, startDate);
+                    pst.setString(2, endDate);
+                } else {
+                    sql = "SELECT \n"
+                            + "    (COALESCE((SELECT SUM(tbd.TotalPrice)\n"
+                            + "     FROM TOURBOOKINGDETAIL tbd\n"
+                            + "     INNER JOIN BOOKING b ON tbd.bookingID = b.BookingID\n"
+                            + "     WHERE b.TourType = 'Available'), 0)) ";
+                    pst = conn.prepareStatement(sql);
+                }
+
+                rs = pst.executeQuery();
+
+                if (rs.next()) {
+                    revenueCount = rs.getDouble(1); // ta phải lấy ở cột đầu tiên của result set mặc dù nó chỉ có đúng 1 cột
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return revenueCount;
+    }
+    
+    public double revenueFromCustomTour(String startDate, String endDate) {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        double revenueCount = 0;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql;
+                if (startDate != null && endDate != null) {
+                    sql = "SELECT \n"
+                            + "    (COALESCE((SELECT SUM(tbd.TotalPrice)\n"
+                            + "     FROM TOURBOOKINGDETAIL tbd\n"
+                            + "     INNER JOIN BOOKING b ON tbd.bookingID = b.BookingID\n"
+                            + "     WHERE b.TourType = 'Custom' AND CAST(b.BookingDate AS DATE) BETWEEN ? AND ?), 0)) ";
+                    pst = conn.prepareStatement(sql);
+                    pst.setString(1, startDate);
+                    pst.setString(2, endDate);
+                } else {
+                    sql = "SELECT \n"
+                            + "    (COALESCE((SELECT SUM(tbd.TotalPrice)\n"
+                            + "     FROM TOURBOOKINGDETAIL tbd\n"
+                            + "     INNER JOIN BOOKING b ON tbd.bookingID = b.BookingID\n"
+                            + "     WHERE b.TourType = 'Custom'), 0)) ";
+                    pst = conn.prepareStatement(sql);
+                }
+
+                rs = pst.executeQuery();
+
+                if (rs.next()) {
+                    revenueCount = rs.getDouble(1); // ta phải lấy ở cột đầu tiên của result set mặc dù nó chỉ có đúng 1 cột
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return revenueCount;
+    }
+    
+    public double commission(String startDate, String endDate) {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        double revenueCount = 0;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql;
+                if (startDate != null && endDate != null) {
+                    sql = "SELECT \n"
+                            
+                            + "    (COALESCE((SELECT SUM(k.TotalPrice * 0.10) \n"
+                            + "     FROM KOIORDERDETAIL k \n"
+                            + "     INNER JOIN KOIORDER ko ON k.KoiOrderID = ko.KoiOrderID \n"
+                            + "     WHERE CAST(ko.DeliveryDate AS DATE) BETWEEN ? AND ?), 0))";
+                    pst = conn.prepareStatement(sql);
+                    pst.setString(1, startDate);
+                    pst.setString(2, endDate);
+                    
+                } else {
+                    sql = "SELECT \n"
+                           
+                            + "    (COALESCE((SELECT SUM(k.TotalPrice * 0.10) \n"
+                            + "     FROM KOIORDERDETAIL k \n"
+                            + "     INNER JOIN KOIORDER ko ON k.KoiOrderID = ko.KoiOrderID), 0))";
+                    pst = conn.prepareStatement(sql);
+                }
+
+                rs = pst.executeQuery();
+
+                if (rs.next()) {
+                    revenueCount = rs.getDouble(1); // ta phải lấy ở cột đầu tiên của result set mặc dù nó chỉ có đúng 1 cột
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return revenueCount;
+    }
+    
     public List<KoiDTO> getKoiList() throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;

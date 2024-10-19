@@ -6,6 +6,94 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!-- chart -->
+<%@ page import="java.util.*" %>
+<%@ page import="com.google.gson.Gson"%>
+<%@ page import="com.google.gson.JsonObject"%>
+
+<%
+    // pie chart 
+    Gson piegsonObj = new Gson();
+    List<Map<Object, Object>> pielist = new ArrayList<>();
+
+// Lấy giá trị từ request và kiểm tra kiểu dữ liệu
+    Object availableRevenueObj = request.getAttribute("AVAILABLE_REVENUE");
+    double avRevenue = 0.0; // Khởi tạo với giá trị mặc định
+
+    Object customRevenueObj = request.getAttribute("CUSTOM_REVENUE");
+    double cuRevenue = 0.0; // Khởi tạo với giá trị mặc định
+
+    Object commissionObj = request.getAttribute("COMMISSION");
+    double commission = 0.0; // Khởi tạo với giá trị mặc định
+
+    if (availableRevenueObj instanceof Integer) {
+        avRevenue = ((Integer) availableRevenueObj).doubleValue(); // Chuyển đổi Integer sang double
+    } else if (availableRevenueObj instanceof Double) {
+        avRevenue = (Double) availableRevenueObj; // Chỉ cần cast nếu là Double
+    }
+
+    if (customRevenueObj instanceof Integer) {
+        cuRevenue = ((Integer) customRevenueObj).doubleValue(); // Chuyển đổi Integer sang double
+    } else if (customRevenueObj instanceof Double) {
+        cuRevenue = (Double) customRevenueObj; // Chỉ cần cast nếu là Double
+    }
+
+    if (commissionObj instanceof Integer) {
+        commission = ((Integer) commissionObj).doubleValue(); // Chuyển đổi Integer sang double
+    } else if (commissionObj instanceof Double) {
+        commission = (Double) commissionObj; // Chỉ cần cast nếu là Double
+    }
+
+    // Tính tổng doanh thu
+    double totalRevenue = avRevenue + cuRevenue + commission;
+
+    // Tính phần trăm cho mỗi thành phần
+    double avPercentage = (avRevenue / totalRevenue) * 100;
+    double cuPercentage = (cuRevenue / totalRevenue) * 100;
+    double commissionPercentage = (commission / totalRevenue) * 100;
+
+    // Tạo đối tượng cho "Available Tours"
+    Map<Object, Object> piemap = new HashMap<>();
+    piemap.put("label", "Available Tours");
+    piemap.put("y", avRevenue);
+    piemap.put("indexLabel", String.format("%.2f%%", avPercentage)); // Phần trăm
+    pielist.add(piemap);
+
+    // Tạo đối tượng cho "Custom Tours"
+    piemap = new HashMap<>();
+    piemap.put("label", "Custom Tours");
+    piemap.put("y", cuRevenue);
+    piemap.put("indexLabel", String.format("%.2f%%", cuPercentage)); // Phần trăm
+    pielist.add(piemap);
+
+    // Tạo đối tượng cho "Koi Fish Commission"
+    piemap = new HashMap<>();
+    piemap.put("label", "Koi Fish Commission");
+    piemap.put("y", commission);
+    piemap.put("indexLabel", String.format("%.2f%%", commissionPercentage)); // Phần trăm
+    pielist.add(piemap);
+
+// Chuyển đổi danh sách thành JSON
+    String piedataPoints = piegsonObj.toJson(pielist);
+
+    // collumn chart 
+    Gson colgsonObj = new Gson();
+    Map<Object, Object> colmap = null;
+    List<Map<Object, Object>> collist = new ArrayList<Map<Object, Object>>();
+
+    colmap = new HashMap<Object, Object>();
+    colmap.put("label", "Available Tour");
+    colmap.put("y", 8);
+    collist.add(colmap);
+
+    colmap = new HashMap<Object, Object>();
+    colmap.put("label", "Custom Tour");
+    colmap.put("y", 8);
+    collist.add(colmap);
+
+    String coldataPoints = colgsonObj.toJson(collist);
+
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -18,6 +106,52 @@
         <link href="css/homeForDelivery.css" rel="stylesheet">
         <title>Manager Dashboard</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
+        <!-- chart -->
+        <script type="text/javascript">
+            window.onload = function () {
+                var pieChart = new CanvasJS.Chart("pieChartContainer", {
+                    animationEnabled: true,
+                    title: {
+                        text: "Revenue Breakdown"
+                    },
+                    legend: {
+                        verticalAlign: "center",
+                        horizontalAlign: "right"
+                    },
+                    data: [{
+                            type: "pie",
+                            showInLegend: true,
+                            indexLabel: "{indexLabel}", // Sử dụng phần trăm từ indexLabel
+                            indexLabelPlacement: "inside",
+                            legendText: "{label}: {y}$",
+                            toolTipContent: "<b>{label}</b>: {y}$",
+                            dataPoints: <%out.print(piedataPoints);%>
+                        }]
+                });
+                pieChart.render();
+
+                var colChart = new CanvasJS.Chart("colChartContainer", {
+                    title: {
+                        text: "Tour"
+                    },
+                    axisX: {
+                        title: "Type of tour"
+                    },
+                    axisY: {
+                        title: "Imports (in billion USD)",
+                        includeZero: true
+                    },
+                    data: [{
+                            type: "column",
+                            yValueFormatString: "$#,##0.0# billion",
+                            dataPoints: <%out.print(coldataPoints);%>
+                        }]
+                });
+                colChart.render();
+
+
+            }
+        </script>
     </head>
     <style>
         .colorlib-product {
@@ -159,9 +293,12 @@
 
                 </c:when>
             </c:choose>
-
-
+            <div id="pieChartContainer" style="height: 370px; width: 100%;"></div>
+            <div id="colChartContainer" style="height: 370px; width: 100%;"></div>
+            <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
         </div>
+
+
     </body>
 
 </html>
