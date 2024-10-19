@@ -108,7 +108,7 @@
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
         <!-- chart -->
         <script type="text/javascript">
-            window.onload = function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 var pieChart = new CanvasJS.Chart("pieChartContainer", {
                     animationEnabled: true,
                     title: {
@@ -150,7 +150,7 @@
                 colChart.render();
 
 
-            }
+});
         </script>
     </head>
     <style>
