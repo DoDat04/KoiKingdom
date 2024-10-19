@@ -127,7 +127,7 @@
                         </select>
                     </div>
                 </div>
-                <script src="js/viewOrder.js"></script>
+<!--                <script src="js/viewOrder.js"></script>-->
 
                 <c:choose>
                     <c:when test="${not empty selectedTour}">

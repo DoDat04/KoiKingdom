@@ -263,34 +263,22 @@
 
         <c:if test="${not empty success}">
             <script>
-                window.onload = function () {
+                document.addEventListener('DOMContentLoaded', function () {
                     showToast('${success}', 'success');
-                };
-
+                });
                 <% session.removeAttribute("CHANGE_PASS_SUCCESS"); %>
-
-
             </script>
         </c:if>
 
         <c:if test="${not empty error}">
             <script>
-                window.onload = function () {
+                document.addEventListener('DOMContentLoaded', function () {
                     showToast('${error}', 'error');
-                };
+                });
                 <% session.removeAttribute("CHANGE_PASS_ERROR");%>
             </script>
         </c:if>
 
-        <c:set var="logoutSuccess" value="${requestScope.notiSuccess}"/>
-
-        <c:if test="${not empty logoutSuccess}">
-            <script>
-                window.onload = function () {
-                    showToast('${logoutSuccess}', 'success');
-                };
-            </script>
-        </c:if>
         <div id="toastBox"></div>
 
         <!-- Swiper JS -->

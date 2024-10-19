@@ -95,14 +95,14 @@
         <!-- Display success or error message -->
         <c:if test="${not empty successMessage}">
             <script>
-                window.onload = function () {
+                document.addEventListener('DOMContentLoaded', function () {
                     showToast('${successMessage}', 'success');
                 };
             </script>
         </c:if>
         <c:if test="${not empty errorMessage}">
             <script>
-                window.onload = function () {
+                document.addEventListener('DOMContentLoaded', function () {
                     showToast('${errorMessage}', 'error');
                 };
             </script>

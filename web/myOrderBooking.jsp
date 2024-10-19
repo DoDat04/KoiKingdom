@@ -336,10 +336,6 @@
                 </script>
             </c:if>
 
-            <c:if test="${empty requestScope.orders}">
-                <p class="alert alert-success">${Error}</p>
-            </c:if>
-
             <div id="toastBox"></div>
             <script src="js/showToast.js"></script> 
             <c:if test="${empty requestScope.orders}">

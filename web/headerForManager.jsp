@@ -140,7 +140,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <script src="js/address.js"></script>
+                            <script src="js/addressSelect.js"></script>
                             <label for="role">Vai trò:</label>
                             <input type="text" id="role" name="role" readonly value="${sessionScope.LOGIN_MANAGER.role}">
 
