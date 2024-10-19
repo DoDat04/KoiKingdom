@@ -23,7 +23,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <link href="css/toast.css" rel="stylesheet">   
-        <<link rel="stylesheet" href="css/myDetailCustomTour.css"/>>
+        <link rel="stylesheet" href="css/myDetailCustomTour.css"/>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
     </head>
     <style>
@@ -31,6 +31,18 @@
     </style>
     <body>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
+        <c:choose>
+            <c:when test="${sessionScope.LOGIN_USER != null}">
+                <div class="text-end my-4 backToTour">
+                    <a href="my-custom-tour?customerID=${sessionScope.LOGIN_USER.customerID}" class="btn btn-link">&lt; Back to Custom Tour List</a>
+                </div>
+            </c:when>
+            <c:otherwise>  
+                <div class="text-end my-4 backToTour">
+                    <a href="my-custom-tour?customerID=${sessionScope.custID}" class="btn btn-link">&lt; Back to Custom Tour List</a>
+                </div>
+            </c:otherwise>
+        </c:choose>
         <c:if test="${not empty requestScope.customerTourDetail}">
             <div class="container mt-5">
                 <div class="row">
