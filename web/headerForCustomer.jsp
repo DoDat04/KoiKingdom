@@ -227,7 +227,8 @@
                                             <div class="text-center">
                                                 <button type="submit" class="btn btn-primary" name="action">Update</button>
                                             </div>
-                                            <script src="js/address.js" defer></script>
+                                            <script src="js/address.js"></script>
+                                            <script src="js/addressSelect.js" defer></script>
                                         </form>
                                     </div>
                                 </div>
