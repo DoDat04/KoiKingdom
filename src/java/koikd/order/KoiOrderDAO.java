@@ -15,6 +15,8 @@ import java.util.List;
 import koikd.customer.CustomerDTO;
 import koikd.farm.FarmDTO;
 import koikd.koi.KoiDTO;
+import koikd.koitype.KoiTypeDAO;
+import koikd.koitype.KoiTypeDTO;
 import koikd.utils.DBUtils;
 
 /**
@@ -743,20 +745,20 @@ public class KoiOrderDAO implements Serializable {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally{
-            if(rs!=null){
+        } finally {
+            if (rs != null) {
                 rs.close();
             }
-            if(pst!=null){
+            if (pst != null) {
                 pst.close();
             }
-            if(conn!=null){
+            if (conn != null) {
                 conn.close();
             }
         }
         return list;
     }
-    
+
     public int countKoiOrder(String startDate, String endDate) {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -777,7 +779,7 @@ public class KoiOrderDAO implements Serializable {
                     sql = "SELECT COUNT([KoiOrderID]) FROM [dbo].[KOIORDER]";
                     pst = conn.prepareStatement(sql);
                 }
-                
+
                 rs = pst.executeQuery();
 
                 if (rs.next()) {
@@ -803,7 +805,7 @@ public class KoiOrderDAO implements Serializable {
         }
         return orderCount;
     }
-    
+
     public double countRevenue(String startDate, String endDate) {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -815,34 +817,33 @@ public class KoiOrderDAO implements Serializable {
             if (conn != null) {
                 String sql;
                 if (startDate != null && endDate != null) {
-                    sql = "SELECT \n" +
-"    (COALESCE((SELECT SUM(tbd.TotalPrice)\n" +
-"     FROM TOURBOOKINGDETAIL tbd\n" +
-"     INNER JOIN BOOKING b ON tbd.bookingID = b.BookingID\n" +
-"     WHERE CAST(b.BookingDate AS DATE) BETWEEN ? AND ?), 0)) \n" +
-"    + \n" +
-"    (COALESCE((SELECT SUM(k.TotalPrice * 0.10) \n" +
-"     FROM KOIORDERDETAIL k \n" +
-"     INNER JOIN KOIORDER ko ON k.KoiOrderID = ko.KoiOrderID \n" +
-"     WHERE CAST(ko.DeliveryDate AS DATE) BETWEEN ? AND ?), 0))";
+                    sql = "SELECT \n"
+                            + "    (COALESCE((SELECT SUM(tbd.TotalPrice)\n"
+                            + "     FROM TOURBOOKINGDETAIL tbd\n"
+                            + "     INNER JOIN BOOKING b ON tbd.bookingID = b.BookingID\n"
+                            + "     WHERE CAST(b.BookingDate AS DATE) BETWEEN ? AND ?), 0)) \n"
+                            + "    + \n"
+                            + "    (COALESCE((SELECT SUM(k.TotalPrice * 0.10) \n"
+                            + "     FROM KOIORDERDETAIL k \n"
+                            + "     INNER JOIN KOIORDER ko ON k.KoiOrderID = ko.KoiOrderID \n"
+                            + "     WHERE CAST(ko.DeliveryDate AS DATE) BETWEEN ? AND ?), 0))";
                     pst = conn.prepareStatement(sql);
                     pst.setString(1, startDate);
                     pst.setString(2, endDate);
                     pst.setString(3, startDate);
                     pst.setString(4, endDate);
                 } else {
-                    sql = "SELECT \n" +
-"    (COALESCE((SELECT SUM(tbd.TotalPrice)\n" +
-"     FROM TOURBOOKINGDETAIL tbd\n" +
-"     INNER JOIN BOOKING b ON tbd.bookingID = b.BookingID), 0)) \n" +
-"    + \n" +
-"    (COALESCE((SELECT SUM(k.TotalPrice * 0.10) \n" +
-"     FROM KOIORDERDETAIL k \n" +
-"     INNER JOIN KOIORDER ko ON k.KoiOrderID = ko.KoiOrderID), 0))";
+                    sql = "SELECT \n"
+                            + "    (COALESCE((SELECT SUM(tbd.TotalPrice)\n"
+                            + "     FROM TOURBOOKINGDETAIL tbd\n"
+                            + "     INNER JOIN BOOKING b ON tbd.bookingID = b.BookingID), 0)) \n"
+                            + "    + \n"
+                            + "    (COALESCE((SELECT SUM(k.TotalPrice * 0.10) \n"
+                            + "     FROM KOIORDERDETAIL k \n"
+                            + "     INNER JOIN KOIORDER ko ON k.KoiOrderID = ko.KoiOrderID), 0))";
                     pst = conn.prepareStatement(sql);
                 }
-             
-                
+
                 rs = pst.executeQuery();
 
                 if (rs.next()) {
@@ -868,7 +869,7 @@ public class KoiOrderDAO implements Serializable {
         }
         return revenueCount;
     }
-    
+
     public double revenueFromAvailableTour(String startDate, String endDate) {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -922,7 +923,7 @@ public class KoiOrderDAO implements Serializable {
         }
         return revenueCount;
     }
-    
+
     public double revenueFromCustomTour(String startDate, String endDate) {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -976,7 +977,7 @@ public class KoiOrderDAO implements Serializable {
         }
         return revenueCount;
     }
-    
+
     public double commission(String startDate, String endDate) {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -989,7 +990,6 @@ public class KoiOrderDAO implements Serializable {
                 String sql;
                 if (startDate != null && endDate != null) {
                     sql = "SELECT \n"
-                            
                             + "    (COALESCE((SELECT SUM(k.TotalPrice * 0.10) \n"
                             + "     FROM KOIORDERDETAIL k \n"
                             + "     INNER JOIN KOIORDER ko ON k.KoiOrderID = ko.KoiOrderID \n"
@@ -997,10 +997,9 @@ public class KoiOrderDAO implements Serializable {
                     pst = conn.prepareStatement(sql);
                     pst.setString(1, startDate);
                     pst.setString(2, endDate);
-                    
+
                 } else {
                     sql = "SELECT \n"
-                           
                             + "    (COALESCE((SELECT SUM(k.TotalPrice * 0.10) \n"
                             + "     FROM KOIORDERDETAIL k \n"
                             + "     INNER JOIN KOIORDER ko ON k.KoiOrderID = ko.KoiOrderID), 0))";
@@ -1032,7 +1031,7 @@ public class KoiOrderDAO implements Serializable {
         }
         return revenueCount;
     }
-    
+
     public List<KoiDTO> getKoiList() throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -1073,7 +1072,7 @@ public class KoiOrderDAO implements Serializable {
         }
         return koiList;
     }
-    
+
     public double getKoiUnitPrice(int koiID) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -1114,4 +1113,81 @@ public class KoiOrderDAO implements Serializable {
 //            }
 //        }
 //    }
+    /**
+     * Filter Koi Order List
+     * @param customerID
+     * @param dateDelivery
+     * @return
+     * @throws ClassNotFoundException
+     * @throws SQLException 
+     */
+    public ArrayList<KoiOrderDTO> filterKoiOrderList(int customerID, String dateDelivery) throws ClassNotFoundException, SQLException {
+        ArrayList<KoiOrderDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                // Basic SQL query without date filter
+                String sql = "SELECT \n"
+                        + "    O.KoiOrderID, \n"
+                        + "    C.CustomerID, \n"
+                        + "    O.DeliveryDate, \n"
+                        + "    O.Status, \n"
+                        + "    O.EstimatedDelivery \n"
+                        + "FROM \n"
+                        + "    [dbo].[KOIORDER] O\n"
+                        + "INNER JOIN \n"
+                        + "    [dbo].[CUSTOMER] C ON O.CustomerID = C.CustomerID\n"
+                        + "WHERE O.CustomerID = ? ";
+
+                // Append date filter only if dateDelivery is provided
+                if (dateDelivery != null && !dateDelivery.isEmpty()) {
+                    sql += " AND O.DeliveryDate = ? ";
+                }
+
+                sql += "ORDER BY O.DeliveryDate";
+
+                // Prepare the statement
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, customerID);
+
+                // Set the dateDelivery parameter only if it is provided
+                if (dateDelivery != null && !dateDelivery.isEmpty()) {
+                    pst.setString(2, dateDelivery); // Set the second parameter for date
+                }
+
+                // Execute the query
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    int KoiOrderID = rs.getInt("KoiOrderID");
+                    int customerId = rs.getInt("CustomerID");
+                    Date deliveryDate = rs.getDate("DeliveryDate");
+                    boolean status = rs.getBoolean("Status");
+                    Date estimatedDelivery = rs.getDate("EstimatedDelivery");
+
+                    // Create DTO and add to the list
+                    KoiOrderDTO order = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery);
+                    list.add(order);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+
 }

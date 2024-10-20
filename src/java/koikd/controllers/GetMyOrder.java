@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import koikd.customer.CustomerDTO;
@@ -43,60 +44,70 @@ public class GetMyOrder extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String url = MYORDERPAGE;
-        try (PrintWriter out = response.getWriter()) {
-            String customerID = request.getParameter("customerID");
-            if (customerID != null) {
+   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    response.setContentType("text/html;charset=UTF-8");
+    String url = MYORDERPAGE;
+    
+    try (PrintWriter out = response.getWriter()) {
+        String customerIDStr = request.getParameter("customerID");
+        String dateDelivery = request.getParameter("dateDelivery");
+        
+        System.out.println(dateDelivery);
+        
+        if (customerIDStr != null || dateDelivery != null) {
+            int customerID = 0;
+            try {
+                if (customerIDStr != null && !customerIDStr.isEmpty()) {
+                    customerID = Integer.parseInt(customerIDStr);
+                }
+            } catch (NumberFormatException e) {
+                request.setAttribute("Error", "Invalid customer ID format.");
+                request.getRequestDispatcher(url).forward(request, response);
+                return;
+            }
 
-                KoiOrderDAO dao = new KoiOrderDAO();
-                CustomerDTO customer = new CustomerDTO();
-                FarmDTO farm = new FarmDTO();
-                KoiDTO koiFish = new KoiDTO();
-                KoiTypeDTO koiType = new KoiTypeDTO();
+            KoiOrderDAO dao = new KoiOrderDAO();
+            KoiTypeDAO koiTypeDao = new KoiTypeDAO();
 
-                KoiTypeDAO koiTypeDao = new KoiTypeDAO();
+            ArrayList<KoiOrderDTO> koiOrderList = dao.filterKoiOrderList(customerID, dateDelivery);
+            ArrayList<FarmDTO> farmCollection = new ArrayList<>();
+            ArrayList<KoiDTO> koiFishCollection = new ArrayList<>();
+            ArrayList<KoiOrderDetailDTO> koiOrderDetailCollection = new ArrayList<>();
+            ArrayList<KoiOrderDTO> koiOrderListByOrderList = new ArrayList<>();
+            ArrayList<KoiTypeDTO> koiTypeListByOrderList = new ArrayList<>();
+            
+            if (koiOrderList != null && !koiOrderList.isEmpty()) {
+                CustomerDTO customer = dao.getCustomerByCustomerID(customerID);
+                
+                for (KoiOrderDTO koiOrder : koiOrderList) {
+                    ArrayList<KoiOrderDetailDTO> koiOrderDetailList = dao.getKoiOrderDetaiListById(koiOrder.getKoiOrderID());
 
-                ArrayList<KoiOrderDTO> koiOrderList = dao.getKoiOrderListByID(Integer.parseInt(customerID));
-                ArrayList<FarmDTO> farmCollection = new ArrayList<>();
-                ArrayList<KoiDTO> koiFishCollection = new ArrayList<>();
-                ArrayList<KoiOrderDetailDTO> koiOrderDetailCollection = new ArrayList<>();
-                ArrayList<KoiOrderDTO> koiOrderListByOrderList = new ArrayList<>();
-                ArrayList<KoiTypeDTO> koiTypeListByOrderList = new ArrayList<>();
-                if (koiOrderList != null && !koiOrderList.isEmpty()) {
-
-                    for (KoiOrderDTO koiOrder : koiOrderList) {
-                        koiOrderListByOrderList = dao.getKoiOrderListByOrderID(koiOrder.getKoiOrderID());
-
-                        ArrayList<KoiOrderDetailDTO> koiOrderDetailList = dao.getKoiOrderDetaiListById(koiOrder.getKoiOrderID());
-                        if (!koiOrderDetailList.isEmpty()) {
-
-                            for (KoiOrderDetailDTO koiOrderDetailItem : koiOrderDetailList) {
-
-                                farm = dao.getFarmByFarmID(koiOrderDetailItem.getFarmID());
-                                farmCollection.add(farm);
-                                koiFish = dao.getKoiFishByKoiID(koiOrderDetailItem.getKoiID());
-                                koiFishCollection.add(koiFish);
-                                koiOrderDetailCollection.add(koiOrderDetailItem);
-                            }
-
-                        } else {
-                            request.setAttribute("Error", "Some orders do not have details");
+                    if (koiOrderDetailList != null && !koiOrderDetailList.isEmpty()) {
+                        for (KoiOrderDetailDTO koiOrderDetailItem : koiOrderDetailList) {
+                            FarmDTO farm = dao.getFarmByFarmID(koiOrderDetailItem.getFarmID());
+                            farmCollection.add(farm);
+                            
+                            KoiDTO koiFish = dao.getKoiFishByKoiID(koiOrderDetailItem.getKoiID());
+                            koiFishCollection.add(koiFish);
+                            
+                            koiOrderDetailCollection.add(koiOrderDetailItem);
                         }
-                        customer = dao.getCustomerByCustomerID(koiOrder.getCustomerID());
+                    } else {
+                        request.setAttribute("Error", "Some orders do not have details.");
+                        break;
                     }
-                    for (KoiDTO koiList : koiFishCollection) {
-                        koiType = koiTypeDao.getKoiType(koiList.getKoiTypeID());
-                        koiTypeListByOrderList.add(koiType);
-                    }
-                } else {
-                    request.setAttribute("Error", "No orders found.");
                 }
 
+                // Retrieve Koi Types for each Koi in the collection
+                for (KoiDTO koiFish : koiFishCollection) {
+                    KoiTypeDTO koiType = koiTypeDao.getKoiType(koiFish.getKoiTypeID());
+                    koiTypeListByOrderList.add(koiType);
+                }
+                
+                // Set attributes for JSP
                 request.setAttribute("koiType", koiTypeListByOrderList);
-                request.setAttribute("koiOrderListByOrderList", koiOrderListByOrderList);
+                request.setAttribute("koiOrderListByOrderList", koiOrderList);
                 request.setAttribute("koiOrderDetails", koiOrderDetailCollection);
                 request.setAttribute("koiNames", koiFishCollection);
                 request.setAttribute("customerNames", customer);
@@ -104,17 +115,22 @@ public class GetMyOrder extends HttpServlet {
                 request.setAttribute("myOrder", koiOrderList);
 
             } else {
-                request.setAttribute("Error", "User is not logged in.");
+                request.setAttribute("Error", "No orders found.");
             }
 
-            request.getRequestDispatcher(url).forward(request, response);
-
-        } catch (SQLException ex) {
-            Logger.getLogger(GetMyOrder.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(GetMyOrder.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            request.setAttribute("Error", "User is not logged in or missing parameters.");
         }
+
+        request.getRequestDispatcher(url).forward(request, response);
+
+    } catch (SQLException | ClassNotFoundException ex) {
+        Logger.getLogger(GetMyOrder.class.getName()).log(Level.SEVERE, null, ex);
+        request.setAttribute("Error", "An error occurred while processing the request.");
+        request.getRequestDispatcher(url).forward(request, response);
     }
+}
+
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 
     /**

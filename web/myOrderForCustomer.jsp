@@ -26,6 +26,28 @@
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
 
         <div>
+            <form method="GET" action="MyOrder" class="mb-5" style="
+    position: relative;
+    right: 16%;
+    top: 3%;">
+                <div class="row justify-content-end">
+                    <div class="col-md-3">
+                        <label for="startDateFilter" class="form-label">Date Delivery</label>
+                        <input type="date" id="startDateFilter" name="dateDelivery" class="form-control" placeholder="dd/mm/yyyy" 
+                               value="${param.dateDelivery}" aria-label="Start Date" onchange="this.form.submit()">
+                        <c:choose>
+                            <c:when test="${sessionScope.LOGIN_USER != null}">
+                                <input type="hidden" name="customerID" value="${sessionScope.LOGIN_USER.customerID}">
+                            </c:when>
+                            <c:otherwise>
+                                <input type="hidden" name="customerID" value="${sessionScope.custID}">
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
+            </form>
+
+
             <!-- Kiểm tra nếu có dữ liệu đơn hàng koi -->
             <c:if test="${not empty requestScope.koiOrderDetails}">
                 <!-- Biến để lưu trữ ngày giao hàng trước đó -->

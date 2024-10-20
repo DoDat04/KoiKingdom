@@ -134,7 +134,7 @@
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
                                         <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
                                         <li>
-                                            <a class="dropdown-item" href="MyOrder?customerID=${sessionScope.custID}">
+                                            <a class="dropdown-item" href="MyOrder?customerID=${sessionScope.custID}&&dateDelivery=">
                                                 <i class="fa fa-history"></i> My Order KOI
                                             </a>
                                         </li>
