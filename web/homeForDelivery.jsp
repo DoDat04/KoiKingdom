@@ -68,13 +68,44 @@
             <jsp:useBean id="a" class="koikd.order.KoiOrderDAO" scope="request"></jsp:useBean>
                 <nav class="navbar fixed-bottom justify-content-center">
                     <ul class="pagination pagination-lg">
-                    <c:forEach begin="1" end="${numberOfPages}" var="i">
-                        <li class="page-item ${pageIndex == i ? 'active' : ''}">
-                            <a class="page-link" href="GetKoiOrder?index=${i}&txtNameCustomer=${param.txtNameCustomer}">${i}</a>
-                        </li>
-                    </c:forEach>
+                    <c:choose>
+                        <c:when test="${numberOfPages <= 5}">
+                            <c:forEach begin="1" end="${numberOfPages}" var="i">
+                                <li class="page-item ${pageIndex == i ? 'active' : ''}">
+                                    <a class="page-link" href="GetKoiOrder?index=${i}&txtNameCustomer=${param.txtNameCustomer}">${i}</a>
+                                </li>
+                            </c:forEach>
+                        </c:when>
+
+                        <c:otherwise>
+                            <!-- JSP comment: Hiển thị dấu ... nếu trang hiện tại lớn hơn 3 -->
+                            <c:if test="${pageIndex > 3}">
+                                <li class="page-item">
+                                    <a class="page-link" href="GetKoiOrder?index=1&txtNameCustomer=${param.txtNameCustomer}">1</a>
+                                </li>
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                </c:if>
+
+                            <!-- JSP comment: Hiển thị 3 trang trước và 2 trang sau trang hiện tại -->
+                            <c:forEach begin="${pageIndex > 2 ? pageIndex - 2 : 1}" 
+                                       end="${pageIndex + 2 <= numberOfPages ? pageIndex + 2 : numberOfPages}" var="i">
+                                <li class="page-item ${pageIndex == i ? 'active' : ''}">
+                                    <a class="page-link" href="GetKoiOrder?index=${i}&txtNameCustomer=${param.txtNameCustomer}">${i}</a>
+                                </li>
+                            </c:forEach>
+
+                            <!-- JSP comment: Hiển thị dấu ... nếu trang hiện tại không gần cuối -->
+                            <c:if test="${pageIndex < numberOfPages - 2}">
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="GetKoiOrder?index=${numberOfPages}&txtNameCustomer=${param.txtNameCustomer}">${numberOfPages}</a>
+                                </li>
+                            </c:if>
+                        </c:otherwise>
+                    </c:choose>
                 </ul>
             </nav>
+
 
         </div>
 
