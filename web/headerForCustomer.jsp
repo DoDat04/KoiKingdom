@@ -112,11 +112,11 @@
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">      
                                 <c:choose>
                                     <c:when test="${sessionScope.LOGIN_USER == null and sessionScope.LOGIN_GMAIL == null}">
-                                        <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
+                                        <li><a class="dropdown-item" href="faq"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
                                         <li><a class="dropdown-item" href="login"><i class="adm_icon fas fa-sign-in-alt"></i> Sign in</a></li>
                                         </c:when>
                                         <c:when test="${sessionScope.LOGIN_USER != null}">
-                                        <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
+                                        <li><a class="dropdown-item" href="faq"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal"><i class="fa-solid fa-key"></i> Change Password</a></li>
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
                                         <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
