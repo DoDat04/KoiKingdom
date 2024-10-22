@@ -20,6 +20,9 @@
         <link rel="stylesheet" href="css/contact.css">
         <script src="js/load.js"></script>
         <link rel="stylesheet" href="css/style.css">
+        <!-- AOS -->
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     </head>
     <style>
         .banner-container {
@@ -107,18 +110,24 @@
 
         <div class="contact-container">
             <h1>Contact Koi Kingdom</h1>
-            <div class="contact-card">
+            <div class="contact-card" data-aos="fade-right"
+                 data-aos-offset="300"
+                 data-aos-easing="ease-in-sine">
                 <div class="card">
                     <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
                     <h3>ADDRESS</h3>
                     <p>Lot E2a-7, Street D1 High-Tech Park, Long Thanh My Ward, Thu Duc, City. Ho Chi Minh.</p>
                 </div>
-                <div class="card">
+                <div class="card" data-aos="fade-right"
+                     data-aos-offset="300"
+                     data-aos-easing="ease-in-sine">
                     <i class="fa fa-clock" aria-hidden="true"></i>
                     <h3>WORKING TIME</h3>
                     <p>Monday - Saturday: 8 a.m - 6 p.m<br>Sunday: 8 a.m - 5 p.m</p>
                 </div>
-                <div class="card">
+                <div class="card" data-aos="fade-right"
+                     data-aos-offset="300"
+                     data-aos-easing="ease-in-sine">
                     <i class="fa fa-phone" aria-hidden="true"></i>
                     <h3>HOTLINE</h3>
                     <p>Service 24/7: 0931 339 228<br>Contact us directly when you need.</p>
@@ -144,5 +153,8 @@
         <script src="js/tourList.js"></script>
 
         <jsp:include page="footer.jsp" flush="true"/>
+        <script>
+            AOS.init();
+        </script>
     </body>
 </html>

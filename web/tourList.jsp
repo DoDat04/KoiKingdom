@@ -21,6 +21,9 @@
         <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/tourList.css">         
+        <!-- AOS -->
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     </head>   
     <body>
         <div class="colorlib-loader"></div>
@@ -110,7 +113,8 @@
                 </c:if>
                 <c:forEach var="tour" items="${tourList}">
                     <div class="col-md-4 mb-4">
-                        <div class="card h-100 position-relative">
+                        <div class="card h-100 position-relative" data-aos="fade-up"
+                             data-aos-duration="3000">
                             <!-- Form trang chi tiết tour -->
                             <form action="tour-detail" method="get">
                                 <input type="hidden" name="tourID" value="${tour.tourID}" />
@@ -180,7 +184,10 @@
         </button>
 
         <script src="js/backToTop.js"></script>    
-        <script src="js/tourList.js"></script>           
+        <script src="js/tourList.js"></script>     
+        <script>
+                                               AOS.init();
+        </script>
 
         <jsp:include page="footer.jsp" flush="true"/>
     </body>

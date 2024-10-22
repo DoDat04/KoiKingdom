@@ -11,6 +11,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>KoiType List</title>
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
@@ -43,7 +45,7 @@
             <div class="row">
                 <c:forEach var="koiType" items="${sessionScope.LIST_KOITYPE}">
                     <div class="col-md-4">
-                        <div class="koi-type-card">
+                        <div class="koi-type-card" data-aos="zoom-in">
                             <h2 class="koi-text"><strong>${koiType.typeName}</strong></h2>
                             <img src="${koiType.koiImageURL}" alt="${koiType.typeName}" class="koi-image"/>
                             <!-- Button trigger modal -->
@@ -85,7 +87,9 @@
 
         <script src="js/backToTop.js"></script>    
         <script src="js/tourList.js"></script>
-        
+        <script>
+            AOS.init();
+        </script>
         <jsp:include page="footer.jsp" flush="true"/>
     </body>
 </html>

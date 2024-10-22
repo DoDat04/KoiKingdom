@@ -17,6 +17,9 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
         <link rel="stylesheet" href="css/style.css">
+        <!-- AOS CSS, JS-->
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     </head>
     <body>
         <div class="colorlib-loader"></div>
@@ -43,7 +46,7 @@
             <div class="row">
                 <c:forEach var="farm" items="${sessionScope.LIST_FARM}">
                     <div class="col-md-4 mb-4">
-                        <div class="card" style="width: 15rem;">
+                        <div class="card" data-aos="zoom-out-down" style="width: 15rem;">
                             <img src="${farm.image}" class="card-img-top koi-image" alt="${farm.farmName}">
                             <div class="card-body">
                                 <h5 class="card-title">${farm.farmName}</h5>
@@ -89,14 +92,16 @@
 
             </div>
         </div>
-        
+
         <!-- Back to Top Button -->
         <button id="backToTop" class="btn btn-primary" style="display: none;">
             <i class="fas fa-angle-up"></i>
         </button>
-
+        <script>
+            AOS.init();
+        </script>
         <script src="js/backToTop.js"></script>
-        
+
         <jsp:include page="footer.jsp" flush="true"/>
     </body>
 </html>

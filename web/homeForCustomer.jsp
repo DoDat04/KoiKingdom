@@ -18,8 +18,10 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <!-- Font Awesome for Icons -->
-
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <!-- AOS -->
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <link rel="stylesheet" href="css/home.css">
         <link rel="stylesheet" href="css/style.css">
         <link href="css/toast.css" rel="stylesheet">
@@ -232,16 +234,16 @@
 
             <!-- The reason why should you choose our Koi Kingdom -->
             <h1><strong class="welcome-text">Why should you choose our Koi Kingdom?</strong></h1>
-            <div class="row text-center align-items-center">
-                <div class="col-md-4">
+            <div class="row text-center align-items-center" >
+                <div class="col-md-4" data-aos="fade-up" data-aos-duration="3000">
                     <img class="mb-3" src="img/quality.png" alt="quality" height="100px" width="100px">
                     <p class="text-secondary"><strong>Quality Koi Selection:</strong> We offer carefully selected, high-quality Koi fish from top breeders in Japan.</p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4" data-aos="fade-up" data-aos-duration="3000">
                     <img class="mb-3" src="img/doctor-appointment.png" alt="appointment" height="100px" width="100px">
                     <p class="text-secondary"><strong>Expert Care:</strong> Our team has extensive experience in Koi care, ensuring the health and vitality of every fish.</p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4" data-aos="fade-up" data-aos-duration="3000">
                     <img class="mb-3" src="img/comprehension.png" alt="comperhension" width="100px" height="100px">
                     <p class="text-secondary"><strong>Comprehensive Services:</strong> From purchasing to shipping, we provide full support for a seamless Koi buying experience.</p>
                 </div>
@@ -303,6 +305,10 @@
                         clickable: true,
                     },
                 });
+        </script>
+        <!-- AOS -->
+        <script>
+            AOS.init();
         </script>
         <script src="js/showToast.js"></script>
 
