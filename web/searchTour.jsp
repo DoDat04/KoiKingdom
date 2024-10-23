@@ -151,13 +151,7 @@
     <body>
 
 
-        <!-- Menu điều hướng -->
-        <!--        <div class="navbar">
-                    <a href="home?action=Manager">Home</a>
-                    <a href="GetListCustomer">Customer</a>
-                    <a href="GetListEmployee">Employee</a>
-                    <a href="GetListTour">Tour</a>
-                </div>-->
+        
         <jsp:include page="headerForManager.jsp" flush="true">
             <jsp:param name="searchController" value="searchtour"/>
         </jsp:include>   
@@ -169,10 +163,25 @@
             <div class="container">
                 <h1>Tour Management</h1>
                 <table>
+                    <%-- Thông báo sau khi update status--%>
                     <c:if test="${not empty UPDATE_STATUS}">
-                        <div class="alert alert-success">
-                            ${UPDATE_STATUS}
-                        </div>
+                        <script>
+                            window.onload = function () {
+                                showToast('${UPDATE_STATUS}', 'success');
+                            };
+                        </script>   
+                    </c:if>
+                    <%-- Thông báo sau khi update tour  --%>
+                    <c:if test="${not empty message}">
+                        <script>
+                            window.onload = function () {
+                                showToast('${message}', 'success');
+                            };
+                        </script>   
+                    </c:if>
+                    <%-- Thông báo search --%>
+                    <c:if test="${not empty SEARCH_MESSAGE}">
+                        <p style="color: red; text-align: center;">${SEARCH_MESSAGE}</p>
                     </c:if>
                     <thead>
                         <tr>
@@ -185,7 +194,7 @@
                             <th>End Date</th>
                             <th>Status</th>
                             <th>Departure Location</th>
-                            <th>Change status</th>
+                            <th>Update</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -221,23 +230,107 @@
                         <td><fmt:formatDate value="${SEARCH_TOUR.endDate}" pattern="dd-MM-yyyy" /></td>
 <!--                        <td><img src="${SEARCH_TOUR.tourImage}" alt="tour-image" height="150px" width="250px" style="border-radius: 20px; object-fit: contain" ></td>-->
 
+                        
                         <td>
                             <c:choose>
                                 <c:when test="${SEARCH_TOUR.status}">
-                                    <span class="status-active">Active</span>
+                                    <a class="status-active btn btn-success" href="updateStatusTour?tourID=${SEARCH_TOUR.tourID}"
+                                       onclick="return confirm('Are you sure you want to change the status?');">
+                                        Active
+                                    </a>
                                 </c:when>
                                 <c:otherwise>
-                                    <span class="status-inactive">Inactive</span>
+                                    <a class="status-inactive btn btn-danger" href="updateStatusTour?tourID=${SEARCH_TOUR.tourID}"
+                                       onclick="return confirm('Are you sure you want to change the status?');">
+                                        Inactive
+                                    </a>
                                 </c:otherwise>
                             </c:choose>
                         </td>
                         <td>${SEARCH_TOUR.tourDepartLoca}</td>
                         <td>
-                            <a class="btn btn-primary" href="updateStatusTour?tourID=${SEARCH_TOUR.tourID}" 
-                               onclick="return confirm('Are you sure you want to change the status?');">
-                                Change
-                            </a>
+                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#updateModal${SEARCH_TOUR.tourID}">
+                                Update
+                            </button>
+
                         </td>
+                        <!-- modal update tour -->
+                        <div class="modal fade" id="updateModal${SEARCH_TOUR.tourID}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Update tour</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Form to update tour details -->
+                                        <form id="updateTourForm${SEARCH_TOUR.tourID}" action="updatetour" method="POST" onsubmit="return confirmUpdate();">
+                                            <!-- Thẻ label chỉ có tác dụng hiển thị văn bản và liên kết với cái input phía dưới nó thông qua for
+                                            For của label khác với name của input
+                                            For là trùng với id của input có tác dụng là
+                                            Ví dụ khi người dùng nháy chuột vào dòng chữ TourID thì con trỏ chuột sẽ trỏ đến ô nhập liệu input của tourID luôn
+                                            Còn name trong input thì là để đẩy dữ liệu qua controller
+                                            -->
+                                            <!-- Tour ID (Readonly) -->
+                                            <div class="mb-3">
+                                                <label for="tourID${SEARCH_TOUR.tourID}" class="form-label">Tour ID</label>
+                                                <input type="text" class="form-control" id="tourID${SEARCH_TOUR.tourID}" name="tourID" value="${SEARCH_TOUR.tourID}" readonly>
+                                            </div>
+                                            <!-- Tour Name -->
+                                            <div class="mb-3">
+                                                <label for="tourName${SEARCH_TOUR.tourID}" class="form-label">Tour Name</label>
+                                                <input type="text" class="form-control" id="tourName${SEARCH_TOUR.tourID}" name="tourName" value="${SEARCH_TOUR.tourName}">
+                                            </div>
+                                            <!-- Duration -->
+                                            <div class="mb-3">
+                                                <label for="tourDuration${SEARCH_TOUR.tourID}" class="form-label">Duration</label>
+                                                <input type="text" class="form-control" id="tourDuration${SEARCH_TOUR.tourID}" name="duration" value="${SEARCH_TOUR.duration}">
+                                            </div>
+                                            <!-- Description -->
+                                            <div class="mb-3">
+                                                <label for="tourDescription${SEARCH_TOUR.tourID}" class="form-label">Description</label>
+                                                <textarea class="form-control" id="tourDescription${SEARCH_TOUR.tourID}" name="description">${SEARCH_TOUR.description}</textarea>
+                                            </div>
+                                            <!-- Price -->
+                                            <div class="mb-3">
+                                                <label for="tourPrice${SEARCH_TOUR.tourID}" class="form-label">Price</label>
+                                                <input type="number" class="form-control" id="tourPrice${SEARCH_TOUR.tourID}" name="tourPrice" value="${SEARCH_TOUR.tourPrice}">
+                                            </div>
+                                            <!-- Start Date -->
+                                            <div class="mb-3">
+                                                <label for="tourStartDate${SEARCH_TOUR.tourID}" class="form-label">Start Date</label>
+                                                <input type="date" class="form-control" id="tourStartDate${SEARCH_TOUR.tourID}" name="startDate" 
+                                                       value="<c:out value='${fn:substring(SEARCH_TOUR.startDate, 0, 10)}'/>"> <!-- Lấy định dạng yyyy-MM-dd -->
+                                            </div>
+                                            <!-- End Date -->
+                                            <div class="mb-3">
+                                                <label for="tourEndDate${SEARCH_TOUR.tourID}" class="form-label">End Date</label>
+                                                <input type="date" class="form-control" id="tourEndDate${SEARCH_TOUR.tourID}" name="endDate" 
+                                                       value="<c:out value='${fn:substring(SEARCH_TOUR.endDate, 0, 10)}'/>"> <!-- Lấy định dạng yyyy-MM-dd -->
+                                            </div>
+
+
+                                            <!-- Location -->
+                                            <div class="mb-3">
+                                                <label for="tourLocation${SEARCH_TOUR.tourID}" class="form-label">Location</label>
+                                                <input type="text" class="form-control" id="tourLocation${SEARCH_TOUR.tourID}" name="departureLocation" value="${SEARCH_TOUR.tourDepartLoca}">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit"  class="btn btn-primary" data-bs-toggle="modal" >Update Tour</button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            function confirmUpdate() {
+                                return confirm('Are you sure you want to update this tour?');
+                            }
+                        </script>
+                        <!-- hết phần modal update tour -->
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -272,33 +365,10 @@
                         </c:if>
                     </ul>
                 </nav>
-                <c:if test="${not empty SEARCH_MESSAGE}">
-                    <p style="color: red; text-align: center;">${SEARCH_MESSAGE}</p>
-                </c:if>
+                
             </div>
         </div>
     </div>
-    <script>
-        function toggleDescription(tourID) {
-            var dots = document.getElementById("dots-" + tourID);
-            var moreText = document.getElementById("moreDesc-" + tourID);
-            var shortDesc = document.getElementById("shortDesc-" + tourID);
-            var btnText = document.getElementById("toggleBtn-" + tourID);
-
-            if (dots.style.display === "none") {
-                // Hiển thị văn bản rút gọn
-                dots.style.display = "inline";
-                moreText.style.display = "none";
-                shortDesc.style.display = "inline";
-                btnText.innerHTML = "Show more";
-            } else {
-                // Hiển thị toàn bộ văn bản
-                dots.style.display = "none";
-                moreText.style.display = "inline";
-                shortDesc.style.display = "none";
-                btnText.innerHTML = "Show less";
-            }
-        }
-    </script>
+    
 </body>
 </html>
