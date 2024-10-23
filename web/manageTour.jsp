@@ -116,7 +116,7 @@
                 color: red;
                 font-weight: bold;
             }
-            
+
             /* Pagination */
             .pagination {
                 justify-content: center; /* Canh giữa */
@@ -160,10 +160,25 @@
                 <h1>Tour Management</h1>
 
                 <table>
+                    <%-- Thông báo sau khi update status--%>
                     <c:if test="${not empty UPDATE_STATUS}">
-                        <div class="alert alert-success">
-                            ${UPDATE_STATUS}
-                        </div>
+                        <script>
+                            window.onload = function () {
+                                showToast('${UPDATE_STATUS}', 'success');
+                            };
+                        </script>   
+                    </c:if>
+                    <%-- Thông báo sau khi update tour  --%>
+                    <c:if test="${not empty message}">
+                        <script>
+                            window.onload = function () {
+                                showToast('${message}', 'success');
+                            };
+                        </script>   
+                    </c:if>
+                    <%-- Thông báo search --%>
+                    <c:if test="${not empty SEARCH_MESSAGE}">
+                        <p style="color: red; text-align: center;">${SEARCH_MESSAGE}</p>
                     </c:if>
                     <thead>
                         <tr>
@@ -174,10 +189,9 @@
                             <th>Tour Price</th>
                             <th>Start Date</th>
                             <th>End Date</th>
-
                             <th>Status</th>
                             <th>Departure Location</th>
-                            <th>Change status</th>
+                            <th>Update</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -187,12 +201,12 @@
                                 <td>${tour.tourName}</td>
                                 <td>${tour.duration}</td>
                                 <td>
-                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal${tour.tourID}">
+                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#viewDetailModal${tour.tourID}">
                                         View detail
                                     </button>
                                 </td>
-                                <!-- Modal -->
-                        <div class="modal fade" id="exampleModal${tour.tourID}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <!-- Modal của description -->
+                        <div class="modal fade" id="viewDetailModal${tour.tourID}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -217,24 +231,112 @@
                         <td>
                             <c:choose>
                                 <c:when test="${tour.status}">
-                                    <span class="status-active">Active</span>
+                                    <a class="status-active btn btn-success" href="updateStatusTour?tourID=${tour.tourID}"
+                                       onclick="return confirm('Are you sure you want to change the status?');">
+                                        Active
+                                    </a>
                                 </c:when>
                                 <c:otherwise>
-                                    <span class="status-inactive">Inactive</span>
+                                    <a class="status-inactive btn btn-danger" href="updateStatusTour?tourID=${tour.tourID}"
+                                       onclick="return confirm('Are you sure you want to change the status?');">
+                                        Inactive
+                                    </a>
                                 </c:otherwise>
                             </c:choose>
                         </td>
                         <td>${tour.tourDepartLoca}</td>
                         <td>
-                            <a class="btn btn-primary" href="updateStatusTour?tourID=${tour.tourID}" 
-                               onclick="return confirm('Are you sure you want to change the status?');">
-                                Change
-                            </a>
+                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#updateModal${tour.tourID}">
+                                Update
+                            </button>
+
                         </td>
+                        <!-- modal update tour -->
+                        <div class="modal fade" id="updateModal${tour.tourID}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Update tour</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Form to update tour details -->
+                                        <form id="updateTourForm${tour.tourID}" action="updatetour" method="POST" onsubmit="return confirmUpdate();">
+                                            <!-- Thẻ label chỉ có tác dụng hiển thị văn bản và liên kết với cái input phía dưới nó thông qua for
+                                            For của label khác với name của input
+                                            For là trùng với id của input có tác dụng là
+                                            Ví dụ khi người dùng nháy chuột vào dòng chữ TourID thì con trỏ chuột sẽ trỏ đến ô nhập liệu input của tourID luôn
+                                            Còn name trong input thì là để đẩy dữ liệu qua controller
+                                            -->
+                                            <!-- Tour ID (Readonly) -->
+                                            <div class="mb-3">
+                                                <label for="tourID${tour.tourID}" class="form-label">Tour ID</label>
+                                                <input type="text" class="form-control" id="tourID${tour.tourID}" name="tourID" value="${tour.tourID}" readonly>
+                                            </div>
+                                            <!-- Tour Name -->
+                                            <div class="mb-3">
+                                                <label for="tourName${tour.tourID}" class="form-label">Tour Name</label>
+                                                <input type="text" class="form-control" id="tourName${tour.tourID}" name="tourName" value="${tour.tourName}">
+                                            </div>
+                                            <!-- Duration -->
+                                            <div class="mb-3">
+                                                <label for="tourDuration${tour.tourID}" class="form-label">Duration</label>
+                                                <input type="text" class="form-control" id="tourDuration${tour.tourID}" name="duration" value="${tour.duration}">
+                                            </div>
+                                            <!-- Description -->
+                                            <div class="mb-3">
+                                                <label for="tourDescription${tour.tourID}" class="form-label">Description</label>
+                                                <textarea class="form-control" id="tourDescription${tour.tourID}" name="description">${tour.description}</textarea>
+                                            </div>
+                                            <!-- Price -->
+                                            <div class="mb-3">
+                                                <label for="tourPrice${tour.tourID}" class="form-label">Price</label>
+                                                <input type="number" class="form-control" id="tourPrice${tour.tourID}" name="tourPrice" value="${tour.tourPrice}">
+                                            </div>
+                                            <!-- Start Date -->
+                                            <div class="mb-3">
+                                                <label for="tourStartDate${tour.tourID}" class="form-label">Start Date</label>
+                                                <input type="date" class="form-control" id="tourStartDate${tour.tourID}" name="startDate" 
+                                                       value="<c:out value='${fn:substring(tour.startDate, 0, 10)}'/>"> <!-- Lấy định dạng yyyy-MM-dd -->
+                                            </div>
+                                            <!-- End Date -->
+                                            <div class="mb-3">
+                                                <label for="tourEndDate${tour.tourID}" class="form-label">End Date</label>
+                                                <input type="date" class="form-control" id="tourEndDate${tour.tourID}" name="endDate" 
+                                                       value="<c:out value='${fn:substring(tour.endDate, 0, 10)}'/>"> <!-- Lấy định dạng yyyy-MM-dd -->
+                                            </div>
+
+
+                                            <!-- Location -->
+                                            <div class="mb-3">
+                                                <label for="tourLocation${tour.tourID}" class="form-label">Location</label>
+                                                <input type="text" class="form-control" id="tourLocation${tour.tourID}" name="departureLocation" value="${tour.tourDepartLoca}">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit"  class="btn btn-primary" data-bs-toggle="modal" >Update Tour</button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            function confirmUpdate() {
+                                return confirm('Are you sure you want to update this tour?');
+                            }
+                        </script>
+                        <!-- hết phần modal update tour -->
+
+
+
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
+
+                <!-- phân trang -->
                 <jsp:useBean id="a" class="koikd.tour.TourDAO" scope="request"></jsp:useBean>
                     <nav>
                         <ul class="pagination pagination-lg">
@@ -263,9 +365,7 @@
                         </c:if>
                     </ul>
                 </nav>
-                <c:if test="${not empty SEARCH_MESSAGE}">
-                    <p style="color: red; text-align: center;">${SEARCH_MESSAGE}</p>
-                </c:if>
+
             </div>
         </div>
     </div>

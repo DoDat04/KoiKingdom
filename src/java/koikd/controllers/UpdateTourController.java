@@ -4,6 +4,8 @@
  */
 package koikd.controllers;
 
+import jakarta.servlet.RequestDispatcher;
+import java.sql.Timestamp;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,15 +14,19 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import koikd.tour.TourDAO;
 
 /**
  *
- * @author ADMIN LAM
+ * @author Nguyen Huu Khoan
  */
-@WebServlet(name = "UpdateStatusTourController", urlPatterns = {"/updateStatusTour"})
-public class UpdateStatusTourController extends HttpServlet {
-    private static final String MANAGE_TOUR_PAGE = "managetour";
+@WebServlet(name = "UpdateTourController", urlPatterns = {"/updatetour"})
+public class UpdateTourController extends HttpServlet {
+
+    private static final String TOUR_PAGE = "managetour";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -31,49 +37,37 @@ public class UpdateStatusTourController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = MANAGE_TOUR_PAGE;
-        String idCustomerString = request.getParameter("tourID");
-        int idCustomer = 0;
-        boolean updateStatusResult = false;
+        String url = TOUR_PAGE;
+        int tourID = Integer.parseInt(request.getParameter("tourID"));
+        String tourName = request.getParameter("tourName");
+        String duration = request.getParameter("duration");
+        String description = request.getParameter("description");
+        double tourPrice = Double.parseDouble(request.getParameter("tourPrice"));
 
+        // Lấy giá trị từ request và chuyển đổi thành Timestamp
+        String startDateStr = request.getParameter("startDate");
+        String endDateStr = request.getParameter("endDate");
+
+        Timestamp startDate = Timestamp.valueOf(request.getParameter("startDate") + " 00:00:00");
+        Timestamp endDate = Timestamp.valueOf(request.getParameter("endDate") + " 00:00:00");
+        String departureLocation = request.getParameter("departureLocation");
         try {
-            if (idCustomerString != null && !idCustomerString.trim().isEmpty()) {
-                try {
-                    idCustomer = Integer.parseInt(idCustomerString);
-                } catch (NumberFormatException e) {
-                    request.setAttribute("ERROR_UPDATE", "Invalid tour ID format: " + idCustomerString);
-                    request.getRequestDispatcher(url).forward(request, response);
-                    return;
-                }
-
-                TourDAO dao = new TourDAO();
-                try {
-                    updateStatusResult = dao.updateStatusTour(idCustomer);
-                } catch (SQLException e) {
-                    request.setAttribute("ERROR_UPDATE", "Database error: " + e.getMessage());
-                    request.getRequestDispatcher(url).forward(request, response);
-                    return;
-                }
-
-                if (updateStatusResult) {
-                    request.setAttribute("UPDATE_STATUS", "Status updated successfully.");
-                } else {
-                    request.setAttribute("ERROR_UPDATE", "Failed to update status for some reason!");
-                }
+            TourDAO dao = new TourDAO();
+            boolean result = dao.updateTour(tourID, tourName, duration, description, tourPrice, startDate, endDate, departureLocation);
+            if (result) {
+                request.setAttribute("message", "Tour updated successfully!");
+                url = TOUR_PAGE;
             } else {
-                request.setAttribute("ERROR_UPDATE", "Customer ID is missing or empty.");
+                request.setAttribute("message", "Tour update failed!");
+                url = TOUR_PAGE;
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("ERROR_UPDATE", "Unexpected error: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            RequestDispatcher rd = request.getRequestDispatcher(url);
+            rd.forward(request, response);
         }
-
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -88,7 +82,11 @@ public class UpdateStatusTourController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(UpdateTourController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -102,7 +100,11 @@ public class UpdateStatusTourController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(UpdateTourController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

@@ -69,6 +69,17 @@ public class TourDTO implements Serializable{
         this.status = status;
         this.tourDepartLoca = tourDepartLoca;
     }
+    
+    public TourDTO(int tourID, String tourName, String duration, String description, double tourPrice, Timestamp startDate, Timestamp endDate, String tourDepartLoca) {
+        this.tourID = tourID;
+        this.tourName = tourName;
+        this.duration = duration;
+        this.description = description;
+        this.tourPrice = tourPrice;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.tourDepartLoca = tourDepartLoca;
+    }
          
     public String getTourDepartLoca() {
         return tourDepartLoca;

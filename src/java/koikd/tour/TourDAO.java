@@ -582,5 +582,44 @@ public class TourDAO implements Serializable {
         }              
     } 
     
+    public boolean updateTour(int tourID, String tourName, String duration, String description, double tourPrice,
+            Timestamp startDate, Timestamp endDate, String departureLocation) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        boolean result = false;
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                // Câu lệnh SQL sửa lại từ 'SUPDATE' thành 'UPDATE'
+                String sql = "UPDATE TOUR "
+                        + "SET TourName = ?, Duration = ?, Description = ? , TourPrice = ?, StartDate = ?, EndDate = ?, DepartureLocation = ? "
+                        + "WHERE TourID = ? ";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, tourName);
+                stm.setString(2, duration);
+                stm.setString(3, description);
+                stm.setDouble(4, tourPrice);  // Đặt giá trị cho email
+                stm.setTimestamp(5, startDate);          // Set start date
+                stm.setTimestamp(6, endDate);            // Set end date
+                stm.setString(7, departureLocation);     // Set departure location
+                stm.setInt(8, tourID);                // Set the tour ID for the WHERE clause
+
+                int rowsUpdated = stm.executeUpdate();
+                result = rowsUpdated > 0;  // Kiểm tra nếu có hàng nào được cập nhật
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
     
 }
