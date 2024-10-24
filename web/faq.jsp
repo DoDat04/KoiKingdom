@@ -21,181 +21,282 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <style>
-        .faq-title {
-            text-align: center;
-            margin: 20px 0;
+        .faq{
+            max-width: 700px;
+            margin-top: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #fff;
+            cursor: pointer;
         }
-        .faq-content {
-            width: 50%;
-            margin: 0 auto;
+        .question{
+            display:flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .accordion-button {
-            background-color: #f8f9fa; /* Light background color */
-            color: #343a40; /* Dark text color */
-            font-weight: bold; /* Bold text for questions */
+        .question h4{
+            font-size: 1.8rem;
         }
-        .accordion-button:not(.collapsed) {
-            background-color: #007bff; /* Blue color for the active button */
-            color: white; /* White text for the active button */
+        .answer{
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height;
         }
-        .accordion-body {
-            font-style: italic; /* Italic style for answers */
-            color: #555; /* Darker gray for the answer text */
+
+        .answer p {
+            padding-top: 1rem;
+            line-height: 1.6;
+            font-size: 93%;
+        }
+
+        .faq.active .answer{
+            max-height: 300px;
+            animation: fade 1s ease-in-out;
+        }
+
+        .faq.active svg{
+            transform: rotate(180deg);
+        }
+        .faq.active .question {
+            animation: fade 1s ease-in-out;
+            background-color: lightblue; /* Background color for the question when active */
+        }
+        svg{
+            transition: transform 0.5 ease-in;
+        }
+        @keyframes fade{
+            from{
+                opacity:0;
+                transform: translateY(-10px);
+            }
+            to{
+                opacity: 1;
+                transform: translateY(0px);
+            }
         }
     </style>
     <body>
 
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
-        <div class="faq-title">
+        <div class="faq-title" style="justify-items: center;">
             <h1>Frequently Asked Questions</h1>
             </br>
             <a href="contact" class="btn btn-success">Press here if you want have our support</a>
         </div>
-        <div class="faq-content">
-            <div class="accordion" id="accordionExample">
+        <div class="faq-content" style="    justify-items: center">
+            <div>
                 <!-- Question 1 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                            How long does the koi fish farm tour last?
-                        </button>
-                    </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne">
-                        <div class="accordion-body">
-                            The tour typically lasts between 2 to 4 hours, depending on the package and schedule.
-                        </div>
+                <div class="faq">
+                    <div class="question">
+                        <h4>How long does the koi fish farm tour last?</h4>
+                        <svg width="15" height="10" viewBox="0 0 42 25">
+                        <path d="M3 3L21 21L39 3" stroke-width="7" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="answer">
+                        <p>The tour typically lasts between 2 to 4 hours, depending on the package and schedule.</p>
                     </div>
                 </div>
 
                 <!-- Question 2 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingTwo">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <div class="faq">
+                    <div class="question">
+                        <h4>
                             Is there a tour guide?
-                        </button>
-                    </h2>
-                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo">
-                        <div class="accordion-body">
+                        </h4>
+                        <svg width="15" height="10" viewBox="0 0 42 25">
+                        <path
+                            d="M3 3L21 21L39 3"
+                            stroke-width="7"
+                            stroke-linecap="round"
+                            />    
+                        </svg>
+                    </div>
+                    <div class="answer">
+                        <p>
                             Yes, we provide local guides who speak both English and Japanese.
-                        </div>
+                        </p>
                     </div>
                 </div>
 
                 <!-- Question 3 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingThree">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                <div class="faq">
+                    <div class="question">
+                        <h4>
                             How much does the tour cost?
-                        </button>
-                    </h2>
-                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree">
-                        <div class="accordion-body">
+                        </h4>
+                        <svg width="15" height="10" viewBox="0 0 42 25">
+                        <path
+                            d="M3 3L21 21L39 3"
+                            stroke-width="7"
+                            stroke-linecap="round"
+                            />    
+                        </svg>
+                    </div>
+                    <div class="answer">
+                        <p>
                             The price ranges from 3,000 yen to 10,000 yen, depending on the package and group size.
-                        </div>
+                        </p>
                     </div>
                 </div>
 
                 <!-- Question 4 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingFour">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                <div class="faq">
+                    <div class="question">
+                        <h4>
                             What should I bring for the koi fish farm tour?
-                        </button>
-                    </h2>
-                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour">
-                        <div class="accordion-body">
+                        </h4>
+                        <svg width="15" height="10" viewBox="0 0 42 25">
+                        <path
+                            d="M3 3L21 21L39 3"
+                            stroke-width="7"
+                            stroke-linecap="round"
+                            />    
+                        </svg>
+                    </div>
+                    <div class="answer">
+                        <p>
                             We recommend bringing comfortable clothing, sunscreen, and a camera to capture the beautiful scenery.
-                        </div>
+                        </p>
                     </div>
                 </div>
 
                 <!-- Question 5 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingFive">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                <div class="faq">
+                    <div class="question">
+                        <h4>
                             Is food provided during the tour?
-                        </button>
-                    </h2>
-                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive">
-                        <div class="accordion-body">
+                        </h4>
+                        <svg width="15" height="10" viewBox="0 0 42 25">
+                        <path
+                            d="M3 3L21 21L39 3"
+                            stroke-width="7"
+                            stroke-linecap="round"
+                            />    
+                        </svg>
+                    </div>
+                    <div class="answer">
+                        <p>
                             Snacks and beverages are provided during the tour, but we recommend eating a full meal before the trip.
-                        </div>
+                        </p>
                     </div>
                 </div>
 
                 <!-- Question 6 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingSix">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                <div class="faq">
+                    <div class="question">
+                        <h4>
                             Can I take photos during the tour?
-                        </button>
-                    </h2>
-                    <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix">
-                        <div class="accordion-body">
+                        </h4>
+                        <svg width="15" height="10" viewBox="0 0 42 25">
+                        <path
+                            d="M3 3L21 21L39 3"
+                            stroke-width="7"
+                            stroke-linecap="round"
+                            />    
+                        </svg>
+                    </div>
+                    <div class="answer">
+                        <p>
                             Yes, you are encouraged to take photos during the tour. Please be respectful of other guests and our farm rules.
-                        </div>
+                        </p>
                     </div>
                 </div>
 
                 <!-- Question 7 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingSeven">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                <div class="faq">
+                    <div class="question">
+                        <h4>
                             Are children allowed on the tour?
-                        </button>
-                    </h2>
-                    <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven">
-                        <div class="accordion-body">
+                        </h4>
+                        <svg width="15" height="10" viewBox="0 0 42 25">
+                        <path
+                            d="M3 3L21 21L39 3"
+                            stroke-width="7"
+                            stroke-linecap="round"
+                            />    
+                        </svg>
+                    </div>
+                    <div class="answer">
+                        <p>
                             Yes, children are welcome on the tour, but they must be accompanied by an adult at all times.
-                        </div>
+                        </p>
                     </div>
                 </div>
 
+
                 <!-- Question 8 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingEight">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                <div class="faq">
+                    <div class="question">
+                        <h4>
                             What happens if it rains on the day of the tour?
-                        </button>
-                    </h2>
-                    <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight">
-                        <div class="accordion-body">
+                        </h4>
+                        <svg width="15" height="10" viewBox="0 0 42 25">
+                        <path
+                            d="M3 3L21 21L39 3"
+                            stroke-width="7"
+                            stroke-linecap="round"
+                            />    
+                        </svg>
+                    </div>
+                    <div class="answer">
+                        <p>
                             Tours will proceed rain or shine, but we may modify the itinerary for safety reasons. Please check the weather before your trip.
-                        </div>
+                        </p>
                     </div>
                 </div>
 
                 <!-- Question 9 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingNine">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                <div class="faq">
+                    <div class="question">
+                        <h4>
                             Is there parking available at the farm?
-                        </button>
-                    </h2>
-                    <div id="collapseNine" class="accordion-collapse collapse" aria-labelledby="headingNine">
-                        <div class="accordion-body">
+                        </h4>
+                        <svg width="15" height="10" viewBox="0 0 42 25">
+                        <path
+                            d="M3 3L21 21L39 3"
+                            stroke-width="7"
+                            stroke-linecap="round"
+                            />    
+                        </svg>
+                    </div>
+                    <div class="answer">
+                        <p>
                             Yes, there is ample parking available for guests at the farm.
-                        </div>
+                        </p>
                     </div>
                 </div>
-
                 <!-- Question 10 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingTen">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+                <div class="faq">
+                    <div class="question">
+                        <h4>
                             How do I make a reservation for the tour?
-                        </button>
-                    </h2>
-                    <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen">
-                        <div class="accordion-body">
+                        </h4>
+                        <svg width="15" height="10" viewBox="0 0 42 25">
+                        <path
+                            d="M3 3L21 21L39 3"
+                            stroke-width="7"
+                            stroke-linecap="round"
+                            />    
+                        </svg>
+                    </div>
+                    <div class="answer">
+                        <p>
                             Reservations can be made through our website or by contacting us directly via phone or email.
-                        </div>
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
-        
 
+        <script>
+            const faqs = document.querySelectorAll(".faq");
+
+            faqs.forEach(faq => {
+                faq.addEventListener("click", () => {
+                    faq.classList.toggle("active");
+                });
+            });
+        </script>
         <jsp:include page="footer.jsp" flush="true"/>
     </body>
 </html>
