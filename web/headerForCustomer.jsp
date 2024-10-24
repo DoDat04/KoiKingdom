@@ -130,27 +130,27 @@
                                         <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>      
                                         </c:when>
                                         <c:otherwise>                                       
-                                        <li><a class="dropdown-item" href="#"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
-                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
-                                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
-                                        <li>
-                                            <a class="dropdown-item" href="MyOrder?customerID=${sessionScope.custID}&&dateDelivery=">
-                                                <i class="fa fa-history"></i> My Order KOI
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="get-booking?customerID=${sessionScope.custID}">
-                                                <i class="fa fa-history"></i> My Order Booking
-                                            </a>
-                                        </li>
+                                            <li><a class="dropdown-item" href="faq"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
+                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
+                                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
+                                            <li>
+                                                <a class="dropdown-item" href="MyOrder?customerID=${sessionScope.custID}&&dateDelivery=">
+                                                    <i class="fa fa-history"></i> My Order KOI
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="get-booking?customerID=${sessionScope.custID}">
+                                                    <i class="fa fa-history"></i> My Order Booking
+                                                </a>
+                                            </li>
 
-                                        <li>
-                                            <a class="dropdown-item" href="my-custom-tour?customerID=${sessionScope.custID}">
-                                                <i class="fa fa-history"></i> My Custom Tour
-                                            </a>
-                                        </li>
+                                            <li>
+                                                <a class="dropdown-item" href="my-custom-tour?customerID=${sessionScope.custID}">
+                                                    <i class="fa fa-history"></i> My Custom Tour
+                                                </a>
+                                            </li>
 
-                                        <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
+                                            <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
                                         </c:otherwise>
                                     </c:choose>
                             </ul>
@@ -228,7 +228,7 @@
                                                 <button type="submit" class="btn btn-primary" name="action">Update</button>
                                             </div>
                                             <script src="js/address.js"></script>
-                                            <script src="js/addressSelect.js" defer></script>
+                                            <script src="js/addressSelect.js"></script>
                                         </form>
                                     </div>
                                 </div>

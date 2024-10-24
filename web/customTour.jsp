@@ -91,18 +91,18 @@
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
 
         <h1>Custom Tour Request</h1>
-
+        
         <!-- Display success or error message -->
         <c:if test="${not empty successMessage}">
             <script>
-                document.addEventListener('DOMContentLoaded', function () {
+                window.onload = function () {
                     showToast('${successMessage}', 'success');
                 };
             </script>
         </c:if>
         <c:if test="${not empty errorMessage}">
             <script>
-                document.addEventListener('DOMContentLoaded', function () {
+                window.onload = function () {
                     showToast('${errorMessage}', 'error');
                 };
             </script>
@@ -118,7 +118,18 @@
             </div>
             <div class="form-group">
                 <label for="duration">Duration</label>
-                <input type="text" id="duration" name="duration" class="form-control" required placeholder="Example: 4 Days 3 Nights">
+                <select class="form-select" aria-label="Default select example" id="duration" name="duration" required>
+                            <option value="" selected>Choose Duration</option>
+                            <option value="2 Days 1 Night">2 Days 1 Night</option>
+                            <option value="3 Days 2 Nights">3 Days 2 Nights</option>
+                            <option value="4 Days 3 Nights">4 Days 3 Nights</option>
+                            <option value="5 Days 4 Nights">5 Days 4 Nights</option>
+                            <option value="6 Days 5 Nights">6 Days 5 Nights</option>
+                            <option value="7 Days 6 Nights">7 Days 6 Nights</option>
+                            <option value="8 Days 7 Nights">8 Days 7 Nights</option>
+                            <option value="9 Days 8 Nights">9 Days 8 Nights</option>
+                            <option value="10 Days 9 Nights">10 Days 9 Nights</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="startDate">Start Date</label>

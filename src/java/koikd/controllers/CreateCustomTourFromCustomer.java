@@ -15,8 +15,6 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import koikd.customtour.CustomTourDAO;
 import koikd.customtour.CustomTourDTO;
 
@@ -77,6 +75,12 @@ public class CreateCustomTourFromCustomer extends HttpServlet {
         try {
             startDate = dateFormat.parse(startDateStr);
             endDate = dateFormat.parse(endDateStr);
+            if (endDate.compareTo(startDate) <= 0) {
+                request.setAttribute("errorMessage", "End date must be later than start date.");
+                request.getRequestDispatcher(url).forward(request, response);
+                return;
+            }
+                
         } catch (ParseException e) {
             request.setAttribute("errorMessage", "Invalid date format. Please use yyyy-MM-dd.");
             request.getRequestDispatcher(url).forward(request, response);

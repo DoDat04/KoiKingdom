@@ -240,7 +240,7 @@ public class CustomerDAO implements Serializable {
             if (con != null) {
                 String sql = "SELECT CustomerID, Password, LastName, FirstName, Address, AccountType, Status "
                         + "FROM CUSTOMER "
-                        + "WHERE Email = ? and Status = 1 and AccountType = 'default' ";
+                        + "WHERE LOWER(Email) = ? and Status = 1 and AccountType = 'default' ";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, email);
                 rs = stm.executeQuery();
@@ -320,7 +320,7 @@ public class CustomerDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT Email "
+                String sql = "SELECT LOWER(Email) "
                         + "FROM CUSTOMER "
                         + "WHERE Email = ? ";
                 stm = con.prepareStatement(sql);

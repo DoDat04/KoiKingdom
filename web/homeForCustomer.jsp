@@ -252,10 +252,10 @@
 
         <c:set var="success" value="${sessionScope.updateSuccess}"/>
         <c:if test="${not empty success}">
-            <script defer>
-                document.addEventListener('DOMContentLoaded', function () {
+            <script>
+                window.onload = function () {
                     showToast('${success}', 'success');
-                });
+                };
             </script>
             <c:remove var="updateSuccess" scope="session"/>
         </c:if>
@@ -265,19 +265,32 @@
 
         <c:if test="${not empty success}">
             <script>
-                document.addEventListener('DOMContentLoaded', function () {
+                window.onload = function () {
                     showToast('${success}', 'success');
-                });
+                };
+
                 <% session.removeAttribute("CHANGE_PASS_SUCCESS"); %>
+
+
             </script>
         </c:if>
 
         <c:if test="${not empty error}">
             <script>
-                document.addEventListener('DOMContentLoaded', function () {
+                window.onload = function () {
                     showToast('${error}', 'error');
-                });
+                };
                 <% session.removeAttribute("CHANGE_PASS_ERROR");%>
+            </script>
+        </c:if>
+
+        <c:set var="logoutSuccess" value="${requestScope.notiSuccess}"/>
+
+        <c:if test="${not empty logoutSuccess}">
+            <script>
+                window.onload = function () {
+                    showToast('${logoutSuccess}', 'success');
+                };
             </script>
         </c:if>
 

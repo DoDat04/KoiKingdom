@@ -214,7 +214,7 @@
                                                 to Manager Dashboard.
                                             </h1>-->
                         <form action="count" method="GET">
-                            <div class="row">
+                            <div class="row" style="margin-bottom: 20px">
                                 <div class="search col-md-5">
                                     <label for="startDateFilter" class="form-label">From Date</label>
                                     <input type="date" id="startDateFilter" name="startDate" class="form-control" placeholder="dd/mm/yyyy" value="${param.startDate}" >

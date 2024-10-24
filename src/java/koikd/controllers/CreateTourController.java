@@ -66,6 +66,10 @@ public class CreateTourController extends HttpServlet {
             tourPrice = Double.parseDouble(tourPriceStr);
             Timestamp startDate = Timestamp.valueOf(startDateParam + " 00:00:00");
             Timestamp endDate = Timestamp.valueOf(endDateParam + " 00:00:00");
+            if (endDate.compareTo(startDate) <= 0) {
+                request.setAttribute("errorMessage", "End date must be later than start date.");
+                return;
+            }
             TourDAO dao = new TourDAO();
             boolean result = dao.createTour(tourName, duration, description, tourPrice, startDate, endDate, imagePath, selectedFarms, selectedKoiTypes, departureLocation);
             if (result) {

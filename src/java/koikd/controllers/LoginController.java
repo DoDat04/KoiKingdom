@@ -54,7 +54,7 @@ public class LoginController extends HttpServlet {
             if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             } else {
                 CustomerDAO customerDao = new CustomerDAO();
-                CustomerDTO customerResult = customerDao.checkLogin(email, password);
+                CustomerDTO customerResult = customerDao.checkLogin(email.toLowerCase(), password);
                 EmployeesDAO deliveryDao = new EmployeesDAO();
                 EmployeesDTO employeeResult = deliveryDao.checkLoginDelivery(email, password);
 
