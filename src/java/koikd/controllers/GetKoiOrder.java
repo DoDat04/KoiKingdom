@@ -21,35 +21,53 @@ import koikd.order.KoiOrderDTO;
  *
  * @author Minhngo
  */
-
 public class GetKoiOrder extends HttpServlet {
 
     private final String SHIPHISTORYPAGE = "homeForDelivery.jsp";
+    private final String MANAGEKOIORDERPAGE = "manageKoiOrder.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = SHIPHISTORYPAGE;
-
+        String userType = request.getParameter("userType");
+        
+        String url = null;
+        
+        if ("manage".equals(userType)) {
+            url = MANAGEKOIORDERPAGE; // Đi đến trang quản lý cho nhân viên
+        } else {
+            url = SHIPHISTORYPAGE;
+        }
+        
         try {
             // Retrieve the input parameters
             String nameOrder = request.getParameter("txtNameCustomer");
-            String index = request.getParameter("index");
+            String searchValue = request.getParameter("txtSearchValue");
             
+            String index = request.getParameter("index");
+
             // Default to 1 if no index is provided
             if (index == null || index.isEmpty()) {
                 index = "1";
             }
+            String searchData = null;
+            if(nameOrder == null){
+                searchData = searchValue;
+            } else {
+                searchData = nameOrder;
+            }
 
+          
             // Parse index as an integer
             int pageIndex = Integer.parseInt(index);
-
+  System.out.println(searchData);
+                System.out.println(pageIndex);
             // Call DAO to get order list
             KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
-            int numberOfPages = koiOrderDAO.getNumberPage(nameOrder);
+            int numberOfPages = koiOrderDAO.getNumberPage(searchData);
             request.setAttribute("numberOfPages", numberOfPages);
-            
-            ArrayList<KoiOrderDTO> koiList = koiOrderDAO.getKoiOrderListByNameCustomer(nameOrder, pageIndex);
+
+            ArrayList<KoiOrderDTO> koiList = koiOrderDAO.getKoiOrderListByNameCustomer(searchData, pageIndex);
             ArrayList<String> customerNames = new ArrayList<>();
 
             // If list is not empty, populate customer names

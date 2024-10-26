@@ -32,7 +32,7 @@ public class KoiOrderDAO implements Serializable {
      * @return
      * @throws SQLException
      */
-    public ArrayList<KoiOrderDTO> getKoiOrderListByNameCustomer(String nameCustomer, int index) throws SQLException {
+    public ArrayList<KoiOrderDTO> getKoiOrderListByNameCustomer(String searchData, int index) throws SQLException {
         ArrayList<KoiOrderDTO> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement pst = null;
@@ -54,7 +54,7 @@ public class KoiOrderDAO implements Serializable {
                         + "    [dbo].[CUSTOMER] C ON O.CustomerID = C.CustomerID \n";
 
                 // Add condition for customer name if it's provided
-                if (nameCustomer != null && !nameCustomer.isEmpty()) {
+                if (searchData != null && !searchData.isEmpty()) {
                     sql += "WHERE C.LastName + ' ' + C.FirstName LIKE ? \n";
                 }
 
@@ -67,8 +67,8 @@ public class KoiOrderDAO implements Serializable {
 
                 int paramIndex = 1;
                 // If nameCustomer is provided, set it in the prepared statement
-                if (nameCustomer != null && !nameCustomer.isEmpty()) {
-                    pst.setString(paramIndex++, "%" + nameCustomer + "%");
+                if (searchData != null && !searchData.isEmpty()) {
+                    pst.setString(paramIndex++, "%" + searchData + "%");
                 }
 
                 // Set index for pagination

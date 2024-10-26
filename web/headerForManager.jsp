@@ -33,8 +33,12 @@
                     <ul class="nav justify-content-center">
                         <form action="${param.searchController}" method="get" class="search--box"> 
                             <input  type="text" name="txtSearchValue" placeholder="Search" value="<%= (request.getParameter("txtSearchValue") != null) ? request.getParameter("txtSearchValue") : ""%>"  style=" border: none;"/>
+                            <input type="text" name="userType" placeholder="Search" 
+                                   value="<%= (request.getParameter("userType") != null) ? request.getParameter("userType") : ""%>" 
+                                   style="border: none;" hidden/>
                             <button type="submit" style="border: none; border-radius: 4px;">  <i class="fa-solid fa-search"></i> </button>
                         </form>
+
                     </ul>
                 </div>
             </div>
@@ -74,6 +78,9 @@
                         </li>
                         <li class="menu-item">
                             <a href="addEmployee.jsp" style="color: black"><i class="fas fa-user-plus" style='font-size:24px'></i>Add Employee</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="GetKoiOrder?userType=manage" style="color: black"><i class="fas fa-user-plus" style='font-size:24px'></i>Manage Order Koi</a>
                         </li>
                         <li class="menu-item">
                             <a href="custom-tour" style="color: black"><i class="fas fa-suitcase" style='font-size:24px'></i>Custom Tour</a>
@@ -178,45 +185,45 @@
         <script src="js/homeForDelivery.js"></script>
         <script src="js/showToast.js"></script>
         <script>
-                                    function previewAvatar() {
-                                        const file = document.getElementById('avatar').files[0];
-                                        const preview = document.getElementById('avatarPreview');
-                                        const reader = new FileReader();
+                function previewAvatar() {
+                    const file = document.getElementById('avatar').files[0];
+                    const preview = document.getElementById('avatarPreview');
+                    const reader = new FileReader();
 
-                                        reader.onloadend = function () {
-                                            preview.src = reader.result;
-                                        };
+                    reader.onloadend = function () {
+                        preview.src = reader.result;
+                    };
 
-                                        if (file) {
-                                            reader.readAsDataURL(file);
-                                        } else {
-                                            preview.src = "";
-                                        }
-                                    }
+                    if (file) {
+                        reader.readAsDataURL(file);
+                    } else {
+                        preview.src = "";
+                    }
+                }
 
-                                    document.querySelector('.toggle-btn').addEventListener('click', function () {
-                                        const sidebar = document.querySelector('.sidebar');
-                                        const mainFrame = document.querySelector('.main-frame');
-                                        // Ensure 'main-content' exists in your HTML or adjust the selector
-                                        const mainContent = document.querySelector('.main-content');
-                                        const toggleIcon = this; // 'this' refers to the clicked '.toggle-btn' element
+                document.querySelector('.toggle-btn').addEventListener('click', function () {
+                    const sidebar = document.querySelector('.sidebar');
+                    const mainFrame = document.querySelector('.main-frame');
+                    // Ensure 'main-content' exists in your HTML or adjust the selector
+                    const mainContent = document.querySelector('.main-content');
+                    const toggleIcon = this; // 'this' refers to the clicked '.toggle-btn' element
 
-                                        sidebar.classList.toggle('collapsed');
+                    sidebar.classList.toggle('collapsed');
 
-                                        if (sidebar.classList.contains('collapsed')) {
-                                            mainFrame.style.marginLeft = '-143px';
-                                            if (mainContent)
-                                                mainContent.style.marginLeft = '10%';
-                                            toggleIcon.classList.remove('fa-angles-left');
-                                            toggleIcon.classList.add('fa-angles-right');
-                                        } else {
-                                            mainFrame.style.marginLeft = '-0.2%';
-                                            if (mainContent)
-                                                mainContent.style.marginLeft = '20%';
-                                            toggleIcon.classList.remove('fa-angles-right');
-                                            toggleIcon.classList.add('fa-angles-left');
-                                        }
-                                    });
+                    if (sidebar.classList.contains('collapsed')) {
+                        mainFrame.style.marginLeft = '-143px';
+                        if (mainContent)
+                            mainContent.style.marginLeft = '10%';
+                        toggleIcon.classList.remove('fa-angles-left');
+                        toggleIcon.classList.add('fa-angles-right');
+                    } else {
+                        mainFrame.style.marginLeft = '-0.2%';
+                        if (mainContent)
+                            mainContent.style.marginLeft = '20%';
+                        toggleIcon.classList.remove('fa-angles-right');
+                        toggleIcon.classList.add('fa-angles-left');
+                    }
+                });
         </script>
     </body>
 </html>
