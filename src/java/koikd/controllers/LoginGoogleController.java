@@ -56,6 +56,9 @@ public class LoginGoogleController extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.removeAttribute("LOGIN_USER"); // Clear regular login user info
                     session.setAttribute("SUCCESS", "Login Successfully!");
+                    String emailPrefix = getUserIdBeforeAt(googlePojo.getEmail());
+                    System.out.println(emailPrefix + " huhu");
+                    session.setAttribute("emailPrefix", emailPrefix);
 
                     //Kiểm tra trong database có tài khoản google đó chưa
                     CustomerDTO dto = dao.findCustomerByEmailAndAccountType(googlePojo.getEmail(), "google");
@@ -75,7 +78,6 @@ public class LoginGoogleController extends HttpServlet {
                     }
                     session.setAttribute("LOGIN_GMAIL", googlePojo);
 
-                    String emailPrefix = getUserIdBeforeAt(googlePojo.getEmail());
                     String avatarUrl = googlePojo.getPicture();
                     dao.createEmailUser(googlePojo, accessToken);
 

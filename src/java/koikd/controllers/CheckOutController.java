@@ -57,12 +57,10 @@ public class CheckOutController extends HttpServlet {
                         cart = new CartBean();
                     }
 
-                    // Add the selected tour to the cart with the specified number of people
-                    cart.addItemToCartt(selectedTour, numberOfPeople);
+                    cart.addCustomTourToCart(selectedTour, numberOfPeople);
                     session.setAttribute("cart", cart);
 
-                    // Optionally, forward to the checkout page
-                    url = VIEW_ORDER_PAGE; // Redirect or forward to the checkout page
+                    url = VIEW_ORDER_PAGE; 
                 } else {
                     request.setAttribute("ERROR", "Tour not found or invalid number of people!");
                 }

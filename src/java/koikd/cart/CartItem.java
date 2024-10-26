@@ -4,6 +4,7 @@
  */
 package koikd.cart;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import koikd.customtour.CustomTourDTO;
 import koikd.tour.TourDTO;
 
@@ -11,23 +12,28 @@ import koikd.tour.TourDTO;
  *
  * @author Do Dat
  */
+@JsonIgnoreProperties(ignoreUnknown = true) 
 public class CartItem {
-    private TourDTO tour; // for TourDTO
-    private CustomTourDTO customTour; // for CustomTourDTO
+    private TourDTO tour; 
+    private CustomTourDTO customTour; 
     private int numberOfPeople;
+    private double totalPrice; 
 
-    // Constructor for TourDTO
-    public CartItem(TourDTO tour, int numberOfPeople) {
-        this.tour = tour;
-        this.customTour = null; // Ensure this is null
-        this.numberOfPeople = numberOfPeople;
+    public CartItem() {
     }
 
-    // Constructor for CustomTourDTO
+    public CartItem(TourDTO tour, int numberOfPeople) {
+        this.tour = tour;
+        this.customTour = null; 
+        this.numberOfPeople = numberOfPeople;
+        this.totalPrice = calculateTotalPrice(); 
+    }
+
     public CartItem(CustomTourDTO customTour, int numberOfPeople) {
         this.customTour = customTour;
-        this.tour = null; // Ensure this is null
+        this.tour = null; 
         this.numberOfPeople = numberOfPeople;
+        this.totalPrice = calculateTotalPrice(); 
     }
 
     public TourDTO getTour() {
@@ -44,19 +50,25 @@ public class CartItem {
 
     public void setNumberOfPeople(int numberOfPeople) {
         this.numberOfPeople = numberOfPeople;
+        this.totalPrice = calculateTotalPrice(); 
     }
 
     public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    private double calculateTotalPrice() {
         double pricePerPerson = 0;
 
         if (tour != null) {
-            pricePerPerson = tour.getTourPrice(); // Assuming TourDTO has this method
+            pricePerPerson = tour.getTourPrice(); 
         } else if (customTour != null) {
-            pricePerPerson = customTour.getQuotationPrice(); // Assuming CustomTourDTO has this method
+            pricePerPerson = customTour.getQuotationPrice(); 
         }
 
         return pricePerPerson * numberOfPeople;
-    } 
+    }
 }
+
 
 

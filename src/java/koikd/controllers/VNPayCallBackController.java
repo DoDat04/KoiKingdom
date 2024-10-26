@@ -4,9 +4,11 @@
  */
 package koikd.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,6 +17,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,6 +50,7 @@ public class VNPayCallBackController extends HttpServlet {
     private static final String FAIL_VNPAY = "vnpay_return_fail.jsp";
     private static final String GMAIL_USERNAME = "koikingdomsystem@gmail.com";
     private static final String GMAIL_APP_PASSWORD = "srzw mrnk kkhj ipcx";
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -61,6 +65,8 @@ public class VNPayCallBackController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = FAIL_VNPAY;
+        String cookieName = null;
+        String userId = null;
         try {
             // Begin process return from VNPAY
             Map<String, String> fields = new HashMap<>();
@@ -73,6 +79,7 @@ public class VNPayCallBackController extends HttpServlet {
             }
 
             String vnp_SecureHash = request.getParameter("vnp_SecureHash");
+            System.out.println("Secure hash: " + vnp_SecureHash);
             fields.remove("vnp_SecureHashType");
             fields.remove("vnp_SecureHash");
             String signValue = ConfigVNPayUtils.hashAllFields(fields);
@@ -161,12 +168,18 @@ public class VNPayCallBackController extends HttpServlet {
                             }
                         }
 
-                        // Clear the cart from the session
-                        session.removeAttribute("cart");
-                        session.removeAttribute("cartItemCount");
-
                         // Send confirmation email
                         sendBillForCustomer(email, custID, fullName, custAddress, custEmail);
+
+                        if (session.getAttribute("LOGIN_USER") != null) {
+                            userId = (String) session.getAttribute("userId");
+                            cookieName = "USER_CART" + userId;
+                        } else if (session.getAttribute("LOGIN_GMAIL") != null) {
+                            userId = (String) session.getAttribute("emailPrefix");
+                            cookieName = "GMAIL_CART" + userId;
+                        }
+
+                        RemoveCookie(request, response, cookieName, cart);
                     } else {
                         url = FAIL_VNPAY;
                         message = "Giao dịch thất bại.";
@@ -260,6 +273,27 @@ public class VNPayCallBackController extends HttpServlet {
 
             // Gửi email
             Transport.send(message);
+        }
+    }
+
+    private String encodeCartToCookie(CartBean cart) throws IOException {
+        byte[] cartBytes = objectMapper.writeValueAsBytes(cart);
+        return Base64.getEncoder().encodeToString(cartBytes);
+    }
+
+    private void RemoveCookie(HttpServletRequest request, HttpServletResponse response, String cookieName, CartBean cart) throws IOException {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(cookieName)) {
+                    // Xóa cookie
+                    Cookie updatedCartCookie = new Cookie(cookieName, encodeCartToCookie(cart));
+                    updatedCartCookie.setMaxAge(0); // Xóa cookie
+                    updatedCartCookie.setPath("/"); 
+                    response.addCookie(updatedCartCookie); // Ghi cookie đã cập nhật trở lại trình duyệt
+                    break;
+                }
+            }
         }
     }
 

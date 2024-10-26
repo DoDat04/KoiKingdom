@@ -64,6 +64,8 @@ public class LoginController extends HttpServlet {
                     session.setAttribute("LOGIN_USER", customerResult);
                     session.setAttribute("custID", customerResult.getCustomerID());
                     session.setAttribute("email", customerResult.getEmail());
+                    String sanitizedUserId = getUserIdBeforeAt(customerResult.getEmail());
+                    session.setAttribute("userId", sanitizedUserId);
                     session.setAttribute("SUCCESS", "Login Successfully!");
                     setUserImage(session, email);
                     url = HOME_PAGE;

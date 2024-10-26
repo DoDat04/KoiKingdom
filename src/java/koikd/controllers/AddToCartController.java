@@ -4,14 +4,17 @@
  */
 package koikd.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import koikd.cart.CartBean;
@@ -25,6 +28,7 @@ import koikd.tour.TourDTO;
 @WebServlet(name = "AddToCartController", urlPatterns = {"/AddToCartController"})
 public class AddToCartController extends HttpServlet {
     private static final String TOUR_DETAIL_PAGE = "tour-detail";
+    private static final ObjectMapper objectMapper = new ObjectMapper();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -50,7 +54,7 @@ public class AddToCartController extends HttpServlet {
                 TourDTO selectedTour = tourDAO.getTourByID(tourID);
                 
                 if (selectedTour != null && numberOfPeople > 0) {
-                    CartBean cart = (CartBean) session.getAttribute("cart");
+                    CartBean cart = getCartFromCookies(request, session);
 
                     if (cart == null) {
                         cart = new CartBean();
@@ -61,6 +65,7 @@ public class AddToCartController extends HttpServlet {
                     session.setAttribute("cart", cart);
                     
                     session.setAttribute("cartItemCount", cart.getTotalQuantity());
+                    saveCartToCookies(response, cart, request, session);
                 }                             
             } else {
                 request.setAttribute("ERROR", "You need to login to perform this action!");
@@ -73,6 +78,61 @@ public class AddToCartController extends HttpServlet {
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
+    }
+    
+    private CartBean getCartFromCookies(HttpServletRequest request, HttpSession session) throws IOException {
+        String userId = null;
+        String cookieName;
+        if (session.getAttribute("LOGIN_USER") != null) {
+            userId = (String) session.getAttribute("userId");
+            cookieName = "USER_CART" + userId;
+        } else if (session.getAttribute("LOGIN_GMAIL") != null) {
+            userId = (String) session.getAttribute("emailPrefix");
+            System.out.println(userId + " hihi");
+            cookieName = "GMAIL_CART" + userId;
+        } else {
+            cookieName = "GUEST_CART";
+        }
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookieName.equals(cookie.getName())) {
+                    return decodeCartFromCookie(cookie.getValue());
+                }
+            }
+        }
+        return null;
+    }
+    
+    private void saveCartToCookies(HttpServletResponse response, CartBean cart, HttpServletRequest request, HttpSession session) throws IOException {
+        String userId = null;
+        String cookieName;
+        if (session.getAttribute("LOGIN_USER") != null) {
+            userId = (String) session.getAttribute("userId");
+            cookieName = "USER_CART" + userId;
+        } else if (session.getAttribute("LOGIN_GMAIL") != null) {
+            userId = (String) session.getAttribute("emailPrefix");
+            cookieName = "GMAIL_CART" + userId;
+        } else {
+            cookieName = "GUEST_CART";
+        }
+
+        String cartEncoded = encodeCartToCookie(cart);
+        Cookie cartCookie = new Cookie(cookieName, cartEncoded);
+        cartCookie.setMaxAge(60 * 60 * 24 * 7); // cookie tồn tại 7 ngày
+        cartCookie.setPath("/"); 
+        response.addCookie(cartCookie);
+    }
+    
+    private String encodeCartToCookie(CartBean cart) throws IOException {
+        byte[] cartBytes = objectMapper.writeValueAsBytes(cart);
+        return Base64.getEncoder().encodeToString(cartBytes);
+    }
+    
+    private CartBean decodeCartFromCookie(String cartEncoded) throws IOException {
+        byte[] cartBytes = Base64.getDecoder().decode(cartEncoded);
+        return objectMapper.readValue(cartBytes, CartBean.class);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

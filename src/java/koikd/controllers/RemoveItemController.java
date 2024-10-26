@@ -4,14 +4,17 @@
  */
 package koikd.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.Base64;
 import koikd.cart.CartBean;
 import koikd.cart.CartItem;
 import koikd.tour.TourDTO;
@@ -24,6 +27,7 @@ import koikd.tour.TourDTO;
 public class RemoveItemController extends HttpServlet {
 
     private static final String CART_PAGE = "cart";
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,12 +47,10 @@ public class RemoveItemController extends HttpServlet {
             HttpSession session = request.getSession();
             CartBean cart = (CartBean) session.getAttribute("cart");
 
-            if (cart != null) {
-                // Get the tour ID to remove              
+            if (cart != null) {              
                 if (tourIDParam != null) {
                     int tourID = Integer.parseInt(tourIDParam);
 
-                    // Find the tour and remove it
                     TourDTO tourToRemove = null;
                     for (CartItem item : cart.getItems().values()) {
                         if (item.getTour().getTourID() == tourID) {
@@ -57,14 +59,50 @@ public class RemoveItemController extends HttpServlet {
                         }
                     }
                     if (tourToRemove != null) {
-                        cart.removeItemFromCart(tourToRemove, 1); 
+                        cart.removeItemFromCart(tourToRemove, 1);
                         session.setAttribute("cartItemCount", cart.getTotalQuantity());
                     }
+                    String userId = null;
+                    String cookieName = null; 
+
+                    if (session.getAttribute("LOGIN_USER") != null) {
+                        userId = (String) session.getAttribute("userId");
+                        cookieName = "USER_CART" + userId;
+                    } else if (session.getAttribute("LOGIN_GMAIL") != null) {
+                        userId = (String) session.getAttribute("emailPrefix");
+                        cookieName = "GMAIL_CART" + userId;
+                    }
+
+                    if (cookieName != null) {
+                        UpdateCookie(request, response, cookieName, cart);
+                    }
+
                 }
             }
         } finally {
             response.sendRedirect(url);
         }
+    }
+
+    private void UpdateCookie(HttpServletRequest request, HttpServletResponse response, String cookieName, CartBean cart) throws IOException {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(cookieName)) {
+                    // Lấy cookie cũ và cập nhật
+                    Cookie updatedCartCookie = new Cookie(cookieName, encodeCartToCookie(cart));
+                    updatedCartCookie.setMaxAge(60 * 60 * 24 * 7); // Lưu trong 1 tuần
+                    updatedCartCookie.setPath("/"); 
+                    response.addCookie(updatedCartCookie); // Ghi cookie đã cập nhật trở lại trình duyệt
+                    break;
+                }
+            }
+        }
+    }
+
+    private String encodeCartToCookie(CartBean cart) throws IOException {
+        byte[] cartBytes = objectMapper.writeValueAsBytes(cart);
+        return Base64.getEncoder().encodeToString(cartBytes);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
