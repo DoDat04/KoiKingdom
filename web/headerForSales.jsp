@@ -165,7 +165,7 @@
                                     function searchByName(param) {
                                         var txtSearch = param.value;
                                         $.ajax({
-                                            url: "/KoiKingdom/GetCustomTourByAjaxController",
+                                            url: "/KoiKingdom/GetCustomTourController",
                                             type: "GET",
                                             data: {
                                                 txtFullName: txtSearch

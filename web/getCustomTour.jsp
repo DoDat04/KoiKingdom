@@ -23,10 +23,11 @@
     </head>
     <body>
         <jsp:include page="headerForSales.jsp" flush="true"/>
-           <div style="    margin-top: 25vh;
+        <div style="    margin-top: 25vh;
              margin-left: 17%;
              margin-right: 6%;" class="main-content">          
 
+            <h1 class="text-center"><strong>Custom Tour List</strong></h1>
             <table id="content" class="styled-table">
                 <thead>
                     <tr>
@@ -97,16 +98,20 @@
                                         </div>
                                         <div class="modal-body">
                                             <form id="updateForm${custom.requestID}" method="post" action="update-price-status">
+                                                <!-- Hiển thị giá báo giá -->
                                                 <div class="mb-3">
                                                     <label for="quotationPrice${custom.requestID}" class="form-label">Quotation Price</label>
-                                                    <input type="number" step="0.01" class="form-control" id="quotationPrice${custom.requestID}" name="txtQuoPrice" placeholder="Enter new quotation price" required>
+                                                    <input type="number" step="0.01" class="form-control" id="quotationPrice${custom.requestID}" name="txtQuoPrice" 
+                                                           value="${custom.quotationPrice > 0 ? custom.quotationPrice : ''}" 
+                                                           placeholder="Enter new quotation price" 
+                                                           ${custom.quotationPrice > 0 ? 'readonly' : 'required'}>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="status${custom.requestID}" class="form-label">Status</label>
                                                     <select class="form-control" id="status${custom.requestID}" name="txtStatus" required>
                                                         <option value="Pending">Pending</option>
                                                         <option value="Approved">Approved</option>
-<!--                                                        <option value="Rejected">Rejected</option>-->
+                                                        <option value="Rejected">Rejected</option>
                                                     </select>
                                                 </div>
                                                 <!-- Hidden input to pass the request ID -->
