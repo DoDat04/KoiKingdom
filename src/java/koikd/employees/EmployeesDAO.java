@@ -175,30 +175,29 @@ public class EmployeesDAO {
         return result;  // Trả về kết quả
     }
 
-    public static void main(String[] args) {
-        try {
-            // Tạo đối tượng DAO (Data Access Object)
-            EmployeesDAO deliveryDAO = new EmployeesDAO();
-
-            // Thông tin cần cập nhật
-            String firstName = "John";
-            String lastName = "Doe";
-            String email = "sale@gmail.com";
-            String address = "123 Main Street, New York, NY";
-
-            // Gọi phương thức updateDeliveryProfile và kiểm tra kết quả
-            boolean isUpdated = deliveryDAO.updateDeliveryProfile(firstName, lastName, email, address);
-
-            if (isUpdated) {
-                System.out.println("Profile updated successfully!");
-            } else {
-                System.out.println("Profile update failed. Please check the email address.");
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace(); // In lỗi ra console để kiểm tra
-        }
-    }
-
+//    public static void main(String[] args) {
+//        try {
+//            // Tạo đối tượng DAO (Data Access Object)
+//            EmployeesDAO deliveryDAO = new EmployeesDAO();
+//
+//            // Thông tin cần cập nhật
+//            String firstName = "John";
+//            String lastName = "Doe";
+//            String email = "sale@gmail.com";
+//            String address = "123 Main Street, New York, NY";
+//
+//            // Gọi phương thức updateDeliveryProfile và kiểm tra kết quả
+//            boolean isUpdated = deliveryDAO.updateDeliveryProfile(firstName, lastName, email, address);
+//
+//            if (isUpdated) {
+//                System.out.println("Profile updated successfully!");
+//            } else {
+//                System.out.println("Profile update failed. Please check the email address.");
+//            }
+//        } catch (ClassNotFoundException | SQLException e) {
+//            e.printStackTrace(); // In lỗi ra console để kiểm tra
+//        }
+//    }
     public List<EmployeesDTO> getAllEmployees(int index) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -242,7 +241,46 @@ public class EmployeesDAO {
         }
         return result;
     }
-    
+
+    public List<EmployeesDTO> getAllEmployees() throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<EmployeesDTO> result = new ArrayList<>();
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT EmployeeID, Email, Role, LastName, FirstName, Address, Status "
+                        + "FROM EMPLOYEE ";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    int id = rs.getInt("EmployeeID");
+                    String email = rs.getString("Email");
+                    String role = rs.getString("Role");
+                    String lastName = rs.getString("LastName");
+                    String firstName = rs.getString("FirstName");
+                    String address = rs.getString("Address");
+                    boolean status = rs.getBoolean("Status");
+                    EmployeesDTO dto = new EmployeesDTO(id, email, role, lastName, firstName, address, status);
+                    result.add(dto);
+                }
+
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
+
     public int getNumberPageInManagePage() throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement stm = null;
@@ -279,7 +317,7 @@ public class EmployeesDAO {
         }
         return countPage;
     }
-    
+
     public List<EmployeesDTO> searchEmployees(String searchValue, int index) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -290,7 +328,7 @@ public class EmployeesDAO {
             if (con != null) {
                 String sql = "SELECT EmployeeID, Email, Role, LastName, FirstName, Address, Status "
                         + "FROM EMPLOYEE ";
-                        
+
                 // Xử lý điều kiện tìm kiếm theo TourName và TourID
                 boolean hasSearchValue = searchValue != null && !searchValue.trim().isEmpty();
                 boolean isNumeric = hasSearchValue && searchValue.matches("\\d+");
@@ -316,7 +354,7 @@ public class EmployeesDAO {
 
                 // Set index for pagination
                 stm.setInt(paramIndex, (index - 1) * 5);
-                       
+
                 rs = stm.executeQuery();
                 while (rs.next()) {
                     int id = rs.getInt("EmployeeID");
@@ -344,7 +382,7 @@ public class EmployeesDAO {
         }
         return result;
     }
-    
+
     public int getNumberPageInSearchPage(String searchValue) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -448,9 +486,7 @@ public class EmployeesDAO {
         }
         return false;
     }
-    
-    
-    
+
     public boolean addEmployee(String email, String password, String role, String lastName,
             String firstName, String address, boolean status) throws SQLException, ClassNotFoundException {
         Connection con = null;
@@ -469,7 +505,7 @@ public class EmployeesDAO {
                 stm.setString(4, lastName);
                 stm.setString(5, firstName);
                 stm.setString(6, address);
-                stm.setBoolean(7, true); 
+                stm.setBoolean(7, true);
                 int affectedRows = stm.executeUpdate();
                 if (affectedRows > 0) {
                     result = true;
@@ -486,7 +522,7 @@ public class EmployeesDAO {
         }
         return result;
     }
-    
+
     public EmployeesDTO getEmployeeByEmail(String email) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;

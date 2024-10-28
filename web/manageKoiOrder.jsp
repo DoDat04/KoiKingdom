@@ -164,6 +164,7 @@
                         <th>Delivery Date</th>
                         <th>Status</th>
                         <th>Actions</th>
+                        <th>Assign</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -188,17 +189,83 @@
                                             <button class="btn-detail" type="submit" style="border: none; background: none;">Detail</button>
                                         </form>
                                     </td>
-                                </tr>
-                            </c:forEach>
-                        </c:when>
-                        <c:otherwise>
-                            <tr>
-                                <td colspan="6" class="text-center alert alert-danger">No orders found.</td>
+                                    <td>
+                                        <button type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#assignModal" onclick="loadDeliveryEmployees()">
+                                            Assign to
+                                        </button>
+                                    </td>
+                            <script>
+                                function loadDeliveryEmployees() {
+                                    $.ajax({
+                                        url: '/KoiKingdom/GetListDeliveryEmployee',
+                                        type: 'GET',
+                                        success: function (response) {
+                                            console.log('Response received:', response);
+
+                                            // Clear old options in select
+                                            $('#employeeSelect').empty();
+
+                                            // Check if response is an array and has employees
+                                            if (Array.isArray(response) && response.length > 0) {
+                                                // Loop through the delivery employees and add to select
+                                                response.forEach(function (employee) {
+                                                    // Create an option for each employee using string concatenation
+                                                    var option = '<option value="' + employee.employeeID + '">' +
+                                                            employee.firstName + ' ' + employee.lastName +
+                                                            '</option>';
+
+                                                    $('#employeeSelect').append(option); // Append the option to the select
+                                                });
+                                                $('#assignModal').modal('show'); // Show modal after populating
+                                            } else {
+                                                alert('No delivery employees found.');
+                                            }
+                                        },
+                                        error: function (xhr, status, error) {
+                                            console.error('Error fetching delivery employee data:', error);
+                                            alert('Could not fetch delivery employees. Please try again.');
+                                        }
+                                    });
+                                }
+
+                            </script>
+
                             </tr>
-                        </c:otherwise>
-                    </c:choose>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <tr>
+                            <td colspan="6" class="text-center alert alert-danger">No orders found.</td>
+                        </tr>
+                    </c:otherwise>
+                </c:choose>
                 </tbody>
             </table>
+
+
+            <div class="modal fade" id="assignModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Assign to Delivery Employee</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="assignEmployeeForm" method="post" enctype="multipart/form-data" id="assignEmployeeForm">
+                                <label for="employeeSelect">Select Employee:</label>
+                                <select name="employeeId" id="employeeSelect" class="form-select">
+                                    <!-- Tùy chọn nhân viên sẽ được thêm vào đây thông qua AJAX -->
+                                </select>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" form="assignEmployeeForm" class="btn btn-primary">Assign</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <jsp:useBean id="a" class="koikd.order.KoiOrderDAO" scope="request"></jsp:useBean>
                 <nav>
