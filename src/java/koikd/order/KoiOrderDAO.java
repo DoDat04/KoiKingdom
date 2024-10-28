@@ -15,8 +15,6 @@ import java.util.List;
 import koikd.customer.CustomerDTO;
 import koikd.farm.FarmDTO;
 import koikd.koi.KoiDTO;
-import koikd.koitype.KoiTypeDAO;
-import koikd.koitype.KoiTypeDTO;
 import koikd.utils.DBUtils;
 
 /**
@@ -47,7 +45,8 @@ public class KoiOrderDAO implements Serializable {
                         + "    C.CustomerID, \n"
                         + "    O.DeliveryDate, \n"
                         + "    O.Status, \n"
-                        + "    O.EstimatedDelivery \n"
+                        + "    O.EstimatedDelivery, \n"
+                        + "    O.Type \n"
                         + "FROM \n"
                         + "    [dbo].[KOIORDER] O \n"
                         + "INNER JOIN \n"
@@ -81,9 +80,10 @@ public class KoiOrderDAO implements Serializable {
                     Date deliveryDate = rs.getDate("DeliveryDate");
                     boolean status = rs.getBoolean("Status");
                     Date estimatedDelivery = rs.getDate("EstimatedDelivery");
+                    String type = rs.getString("Type");
 
                     // Create the DTO and add to the list
-                    KoiOrderDTO orderDTO = new KoiOrderDTO(koiOrderID, customerID, deliveryDate, status, estimatedDelivery);
+                    KoiOrderDTO orderDTO = new KoiOrderDTO(koiOrderID, customerID, deliveryDate, status, estimatedDelivery, type);
                     list.add(orderDTO);
                 }
             }
@@ -340,7 +340,8 @@ public class KoiOrderDAO implements Serializable {
                         + "    C.CustomerID, \n"
                         + "    O.DeliveryDate, \n"
                         + "    O.Status, \n"
-                        + "    O.EstimatedDelivery \n" // Thêm cột EstimatedDelivery
+                        + "    O.EstimatedDelivery, \n" // Thêm cột EstimatedDelivery
+                        + "    O.Type \n"
                         + "FROM \n"
                         + "    [dbo].[KOIORDER] O\n"
                         + "INNER JOIN \n"
@@ -358,8 +359,9 @@ public class KoiOrderDAO implements Serializable {
                     Date deliveryDate = rs.getDate("DeliveryDate");
                     boolean status = rs.getBoolean("Status");
                     Date estimatedDelivery = rs.getDate("EstimatedDelivery");
+                    String type = rs.getString("Type");
                     // Tạo DTO từ dữ liệu lấy được
-                    KoiOrderDTO dao = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery);
+                    KoiOrderDTO dao = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery, type);
                     list.add(dao);
                 }
             }
@@ -468,7 +470,8 @@ public class KoiOrderDAO implements Serializable {
                         + "    C.CustomerID, \n"
                         + "    O.DeliveryDate, \n"
                         + "    O.Status, \n"
-                        + "    O.EstimatedDelivery \n"
+                        + "    O.EstimatedDelivery, \n"
+                        + "    O.Type \n"
                         + "FROM \n"
                         + "    [dbo].[KOIORDER] O\n"
                         + "INNER JOIN \n"
@@ -486,7 +489,8 @@ public class KoiOrderDAO implements Serializable {
                     Date deliveryDate = rs.getDate("DeliveryDate");
                     boolean status = rs.getBoolean("Status");
                     Date estimatedDelivery = rs.getDate("EstimatedDelivery");
-                    KoiOrderDTO dao = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery);
+                    String type = rs.getString("Type");
+                    KoiOrderDTO dao = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery, type);
                     list.add(dao);
                 }
             }
@@ -521,13 +525,14 @@ public class KoiOrderDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "INSERT INTO [dbo].[KOIORDER]([CustomerID], [DeliveryDate], [Status], [EstimatedDelivery]) "
-                        + "VALUES(?, ?, ?, ?)";
+                String sql = "INSERT INTO [dbo].[KOIORDER]([CustomerID], [DeliveryDate], [Status], [EstimatedDelivery], [Type]) "
+                        + "VALUES(?, ?, ?, ?, ?)";
                 pst = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);  // Lấy giá trị khóa tự động sinh
                 pst.setInt(1, koiOrderDTO.getCustomerID());
                 pst.setTimestamp(2, new java.sql.Timestamp(koiOrderDTO.getDeliveryDate().getTime()));
                 pst.setBoolean(3, koiOrderDTO.isStatus());
                 pst.setTimestamp(4, new java.sql.Timestamp(koiOrderDTO.getEstimatedDelivery().getTime()));
+                pst.setString(5, koiOrderDTO.getType());
 
                 int affectedRows = pst.executeUpdate();
                 if (affectedRows > 0) {
@@ -1136,7 +1141,8 @@ public class KoiOrderDAO implements Serializable {
                         + "    C.CustomerID, \n"
                         + "    O.DeliveryDate, \n"
                         + "    O.Status, \n"
-                        + "    O.EstimatedDelivery \n"
+                        + "    O.EstimatedDelivery, \n"
+                        + "    O.Type \n"
                         + "FROM \n"
                         + "    [dbo].[KOIORDER] O\n"
                         + "INNER JOIN \n"
@@ -1167,9 +1173,10 @@ public class KoiOrderDAO implements Serializable {
                     Date deliveryDate = rs.getDate("DeliveryDate");
                     boolean status = rs.getBoolean("Status");
                     Date estimatedDelivery = rs.getDate("EstimatedDelivery");
+                    String type = rs.getString("Type");
 
                     // Create DTO and add to the list
-                    KoiOrderDTO order = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery);
+                    KoiOrderDTO order = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery, type);
                     list.add(order);
                 }
             }

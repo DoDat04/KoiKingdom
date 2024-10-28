@@ -6,7 +6,6 @@ package koikd.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
@@ -17,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.Base64;
 import koikd.cart.CartBean;
 import koikd.cart.CartItem;
+import koikd.koi.KoiDTO;
 import koikd.tour.TourDTO;
 
 /**
@@ -42,41 +42,57 @@ public class RemoveItemController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = CART_PAGE;
-        String tourIDParam = request.getParameter("tourID");
+        String itemIDParam = request.getParameter("itemID");
+        String itemType = request.getParameter("itemType");
         try {
             HttpSession session = request.getSession();
             CartBean cart = (CartBean) session.getAttribute("cart");
 
-            if (cart != null) {              
-                if (tourIDParam != null) {
-                    int tourID = Integer.parseInt(tourIDParam);
+            if (cart != null && itemIDParam != null) {
+                int itemID = Integer.parseInt(itemIDParam);
 
+                if ("tour".equals(itemType)) {
                     TourDTO tourToRemove = null;
                     for (CartItem item : cart.getItems().values()) {
-                        if (item.getTour().getTourID() == tourID) {
-                            tourToRemove = item.getTour();
+                        TourDTO tour = item.getTour();
+                        if (tour != null && tour.getTourID() == itemID) {
+                            tourToRemove = tour;
                             break;
                         }
                     }
                     if (tourToRemove != null) {
                         cart.removeItemFromCart(tourToRemove, 1);
-                        session.setAttribute("cartItemCount", cart.getTotalQuantity());
                     }
-                    String userId = null;
-                    String cookieName = null; 
-
-                    if (session.getAttribute("LOGIN_USER") != null) {
-                        userId = (String) session.getAttribute("userId");
-                        cookieName = "USER_CART" + userId;
-                    } else if (session.getAttribute("LOGIN_GMAIL") != null) {
-                        userId = (String) session.getAttribute("emailPrefix");
-                        cookieName = "GMAIL_CART" + userId;
+                } else if ("koi".equals(itemType)) {
+                    KoiDTO koiToRemove = null;
+                    for (CartItem item : cart.getItems().values()) {
+                        KoiDTO koi = item.getKoi();
+                        if (koi != null && koi.getKoiID() == itemID) {
+                            koiToRemove = koi;
+                            break;
+                        }
                     }
-
-                    if (cookieName != null) {
-                        UpdateCookie(request, response, cookieName, cart);
+                    if (koiToRemove != null) {
+                        cart.removeKoiFromCart(koiToRemove, 1);
                     }
+                }
 
+                // Update the cart item count in session
+                session.setAttribute("cartItemCount", cart.getTotalQuantity());
+
+                // Update the cookie if necessary
+                String userId = null;
+                String cookieName = null;
+                if (session.getAttribute("LOGIN_USER") != null) {
+                    userId = (String) session.getAttribute("userId");
+                    cookieName = "USER_CART" + userId;
+                } else if (session.getAttribute("LOGIN_GMAIL") != null) {
+                    userId = (String) session.getAttribute("emailPrefix");
+                    cookieName = "GMAIL_CART" + userId;
+                }
+
+                if (cookieName != null) {
+                    UpdateCookie(request, response, cookieName, cart);
                 }
             }
         } finally {
@@ -92,7 +108,7 @@ public class RemoveItemController extends HttpServlet {
                     // Lấy cookie cũ và cập nhật
                     Cookie updatedCartCookie = new Cookie(cookieName, encodeCartToCookie(cart));
                     updatedCartCookie.setMaxAge(60 * 60 * 24 * 7); // Lưu trong 1 tuần
-                    updatedCartCookie.setPath("/"); 
+                    updatedCartCookie.setPath("/");
                     response.addCookie(updatedCartCookie); // Ghi cookie đã cập nhật trở lại trình duyệt
                     break;
                 }

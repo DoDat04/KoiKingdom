@@ -17,16 +17,26 @@ public class KoiOrderDTO implements Serializable {
     private Date deliveryDate;
     private boolean status;
     private Date estimatedDelivery;
+    private String type;
 
     public KoiOrderDTO() {
     }
 
-    public KoiOrderDTO(int koiOrderID, int customerID, Date deliveryDate, boolean status, Date estimatedDelivery) {
+    public KoiOrderDTO(int koiOrderID, int customerID, Date deliveryDate, boolean status, Date estimatedDelivery, String type) {
         this.koiOrderID = koiOrderID;
         this.customerID = customerID;
         this.deliveryDate = deliveryDate;
         this.status = status;
         this.estimatedDelivery = estimatedDelivery;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getKoiOrderID() {

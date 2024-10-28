@@ -9,11 +9,11 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import koikd.customtour.CustomTourDTO;
+import koikd.koi.KoiDTO;
 import koikd.tour.TourDTO;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CartBean implements Serializable {
-
     private Map<Integer, CartItem> items;
 
     public CartBean() {
@@ -30,7 +30,7 @@ public class CartBean implements Serializable {
             return;
         }
 
-        int tourID = tour.getTourID();
+        int tourID = tour.getTourID(); 
 
         if (this.items.containsKey(tourID)) {
             CartItem existingItem = this.items.get(tourID);
@@ -40,13 +40,27 @@ public class CartBean implements Serializable {
         }
     }
 
-    // Thêm một CustomTourDTO vào giỏ hàng
+    public void addKoiToCart(KoiDTO koi, int quantity) {
+        if (koi == null || quantity <= 0) {
+            return;
+        }
+
+        int koiID = koi.getKoiID(); 
+
+        if (this.items.containsKey(koiID)) {
+            CartItem existingItem = this.items.get(koiID);
+            existingItem.setQuantity(existingItem.getQuantity() + quantity);
+        } else {
+            this.items.put(koiID, new CartItem(koi, quantity));
+        }
+    }
+
     public void addCustomTourToCart(CustomTourDTO customTour, int numberOfPeople) {
         if (customTour == null || numberOfPeople <= 0) {
             return;
         }
 
-        int requestID = customTour.getRequestID();
+        int requestID = customTour.getRequestID(); 
 
         if (this.items.containsKey(requestID)) {
             CartItem existingItem = this.items.get(requestID);
@@ -56,7 +70,6 @@ public class CartBean implements Serializable {
         }
     }
 
-    // Xóa một TourDTO khỏi giỏ hàng
     public void removeItemFromCart(TourDTO tour, int numberOfPeople) {
         if (tour == null || numberOfPeople <= 0) {
             return;
@@ -66,6 +79,25 @@ public class CartBean implements Serializable {
         if (this.items.containsKey(tourID)) {
             this.items.remove(tourID);
         }
+    }
+    
+    public void removeKoiFromCart(KoiDTO koi, int quantity) {
+        if (koi == null || quantity <= 0) {
+            return;
+        }
+
+        int koiID = koi.getKoiID();
+        if (this.items.containsKey(koiID)) {
+            this.items.remove(koiID);
+        }
+    }
+    
+    public int getTotalQuantityKoi() {
+        int totalKoi = 0;
+        for (CartItem item : items.values()) {
+            totalKoi += item.getQuantity();
+        }
+        return totalKoi;
     }
 
     // Lấy tổng số người cho tất cả các mục trong giỏ hàng

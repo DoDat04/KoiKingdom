@@ -34,6 +34,9 @@ import koikd.booking.BookingDTO;
 import koikd.cart.CartBean;
 import koikd.cart.CartItem;
 import koikd.customtour.CustomTourDTO;
+import koikd.koi.KoiDAO;
+import koikd.koi.KoiDTO;
+import koikd.order.KoiOrderDTO;
 import koikd.tour.TourDTO;
 import koikd.tourbookingdetail.TourBookingDetailDAO;
 import koikd.tourbookingdetail.TourBookingDetailDTO;
@@ -115,10 +118,12 @@ public class VNPayCallBackController extends HttpServlet {
                         for (CartItem item : items.values()) {
                             TourDTO tour = item.getTour();
                             CustomTourDTO customTour = item.getCustomTour();
+                            KoiDTO koi = item.getKoi();
                             int numberOfPeople = item.getNumberOfPeople();
 
                             BookingDTO booking = new BookingDTO();
                             TourBookingDetailDTO tourBookingDetail = new TourBookingDetailDTO();
+                            KoiOrderDTO koiDto = new KoiOrderDTO();
 
                             booking.setCustomerID(custID);
                             booking.setCustName(fullName);
@@ -129,6 +134,7 @@ public class VNPayCallBackController extends HttpServlet {
 
                             BookingDAO bookingDAO = new BookingDAO();
                             TourBookingDetailDAO tourBookingDetailDAO = new TourBookingDetailDAO();
+                            KoiDAO koiDAO = new KoiDAO();
 
                             if (customTour != null) {
                                 booking.setTourID(customTour.getRequestID());
@@ -165,6 +171,11 @@ public class VNPayCallBackController extends HttpServlet {
                                 tourBookingDetail.setFeedbackStatus(false);
                                 // Add the tour booking detail
                                 tourBookingDetailDAO.addTourBookingDetail(bookingID, tourBookingDetail, customTour);
+                            } else if (koi != null) {
+                                koiDto.setCustomerID(custID);
+                                koiDto.setStatus(false);
+                                koiDto.setType("Online");
+                                koiDAO.insertKoiOrder(koiDto);
                             }
                         }
 

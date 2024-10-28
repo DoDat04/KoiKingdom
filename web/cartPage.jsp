@@ -18,6 +18,13 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/cart.css"> 
+        <style>
+            .koi-img {
+                max-width: 100px;
+                height: auto;
+                object-fit: cover;
+            }
+        </style>
     </head>
     <body>
         <div class="colorlib-loader"></div>
@@ -40,46 +47,77 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Tour Image</th>
-                                        <th>Tour Details</th>
-                                        <th>Number of People</th>
-                                        <th>Tour Price</th>
-                                        <th>Total</th>
+                                        <th>Image</th>
+                                        <th>Details</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Total Price</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <c:forEach var="entry" items="${cart.items}" varStatus="status">
                                         <tr>
-
                                             <td>
-                                                <img class="tour-img" 
-                                                     src="${entry.value.tour.tourImage}" 
-                                                     alt="${entry.value.tour.tourName}">
+                                                <c:choose>
+                                                    <c:when test="${not empty entry.value.tour}">
+                                                        <img class="tour-img" src="${entry.value.tour.tourImage}" alt="${entry.value.tour.tourName}">
+                                                    </c:when>
+                                                    <c:when test="${not empty entry.value.koi}">
+                                                        <img class="koi-img" src="${entry.value.koi.image}" alt="${entry.value.koi.koiName}">
+                                                    </c:when>
+                                                </c:choose>
                                             </td>
                                             <td>
-                                                <div class="tour-info">
-                                                    <div class="tour-name">${entry.value.tour.tourName}</div>
-                                                    <div class="tour-dates">
-                                                        <span>Start Date: 
-                                                            <fmt:formatDate value="${entry.value.tour.startDate}" pattern="dd-MM-yyyy" />
-                                                        </span>
-                                                        <span>End Date: 
-                                                            <fmt:formatDate value="${entry.value.tour.endDate}" pattern="dd-MM-yyyy" />
-                                                        </span>
-                                                        <span>Departure Location: 
-                                                            ${entry.value.tour.tourDepartLoca}
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                                <c:choose>
+                                                    <c:when test="${not empty entry.value.tour}">
+                                                        <div class="tour-info">
+                                                            <div class="tour-name">${entry.value.tour.tourName}</div>
+                                                            <div class="tour-dates">
+                                                                <span>Start Date: <fmt:formatDate value="${entry.value.tour.startDate}" pattern="dd-MM-yyyy" /></span>
+                                                                <span>End Date: <fmt:formatDate value="${entry.value.tour.endDate}" pattern="dd-MM-yyyy" /></span>
+                                                                <span>Departure Location: ${entry.value.tour.tourDepartLoca}</span>
+                                                            </div>
+                                                        </div>
+                                                    </c:when>
+                                                    <c:when test="${not empty entry.value.koi}">
+                                                        <div class="koi-info">
+                                                            <div class="koi-name">${entry.value.koi.koiName}</div>
+                                                            <div class="tour-dates">
+                                                                <span>Koi Type: ${entry.value.koi.koiTypeName}</span>
+                                                                <span>Age: ${entry.value.koi.age}</span>
+                                                                <span>Length: ${entry.value.koi.length}</span>
+                                                                <span>Weight: ${entry.value.koi.weight}</span>
+                                                            </div>
+                                                        </div>
+                                                    </c:when>
+                                                </c:choose>
                                             </td>
-                                            <td>${entry.value.numberOfPeople}</td>
-                                            <td>$${entry.value.tour.tourPrice}</td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${not empty entry.value.tour}">
+                                                        ${entry.value.numberOfPeople}
+                                                    </c:when>
+                                                    <c:when test="${not empty entry.value.koi}">
+                                                        ${entry.value.quantity}
+                                                    </c:when>
+                                                </c:choose>
+                                            </td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${not empty entry.value.tour}">
+                                                        $${entry.value.tour.tourPrice}
+                                                    </c:when>
+                                                    <c:when test="${not empty entry.value.koi}">
+                                                        $${entry.value.koi.price}
+                                                    </c:when>
+                                                </c:choose>
+                                            </td>
                                             <td>$${entry.value.totalPrice}</td>
                                             <td>
-                                                <!-- Remove Button -->
                                                 <form action="RemoveItemController" method="post">
-                                                    <input type="hidden" name="tourID" value="${entry.value.tour.tourID}">
+                                                    <input type="hidden" name="itemID" value="${entry.value.tour != null ? entry.value.tour.tourID : entry.value.koi.koiID}">
+                                                    <input type="hidden" name="itemType" value="${entry.value.tour != null ? 'tour' : 'koi'}">
                                                     <button type="submit" class="btn-remove">Remove</button>
                                                 </form>
                                             </td>

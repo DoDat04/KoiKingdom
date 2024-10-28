@@ -11,8 +11,9 @@ import java.io.Serializable;
  * @author Admin
  */
 public class KoiDTO implements Serializable {
-     private int koiID;
+    private int koiID;
     private String koiName;
+    private String koiTypeName;
     private int koiTypeID;
     private int age; // Tuổi có thể là kiểu int
     private double length; // Chiều dài có thể là kiểu double
@@ -22,6 +23,17 @@ public class KoiDTO implements Serializable {
 
     public KoiDTO() {
     }   
+
+    public KoiDTO(int koiID, String koiName, String koiTypeName, int age, double length, double weight, double price, String image) {
+        this.koiID = koiID;
+        this.koiName = koiName;
+        this.koiTypeName = koiTypeName;
+        this.age = age;
+        this.length = length;
+        this.weight = weight;
+        this.price = price;
+        this.image = image;
+    }
     
     public KoiDTO(int koiID, String koiName, int koiTypeID, int age, double length, double weight, double price, String image) {
         this.koiID = koiID;
@@ -32,6 +44,14 @@ public class KoiDTO implements Serializable {
         this.weight = weight;
         this.price = price;
         this.image = image;
+    }
+
+    public String getKoiTypeName() {
+        return koiTypeName;
+    }
+
+    public void setKoiTypeName(String koiTypeName) {
+        this.koiTypeName = koiTypeName;
     }
 
     public int getKoiID() {

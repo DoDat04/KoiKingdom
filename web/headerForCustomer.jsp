@@ -43,6 +43,7 @@
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bookingDropdown">
                                     <li><a class="dropdown-item" href="tour-list">Tour</a></li>
                                     <li><a class="dropdown-item" href="home?action=customTour">Custom Tour</a></li>
+                                    <li><a class="dropdown-item" href="koi-list-order">Koi Fish</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item">

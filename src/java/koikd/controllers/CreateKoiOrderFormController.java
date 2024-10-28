@@ -49,6 +49,7 @@ public class CreateKoiOrderFormController extends HttpServlet {
             koiOrderDTO.setDeliveryDate(deliveryDate);
             koiOrderDTO.setStatus(false);
             koiOrderDTO.setEstimatedDelivery(estimateDate);
+            koiOrderDTO.setType("Offline");
 
             KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
             int koiOrderID = koiOrderDAO.createKoiOrder(koiOrderDTO);  // Lấy KoiOrderID sau khi tạo

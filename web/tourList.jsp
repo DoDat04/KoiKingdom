@@ -20,7 +20,7 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="css/tourList.css">         
+        <link rel="stylesheet" href="css/koiList.css">         
         <!-- AOS -->
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -55,7 +55,7 @@
 
                     <!-- Filter by farm -->
                     <div class="col-md-2">
-                        <label for="farmFilter" class="form-label">Farm</label>
+                        <strong><label for="farmFilter" class="form-label">Farm</label></strong>
                         <select id="farmFilter" name="farmID" class="form-select" onchange="this.form.submit()">
                             <option value="" ${empty param.farmID ? 'selected' : ''}>All Farms</option>
                             <c:forEach var="farm" items="${farmList}">
@@ -66,7 +66,7 @@
 
                     <!-- Filter by Koi Type -->
                     <div class="col-md-2">
-                        <label for="koiTypeFilter" class="form-label">Koi Type</label>
+                        <strong><label for="koiTypeFilter" class="form-label">Koi Type</label></strong>
                         <select id="koiTypeFilter" name="koiTypeID" class="form-select" onchange="this.form.submit()">
                             <option value="" ${empty param.koiTypeID ? 'selected' : ''}>All Types</option>
                             <c:forEach var="koiType" items="${koiTypeList}">
@@ -77,7 +77,7 @@
 
                     <!-- Filter by Price Order -->
                     <div class="col-md-2">
-                        <label for="priceFilter" class="form-label">Price</label>
+                        <strong><label for="priceFilter" class="form-label">Price</label></strong>
                         <select id="priceFilter" name="priceOrder" class="form-select" onchange="this.form.submit()">
                             <option value="" ${empty param.priceOrder ? 'selected' : ''}>All Prices</option>
                             <option value="asc" ${param.priceOrder == 'asc' ? 'selected' : ''}>Price (Low to High)</option>
@@ -88,11 +88,11 @@
                     <!-- Filter by Dates -->
                     <div class="col-md-6 d-flex">
                         <div class="me-3 w-100">
-                            <label for="startDateFilter" class="form-label">From Date</label>
+                            <strong><label for="startDateFilter" class="form-label">From Date</label></strong>
                             <input type="date" id="startDateFilter" name="startDate" class="form-control" placeholder="dd/mm/yyyy" value="${param.startDate}" onchange="this.form.submit()">
                         </div>
                         <div class="w-100">
-                            <label for="endDateFilter" class="form-label">To Date</label>
+                            <strong><label for="endDateFilter" class="form-label">To Date</label></strong>
                             <input type="date" id="endDateFilter" name="endDate" class="form-control" placeholder="dd/mm/yyyy" value="${param.endDate}" onchange="this.form.submit()">
                         </div>
                     </div>                   

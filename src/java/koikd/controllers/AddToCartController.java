@@ -18,6 +18,8 @@ import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import koikd.cart.CartBean;
+import koikd.koi.KoiDAO;
+import koikd.koi.KoiDTO;
 import koikd.tour.TourDAO;
 import koikd.tour.TourDTO;
 
@@ -27,8 +29,11 @@ import koikd.tour.TourDTO;
  */
 @WebServlet(name = "AddToCartController", urlPatterns = {"/AddToCartController"})
 public class AddToCartController extends HttpServlet {
+
     private static final String TOUR_DETAIL_PAGE = "tour-detail";
+    private static final String KOI_LIST_PAGE = "koi-list-order";
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,15 +49,18 @@ public class AddToCartController extends HttpServlet {
         String url = TOUR_DETAIL_PAGE;
         String tourIDParam = request.getParameter("tourID");
         String numberOfPeopleParam = request.getParameter("numberOfPeople");
+        String koiIDParam = request.getParameter("koiID");
+        String quantityParam = request.getParameter("quantity");
         try {
             HttpSession session = request.getSession();
             if (tourIDParam != null && numberOfPeopleParam != null && !numberOfPeopleParam.isEmpty()) {
+                url = TOUR_DETAIL_PAGE;
                 int tourID = Integer.parseInt(tourIDParam);
                 int numberOfPeople = Integer.parseInt(numberOfPeopleParam);
-                
+
                 TourDAO tourDAO = new TourDAO();
                 TourDTO selectedTour = tourDAO.getTourByID(tourID);
-                
+
                 if (selectedTour != null && numberOfPeople > 0) {
                     CartBean cart = getCartFromCookies(request, session);
 
@@ -63,14 +71,33 @@ public class AddToCartController extends HttpServlet {
                     // Add the selected tour to the cart
                     cart.addItemToCart(selectedTour, numberOfPeople);
                     session.setAttribute("cart", cart);
+
+                    session.setAttribute("cartItemCount", cart.getTotalQuantity());
+                    saveCartToCookies(response, cart, request, session);
+                }
+            } else if (koiIDParam != null && quantityParam != null) {              
+                url = KOI_LIST_PAGE;
+                int koiID = Integer.parseInt(koiIDParam);
+                int quantity = Integer.parseInt(quantityParam);
+                
+                KoiDAO koiDAO = new KoiDAO();
+                KoiDTO selectedKoi = koiDAO.getKoiByID(koiID);
+                if (selectedKoi != null && quantity > 0) {
+                    CartBean cart = getCartFromCookies(request, session);
+                    
+                    if (cart == null) {
+                        cart = new CartBean();
+                    }
+                    cart.addKoiToCart(selectedKoi, quantity);
+                    session.setAttribute("cart", cart);
                     
                     session.setAttribute("cartItemCount", cart.getTotalQuantity());
                     saveCartToCookies(response, cart, request, session);
-                }                             
+                }
             } else {
                 request.setAttribute("ERROR", "You need to login to perform this action!");
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(AddToCartController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -79,7 +106,7 @@ public class AddToCartController extends HttpServlet {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
-    
+
     private CartBean getCartFromCookies(HttpServletRequest request, HttpSession session) throws IOException {
         String userId = null;
         String cookieName;
@@ -88,7 +115,6 @@ public class AddToCartController extends HttpServlet {
             cookieName = "USER_CART" + userId;
         } else if (session.getAttribute("LOGIN_GMAIL") != null) {
             userId = (String) session.getAttribute("emailPrefix");
-            System.out.println(userId + " hihi");
             cookieName = "GMAIL_CART" + userId;
         } else {
             cookieName = "GUEST_CART";
@@ -104,7 +130,7 @@ public class AddToCartController extends HttpServlet {
         }
         return null;
     }
-    
+
     private void saveCartToCookies(HttpServletResponse response, CartBean cart, HttpServletRequest request, HttpSession session) throws IOException {
         String userId = null;
         String cookieName;
@@ -121,15 +147,15 @@ public class AddToCartController extends HttpServlet {
         String cartEncoded = encodeCartToCookie(cart);
         Cookie cartCookie = new Cookie(cookieName, cartEncoded);
         cartCookie.setMaxAge(60 * 60 * 24 * 7); // cookie tồn tại 7 ngày
-        cartCookie.setPath("/"); 
+        cartCookie.setPath("/");
         response.addCookie(cartCookie);
     }
-    
+
     private String encodeCartToCookie(CartBean cart) throws IOException {
         byte[] cartBytes = objectMapper.writeValueAsBytes(cart);
         return Base64.getEncoder().encodeToString(cartBytes);
     }
-    
+
     private CartBean decodeCartFromCookie(String cartEncoded) throws IOException {
         byte[] cartBytes = Base64.getDecoder().decode(cartEncoded);
         return objectMapper.readValue(cartBytes, CartBean.class);
@@ -161,7 +187,7 @@ public class AddToCartController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);        
+        processRequest(request, response);
     }
 
     /**

@@ -6,6 +6,7 @@ package koikd.cart;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import koikd.customtour.CustomTourDTO;
+import koikd.koi.KoiDTO;
 import koikd.tour.TourDTO;
 
 /**
@@ -14,6 +15,8 @@ import koikd.tour.TourDTO;
  */
 @JsonIgnoreProperties(ignoreUnknown = true) 
 public class CartItem {
+    private KoiDTO koi;
+    private int quantity;
     private TourDTO tour; 
     private CustomTourDTO customTour; 
     private int numberOfPeople;
@@ -21,6 +24,12 @@ public class CartItem {
 
     public CartItem() {
     }
+
+    public CartItem(KoiDTO koi, int quantity) {
+        this.koi = koi;
+        this.quantity = quantity;
+        this.totalPrice = calculateTotalPriceKoi();
+    }   
 
     public CartItem(TourDTO tour, int numberOfPeople) {
         this.tour = tour;
@@ -40,10 +49,23 @@ public class CartItem {
         return tour;
     }
 
+    public KoiDTO getKoi() {
+        return koi;
+    }
+
     public CustomTourDTO getCustomTour() {
         return customTour;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+        this.totalPrice = calculateTotalPriceKoi();
+    }
+       
     public int getNumberOfPeople() {
         return numberOfPeople;
     }
@@ -68,7 +90,14 @@ public class CartItem {
 
         return pricePerPerson * numberOfPeople;
     }
+    
+    private double calculateTotalPriceKoi() {
+        double pricePerKoi = 0;
+
+        if (koi != null) {
+            pricePerKoi = koi.getPrice(); 
+        } 
+
+        return pricePerKoi * quantity;
+    }
 }
-
-
-

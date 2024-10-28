@@ -3,7 +3,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to c
 Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
 */
 /* 
-    Created on : Sep 23, 2024, 7:42:43 PM
+    Created on : Oct 28, 2024, 4:34:15 PM
     Author     : Do Dat
 */
 .colorlib-loader {
@@ -58,24 +58,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 }
 
 .text-center {
-    margin: 40px 0px;
+    margin: 40px 0;
 }
-.description p {
-    white-space: pre-wrap;
-}
+
 .card-body .card-title {
-    margin-bottom: -9px; 
     font-size: 24px;
 }
+
 .rating {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     margin-bottom: 7px;
 }
 
 .rating-number {
-    margin-left: 0.2rem; /* Khoảng cách giữa ngôi sao và số đánh giá */
+    margin-left: 0.2rem;
 }
+
 #backToTop {
     position: fixed;
     bottom: 50px;
@@ -88,25 +87,22 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     color: black;
     font-size: 24px;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease; /* Thêm hiệu ứng chuyển tiếp */
+    transition: all 0.3s ease;
 }
 
 #backToTop:hover {
-    background-color: #D3D3D3;
-    transform: translateY(-5px); /* Di chuyển lên 5px */
+    background-color: #d3d3d3;
+    transform: translateY(-3px);
 }
 
 .alert {
-    background-color: #fff3cd; 
-    border-color: #ffeeba; 
-}
-
-.alert strong {
-    color: #856404; 
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    color: #856404;
 }
 
 .backToTour {
@@ -124,17 +120,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 }
 
 .favorite-icon i {
-    color: white; 
-    font-size: 2rem; 
-    cursor: pointer; 
-    text-shadow: 
-        1px 1px 0 black,  
-        -1px -1px 0 black, 
-        -1px 1px 0 black,  
-        1px -1px 0 black;  
-    transition: color 0.3s ease; 
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    text-shadow: 1px 1px 0 black, -1px -1px 0 black, -1px 1px 0 black, 1px -1px 0 black;
+    transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .favorite-icon i:hover {
-    color: red; 
+    color: red;
+    transform: scale(1.1);
 }
+
+

@@ -22,6 +22,13 @@
         <!-- Script get api province -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <style>
+            .koi-img {
+                max-width: 100px;
+                height: auto;
+                object-fit: cover;
+            }
+        </style>
     </head>
     <body>
         <div class="colorlib-loader"></div>
@@ -45,31 +52,84 @@
                         <c:forEach var="entry" items="${cart.items}">
                             <tr>
                                 <td>
-                                    <img class="tour-img" src="${entry.value.tour != null ? entry.value.tour.tourImage : entry.value.customTour.image}" alt="${entry.value.tour.tourName}">
+                                    <c:choose>
+                                        <c:when test="${not empty entry.value.tour}">
+                                            <img class="tour-img" src="${entry.value.tour.tourImage}" alt="${entry.value.tour.tourName}">
+                                        </c:when>
+                                        <c:when test="${not empty entry.value.customTour}">
+                                            <img class="tour-img" src="${entry.value.customTour.image}" alt="Custom Tour">
+                                        </c:when>
+                                        <c:when test="${not empty entry.value.koi}">
+                                            <img class="koi-img" src="${entry.value.koi.image}" alt="${entry.value.koi.koiName}">
+                                        </c:when>
+                                    </c:choose>
                                 </td>
                                 <td>
-                                    <div class="tour-info">
-                                        <div class="tour-name">${entry.value.tour.tourName}</div>
-                                        <div class="tour-dates">
-                                            <span>Start Date: 
-                                                <fmt:formatDate value="${entry.value.tour != null ? entry.value.tour.startDate : entry.value.customTour.startDate}" pattern="dd-MM-yyyy" />
-                                            </span>
-                                            <span>End Date: 
-                                                <fmt:formatDate value="${entry.value.tour != null ? entry.value.tour.endDate : entry.value.customTour.endDate}" pattern="dd-MM-yyyy" />
-                                            </span>
-                                            <span>Departure Location: 
-                                                ${entry.value.tour != null ? entry.value.tour.tourDepartLoca : entry.value.customTour.departureLocation}
-                                            </span>
-                                        </div>
-                                    </div>
+                                    <c:choose>
+                                        <c:when test="${not empty entry.value.tour}">
+                                            <div class="tour-info">
+                                                <div class="tour-name">${entry.value.tour.tourName}</div>
+                                                <div class="tour-dates">
+                                                    <span>Start Date: <fmt:formatDate value="${entry.value.tour.startDate}" pattern="dd-MM-yyyy" /></span>
+                                                    <span>End Date: <fmt:formatDate value="${entry.value.tour.endDate}" pattern="dd-MM-yyyy" /></span>
+                                                    <span>Departure Location: ${entry.value.tour.tourDepartLoca}</span>
+                                                </div>
+                                            </div>
+                                        </c:when>
+                                        <c:when test="${not empty entry.value.customTour}">
+                                            <div class="tour-info">
+                                                <div class="tour-name">Custom Tour</div>
+                                                <div class="tour-dates">
+                                                    <span>Start Date: <fmt:formatDate value="${entry.value.customTour.startDate}" pattern="dd-MM-yyyy" /></span>
+                                                    <span>End Date: <fmt:formatDate value="${entry.value.customTour.endDate}" pattern="dd-MM-yyyy" /></span>
+                                                    <span>Departure Location: ${entry.value.customTour.departureLocation}</span>
+                                                </div>
+                                            </div>
+                                        </c:when>
+                                        <c:when test="${not empty entry.value.koi}">
+                                            <div class="koi-info">
+                                                <div class="koi-name">${entry.value.koi.koiName}</div>
+                                                <div class="tour-dates">
+                                                    <span>Koi Type: ${entry.value.koi.koiTypeName}</span>
+                                                    <span>Age: ${entry.value.koi.age}</span>
+                                                    <span>Length: ${entry.value.koi.length}</span>
+                                                    <span>Weight: ${entry.value.koi.weight}</span>
+                                                </div>
+                                            </div>
+                                        </c:when>
+                                    </c:choose>
                                 </td>
-                                <td>${entry.value.numberOfPeople}</td>
-                                <td>$${entry.value.tour != null ? entry.value.tour.tourPrice : entry.value.customTour.quotationPrice}</td>
                                 <td>
-                                    <fmt:formatNumber value="${entry.value.getTotalPrice()}" type="number" maxFractionDigits="2" minFractionDigits="2" />
+                                    <c:choose>
+                                        <c:when test="${not empty entry.value.tour}">
+                                            ${entry.value.numberOfPeople}
+                                        </c:when>
+                                        <c:when test="${not empty entry.value.customTour}">
+                                            ${entry.value.numberOfPeople}
+                                        </c:when>
+                                        <c:when test="${not empty entry.value.koi}">
+                                            ${entry.value.quantity}
+                                        </c:when>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${not empty entry.value.tour}">
+                                            $${entry.value.tour.tourPrice}
+                                        </c:when>
+                                        <c:when test="${not empty entry.value.customTour}">
+                                            $${entry.value.customTour.quotationPrice}
+                                        </c:when>
+                                        <c:when test="${not empty entry.value.koi}">
+                                            $${entry.value.koi.price}
+                                        </c:when>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <fmt:formatNumber value="${entry.value.totalPrice}" type="number" maxFractionDigits="2" minFractionDigits="2" />
                                 </td>
                             </tr>
-                        </c:forEach>                         
+                        </c:forEach>                       
                     </tbody>
                     <tfoot>
                         <tr>
@@ -127,7 +187,7 @@
                         </select>
                     </div>
                 </div>
-<!--                <script src="js/viewOrder.js"></script>-->
+                <!--                <script src="js/viewOrder.js"></script>-->
 
                 <c:choose>
                     <c:when test="${not empty selectedTour}">

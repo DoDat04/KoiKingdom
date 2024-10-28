@@ -39,7 +39,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 .table td {
     vertical-align: middle;
 }
-.tour-name {
+.tour-name, .koi-name {
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 5px;
