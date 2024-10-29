@@ -86,6 +86,7 @@ public class LoginController extends HttpServlet {
                         url = SALES_PAGE;
                     } else if ("Consulting".equals(role)) {
                         session.setAttribute("LOGIN_CONSULTING", employeeResult);
+                        session.setAttribute("consultingID", employeeResult.getEmployeeID());
                         url = CONSULTING_PAGE;
                     }                   
                     else {

@@ -32,24 +32,23 @@ public class CreateKoiOrderFormController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = KOI_ORDER_FORM;
         HttpSession session = request.getSession();
+        Integer consultingID = (Integer) session.getAttribute("consultingID");
 
         try {
             // Lấy thông tin đơn hàng từ form
             int custID = Integer.parseInt(request.getParameter("txtCustID"));
             String deliveryDateStr = request.getParameter("txtDelivery");
-            String estimateDateStr = request.getParameter("txtEstimate");
 
             // Chuyển đổi chuỗi thành đối tượng Date
             Date deliveryDate = DATE_FORMAT.parse(deliveryDateStr);
-            Date estimateDate = DATE_FORMAT.parse(estimateDateStr);
 
             // Tạo đối tượng KoiOrderDTO và lưu đơn hàng
             KoiOrderDTO koiOrderDTO = new KoiOrderDTO();
             koiOrderDTO.setCustomerID(custID);
             koiOrderDTO.setDeliveryDate(deliveryDate);
             koiOrderDTO.setStatus(false);
-            koiOrderDTO.setEstimatedDelivery(estimateDate);
             koiOrderDTO.setType("Offline");
+            koiOrderDTO.setCreateBy(consultingID);
 
             KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
             int koiOrderID = koiOrderDAO.createKoiOrder(koiOrderDTO);  // Lấy KoiOrderID sau khi tạo

@@ -26,14 +26,9 @@
                         <input type="number" id="txtCustID" name="txtCustID" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
                     </div>
                     <div class="mb-3" style="margin-bottom: 15px;">
-                        <label for="txtDelivery" style="font-weight: bold;">Delivery Date</label>
+                        <label for="txtDelivery" style="font-weight: bold;">Order Date</label>
                         <input type="date" id="txtDelivery" name="txtDelivery" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
                     </div>
-                    <div class="mb-3" style="margin-bottom: 15px;">
-                        <label for="txtEstimate" style="font-weight: bold;">Estimated Delivery Date</label>
-                        <input type="date" id="txtEstimate" name="txtEstimate" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                    </div>
-
                     <h3 style="text-align: center; color: #4CAF50;">Koi Order Details</h3>
                     <div id="orderDetails">
                         <div class="detailRow" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between;">

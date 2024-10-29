@@ -15,13 +15,13 @@ public class KoiOrderDTO implements Serializable {
 
     private int koiOrderID;
     private int customerID;
+    private String fullName;
     private Date deliveryDate;
     private boolean status;
     private Date estimatedDelivery;
-
     private String type;
-
     private int deliveryBy;
+    private int createBy;
 
     public KoiOrderDTO() {
     }
@@ -35,7 +35,15 @@ public class KoiOrderDTO implements Serializable {
         this.type = type;
     }
 
-    
+    public KoiOrderDTO(int koiOrderID, String fullName, Date deliveryDate, boolean status, Date estimatedDelivery, String type, int createBy) {
+        this.koiOrderID = koiOrderID;
+        this.fullName = fullName;
+        this.deliveryDate = deliveryDate;
+        this.status = status;
+        this.estimatedDelivery = estimatedDelivery;
+        this.type = type;
+        this.createBy = createBy;
+    }
     
     public KoiOrderDTO(int koiOrderID, int customerID, Date deliveryDate, boolean status, Date estimatedDelivery, String type, int deliveryBy) {
         this.koiOrderID = koiOrderID;
@@ -53,7 +61,22 @@ public class KoiOrderDTO implements Serializable {
         this.deliveryDate = deliveryDate;
         this.status = status;
         this.estimatedDelivery = estimatedDelivery;
+    }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public int getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(int createBy) {
+        this.createBy = createBy;
     }
 
     public String getType() {

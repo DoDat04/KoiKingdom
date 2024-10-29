@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import koikd.customer.CustomerDTO;
-import koikd.employees.EmployeesDTO;
+import java.sql.Timestamp;
 import koikd.farm.FarmDTO;
 import koikd.koi.KoiDTO;
 import koikd.utils.DBUtils;
@@ -577,15 +577,15 @@ public class KoiOrderDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "INSERT INTO [dbo].[KOIORDER]([CustomerID], [DeliveryDate], [Status], [EstimatedDelivery], [Type]) "
-                        + "VALUES(?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO [dbo].[KOIORDER]([CustomerID], [DeliveryDate], [Status], [EstimatedDelivery], [Type], [CreatedBy]) "
+                        + "VALUES(?, ?, ?, NULL, ?, ?)";
                 pst = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); // Lấy giá trị khóa tự động
                 // sinh
                 pst.setInt(1, koiOrderDTO.getCustomerID());
                 pst.setTimestamp(2, new java.sql.Timestamp(koiOrderDTO.getDeliveryDate().getTime()));
                 pst.setBoolean(3, koiOrderDTO.isStatus());
-                pst.setTimestamp(4, new java.sql.Timestamp(koiOrderDTO.getEstimatedDelivery().getTime()));
-                pst.setString(5, koiOrderDTO.getType());
+                pst.setString(4, koiOrderDTO.getType());
+                pst.setInt(5, koiOrderDTO.getCreateBy());
 
                 int affectedRows = pst.executeUpdate();
                 if (affectedRows > 0) {
@@ -1358,6 +1358,74 @@ public class KoiOrderDAO implements Serializable {
             }
         }
         return isUpdated;
+    }
+
+    public List<KoiOrderDTO> getKoiOrderForConsulting(int consultingID) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<KoiOrderDTO> koiOrderList = new ArrayList<>();
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT ko.KoiOrderID, c.FirstName + ' ' + c.LastName AS FullName, "
+                        + "ko.DeliveryDate, ko.EstimatedDelivery, ko.Type, ko.Status, "
+                        + "ko.CreatedBy "
+                        + "FROM KOIORDER ko "
+                        + "INNER JOIN CUSTOMER c ON ko.CustomerID = c.CustomerID "
+                        + "WHERE ko.CreatedBy = ?";  
+
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, consultingID);  
+
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    int koiOrderID = rs.getInt("KoiOrderID");
+                    String fullName = rs.getString("FullName");
+                    Date deliveryDate = rs.getDate("DeliveryDate");
+                    boolean status = rs.getBoolean("Status");
+                    Date estimatedDelivery = rs.getDate("EstimatedDelivery");
+                    String type = rs.getString("Type");
+                    int createBy = rs.getInt("CreatedBy");
+
+                    KoiOrderDTO koiOrder = new KoiOrderDTO(koiOrderID, fullName, deliveryDate, status, estimatedDelivery, type, createBy);
+                    koiOrderList.add(koiOrder);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return koiOrderList;
+    }
+    
+    public void updateEstimatedDate(int koiOrderID, Timestamp estimatedDelivery) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+
+        try {
+            con = DBUtils.getConnection();
+            String sql = "UPDATE KOIORDER SET EstimatedDelivery = ? WHERE KoiOrderID = ?";
+            stm = con.prepareStatement(sql);
+            stm.setTimestamp(1, estimatedDelivery);
+            stm.setInt(2, koiOrderID);
+            stm.executeUpdate();
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
     }
 }
 
