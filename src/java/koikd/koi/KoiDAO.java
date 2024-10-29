@@ -63,7 +63,7 @@ public class KoiDAO implements Serializable {
         return koiList;
     }
 
-    public List<KoiDTO> filterKois(String farmID) throws SQLException, ClassNotFoundException {
+    public List<KoiDTO> filterKois(String farmID, String priceOrder) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -72,14 +72,25 @@ public class KoiDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT k.KoiID, k.KoiName, k.Age, kt.TypeName, k.Length, k.Weight, k.Price, k.Image "
+                String sql = "SELECT DISTINCT k.KoiID, k.KoiName, k.Age, kt.TypeName, k.Length, k.Weight, k.Price, k.Image "
                         + "FROM KOI k "
                         + "INNER JOIN KOI_FARM kf ON k.KoiID = kf.KoiID "
                         + "INNER JOIN FARM f ON f.FarmID = kf.FarmID "
-                        + "INNER JOIN KOITYPE kt ON k.KoiTypeID = kt.KoiTypeID "
-                        + "WHERE f.FarmID = ?";
+                        + "INNER JOIN KOITYPE kt ON k.KoiTypeID = kt.KoiTypeID";
+
+                boolean hasFarmFilter = (farmID != null && !farmID.isEmpty());
+                if (hasFarmFilter) {
+                    sql += " WHERE f.FarmID = ?";
+                }
+
+                if (priceOrder != null && !priceOrder.isEmpty()) {
+                    sql += " ORDER BY k.Price " + (priceOrder.equalsIgnoreCase("asc") ? "ASC" : "DESC");
+                }
+
                 stm = con.prepareStatement(sql);
-                stm.setString(1, farmID);
+                if (hasFarmFilter) {
+                    stm.setString(1, farmID);
+                }
 
                 rs = stm.executeQuery();
                 while (rs.next()) {
@@ -166,7 +177,7 @@ public class KoiDAO implements Serializable {
                 pst = conn.prepareStatement(sql);
 
                 pst.setInt(1, koiOrderDTO.getCustomerID());
-                pst.setTimestamp(2, new java.sql.Timestamp(System.currentTimeMillis()));  
+                pst.setTimestamp(2, new java.sql.Timestamp(System.currentTimeMillis()));
                 pst.setBoolean(3, koiOrderDTO.isStatus());
                 pst.setString(4, koiOrderDTO.getType());
 

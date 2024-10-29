@@ -39,7 +39,7 @@
         <div class="banner-container">
             <div class="banner-text text-center">
                 <h2>Category</h2>
-                <h1>Travel Tours</h1>
+                <h1>Book Koi</h1>
             </div>
             <div class="banner-images">
                 <img src="img/TourImage/koitype.jpg" alt="Tour 1">
@@ -54,7 +54,7 @@
             <form method="GET" action="koi-list-order" class="mb-5">
                 <div class="row mb-4">
                     <div class="col-md-12 mb-3">
-                        <c:if test="${not empty param.farmID}">
+                        <c:if test="${not empty param.farmID or not empty param.priceOrder}">
                             <button type="button" class="btn btn-danger" onclick="removeFilters()">Remove Filter</button>
                         </c:if>
                     </div>
@@ -65,6 +65,15 @@
                             <c:forEach var="farm" items="${farmList}">
                                 <option value="${farm.farmID}" ${param.farmID == farm.farmID ? 'selected' : ''}>${farm.farmName}</option>
                             </c:forEach>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <strong><label for="priceFilter" class="form-label">Price</label></strong>
+                        <select id="priceFilter" name="priceOrder" class="form-select" onchange="this.form.submit()">
+                            <option value="" ${empty param.priceOrder ? 'selected' : ''}>All Prices</option>
+                            <option value="asc" ${param.priceOrder == 'asc' ? 'selected' : ''}>Price (Low to High)</option>
+                            <option value="desc" ${param.priceOrder == 'desc' ? 'selected' : ''}>Price (High to Low)</option>
                         </select>
                     </div>
                 </div>
@@ -107,7 +116,7 @@
                                 <!-- Form to add to cart -->
                                 <form action="AddToCartController" method="post">
                                     <input type="hidden" name="koiID" value="${tour.koiID}">
-                                    <input type="hidden" name="quantity" id="quantity-input-${tour.koiID}" value="0">
+                                    <input type="hidden" name="quantity" id="quantity-input-add-${tour.koiID}" value="0">
                                     <button type="submit" class="btn btn-primary btn-block" style="width: 200px;">
                                         <i class="fas fa-cart-plus"></i> Add to Cart
                                     </button>
@@ -116,7 +125,7 @@
                                 <!-- Form to book now -->
                                 <form action="BookNowController" method="post">  
                                     <input type="hidden" name="koiID" value="${tour.koiID}">
-                                    <input type="hidden" name="quantity" id="quantity-input-${tour.koiID}" value="0">
+                                    <input type="hidden" name="quantity" id="quantity-input-book-${tour.koiID}" value="0">
                                     <button type="submit" class="btn btn-danger btn-block" style="width: 200px;">
                                         <i class="fas fa-credit-card"></i> Book Now
                                     </button>

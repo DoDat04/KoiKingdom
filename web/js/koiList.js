@@ -26,19 +26,18 @@ function removeFilters() {
 // Function to update quantity
 function updateQuantity(koiID, change) {
     const quantityInput = document.getElementById(`quantity-${koiID}`);
-    const quantityHiddenInput = document.getElementById(`quantity-input-${koiID}`);
+    const quantityAddToCart = document.getElementById(`quantity-input-add-${koiID}`);
+    const quantityBookNow = document.getElementById(`quantity-input-book-${koiID}`);
     
     let currentQuantity = parseInt(quantityInput.value, 10);
     currentQuantity += change;
 
     if (currentQuantity < 0) {
-        currentQuantity = 0; // Prevent negative quantity
+        currentQuantity = 0; 
     }
 
-    quantityInput.value = currentQuantity; // Update input field
-    quantityHiddenInput.value = currentQuantity; // Update hidden input value
+    quantityInput.value = currentQuantity; 
+    quantityAddToCart.value = currentQuantity; 
+    quantityBookNow.value = currentQuantity; 
 }
-
-
-
 

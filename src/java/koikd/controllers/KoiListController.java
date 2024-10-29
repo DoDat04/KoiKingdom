@@ -40,6 +40,7 @@ public class KoiListController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = KOI_LIST_PAGE;
         String farmID = request.getParameter("farmID");
+        String priceOrder = request.getParameter("priceOrder");
         try {
             KoiDAO dao = new KoiDAO();  
             FarmDAO farmDao = new FarmDAO();
@@ -49,8 +50,8 @@ public class KoiListController extends HttpServlet {
             List<FarmDTO> farmList = farmDao.getFarmList();
             request.setAttribute("farmList", farmList);
             
-            if (farmID != null) {
-                List<KoiDTO> filterKoiList = dao.filterKois(farmID);
+            if (farmID != null || priceOrder != null) {
+                List<KoiDTO> filterKoiList = dao.filterKois(farmID, priceOrder);
                 request.setAttribute("KOILIST", filterKoiList);
             } else {
                 request.setAttribute("KOILIST", koiList);
