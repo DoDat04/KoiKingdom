@@ -9,11 +9,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import koikd.customer.CustomerDTO;
+import koikd.employees.EmployeesDTO;
 import koikd.order.KoiOrderDAO;
 import koikd.order.KoiOrderDTO;
 
@@ -30,44 +32,53 @@ public class GetKoiOrder extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String userType = request.getParameter("userType");
-        
+
         String url = null;
-        
+
         if ("manage".equals(userType)) {
             url = MANAGEKOIORDERPAGE; // Đi đến trang quản lý cho nhân viên
         } else {
             url = SHIPHISTORYPAGE;
         }
-        
+
         try {
             // Retrieve the input parameters
             String nameOrder = request.getParameter("txtNameCustomer");
             String searchValue = request.getParameter("txtSearchValue");
-            
+            String employeeId = request.getParameter("employeeId");
             String index = request.getParameter("index");
+            HttpSession session = request.getSession();
 
+// Lấy giá trị LOGIN_DELIVERY từ session
+            EmployeesDTO deliveryEmployee = (EmployeesDTO) session.getAttribute("LOGIN_DELIVERY");
+            int deliveryBy = 0; // Default value
+
+            if (deliveryEmployee != null) {
+                deliveryBy = deliveryEmployee.getEmployeeID();
+            }
+
+            System.out.println(userType);
             // Default to 1 if no index is provided
             if (index == null || index.isEmpty()) {
                 index = "1";
             }
             String searchData = null;
-            if(nameOrder == null){
+            if (nameOrder == null) {
                 searchData = searchValue;
             } else {
                 searchData = nameOrder;
             }
-
-          
+            System.out.println("ẻwe"+searchData);  
+            
+            
             // Parse index as an integer
             int pageIndex = Integer.parseInt(index);
-  System.out.println(searchData);
-                System.out.println(pageIndex);
             // Call DAO to get order list
             KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
-            int numberOfPages = koiOrderDAO.getNumberPage(searchData);
+            int numberOfPages = koiOrderDAO.getNumberPage(searchData, deliveryBy);
             request.setAttribute("numberOfPages", numberOfPages);
 
-            ArrayList<KoiOrderDTO> koiList = koiOrderDAO.getKoiOrderListByNameCustomer(searchData, pageIndex);
+            ArrayList<KoiOrderDTO> koiList = koiOrderDAO.getKoiOrderListByNameCustomer(searchData, pageIndex, deliveryBy);
             ArrayList<String> customerNames = new ArrayList<>();
 
             // If list is not empty, populate customer names
@@ -76,6 +87,8 @@ public class GetKoiOrder extends HttpServlet {
                     CustomerDTO customer = koiOrderDAO.getCustomerByCustomerID(koiOrderDTO.getCustomerID());
                     customerNames.add(customer.getLastName() + " " + customer.getFirstName());
                 }
+                System.out.println("employId đã chọn" + employeeId);
+                request.setAttribute("employeeId", employeeId);
                 request.setAttribute("koiList", koiList);
                 request.setAttribute("pageIndex", pageIndex);
                 request.setAttribute("customerNames", customerNames);

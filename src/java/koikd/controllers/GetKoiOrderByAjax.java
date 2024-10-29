@@ -11,11 +11,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import koikd.customer.CustomerDTO;
+import koikd.employees.EmployeesDTO;
 import koikd.order.KoiOrderDAO;
 import koikd.order.KoiOrderDTO;
 
@@ -41,12 +43,15 @@ public class GetKoiOrderByAjax extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             String nameOrder = request.getParameter("txtNameCustomer");
             String index = request.getParameter("index");
+            HttpSession session = request.getSession();
+            EmployeesDTO deliveryEmployee = (EmployeesDTO) session.getAttribute("LOGIN_DELIVERY");
+            int deliveryBy = deliveryEmployee.getEmployeeID();
             KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
             if (index == null || index.isEmpty()) {
                 index = "1";
             }
-              int pageIndex = Integer.parseInt(index);
-            ArrayList<KoiOrderDTO> koiList = koiOrderDAO.getKoiOrderListByNameCustomer(nameOrder, pageIndex);
+            int pageIndex = Integer.parseInt(index);
+            ArrayList<KoiOrderDTO> koiList = koiOrderDAO.getKoiOrderListByNameCustomer(nameOrder, pageIndex, deliveryBy);
 
             if (koiList != null && !koiList.isEmpty()) {
                 out.print("<table class=\"styled-table\">");
@@ -85,7 +90,7 @@ public class GetKoiOrderByAjax extends HttpServlet {
 
                 out.print("</tbody>");
                 out.print("</table>");
-                
+
             } else {
                 out.print("<p>No orders found for this customer.</p>");
             }

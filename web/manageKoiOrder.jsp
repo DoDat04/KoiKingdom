@@ -1,7 +1,7 @@
 <%-- 
     Document   : manageKoiOrder
     Created on : Oct 26, 2024, 4:06:54 PM
-    Author     : Admin
+    Author     : Minhngo
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -170,11 +170,11 @@
                 <tbody>
                     <c:choose>
                         <c:when test="${not empty requestScope.koiList}">
-                            <c:forEach var="order" items="${requestScope.koiList}" varStatus="status">
+                            <c:forEach var="order" items="${requestScope.koiList}" varStatus="koiOrderID">
                                 <tr>
                                     <td>${order.koiOrderID}</td>
                                     <td>${order.customerID}</td>
-                                    <td>${requestScope.customerNames[status.index]}</td>
+                                    <td>${requestScope.customerNames[koiOrderID.index]}</td>
                                     <td>${order.deliveryDate}</td>
                                     <td>
                                         <select id="orderStatus_${order.koiOrderID}" onchange="updateStatus(${order.koiOrderID}, this.value)">
@@ -190,33 +190,50 @@
                                         </form>
                                     </td>
                                     <td>
-                                        <button type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#assignModal" onclick="loadDeliveryEmployees()">
+                                        <button type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#assignModal" onclick="loadDeliveryEmployees(${order.koiOrderID}, ${order.deliveryBy})">
                                             Assign to
                                         </button>
                                     </td>
                             <script>
-                                function loadDeliveryEmployees() {
+                                var selectedEmployeeId = ''; // Biến toàn cục để lưu employeeId được chọn
+
+                                function loadDeliveryEmployees(koiOrderID, employeeId) {
+                                    selectedEmployeeId = employeeId; // Cập nhật selectedEmployeeId từ tham số
+
                                     $.ajax({
                                         url: '/KoiKingdom/GetListDeliveryEmployee',
                                         type: 'GET',
                                         success: function (response) {
                                             console.log('Response received:', response);
 
-                                            // Clear old options in select
-                                            $('#employeeSelect').empty();
-
-                                            // Check if response is an array and has employees
+                                            // Bắt đầu HTML của form
+                                            var formHtml = '<form action="assignToDelivery" method="post" enctype="multipart/form-data" id="assignEmployeeForm">' +
+                                                    '<label for="employeeSelect">Select Employee:</label>' +
+                                                    '<select name="employeeId" id="employeeSelect" class="form-select" onchange="updateFormAction(' + koiOrderID + ')">' +
+                                                    '<option value="">-- Select an Employee --</option>'; // Tùy chọn mặc định
+                                            console.log('id đã chọn: ' + selectedEmployeeId);
+                                            // Kiểm tra nếu response là mảng và có dữ liệu nhân viên
                                             if (Array.isArray(response) && response.length > 0) {
-                                                // Loop through the delivery employees and add to select
                                                 response.forEach(function (employee) {
-                                                    // Create an option for each employee using string concatenation
-                                                    var option = '<option value="' + employee.employeeID + '">' +
+
+                                                    console.log('id chưa chọn: ' + employee.employeeID);
+                                                    // Kiểm tra xem employeeID có bằng với selectedEmployeeId không
+                                                    var selectedAttr = (selectedEmployeeId == employee.employeeID) ? ' selected' : '';
+                                                    formHtml += '<option value="' + employee.employeeID + '"' + selectedAttr + '>' +
                                                             employee.firstName + ' ' + employee.lastName +
                                                             '</option>';
-
-                                                    $('#employeeSelect').append(option); // Append the option to the select
                                                 });
-                                                $('#assignModal').modal('show'); // Show modal after populating
+
+                                                // Đóng thẻ select và form
+                                                formHtml += '</select></form>';
+
+                                                // Chèn toàn bộ HTML của form vào phần tử đích
+                                                $('#assignEmployeeContainer').html(formHtml);
+
+                                                // Thiết lập action với employeeId đã chọn
+                                                updateFormAction(koiOrderID);
+                                                // Hiển thị modal sau khi form đã được thêm vào
+                                                $('#assignModal').modal('show');
                                             } else {
                                                 alert('No delivery employees found.');
                                             }
@@ -228,8 +245,20 @@
                                     });
                                 }
 
-                            </script>
+                                // Hàm cập nhật action của form với `employeeId` và `koiOrderID`
+                                function updateFormAction(koiOrderID) {
+                                    // Lấy giá trị employeeId được chọn
+                                    var selectedEmployeeId = $('#employeeSelect').val();
+                                    console.log('id đã chọn123: ' + selectedEmployeeId);
 
+                                    // Nếu không có employeeId được chọn, action sẽ không có tham số employeeId
+                                    if (selectedEmployeeId) {
+                                        $('#assignEmployeeForm').attr('action', 'assignToDelivery?employeeId=' + selectedEmployeeId + '&koiOrderId=' + koiOrderID + '&userType=manage');
+                                    } else {
+                                        $('#assignEmployeeForm').attr('action', 'assignToDelivery?koiOrderId=' + koiOrderID + '&userType=manage'); // Không có employeeId
+                                    }
+                                }
+                            </script>
                             </tr>
                         </c:forEach>
                     </c:when>
@@ -251,12 +280,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="assignEmployeeForm" method="post" enctype="multipart/form-data" id="assignEmployeeForm">
-                                <label for="employeeSelect">Select Employee:</label>
-                                <select name="employeeId" id="employeeSelect" class="form-select">
-                                    <!-- Tùy chọn nhân viên sẽ được thêm vào đây thông qua AJAX -->
-                                </select>
-                            </form>
+                            <div id="assignEmployeeContainer"></div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
