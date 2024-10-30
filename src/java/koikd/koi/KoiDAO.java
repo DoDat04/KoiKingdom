@@ -62,6 +62,86 @@ public class KoiDAO implements Serializable {
         }
         return koiList;
     }
+    
+    public List<KoiDTO> getKoiTypeByFarm(String farmID) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<KoiDTO> koiList = new ArrayList<>();
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT kt.KoiTypeID, kt.TypeName "
+                        + "FROM KOITYPE kt "
+                        + "INNER JOIN KOI k ON kt.KoiTypeID = k.KoiTypeID "
+                        + "INNER JOIN KOI_FARM kf ON k.KoiID = kf.KoiID "
+                        + "WHERE kf.farmID = ?"; 
+
+                stm = con.prepareStatement(sql);
+                stm.setString(1, farmID); 
+
+                rs = stm.executeQuery();
+
+                while (rs.next()) {
+                    KoiDTO koi = new KoiDTO();
+                    koi.setKoiTypeID(rs.getInt("KoiTypeID")); 
+                    koi.setKoiName(rs.getString("TypeName")); 
+                    koiList.add(koi); 
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return koiList; 
+    }
+    
+    public List<KoiDTO> getKoiByKoiType(String koiTypeID) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<KoiDTO> koiList = new ArrayList<>();
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT KoiID, KoiName "
+                        + "FROM KOI "
+                        + "WHERE KoiTypeID = ?"; 
+
+                stm = con.prepareStatement(sql);
+                stm.setString(1, koiTypeID); 
+
+                rs = stm.executeQuery();
+
+                while (rs.next()) {
+                    KoiDTO koi = new KoiDTO();
+                    koi.setKoiID(rs.getInt("KoiID")); 
+                    koi.setKoiName(rs.getString("KoiName")); 
+                    koiList.add(koi); 
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return koiList; 
+    }
 
     public List<KoiDTO> filterKois(String farmID, String priceOrder) throws SQLException, ClassNotFoundException {
         Connection con = null;

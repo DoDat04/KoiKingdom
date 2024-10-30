@@ -32,29 +32,30 @@
                     <h3 style="text-align: center; color: #4CAF50;">Koi Order Details</h3>
                     <div id="orderDetails">
                         <div class="detailRow" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between;">
-                            <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
-                                <label for="txtKoiTypeID" style="font-weight: bold;">Select Koi Type</label>
-                                <select id="txtKoiTypeID" name="txtKoiTypeID" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                                    <option value="">-- Select Koi Type --</option>
-                                    <c:forEach var="koiType" items="${LIST_KOITYPE}">
-                                        <option value="${koiType.koiTypeID}">${koiType.typeName}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                            <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
-                                <label for="txtKoiIDs" style="font-weight: bold;">Select Koi</label>
-                                <select id="txtKoiIDs" name="txtKoiIDs" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                                    <c:forEach var="koi" items="${LIST_KOI}">
-                                        <option value="${koi.koiID}">${koi.koiName}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
+                            <!-- Select Farm -->
                             <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
                                 <label for="txtFarmIDs" style="font-weight: bold;">Select Farm</label>
-                                <select id="txtFarmIDs" name="txtFarmIDs" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                                <select id="txtFarmIDs" name="txtFarmIDs" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;" onchange="updateKoiTypeDropdown()">
+                                    <option value="">-- Select Farm --</option>
                                     <c:forEach var="farm" items="${LIST_FARM}">
                                         <option value="${farm.farmID}">${farm.farmName}</option>
                                     </c:forEach>
+                                </select>
+                            </div>
+
+                            <!-- Select Koi Type -->
+                            <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
+                                <label for="txtKoiTypeID" style="font-weight: bold;">Select Koi Type</label>
+                                <select id="txtKoiTypeID" name="txtKoiTypeID" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;" onchange="updateKoiDropdown()">
+                                    <option value="">-- Select Koi Type --</option>
+                                </select>
+                            </div>
+
+                            <!-- Select Koi -->
+                            <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
+                                <label for="txtKoiIDs" style="font-weight: bold;">Select Koi</label>
+                                <select id="txtKoiIDs" name="txtKoiIDs" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                                    <option value="">-- Select Koi --</option>
                                 </select>
                             </div>
                             <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
@@ -75,6 +76,48 @@
                 </form>
             </div>
         </div>
+
+        <script>
+            function updateKoiTypeDropdown() {
+                var farmID = document.getElementById("txtFarmIDs").value;
+                var koiTypeSelect = document.getElementById("txtKoiTypeID");
+                koiTypeSelect.innerHTML = '<option value="">-- Select Koi Type --</option>'; // Reset options
+
+                if (farmID) {
+                    fetch('getKoiData?action=getKoiTypeByFarm&farmID=' + farmID)
+                            .then(response => response.json())
+                            .then(data => {
+                                data.forEach(koiType => {
+                                    var option = document.createElement("option");
+                                    option.value = koiType.koiTypeID;
+                                    option.textContent = koiType.typeName;
+                                    koiTypeSelect.appendChild(option);
+                                });
+                            })
+                            .catch(error => console.error('Error fetching koi type data:', error));
+                }
+            }
+
+            function updateKoiDropdown() {
+                var koiTypeID = document.getElementById("txtKoiTypeID").value;
+                var koiSelect = document.getElementById("txtKoiIDs");
+                koiSelect.innerHTML = '<option value="">-- Select Koi --</option>'; // Reset options
+
+                if (koiTypeID) {
+                    fetch('getKoiData?action=getKoiByKoiType&koiTypeID=' + koiTypeID)
+                            .then(response => response.json())
+                            .then(data => {
+                                data.forEach(koi => {
+                                    var option = document.createElement("option");
+                                    option.value = koi.koiID;
+                                    option.textContent = koi.koiName;
+                                    koiSelect.appendChild(option);
+                                });
+                            })
+                            .catch(error => console.error('Error fetching koi data:', error));
+                }
+            }
+        </script>
 
         <c:if test="${not empty sessionScope.message}">
             <script>

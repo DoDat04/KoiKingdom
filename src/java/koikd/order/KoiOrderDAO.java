@@ -1259,7 +1259,7 @@ public class KoiOrderDAO implements Serializable {
                         + "    C.CustomerID, \n"
                         + "    O.DeliveryDate, \n"
                         + "    O.Status, \n"
-                        + "    O.EstimatedDelivery \n"
+                        + "    O.EstimatedDelivery, \n"
                         + "    O.Type \n"
                         + "FROM \n"
                         + "    [dbo].[KOIORDER] O\n"
