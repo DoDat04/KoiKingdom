@@ -25,6 +25,8 @@ public class TourDTO implements Serializable{
     private double tourRating;
     private boolean status;
     private String tourDepartLoca;
+    private int consultingID;
+
 
     public TourDTO() {
     }
@@ -79,6 +81,20 @@ public class TourDTO implements Serializable{
         this.startDate = startDate;
         this.endDate = endDate;
         this.tourDepartLoca = tourDepartLoca;
+    }
+    
+    public TourDTO(int tourID, String tourName, String duration, String description, double tourPrice, Timestamp startDate, Timestamp endDate, String tourImage, boolean status, String tourDepartLoca, int consultingID) {
+        this.tourID = tourID;
+        this.tourName = tourName;
+        this.duration = duration;
+        this.description = description;
+        this.tourPrice = tourPrice;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.tourDepartLoca = tourDepartLoca;
+        this.consultingID = consultingID;
+        this.tourImage = tourImage;
     }
          
     public String getTourDepartLoca() {
@@ -184,4 +200,14 @@ public class TourDTO implements Serializable{
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    public int getConsultingID() {
+        return consultingID;
+    }
+
+    public void setConsultingID(int consultingID) {
+        this.consultingID = consultingID;
+    }
+    
+    
 }

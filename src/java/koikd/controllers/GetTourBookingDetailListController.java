@@ -38,8 +38,9 @@ public class GetTourBookingDetailListController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = TOUR_BOOKING_DETAIL_PAGE;
         try {
+            int consuID = Integer.parseInt(request.getParameter("employeeID"));
             TourBookingDetailDAO dao = new TourBookingDetailDAO();
-            List<TourBookingDetailDTO> listDTO = dao.getAllTourBookingDetail();
+            List<TourBookingDetailDTO> listDTO = dao.getAllTourBookingDetail(consuID);
             request.setAttribute("TOUR_BOOKING_DETAIL", listDTO);
         } catch (SQLException ex) {
             Logger.getLogger(GetTourBookingDetailListController.class.getName()).log(Level.SEVERE, null, ex);

@@ -226,48 +226,53 @@ public class TourBookingDetailDAO implements Serializable {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    public List<TourBookingDetailDTO> getAllTourBookingDetail() throws SQLException, ClassNotFoundException {
-        Connection con = null;
-        PreparedStatement stm = null;
-        ResultSet rs = null;
-        List<TourBookingDetailDTO> listTourBookingDetail = new ArrayList<>();
+    public List<TourBookingDetailDTO> getAllTourBookingDetail(int consultingID) throws SQLException, ClassNotFoundException {
+    Connection con = null;
+    PreparedStatement stm = null;
+    ResultSet rs = null;
+    List<TourBookingDetailDTO> listTourBookingDetail = new ArrayList<>();
 
-        try {
-            con = DBUtils.getConnection();
-            if (con != null) {
-                String sql = "SELECT DISTINCT t.TourBookingDetail, t.CustomerID, b.Name, t.TourID, t.Quantity, t.UnitPrice, t.TotalPrice, t.Status, t.TourType "
-                        + "FROM TOURBOOKINGDETAIL t INNER JOIN BOOKING b ON "
-                        + "t.CustomerID = b.CustomerID";
-                stm = con.prepareStatement(sql);
-                rs = stm.executeQuery();
-                while (rs.next()) {
-                    int tourBookingDetailID = rs.getInt("TourBookingDetail");
-                    int custID = rs.getInt("CustomerID");
-                    String custName = rs.getString("Name");
-                    int tourID = rs.getInt("TourID");
-                    int quantity = rs.getInt("Quantity");
-                    double unitPrice = rs.getDouble("UnitPrice");
-                    double totalPrice = rs.getDouble("TotalPrice");
-                    String status = rs.getString("Status");
-                    String tourType = rs.getString("TourType");
+    try {
+        con = DBUtils.getConnection();
+        if (con != null) {
+            String sql = "SELECT DISTINCT t.TourBookingDetail, t.CustomerID, b.Name, t.TourID, t.Quantity, t.UnitPrice, t.TotalPrice, t.Status, t.TourType " +
+                         "FROM TOURBOOKINGDETAIL t " +
+                         "INNER JOIN BOOKING b ON t.CustomerID = b.CustomerID " +
+                         "INNER JOIN TOUR tour ON t.TourID = tour.TourID " + // INNER JOIN với bảng TOUR
+                         "WHERE tour.Consulting= ?"; // Điều kiện lọc theo consultingID
+            
+            stm = con.prepareStatement(sql);
+            stm.setInt(1, consultingID); // Gán giá trị cho consultingID
+            rs = stm.executeQuery();
 
-                    TourBookingDetailDTO listDTO = new TourBookingDetailDTO(tourBookingDetailID, custID, custName, tourID, tourType, quantity, unitPrice, totalPrice, status, tourType);
-                    listTourBookingDetail.add(listDTO);
-                }
-            }
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (stm != null) {
-                stm.close();
-            }
-            if (con != null) {
-                con.close();
+            while (rs.next()) {
+                int tourBookingDetailID = rs.getInt("TourBookingDetail");
+                int custID = rs.getInt("CustomerID");
+                String custName = rs.getString("Name");
+                int tourID = rs.getInt("TourID");
+                int quantity = rs.getInt("Quantity");
+                double unitPrice = rs.getDouble("UnitPrice");
+                double totalPrice = rs.getDouble("TotalPrice");
+                String status = rs.getString("Status");
+                String tourType = rs.getString("TourType");
+
+                TourBookingDetailDTO listDTO = new TourBookingDetailDTO(tourBookingDetailID, custID, custName, tourID, tourType, quantity, unitPrice, totalPrice, status, tourType);
+                listTourBookingDetail.add(listDTO);
             }
         }
-        return listTourBookingDetail;
+    } finally {
+        if (rs != null) {
+            rs.close();
+        }
+        if (stm != null) {
+            stm.close();
+        }
+        if (con != null) {
+            con.close();
+        }
     }
+    return listTourBookingDetail;
+}
 
     /**
      * Update Tour Booking Detail Status

@@ -62,7 +62,7 @@
                             <a href="booking-list" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Manage Booking</a>
                         </li>
                         <li class="menu-item">
-                            <a href="tour-booking-detail-list" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Manage Tour Booking</a>
+                            <a href="tour-booking-detail-list?employeeID=${sessionScope.consultingID}" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Tour Detail Management</a>
                         </li>
                         <li class="menu-item">
                             <a href="list-tour-custom" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Manage Tour Custom</a>

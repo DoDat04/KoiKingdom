@@ -40,14 +40,16 @@ public class UpdateTourBookingStatusController extends HttpServlet {
         String url = TOUR_BOOKING_DETAIL_PAGE;
         String tourBookingDetailIDParam = request.getParameter("txtTourBookingDetailID");
         String newStatus = request.getParameter("txtStatus");
+        int consuID = Integer.parseInt(request.getParameter("employeeID"));
         try {
+            
             TourBookingDetailDAO dao = new TourBookingDetailDAO();
             if (tourBookingDetailIDParam != null && !tourBookingDetailIDParam.isEmpty()) {
                 int tourBookingDetailID = Integer.parseInt(tourBookingDetailIDParam);
                 dao.updateTourBookingDetailStatus(tourBookingDetailID, newStatus);
             }            
             
-            List<TourBookingDetailDTO> listDTO = dao.getAllTourBookingDetail();
+            List<TourBookingDetailDTO> listDTO = dao.getAllTourBookingDetail(consuID);
             request.setAttribute("TOUR_BOOKING_DETAIL", listDTO);
         } catch (SQLException ex) {
             Logger.getLogger(GetTourBookingDetailListController.class.getName()).log(Level.SEVERE, null, ex);

@@ -78,7 +78,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form id="updateForm${custom.tourBookingDetailID}" method="post" action="update-status">
+                                            <form id="updateForm${custom.tourBookingDetailID}" method="post" action="update-status?employeeID=${sessionScope.consultingID}">
                                                 <!-- Dropdown to select the status -->
                                                 <div class="mb-3">
                                                     <label for="status${custom.tourBookingDetailID}" class="form-label">Status</label>
