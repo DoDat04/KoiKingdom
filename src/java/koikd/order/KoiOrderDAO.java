@@ -1374,10 +1374,56 @@ public class KoiOrderDAO implements Serializable {
                         + "ko.CreatedBy "
                         + "FROM KOIORDER ko "
                         + "INNER JOIN CUSTOMER c ON ko.CustomerID = c.CustomerID "
-                        + "WHERE ko.CreatedBy = ?";  
+                        + "WHERE ko.CreatedBy = ? AND ko.Type = 'Offline' ";  
 
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, consultingID);  
+
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    int koiOrderID = rs.getInt("KoiOrderID");
+                    String fullName = rs.getString("FullName");
+                    Date deliveryDate = rs.getDate("DeliveryDate");
+                    boolean status = rs.getBoolean("Status");
+                    Date estimatedDelivery = rs.getDate("EstimatedDelivery");
+                    String type = rs.getString("Type");
+                    int createBy = rs.getInt("CreatedBy");
+
+                    KoiOrderDTO koiOrder = new KoiOrderDTO(koiOrderID, fullName, deliveryDate, status, estimatedDelivery, type, createBy);
+                    koiOrderList.add(koiOrder);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return koiOrderList;
+    }
+    
+    public List<KoiOrderDTO> getKoiBookingForConsulting() throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<KoiOrderDTO> koiOrderList = new ArrayList<>();
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT ko.KoiOrderID, c.FirstName + ' ' + c.LastName AS FullName, "
+                        + "ko.DeliveryDate, ko.EstimatedDelivery, ko.Type, ko.Status, "
+                        + "ko.CreatedBy "
+                        + "FROM KOIORDER ko "
+                        + "INNER JOIN CUSTOMER c ON ko.CustomerID = c.CustomerID "
+                        + "WHERE ko.Type = 'Online' ";  
+
+                stm = con.prepareStatement(sql);
 
                 rs = stm.executeQuery();
                 while (rs.next()) {

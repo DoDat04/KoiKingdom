@@ -17,13 +17,13 @@
     <body>
         <jsp:include page="headerForConsulting.jsp" flush="true"/>
 
-        <c:if test="${not empty sessionScope.updateSuccess}">
-            <script defer>
-                document.addEventListener('DOMContentLoaded', function () {
-                    showToast('${success}', 'success');
-                });
+        <c:if test="${not empty sessionScope.updateSuccessConsulting}">
+            <script>
+                window.onload = function () {
+                    showToast('${sessionScope.updateSuccessConsulting}', 'success');
+                };
             </script>
-            <c:set var="updateSuccess" value="${null}" scope="session"/>
+            <c:set var="updateSuccessConsulting" value="${null}" scope="session"/>
         </c:if>
 
         <c:if test="${not empty sessionScope.updateError}">

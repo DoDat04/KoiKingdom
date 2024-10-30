@@ -18,6 +18,16 @@
 
     <body>
         <jsp:include page="headerForDelivery.jsp" flush="true"/>
+        
+        <c:if test="${not empty sessionScope.updateSuccessDelivery}">
+            <script>
+                window.onload = function () {
+                    showToast('${sessionScope.updateSuccessDelivery}', 'success');
+                };
+            </script>
+            <c:set var="updateSuccessDelivery" value="${null}" scope="session"/>
+        </c:if>
+        
         <div style="margin-top: 25vh; margin-left: 17%; margin-right: 6%;" class="main-content">         
 
             <table id="content" class="styled-table">
@@ -127,16 +137,7 @@
                     }
                 });
             }
-        </script>
-
-        <c:if test="${not empty sessionScope.updateSuccess}">
-            <script defer>
-                document.addEventListener('DOMContentLoaded', function () {
-                    showToast('${success}', 'success');
-                });
-            </script>
-            <c:set var="updateSuccess" value="${null}" scope="session"/>
-        </c:if>
+        </script>       
 
         <c:if test="${not empty sessionScope.updateError}">
             <script>

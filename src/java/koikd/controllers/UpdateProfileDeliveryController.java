@@ -112,7 +112,7 @@ public class UpdateProfileDeliveryController extends HttpServlet {
                     employee.setLastName(lastName);
                     employee.setEmail(email);
                     session.setAttribute("LOGIN_DELIVERY", employee);
-                    session.setAttribute("updateSuccess", "Update successfully!");
+                    session.setAttribute("updateSuccessDelivery", "Update successfully!");
                 } else {
                     // Thông báo lỗi nếu quá trình cập nhật không thành công
                     request.setAttribute("updateError", "Failed to update profile.");

@@ -109,7 +109,7 @@ public class UpdateProfileSalesController extends HttpServlet {
                     employee.setLastName(lastName);
                     employee.setEmail(email);
                     session.setAttribute("LOGIN_SALES", employee);
-                    session.setAttribute("updateSuccess", "Update successfully!");
+                    session.setAttribute("updateSuccessSales", "Update successfully!");
                 } else {
                     // Thông báo lỗi nếu quá trình cập nhật không thành công
                     request.setAttribute("updateError", "Failed to update profile.");

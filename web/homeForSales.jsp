@@ -23,13 +23,13 @@
     <body>
         <jsp:include page="headerForSales.jsp" flush="true"/>
         
-        <c:if test="${not empty sessionScope.updateSuccess}">
-            <script defer>
-                document.addEventListener('DOMContentLoaded', function () {
-                    showToast('${success}', 'success');
-                });
+        <c:if test="${not empty sessionScope.updateSuccessSales}">
+            <script>
+                window.onload = function () {
+                    showToast('${sessionScope.updateSuccessSales}', 'success');
+                };
             </script>
-            <c:set var="updateSuccess" value="${null}" scope="session"/>
+            <c:set var="updateSuccessSales" value="${null}" scope="session"/>
         </c:if>
 
         <c:if test="${not empty sessionScope.updateError}">
@@ -40,5 +40,8 @@
             </script>
             <c:set var="updateError" value="${null}" scope="session"/>
         </c:if>
+        <div id="toastBox"></div>
+        <script src="js/homeForDelivery.js"></script>
+        <script src="js/showToast.js"></script>
     </body>
 </html>

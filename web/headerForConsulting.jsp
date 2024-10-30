@@ -73,6 +73,9 @@
                         <li class="menu-item">
                             <a href="koi-order-list" style="color: black"><i style='font-size:24px' class='fas'>&#xF433;</i>Koi Order</a>
                         </li>
+                        <li class="menu-item">
+                            <a href="koi-booking-list" style="color: black"><i style='font-size:24px' class='fas'>&#xF433;</i>Koi Booking</a>
+                        </li>
                         <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
                                 <i style='font-size:24px' class='fas'>&#xf406;</i>Profile</a></li>
                         <li class="menu-item">
