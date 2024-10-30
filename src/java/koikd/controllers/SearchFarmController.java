@@ -12,19 +12,22 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.sql.SQLException;
 import java.util.List;
+import koikd.farm.FarmDAO;
 import koikd.farm.FarmDTO;
-import koikd.tour.TourDAO;
-import koikd.tour.TourDTO;
 
 /**
  *
  * @author Nguyen Huu Khoan
  */
-@WebServlet(name = "GetListTour", urlPatterns = {"/managetour"})
-public class GetListTourController extends HttpServlet {
-    private final String MANAGE_TOUR = "manageTour.jsp";
+@WebServlet(name = "SearchFarmController", urlPatterns = {"/searchfarm"})
+public class SearchFarmController extends HttpServlet {
+
+    private static final String SEARCH_PAGE = "manageFarm.jsp";
+    private static final String SEARCH_RESULT = "searchFarm.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,28 +38,43 @@ public class GetListTourController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = MANAGE_TOUR;
-        try {
-            String index = request.getParameter("index");
+        String searchValue = request.getParameter("txtSearchValue");
+        String index = request.getParameter("index");
+        String url = SEARCH_PAGE;
+         try {
             // Default to 1 if no index is provided
             if (index == null || index.isEmpty()) {
                 index = "1";
             }
+
             // Parse index as an integer
-           int pageIndex = Integer.parseInt(index);
-           TourDAO dao = new TourDAO();
-           int numberOfPages = dao.getNumberPageInManagePage();
-           request.setAttribute("numberOfPages", numberOfPages);
-           request.setAttribute("pageIndex", pageIndex);
-           List<TourDTO> tour = dao.getAllTour(pageIndex);
-           request.setAttribute("tour", tour);
+            int pageIndex = Integer.parseInt(index);
+            if (searchValue == null || searchValue.trim().isEmpty()) {
+                // Trường hợp không nhập từ khóa
+                request.setAttribute("SEARCH_MESSAGE", "No keyword entered !");
+            } else {
+                FarmDAO dao = new FarmDAO();
+                int numberOfPages = dao.getNumberPageInSearchPage(searchValue);
+                request.setAttribute("numberOfPages", numberOfPages);
+                List<FarmDTO> result = dao.searchFarmName(searchValue,pageIndex);
+                if (result != null && !result.isEmpty()) {
+                    url = SEARCH_RESULT;
+                    request.setAttribute("SEARCH_FARM", result);
+                    request.setAttribute("pageIndex", pageIndex);
+               
+                } else {
+                    request.setAttribute("SEARCH_MESSAGE", "No tour found !");
+                }
+
+            }
+           
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(SearchTourController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }  finally {
+            Logger.getLogger(SearchTourController.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
         }
@@ -74,7 +92,11 @@ public class GetListTourController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(SearchFarmController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -88,7 +110,11 @@ public class GetListTourController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(SearchFarmController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

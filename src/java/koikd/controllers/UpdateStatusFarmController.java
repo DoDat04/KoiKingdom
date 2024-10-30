@@ -4,7 +4,6 @@
  */
 package koikd.controllers;
 
-import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,19 +11,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import koikd.farm.FarmDAO;
 import java.sql.SQLException;
-import java.util.List;
-import koikd.farm.FarmDTO;
-import koikd.tour.TourDAO;
-import koikd.tour.TourDTO;
 
 /**
  *
  * @author Nguyen Huu Khoan
  */
-@WebServlet(name = "GetListTour", urlPatterns = {"/managetour"})
-public class GetListTourController extends HttpServlet {
-    private final String MANAGE_TOUR = "manageTour.jsp";
+@WebServlet(name = "UpdateStatusFarmController", urlPatterns = {"/updateStatusFarm"})
+public class UpdateStatusFarmController extends HttpServlet {
+private static final String MANAGE_FARM_PAGE = "managefarm";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,28 +33,45 @@ public class GetListTourController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = MANAGE_TOUR;
+        String url = MANAGE_FARM_PAGE;
+        
+        String idFarmString = request.getParameter("farmID");
+        int idFarm = 0;
+        boolean updateStatusResult = false;
+
         try {
-            String index = request.getParameter("index");
-            // Default to 1 if no index is provided
-            if (index == null || index.isEmpty()) {
-                index = "1";
+            if (idFarmString != null && !idFarmString.trim().isEmpty()) {
+                try {
+                    idFarm = Integer.parseInt(idFarmString);
+                } catch (NumberFormatException e) {
+                    request.setAttribute("ERROR_UPDATE", "Invalid farm ID format: " + idFarmString);
+                    request.getRequestDispatcher(url).forward(request, response);
+                    return;
+                }
+
+                FarmDAO dao = new FarmDAO();
+                try {
+                    updateStatusResult = dao.updateFarmStatus(idFarm);
+                } catch (SQLException e) {
+                    request.setAttribute("ERROR_UPDATE", "Database error: " + e.getMessage());
+                    request.getRequestDispatcher(url).forward(request, response);
+                    return;
+                }
+
+                if (updateStatusResult) {
+                    request.setAttribute("UPDATE_STATUS", "Status updated successfully.");
+                } else {
+                    request.setAttribute("ERROR_UPDATE", "Failed to update status for some reason!");
+                }
+            } else {
+                request.setAttribute("ERROR_UPDATE", "farm ID is missing or empty.");
             }
-            // Parse index as an integer
-           int pageIndex = Integer.parseInt(index);
-           TourDAO dao = new TourDAO();
-           int numberOfPages = dao.getNumberPageInManagePage();
-           request.setAttribute("numberOfPages", numberOfPages);
-           request.setAttribute("pageIndex", pageIndex);
-           List<TourDTO> tour = dao.getAllTour(pageIndex);
-           request.setAttribute("tour", tour);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }  finally {
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("ERROR_UPDATE", "Unexpected error: " + e.getMessage());
+        } finally {
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

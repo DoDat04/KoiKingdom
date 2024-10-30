@@ -14,17 +14,19 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import koikd.farm.FarmDAO;
 import koikd.farm.FarmDTO;
-import koikd.tour.TourDAO;
-import koikd.tour.TourDTO;
 
 /**
  *
  * @author Nguyen Huu Khoan
  */
-@WebServlet(name = "GetListTour", urlPatterns = {"/managetour"})
-public class GetListTourController extends HttpServlet {
-    private final String MANAGE_TOUR = "manageTour.jsp";
+@WebServlet(name = "GetFarmsController", urlPatterns = {"/managefarm"})
+public class GetFarmsController extends HttpServlet {
+
+    private final String MANAGE_FARM = "manageFarm.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,9 +37,9 @@ public class GetListTourController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = MANAGE_TOUR;
+        String url = MANAGE_FARM;
         try {
             String index = request.getParameter("index");
             // Default to 1 if no index is provided
@@ -46,12 +48,12 @@ public class GetListTourController extends HttpServlet {
             }
             // Parse index as an integer
            int pageIndex = Integer.parseInt(index);
-           TourDAO dao = new TourDAO();
+           FarmDAO dao = new FarmDAO();
            int numberOfPages = dao.getNumberPageInManagePage();
            request.setAttribute("numberOfPages", numberOfPages);
            request.setAttribute("pageIndex", pageIndex);
-           List<TourDTO> tour = dao.getAllTour(pageIndex);
-           request.setAttribute("tour", tour);
+           List<FarmDTO> farm = dao.getAllFarm(pageIndex);
+           request.setAttribute("farm", farm);
         } catch (SQLException ex) {
             ex.printStackTrace();
         } catch (ClassNotFoundException ex) {
@@ -74,7 +76,11 @@ public class GetListTourController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(GetFarmsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -88,7 +94,11 @@ public class GetListTourController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(GetFarmsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

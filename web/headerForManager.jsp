@@ -77,6 +77,9 @@
                             <a href="createTour.jsp" style="color: black"><i class="fa-solid fa-plus" style='font-size:24px'></i>Add Tour</a>
                         </li>
                         <li class="menu-item">
+                            <a href="managefarm" style="color: black"><i class="fa-solid fa-tractor" style='font-size:24px'></i>Farm</a>
+                        </li>
+                        <li class="menu-item">
                             <a href="addEmployee.jsp" style="color: black"><i class="fas fa-user-plus" style='font-size:24px'></i>Add Employee</a>
                         </li>
                         <li class="menu-item">
