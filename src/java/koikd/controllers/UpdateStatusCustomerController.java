@@ -5,21 +5,22 @@
 package koikd.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import koikd.customer.CustomerDAO;
 import java.sql.SQLException;
-import koikd.employees.EmployeesDAO;
 
 /**
  *
- * @author ADMIN LAM
+ * @author Nguyen Huu Khoan
  */
-@WebServlet(name = "UpdateStatusEmployeeController", urlPatterns = {"/updateStatusEmployee"})
-public class UpdateStatusEmployeeController extends HttpServlet {
-    private static final String MANAGE_EMPLOYEES_PAGE = "manageemployee";
+@WebServlet(name = "UpdateStatusCustomerController", urlPatterns = {"/updateStatusCustomer"})
+public class UpdateStatusCustomerController extends HttpServlet {
+    private static final String MANAGE_CUSTOMER_PAGE = "managecustomer";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,9 +33,8 @@ public class UpdateStatusEmployeeController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = MANAGE_EMPLOYEES_PAGE;
-        
-        String idCustomerString = request.getParameter("employeeID");
+        String url = MANAGE_CUSTOMER_PAGE;
+        String idCustomerString = request.getParameter("customerID");
         int idCustomer = 0;
         boolean updateStatusResult = false;
 
@@ -43,14 +43,14 @@ public class UpdateStatusEmployeeController extends HttpServlet {
                 try {
                     idCustomer = Integer.parseInt(idCustomerString);
                 } catch (NumberFormatException e) {
-                    request.setAttribute("ERROR_UPDATE", "Invalid employee ID format: " + idCustomerString);
+                    request.setAttribute("ERROR_UPDATE", "Invalid customer ID format: " + idCustomerString);
                     request.getRequestDispatcher(url).forward(request, response);
                     return;
                 }
 
-                EmployeesDAO dao = new EmployeesDAO();
+                CustomerDAO dao = new CustomerDAO();
                 try {
-                    updateStatusResult = dao.updateStatusEmployee(idCustomer);
+                    updateStatusResult = dao.updateStatusCustomer(idCustomer);
                 } catch (SQLException e) {
                     request.setAttribute("ERROR_UPDATE", "Database error: " + e.getMessage());
                     request.getRequestDispatcher(url).forward(request, response);
@@ -63,7 +63,7 @@ public class UpdateStatusEmployeeController extends HttpServlet {
                     request.setAttribute("ERROR_UPDATE", "Failed to update status for some reason!");
                 }
             } else {
-                request.setAttribute("ERROR_UPDATE", "Employee ID is missing or empty.");
+                request.setAttribute("ERROR_UPDATE", "Customer ID is missing or empty.");
             }
 
         } catch (Exception e) {
@@ -72,6 +72,7 @@ public class UpdateStatusEmployeeController extends HttpServlet {
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

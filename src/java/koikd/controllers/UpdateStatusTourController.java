@@ -63,7 +63,7 @@ public class UpdateStatusTourController extends HttpServlet {
                     request.setAttribute("ERROR_UPDATE", "Failed to update status for some reason!");
                 }
             } else {
-                request.setAttribute("ERROR_UPDATE", "Customer ID is missing or empty.");
+                request.setAttribute("ERROR_UPDATE", "Tour ID is missing or empty.");
             }
 
         } catch (Exception e) {

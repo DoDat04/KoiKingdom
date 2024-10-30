@@ -194,6 +194,7 @@
                             <th>End Date</th>
                             <th>Status</th>
                             <th>Departure Location</th>
+                            <th>Consulting</th>
                             <th>Update</th>
                         </tr>
                     </thead>
@@ -248,6 +249,7 @@
                             </c:choose>
                         </td>
                         <td>${SEARCH_TOUR.tourDepartLoca}</td>
+                        <td>${SEARCH_TOUR.consultingID}</td>
                         <td>
                             <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#updateModal${SEARCH_TOUR.tourID}">
                                 Update

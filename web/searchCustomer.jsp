@@ -172,7 +172,7 @@
                             <th>Address</th>
                             <th>Account Type</th>
                             <th>Status</th>
-                            <th>Change status</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -188,18 +188,18 @@
                                 <td>
                                     <c:choose>
                                         <c:when test="${SEARCH_CUSTOMER.status}">
-                                            <span class="status-active">Active</span>
+                                            <a class="status-active btn btn-success" href="updateStatusCustomer?customerID=${SEARCH_CUSTOMER.customerID}"
+                                               onclick="return confirm('Are you sure you want to change the status?');">
+                                                Active
+                                            </a>
                                         </c:when>
                                         <c:otherwise>
-                                            <span class="status-inactive">Inactive</span>
+                                            <a class="status-inactive btn btn-danger" href="updateStatusCustomer?customerID=${SEARCH_CUSTOMER.customerID}"
+                                               onclick="return confirm('Are you sure you want to change the status?');">
+                                                Inactive
+                                            </a>
                                         </c:otherwise>
                                     </c:choose>
-                                </td>
-                                <td>
-                                    <a class="btn btn-primary" href="updateStatus?customerID=${SEARCH_CUSTOMER.customerID}" 
-                                       onclick="return confirm('Are you sure you want to change the status?');">
-                                        Change
-                                    </a>
                                 </td>
                             </tr>
                         </c:forEach>

@@ -278,7 +278,7 @@ public class TourDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT TourID, TourName, Duration, Description, TourPrice, StartDate, EndDate, Image, Status, DepartureLocation "
+                String sql = "SELECT TourID, TourName, Duration, Description, TourPrice, StartDate, EndDate, Image, Status, DepartureLocation, Consulting "
                         + "FROM TOUR ";
 
                 // Xử lý điều kiện tìm kiếm theo TourName và TourID
@@ -320,7 +320,8 @@ public class TourDAO implements Serializable {
                     String img = rs.getString("Image");
                     boolean status = rs.getBoolean("Status");
                     String loca = rs.getString("DepartureLocation");
-                    TourDTO dto = new TourDTO(id, name, duration, description, price, start, end, img, status, loca);
+                    int consu = rs.getInt("Consulting");
+                    TourDTO dto = new TourDTO(id, name, duration, description, price, start, end, img, status, loca, consu);
                     result.add(dto);
                 }
             }

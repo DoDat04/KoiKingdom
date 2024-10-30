@@ -176,7 +176,7 @@
                             <th>First Name</th>
                             <th>Address</th>
                             <th>Status</th>
-                            <th>Change status</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -191,26 +191,29 @@
                                 <td>
                                     <c:choose>
                                         <c:when test="${SEARCH_EMPLOYEE.status}">
-                                            <span class="status-active">Active</span>
+                                            <a class="status-active btn btn-success" href="updateStatusEmployee?employeeID=${SEARCH_EMPLOYEE.employeeID}"
+                                               onclick="return confirm('Are you sure you want to change the status?');">
+                                                Active
+                                            </a>
                                         </c:when>
                                         <c:otherwise>
-                                            <span class="status-inactive">Block</span>
+                                            <a class="status-inactive btn btn-danger" href="updateStatusEmployee?employeeID=${SEARCH_EMPLOYEE.employeeID}"
+                                               onclick="return confirm('Are you sure you want to change the status?');">
+                                                Inactive
+                                            </a>
                                         </c:otherwise>
                                     </c:choose>
-                                </td>
-                                <td>
-                                    <a class="btn btn-primary" href="updateStatusEmployee?employeeID=${SEARCH_EMPLOYEE.employeeID}" 
-                                       onclick="return confirm('Are you sure you want to change the status?');">
-                                        Change
-                                    </a>
                                 </td>
                             </tr>
                         </c:forEach>
                     </tbody>
+                    <%-- Thông báo sau khi update status--%>
                     <c:if test="${not empty UPDATE_STATUS}">
-                        <div class="alert alert-success">
-                            ${UPDATE_STATUS}
-                        </div>
+                        <script>
+                            window.onload = function () {
+                                showToast('${UPDATE_STATUS}', 'success');
+                            };
+                        </script>   
                     </c:if>
                     
                 </table>

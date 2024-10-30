@@ -153,11 +153,11 @@
                     <a href="GetListEmployee">Employee</a>
                     <a href="GetListTour">Tour</a>
                 </div>-->
-         <jsp:include page="headerForManager.jsp" flush="true">
+        <jsp:include page="headerForManager.jsp" flush="true">
             <jsp:param name="searchController" value="searchcustomer"/>
         </jsp:include>   
         <!-- Nội dung chính -->
-          <div style="    margin-top: 25vh;
+        <div style="    margin-top: 25vh;
              margin-left: 17%;
              margin-right: 6%;" class="main-content">      
             <div class="container">
@@ -173,7 +173,7 @@
                             <th>Address</th>
                             <th>Account Type</th>
                             <th>Status</th>
-                            <th>Change status</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -185,22 +185,21 @@
                                 <td>${customer.firstName}</td>
                                 <td>${customer.address}</td>
                                 <td>${customer.accountType}</td>
-
                                 <td>
                                     <c:choose>
                                         <c:when test="${customer.status}">
-                                            <span class="status-active">Active</span>
+                                            <a class="status-active btn btn-success" href="updateStatusCustomer?customerID=${customer.customerID}"
+                                               onclick="return confirm('Are you sure you want to change the status?');">
+                                                Active
+                                            </a>
                                         </c:when>
                                         <c:otherwise>
-                                            <span class="status-inactive">Inactive</span>
+                                            <a class="status-inactive btn btn-danger" href="updateStatusCustomer?customerID=${customer.customerID}"
+                                               onclick="return confirm('Are you sure you want to change the status?');">
+                                                Inactive
+                                            </a>
                                         </c:otherwise>
                                     </c:choose>
-                                </td>
-                                <td>
-                                    <a class="btn btn-primary" href="updateStatus?customerID=${customer.customerID}" 
-                                       onclick="return confirm('Are you sure you want to change the status?');">
-                                        Change
-                                    </a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -234,11 +233,14 @@
                         </c:if>
                     </ul>
                 </nav>
-                <c:if test="${not empty UPDATE_STATUS}">
-                    <div class="alert alert-success">
-                        ${UPDATE_STATUS}
-                    </div>
-                </c:if>
+                <%-- Thông báo sau khi update status--%>
+                    <c:if test="${not empty UPDATE_STATUS}">
+                        <script>
+                            window.onload = function () {
+                                showToast('${UPDATE_STATUS}', 'success');
+                            };
+                        </script>   
+                    </c:if>
                 <c:if test="${not empty SEARCH_MESSAGE}">
                     <p style="color: red; text-align: center;">${SEARCH_MESSAGE}</p>
                 </c:if>
