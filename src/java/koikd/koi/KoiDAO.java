@@ -62,7 +62,7 @@ public class KoiDAO implements Serializable {
         }
         return koiList;
     }
-    
+
     public List<KoiDTO> getKoiTypeByFarm(String farmID) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -76,18 +76,18 @@ public class KoiDAO implements Serializable {
                         + "FROM KOITYPE kt "
                         + "INNER JOIN KOI k ON kt.KoiTypeID = k.KoiTypeID "
                         + "INNER JOIN KOI_FARM kf ON k.KoiID = kf.KoiID "
-                        + "WHERE kf.farmID = ?"; 
+                        + "WHERE kf.farmID = ?";
 
                 stm = con.prepareStatement(sql);
-                stm.setString(1, farmID); 
+                stm.setString(1, farmID);
 
                 rs = stm.executeQuery();
 
                 while (rs.next()) {
                     KoiDTO koi = new KoiDTO();
-                    koi.setKoiTypeID(rs.getInt("KoiTypeID")); 
-                    koi.setKoiName(rs.getString("TypeName")); 
-                    koiList.add(koi); 
+                    koi.setKoiTypeID(rs.getInt("KoiTypeID"));
+                    koi.setKoiName(rs.getString("TypeName"));
+                    koiList.add(koi);
                 }
             }
         } finally {
@@ -101,9 +101,9 @@ public class KoiDAO implements Serializable {
                 con.close();
             }
         }
-        return koiList; 
+        return koiList;
     }
-    
+
     public List<KoiDTO> getKoiByKoiType(String koiTypeID) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -115,18 +115,18 @@ public class KoiDAO implements Serializable {
             if (con != null) {
                 String sql = "SELECT KoiID, KoiName "
                         + "FROM KOI "
-                        + "WHERE KoiTypeID = ?"; 
+                        + "WHERE KoiTypeID = ?";
 
                 stm = con.prepareStatement(sql);
-                stm.setString(1, koiTypeID); 
+                stm.setString(1, koiTypeID);
 
                 rs = stm.executeQuery();
 
                 while (rs.next()) {
                     KoiDTO koi = new KoiDTO();
-                    koi.setKoiID(rs.getInt("KoiID")); 
-                    koi.setKoiName(rs.getString("KoiName")); 
-                    koiList.add(koi); 
+                    koi.setKoiID(rs.getInt("KoiID"));
+                    koi.setKoiName(rs.getString("KoiName"));
+                    koiList.add(koi);
                 }
             }
         } finally {
@@ -140,7 +140,7 @@ public class KoiDAO implements Serializable {
                 con.close();
             }
         }
-        return koiList; 
+        return koiList;
     }
 
     public List<KoiDTO> filterKois(String farmID, String priceOrder) throws SQLException, ClassNotFoundException {
@@ -245,26 +245,38 @@ public class KoiDAO implements Serializable {
         return koi;
     }
 
-    public void insertKoiOrder(KoiOrderDTO koiOrderDTO) throws SQLException, ClassNotFoundException {
+    public int insertKoiOrder(KoiOrderDTO koiOrderDTO) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement pst = null;
+        ResultSet rs = null;
+        int koiOrderID = -1;
 
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 String sql = "INSERT INTO [dbo].[KOIORDER]([CustomerID], [DeliveryDate], [Status], [EstimatedDelivery], [Type]) "
                         + "VALUES(?, ?, ?, NULL, ?)";
-                pst = conn.prepareStatement(sql);
+                pst = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); // Lấy giá trị khóa tự động
 
                 pst.setInt(1, koiOrderDTO.getCustomerID());
-                pst.setTimestamp(2, new java.sql.Timestamp(System.currentTimeMillis()));
+                pst.setTimestamp(2, new java.sql.Timestamp(koiOrderDTO.getDeliveryDate().getTime()));
                 pst.setBoolean(3, koiOrderDTO.isStatus());
                 pst.setString(4, koiOrderDTO.getType());
 
-                pst.executeUpdate();
+                int affectedRows = pst.executeUpdate();
+                if (affectedRows > 0) {
+                    // Lấy KoiOrderID tự động sinh
+                    rs = pst.getGeneratedKeys();
+
+                    if (rs.next()) {
+                        koiOrderID = rs.getInt(1); // Lấy giá trị KoiOrderID từ kết quả
+                    }
+                }
             }
         } finally {
-            // Close resources
+            if (rs != null) {
+                rs.close();
+            }
             if (pst != null) {
                 pst.close();
             }
@@ -272,5 +284,40 @@ public class KoiDAO implements Serializable {
                 conn.close();
             }
         }
+        return koiOrderID;
+    }
+
+    public int getKoiTypeIDByKoiID(int koiID) throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        int koiTypeID = -1; // Default value if koiTypeID is not found
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT kt.KoiTypeID "
+                        + "FROM KOI k INNER JOIN KOITYPE kt ON k.KoiTypeID = kt.KoiTypeID "
+                        + "WHERE k.KoiID = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, koiID);
+
+                rs = pst.executeQuery();
+                if (rs.next()) {
+                    koiTypeID = rs.getInt("KoiTypeID");
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return koiTypeID;
     }
 }

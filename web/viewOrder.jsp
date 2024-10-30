@@ -126,16 +126,34 @@
                                     </c:choose>
                                 </td>
                                 <td>
-                                    <fmt:formatNumber value="${entry.value.totalPrice}" type="number" maxFractionDigits="2" minFractionDigits="2" />
+                                    <c:choose>
+                                        <c:when test="${not empty entry.value.tour}">
+                                            $<fmt:formatNumber value="${entry.value.tour.tourPrice * entry.value.numberOfPeople}" type="number" maxFractionDigits="2" minFractionDigits="2" />
+                                        </c:when>
+                                        <c:when test="${not empty entry.value.koi}">
+                                            $<fmt:formatNumber value="${entry.value.koi.price * 0.3 * entry.value.quantity}" type="number" maxFractionDigits="2" minFractionDigits="2" />
+                                        </c:when>
+                                    </c:choose>
                                 </td>
                             </tr>
                         </c:forEach>                       
                     </tbody>
                     <tfoot>
                         <tr>
+                            <c:set var="subtotal" value="0" />
+                            <c:forEach var="entry" items="${cart.items}">
+                                <c:choose>
+                                    <c:when test="${not empty entry.value.tour}">
+                                        <c:set var="subtotal" value="${subtotal + entry.value.tour.tourPrice * entry.value.numberOfPeople}" />
+                                    </c:when>
+                                    <c:when test="${not empty entry.value.koi}">
+                                        <c:set var="subtotal" value="${subtotal + entry.value.koi.price * 0.3 * entry.value.quantity}" />
+                                    </c:when>
+                                </c:choose>
+                            </c:forEach>
                             <td colspan="4" class="text-end fw-bold">Subtotal:</td>
                             <td>
-                                $<fmt:formatNumber value="${cart.totalPrice}" type="number" maxFractionDigits="2" minFractionDigits="2" />
+                                $<fmt:formatNumber value="${subtotal}" type="number" maxFractionDigits="2" minFractionDigits="2" />
                             </td>
                         </tr>
                     </tfoot>
@@ -194,7 +212,7 @@
                         <input type="hidden" id="amount" name="amount" value="${selectedTour.totalPrice * 24610}">
                     </c:when>
                     <c:otherwise>
-                        <input type="hidden" id="amount" name="amount" value="${cart.totalPrice * 24610}">
+                        <input type="hidden" id="amount" name="amount" value="${subtotal * 24610}">
                     </c:otherwise>
                 </c:choose>                
 

@@ -113,7 +113,16 @@
                                                     </c:when>
                                                 </c:choose>
                                             </td>
-                                            <td>$${entry.value.totalPrice}</td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${not empty entry.value.tour}">
+                                                        $${entry.value.totalPrice}
+                                                    </c:when>
+                                                    <c:when test="${not empty entry.value.koi}">
+                                                        $${entry.value.totalPrice * 0.3}
+                                                    </c:when>
+                                                </c:choose>
+                                            </td>
                                             <td>
                                                 <form action="RemoveItemController" method="post">
                                                     <input type="hidden" name="itemID" value="${entry.value.tour != null ? entry.value.tour.tourID : entry.value.koi.koiID}">
@@ -132,8 +141,24 @@
                 <div class="col-md-4">
                     <div class="summary-card">
                         <h4>Summary</h4>
-                        <p>Subtotal: <strong>$<c:out value="${cart.totalPrice}"/></strong></p>
-                        <p>Total: <strong class="total-price">$<c:out value="${cart.totalPrice}"/></strong></p>
+                        <c:set var="subtotal" value="0" />
+                        <c:set var="total" value="0" />
+
+                        <c:forEach var="entry" items="${cart.items}">
+                            <c:choose>
+                                <c:when test="${not empty entry.value.tour}">
+                                    <c:set var="subtotal" value="${subtotal + entry.value.tour.tourPrice * entry.value.numberOfPeople}" />
+                                    <c:set var="total" value="${total + entry.value.tour.tourPrice * entry.value.numberOfPeople}" />
+                                </c:when>
+                                <c:when test="${not empty entry.value.koi}">
+                                    <c:set var="subtotal" value="${subtotal + entry.value.koi.price * 0.3 * entry.value.quantity}" />
+                                    <c:set var="total" value="${total + entry.value.koi.price * 0.3 * entry.value.quantity}" />
+                                </c:when>
+                            </c:choose>
+                        </c:forEach>
+
+                        <p>Subtotal: <strong>$<c:out value="${subtotal}"/></strong></p>
+                        <p>Total: <strong class="total-price">$<c:out value="${total}"/></strong></p>
 
                         <c:choose>
                             <c:when test="${cart.totalQuantity == null || cart.totalQuantity == 0}">

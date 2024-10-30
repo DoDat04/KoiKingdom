@@ -22,6 +22,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.Message;
@@ -36,7 +37,9 @@ import koikd.cart.CartItem;
 import koikd.customtour.CustomTourDTO;
 import koikd.koi.KoiDAO;
 import koikd.koi.KoiDTO;
+import koikd.order.KoiOrderDAO;
 import koikd.order.KoiOrderDTO;
+import koikd.order.KoiOrderDetailDTO;
 import koikd.tour.TourDTO;
 import koikd.tourbookingdetail.TourBookingDetailDAO;
 import koikd.tourbookingdetail.TourBookingDetailDTO;
@@ -120,10 +123,12 @@ public class VNPayCallBackController extends HttpServlet {
                             CustomTourDTO customTour = item.getCustomTour();
                             KoiDTO koi = item.getKoi();
                             int numberOfPeople = item.getNumberOfPeople();
+                            int quantity = item.getQuantity();
 
                             BookingDTO booking = new BookingDTO();
                             TourBookingDetailDTO tourBookingDetail = new TourBookingDetailDTO();
                             KoiOrderDTO koiDto = new KoiOrderDTO();
+                            KoiOrderDetailDTO koiOrderDetailDTO = new KoiOrderDetailDTO();
 
                             booking.setCustomerID(custID);
                             booking.setCustName(fullName);
@@ -135,6 +140,7 @@ public class VNPayCallBackController extends HttpServlet {
                             BookingDAO bookingDAO = new BookingDAO();
                             TourBookingDetailDAO tourBookingDetailDAO = new TourBookingDetailDAO();
                             KoiDAO koiDAO = new KoiDAO();
+                            KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
 
                             if (customTour != null) {
                                 booking.setTourID(customTour.getRequestID());
@@ -175,7 +181,18 @@ public class VNPayCallBackController extends HttpServlet {
                                 koiDto.setCustomerID(custID);
                                 koiDto.setStatus(false);
                                 koiDto.setType("Online");
-                                koiDAO.insertKoiOrder(koiDto);
+                                int koiOrderID = koiDAO.insertKoiOrder(koiDto);
+                                
+                                koiOrderDetailDTO.setKoiOrderID(koiOrderID);  // Set KoiOrderID vừa tạo
+                                koiOrderDetailDTO.setKoiID(koi.getKoiID());
+                                koiOrderDetailDTO.setFarmID(generateRandomFarmID());
+                                koiOrderDetailDTO.setQuantity(quantity);
+                                koiOrderDetailDTO.setUnitPrice(koi.getPrice());
+                                System.out.println(koi.getPrice());
+                                koiOrderDetailDTO.setTotalPrice(koi.getPrice() * quantity);
+                                koiOrderDetailDTO.setKoiTypeID(koiDAO.getKoiTypeIDByKoiID(koi.getKoiID()));
+                                
+                                koiOrderDAO.createKoiOrderDetail(koiOrderDetailDTO);
                             }
                         }
 
@@ -210,6 +227,11 @@ public class VNPayCallBackController extends HttpServlet {
         } finally {
             response.sendRedirect(url);
         }
+    }
+    
+    public static int generateRandomFarmID() {
+        Random random = new Random();
+        return random.nextInt(10) + 1; // Số ngẫu nhiên từ 1 đến 10
     }
 
     private void sendBillForCustomer(String toEmail, int custID, String fullName, String custAddress, String custEmail) throws Exception {
