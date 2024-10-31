@@ -15,7 +15,6 @@
         <!-- Font Awesome for Icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <script src="https://cdn.tiny.cloud/1/sh1a9yujtib6v1803atuatuqb18ai0hfi32thc2u0y9nuah7/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
         <link href="css/homeForDelivery.css" rel="stylesheet">
         <link href="css/toast.css" rel="stylesheet">
         <link href="css/headerForSales.css" rel="stylesheet">
@@ -57,7 +56,6 @@
                                         </c:if>
                                     </td>  
 
-                                    <!-- Modal for entering tour details -->
                             <div class="modal fade" id="sendDetailModal${custom.bookingID}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="sendDetailModalLabel${custom.bookingID}" aria-hidden="true">
                                 <div class="modal-dialog modal-xl modal-dialog-scrollable">
                                     <div class="modal-content">
@@ -67,21 +65,18 @@
                                         </div>
                                         <div class="modal-body">
                                             <form id="sendTourDetailForm${custom.bookingID}" method="post" action="send-tour-detail">
-                                                <!-- Hidden field to pass CustomerEmail -->
                                                 <input type="hidden" name="txtCustomerEmail" value="${custom.custEmail}">
-                                                <!-- Hidden field to pass BookingID -->
                                                 <input type="hidden" name="txtBookingID" value="${custom.bookingID}">
-
-                                                <!-- Single input field for tour details -->
+                                                <input type="hidden" name="txtTourDetails" id="txtTourDetails${custom.bookingID}" value="">
                                                 <div class="mb-3">
-                                                    <label for="tourDetails${custom.bookingID}" class="form-label">Tour Details</label>
-                                                    <textarea class="form-control" id="tourDetails${custom.bookingID}" name="txtTourDetails" rows="5" required></textarea>
+                                                    <label for="editor${custom.bookingID}" class="form-label">Tour Details</label>
+                                                    <textarea class="form-control simple-editor" id="editor${custom.bookingID}" rows="5" required></textarea>
                                                 </div>
-                                            </form>
+                                            </form>                                 
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" form="sendTourDetailForm${custom.bookingID}" class="btn btn-primary">Send Tour Detail</button>
+                                            <button type="button" class="btn btn-primary" onclick="submitTourDetailForm(${custom.bookingID})">Send Tour Detail</button>
                                         </div>
                                     </div>
                                 </div>
@@ -100,42 +95,34 @@
         </div>      
 
         <script>
-            tinymce.init({
-                selector: 'textarea[id^="tourDetails"]',
-                plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak textcolor', // Thêm textcolor vào danh sách plugin
-                toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor | charmap | hr | pagebreak |', // Cập nhật thanh công cụ để bao gồm lựa chọn màu
-                toolbar_mode: 'floating',
-                images_file_types: 'jpg,svg,webp',
-                file_picker_callback: function (callback, value, meta) {
-                    if (meta.filetype === 'image') {
-                        var input = document.createElement('input');
-                        input.setAttribute('type', 'file');
-                        input.setAttribute('accept', 'image/*');
-
-                        input.onchange = function () {
-                            var file = this.files[0];
-                            var reader = new FileReader();
-
-                            reader.onload = function () {
-                                // Callback để chèn ảnh vào editor
-                                callback(reader.result, {
-                                    alt: file.name
-                                });
-                            };
-
-                            reader.readAsDataURL(file);
-                        };
-
-                        input.click();
-                    }
-                },
-                setup: function (editor) {
-                    editor.on('change', function () {
-                        editor.save(); // Lưu nội dung vào textarea
-                    });
-                }
+            $(document).ready(function () {
+            <c:forEach var="custom" items="${requestScope.BOOKING_LIST}">
+                $('#editor${custom.bookingID}').trumbowyg({
+                    btns: [
+                        ['viewHTML'],
+                        ['undo', 'redo'], 
+                        ['formatting'],
+                        ['strong', 'em', 'del'],
+                        ['superscript', 'subscript'],
+                        ['link'],
+                        ['insertImage'],
+                        ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+                        ['unorderedList', 'orderedList'],
+                        ['horizontalRule'],
+                        ['removeformat'],
+                        ['fullscreen']
+                    ]
+                });
+            </c:forEach>
+                window.submitTourDetailForm = function (bookingID) {
+                    var content = $('#editor' + bookingID).trumbowyg('html');
+                    $('#txtTourDetails' + bookingID).val(content);
+                    $('#sendTourDetailForm' + bookingID).submit();
+                };
             });
         </script>
+
+
 
         <c:if test="${not empty requestScope.SEND_SUCCESS}">
             <script>
@@ -144,6 +131,7 @@
                 };
             </script>
         </c:if>
+
 
         <div id="toastBox"></div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
