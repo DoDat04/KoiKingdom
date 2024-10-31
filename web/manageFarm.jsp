@@ -176,7 +176,7 @@
                                 <td>${farm.farmName}</td>
                                 <td>${farm.location}</td>
                                 <td>${farm.description}</td>
-                                <td>${farm.image}</td>
+                                <td><img src="${farm.image}" alt="farm image" height="200px" width="200px" style="border-radius: 10px"></td>
                                 
                                 <td>
                                     <c:choose>

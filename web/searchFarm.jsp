@@ -181,7 +181,7 @@
                                 <td>${SEARCH_FARM.farmName}</td>
                                 <td>${SEARCH_FARM.location}</td>
                                 <td>${SEARCH_FARM.description}</td>
-                                <td>${SEARCH_FARM.image}</td>
+                                <td><img src="${SEARCH_FARM.image}" width="200px" height="200px" style="border-radius: 10px;"></td>
                                 
                                 <td>
                                     <c:choose>

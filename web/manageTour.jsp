@@ -314,6 +314,9 @@
                                                 <label for="tourLocation${tour.tourID}" class="form-label">Location</label>
                                                 <input type="text" class="form-control" id="tourLocation${tour.tourID}" name="departureLocation" value="${tour.tourDepartLoca}">
                                             </div>
+                                            
+                                            
+                                            
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                 <button type="submit"  class="btn btn-primary" data-bs-toggle="modal" >Update Tour</button>
