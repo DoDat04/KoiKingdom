@@ -135,9 +135,9 @@
 
                         <div class="modal-body">
                             <form action="CreateFeedbackForCustomer" method="post" enctype="multipart/form-data" id="reviewForm">
-                                <input type="" name="customerID" value="">
-                                <input type="" name="tourID" value="">
-                                <input type="" name="bookingID" value="">
+                                <input type="hidden" name="customerID" value="">
+                                <input type="hidden" name="tourID" value="">
+                                <input type="hidden" name="bookingID" value="">
 
                                 <div class="mb-3">
                                     <label for="feedback" class="form-label">Phản hồi của bạn</label>

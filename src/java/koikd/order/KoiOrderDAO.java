@@ -59,7 +59,7 @@ public class KoiOrderDAO implements Serializable {
                 }
 
                 // Add pagination
-                sql += "ORDER BY O.KoiOrderID \n"
+                sql += "ORDER BY O.KoiOrderID DESC \n"
                         + "OFFSET ? ROWS \n"
                         + "FETCH NEXT 5 ROWS ONLY;";
 
@@ -1272,7 +1272,7 @@ public class KoiOrderDAO implements Serializable {
                     sql += " AND O.DeliveryDate = ? ";
                 }
 
-                sql += "ORDER BY O.DeliveryDate";
+                sql += "ORDER BY O.DeliveryDate DESC";
 
                 // Prepare the statement
                 pst = conn.prepareStatement(sql);

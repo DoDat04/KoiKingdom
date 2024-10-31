@@ -15,11 +15,17 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link href="css/homeForDelivery.css" rel="stylesheet">
         <title>Ship History</title>
     </head>
     <body>
-        <jsp:include page="headerForDelivery.jsp" flush="true"/>
+        <c:choose>
+            <c:when test="${userType == 'manage'}">
+                <jsp:include page="headerForManager.jsp" flush="true"/>
+            </c:when>
+            <c:when test="${userType == null}">
+                <jsp:include page="headerForDelivery.jsp" flush="true"/>
+            </c:when>
+        </c:choose>
         <div style="    margin-top: 25vh;
              margin-left: 17%;
              margin-right: 6%;" class="main-content">   

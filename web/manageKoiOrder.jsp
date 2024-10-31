@@ -186,6 +186,7 @@
                                         <form action="GetKoiOrderDetail" method="GET" style="display:inline;">
                                             <input type="hidden" name="orderID" value="${order.koiOrderID}">
                                             <input type="hidden" name="customerID" value="${order.customerID}">
+                                            <input type="hidden" name="userType" value="manage">
                                             <button class="btn-detail" type="submit" style="border: none; background: none;">Detail</button>
                                         </form>
                                     </td>

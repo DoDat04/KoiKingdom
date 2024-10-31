@@ -43,6 +43,7 @@ public class GetKoiOrderDetail extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = SHIPHISTORYPAGE;
         try (PrintWriter out = response.getWriter()) {
+            String userType = request.getParameter("userType");
             String koiOrderID = request.getParameter("orderID");
             String customerID = request.getParameter("customerID");
             if (customerID != null && koiOrderID != null) {
@@ -76,6 +77,7 @@ public class GetKoiOrderDetail extends HttpServlet {
                 request.setAttribute("koiOrderDetails", koiOrderDetailCollection);
                 request.setAttribute("koiNames", koiFishCollection);
                 request.setAttribute("customer", customer);
+                request.setAttribute("userType", userType);
                 request.setAttribute("farmNames", farmCollection);
                 request.setAttribute("myOrders", koiOrderList);
             }

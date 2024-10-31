@@ -49,6 +49,7 @@ public class GetMyOrderDetail extends HttpServlet {
         try {
             String customerID = request.getParameter("customerID");
             String koiOrderID = request.getParameter("koiOrderID");
+            
 
             if (customerID != null && koiOrderID != null) {
                 KoiOrderDAO dao = new KoiOrderDAO();

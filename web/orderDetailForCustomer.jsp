@@ -27,7 +27,6 @@
     <body>
         <div class="colorlib-loader"></div>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
-
         <div class="container-fluid" id="detail" style="padding-top: 90px; padding-bottom: 90px; display: flex; gap: 20px; padding-left: 57px; padding-right: 57px;">
             <c:if test="${not empty requestScope.koiOrderDetails}">
                 <div class="order-details">
