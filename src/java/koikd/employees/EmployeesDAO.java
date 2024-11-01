@@ -562,6 +562,50 @@ public class EmployeesDAO {
         }
         return result;
     }
+    
+    
+    
+    public List<EmployeesDTO> getAllConsulting() throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<EmployeesDTO> list = new ArrayList<>();
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT EmployeeID, Email, Role, LastName, FirstName, Address, Status "
+                        + "FROM EMPLOYEE "
+                        + "WHERE Role = 'Consulting' ";
+                stm = con.prepareStatement(sql);
+           
+                rs = stm.executeQuery();
+
+                while (rs.next()) {
+                    int id = rs.getInt("EmployeeID");
+                    String email = rs.getString("Email");
+                    String role = rs.getString("Role");
+                    String lastName = rs.getString("LastName");
+                    String firstName = rs.getString("FirstName");
+                    String address = rs.getString("Address");
+                    boolean status = rs.getBoolean("Status");
+                    EmployeesDTO result = new EmployeesDTO(id, email, role, lastName, firstName, address, status);
+                    list.add(result);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return list;
+    }
 //    public static void main(String[] args) throws SQLException {
 //        int id = 1;
 //        EmployeesDAO dao = new EmployeesDAO();

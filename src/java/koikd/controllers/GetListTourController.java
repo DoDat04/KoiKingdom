@@ -12,8 +12,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
+import koikd.employees.EmployeesDAO;
+import koikd.employees.EmployeesDTO;
 import koikd.farm.FarmDTO;
 import koikd.tour.TourDAO;
 import koikd.tour.TourDTO;
@@ -52,6 +55,10 @@ public class GetListTourController extends HttpServlet {
            request.setAttribute("pageIndex", pageIndex);
            List<TourDTO> tour = dao.getAllTour(pageIndex);
            request.setAttribute("tour", tour);
+           HttpSession session = request.getSession();
+            EmployeesDAO em = new EmployeesDAO();
+            List<EmployeesDTO> dto = em.getAllConsulting();
+            session.setAttribute("CONSULTING", dto);
         } catch (SQLException ex) {
             ex.printStackTrace();
         } catch (ClassNotFoundException ex) {

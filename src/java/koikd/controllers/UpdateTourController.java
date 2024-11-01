@@ -53,9 +53,10 @@ public class UpdateTourController extends HttpServlet {
         Timestamp startDate = Timestamp.valueOf(request.getParameter("startDate") + " 00:00:00");
         Timestamp endDate = Timestamp.valueOf(request.getParameter("endDate") + " 00:00:00");
         String departureLocation = request.getParameter("departureLocation");
+        int consuID = Integer.parseInt(request.getParameter("consultingID"));
         try {
             TourDAO dao = new TourDAO();
-            boolean result = dao.updateTour(tourID, tourName, duration, description, tourPrice, startDate, endDate, departureLocation);
+            boolean result = dao.updateTour(tourID, tourName, duration, description, tourPrice, startDate, endDate, departureLocation, consuID);
             if (result) {
                 request.setAttribute("message", "Tour updated successfully!");
                 url = TOUR_PAGE;

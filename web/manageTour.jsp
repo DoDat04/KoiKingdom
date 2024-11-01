@@ -315,7 +315,16 @@
                                                 <input type="text" class="form-control" id="tourLocation${tour.tourID}" name="departureLocation" value="${tour.tourDepartLoca}">
                                             </div>
                                             
-                                            
+                                            <!-- Consulting -->
+                                            <div class="mb-3">
+                                                <label for="tourConsulting${tour.tourID}" class="form-label">Consulting</label>
+                                                <select class="form-select" id="tourConsulting${tour.tourID}" name="consultingID">
+                                                    <option selected>Select consulting</option>
+                                                    <c:forEach var="option" items="${sessionScope.CONSULTING}">
+                                                        <option value="${option.employeeID}"> ${option.employeeID} - ${option.lastName}  ${option.firstName}</option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
                                             
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

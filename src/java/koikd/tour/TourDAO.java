@@ -585,7 +585,7 @@ public class TourDAO implements Serializable {
     } 
     
     public boolean updateTour(int tourID, String tourName, String duration, String description, double tourPrice,
-            Timestamp startDate, Timestamp endDate, String departureLocation) throws SQLException {
+            Timestamp startDate, Timestamp endDate, String departureLocation, int consultingID) throws SQLException {
         Connection con = null;
         PreparedStatement stm = null;
         boolean result = false;
@@ -595,7 +595,7 @@ public class TourDAO implements Serializable {
             if (con != null) {
                 // Câu lệnh SQL sửa lại từ 'SUPDATE' thành 'UPDATE'
                 String sql = "UPDATE TOUR "
-                        + "SET TourName = ?, Duration = ?, Description = ? , TourPrice = ?, StartDate = ?, EndDate = ?, DepartureLocation = ? "
+                        + "SET TourName = ?, Duration = ?, Description = ? , TourPrice = ?, StartDate = ?, EndDate = ?, DepartureLocation = ? , Consulting = ? "
                         + "WHERE TourID = ? ";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, tourName);
@@ -605,8 +605,9 @@ public class TourDAO implements Serializable {
                 stm.setTimestamp(5, startDate);          // Set start date
                 stm.setTimestamp(6, endDate);            // Set end date
                 stm.setString(7, departureLocation);     // Set departure location
-                stm.setInt(8, tourID);                // Set the tour ID for the WHERE clause
-
+                stm.setInt(8, consultingID);
+                stm.setInt(9, tourID);                // Set the tour ID for the WHERE clause
+                
                 int rowsUpdated = stm.executeUpdate();
                 result = rowsUpdated > 0;  // Kiểm tra nếu có hàng nào được cập nhật
             }
