@@ -317,10 +317,24 @@
                                                 <label for="tourLocation${SEARCH_TOUR.tourID}" class="form-label">Location</label>
                                                 <input type="text" class="form-control" id="tourLocation${SEARCH_TOUR.tourID}" name="departureLocation" value="${SEARCH_TOUR.tourDepartLoca}">
                                             </div>
+                                            
+                                            <!-- Consulting -->
+                                            <div class="mb-3">
+                                                <label for="tourConsulting${SEARCH_TOUR.tourID}" class="form-label">Consulting</label>
+                                                <select class="form-select" id="tourConsulting${SEARCH_TOUR.tourID}" name="consultingID">
+                                                    <c:forEach var="option" items="${sessionScope.CONSULTING}">
+                                                        <option value="${option.employeeID}" ${option.employeeID == SEARCH_TOUR.consultingID ? 'selected' : ''}>
+                                                            ${option.employeeID} - ${option.lastName} ${option.firstName}
+                                                        </option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                 <button type="submit"  class="btn btn-primary" data-bs-toggle="modal" >Update Tour</button>
                                             </div>
+                                            
+                                            
                                         </form>
                                     </div>
 

@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.File;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import koikd.customer.CustomerDAO;
@@ -70,26 +71,29 @@ public class LoginController extends HttpServlet {
                     setUserImage(session, email);
                     url = HOME_PAGE;
                 } else if (employeeResult != null) {
-                    
+
                     setUserImage(session, email);
 
-                    String role = employeeResult.getRole(); 
+                    String role = employeeResult.getRole();
 
                     if ("Delivery".equals(role)) {
                         session.setAttribute("LOGIN_DELIVERY", employeeResult);
                         url = DELIVERY_PAGE;
                     } else if ("Manager".equals(role)) {
                         session.setAttribute("LOGIN_MANAGER", employeeResult);
+                        List<EmployeesDTO> dto = deliveryDao.getAllConsulting();
+                        session.setAttribute("CONSULTING", dto);
                         url = MANAGER_PAGE;
-                    } else if("Sales".equals(role)){
+                    } else if ("Sales".equals(role)) {
                         session.setAttribute("LOGIN_SALES", employeeResult);
                         url = SALES_PAGE;
                     } else if ("Consulting".equals(role)) {
                         session.setAttribute("LOGIN_CONSULTING", employeeResult);
                         session.setAttribute("consultingID", employeeResult.getEmployeeID());
+
+                        
                         url = CONSULTING_PAGE;
-                    }                   
-                    else {
+                    } else {
                         request.setAttribute("ERROR", "Invalid role for this employee!");
                     }
                 } else {
@@ -104,14 +108,13 @@ public class LoginController extends HttpServlet {
                 response.sendRedirect("home");
             } else if (DELIVERY_PAGE.equals(url)) {
                 response.sendRedirect("home?action=Delivery");
-            } else if(MANAGER_PAGE.equals(url)) {
+            } else if (MANAGER_PAGE.equals(url)) {
                 response.sendRedirect("home?action=Manager");
-            } else if(SALES_PAGE.equals(url)){
+            } else if (SALES_PAGE.equals(url)) {
                 response.sendRedirect("home?action=Sales");
-            } else if(CONSULTING_PAGE.equals(url)){
+            } else if (CONSULTING_PAGE.equals(url)) {
                 response.sendRedirect("home?action=Consulting");
-            }
-            else {
+            } else {
                 request.getRequestDispatcher(url).forward(request, response);
             }
         }

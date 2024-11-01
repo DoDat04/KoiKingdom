@@ -480,7 +480,7 @@ public class TourDAO implements Serializable {
     
     public boolean createTour(String tourName, String duration, String description, double tourPrice,
             Timestamp startDate, Timestamp endDate, String imagePath,
-            String[] selectedFarms, String[] selectedKoiTypes, String departureLocation) throws SQLException, ClassNotFoundException {
+            String[] selectedFarms, String[] selectedKoiTypes, String departureLocation, int consultingID) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         boolean result = false;
@@ -488,8 +488,8 @@ public class TourDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "INSERT INTO TOUR (TourName, Duration, Description, TourPrice, StartDate, EndDate, Image, Status, DepartureLocation) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO TOUR (TourName, Duration, Description, TourPrice, StartDate, EndDate, Image, Status, DepartureLocation, Consulting ) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 stm = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); // Lấy tourID vừa được tạo ra
                 stm.setString(1, tourName);
                 stm.setString(2, duration);
@@ -500,6 +500,7 @@ public class TourDAO implements Serializable {
                 stm.setString(7, imagePath);
                 stm.setBoolean(8, true); 
                 stm.setString(9, departureLocation);
+                stm.setInt(10, consultingID);
                 int affectedRows = stm.executeUpdate();
                 if (affectedRows > 0) {
                     result = true;

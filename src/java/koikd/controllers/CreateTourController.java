@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.InputStream;
@@ -19,17 +20,21 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import koikd.employees.EmployeesDAO;
+import koikd.employees.EmployeesDTO;
 import koikd.tour.TourDAO;
 
 /**
  *
  * @author Do Dat
  */
-@WebServlet(name = "CreateTourController", urlPatterns = {"/CreateTourController"})
+@WebServlet(name = "CreateTourController", urlPatterns = {"/createtour"})
 @MultipartConfig
 public class CreateTourController extends HttpServlet {
+
     private static final String CREATE_TOUR_PAGE = "createTour.jsp";
     private static final String UPLOAD_DIR = "img/TourImage";
 
@@ -43,7 +48,7 @@ public class CreateTourController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException, ClassNotFoundException {
         response.setContentType("text/html;charset=UTF-8");
         String url = CREATE_TOUR_PAGE;
         String tourName = request.getParameter("tourName");
@@ -61,7 +66,14 @@ public class CreateTourController extends HttpServlet {
 
         String[] selectedFarms = request.getParameterValues("farms");
         String[] selectedKoiTypes = request.getParameterValues("koiTypes");
+        int consuID = Integer.parseInt(request.getParameter("consultingID"));
         double tourPrice = 0;
+
+        HttpSession session = request.getSession();
+        EmployeesDAO em = new EmployeesDAO();
+        List<EmployeesDTO> dto = em.getAllConsulting();
+        session.setAttribute("CONSULTING", dto);
+
         try {
             tourPrice = Double.parseDouble(tourPriceStr);
             Timestamp startDate = Timestamp.valueOf(startDateParam + " 00:00:00");
@@ -71,7 +83,7 @@ public class CreateTourController extends HttpServlet {
                 return;
             }
             TourDAO dao = new TourDAO();
-            boolean result = dao.createTour(tourName, duration, description, tourPrice, startDate, endDate, imagePath, selectedFarms, selectedKoiTypes, departureLocation);
+            boolean result = dao.createTour(tourName, duration, description, tourPrice, startDate, endDate, imagePath, selectedFarms, selectedKoiTypes, departureLocation, consuID);
             if (result) {
                 url = CREATE_TOUR_PAGE;
                 request.setAttribute("CREATE_SUCCESS", "Create tour success");
@@ -115,7 +127,13 @@ public class CreateTourController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(CreateTourController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CreateTourController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -129,7 +147,13 @@ public class CreateTourController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(CreateTourController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CreateTourController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

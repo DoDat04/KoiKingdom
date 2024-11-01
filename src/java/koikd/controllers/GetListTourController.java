@@ -55,10 +55,7 @@ public class GetListTourController extends HttpServlet {
            request.setAttribute("pageIndex", pageIndex);
            List<TourDTO> tour = dao.getAllTour(pageIndex);
            request.setAttribute("tour", tour);
-           HttpSession session = request.getSession();
-            EmployeesDAO em = new EmployeesDAO();
-            List<EmployeesDTO> dto = em.getAllConsulting();
-            session.setAttribute("CONSULTING", dto);
+           
         } catch (SQLException ex) {
             ex.printStackTrace();
         } catch (ClassNotFoundException ex) {

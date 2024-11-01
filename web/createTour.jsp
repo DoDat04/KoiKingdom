@@ -40,7 +40,7 @@
 
                 <div id="toastBox"></div>
                 <script src="js/showToast.js"></script>
-                <form action="CreateTourController" method="post" enctype="multipart/form-data">
+                <form action="createtour" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="tourName">Tour Name</label>
                         <input type="text" id="tourName" name="tourName" class="form-control" required>
@@ -93,6 +93,16 @@
                             <option value="Cần Thơ">Cần Thơ</option>
                             <option value="Quảng Ninh">Quảng Ninh</option>
                             <option value="Thanh Hóa">Thanh Hóa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="consultingID">Consulting</label>
+                       
+                        <select class="form-select" id="tourConsulting${tour.tourID}" name="consultingID" required>
+                            <option value="" selected>Select consulting</option>
+                            <c:forEach var="option" items="${sessionScope.CONSULTING}">
+                                <option value="${option.employeeID}"> ${option.employeeID} - ${option.lastName}  ${option.firstName}</option>
+                            </c:forEach>
                         </select>
                     </div>
                     <div class="form-group checkbox-group">

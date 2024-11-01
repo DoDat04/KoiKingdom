@@ -319,9 +319,10 @@
                                             <div class="mb-3">
                                                 <label for="tourConsulting${tour.tourID}" class="form-label">Consulting</label>
                                                 <select class="form-select" id="tourConsulting${tour.tourID}" name="consultingID">
-                                                    <option selected>Select consulting</option>
                                                     <c:forEach var="option" items="${sessionScope.CONSULTING}">
-                                                        <option value="${option.employeeID}"> ${option.employeeID} - ${option.lastName}  ${option.firstName}</option>
+                                                        <option value="${option.employeeID}" ${option.employeeID == tour.consultingID ? 'selected' : ''}>
+                                                            ${option.employeeID} - ${option.lastName} ${option.firstName}
+                                                        </option>
                                                     </c:forEach>
                                                 </select>
                                             </div>
