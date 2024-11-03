@@ -181,8 +181,25 @@ public class VNPayCallBackController extends HttpServlet {
                                 koiDto.setCustomerID(custID);
                                 koiDto.setStatus(false);
                                 koiDto.setType("Online");
+                                koiDto.setShippingAddress(custAddress);
+
+                                String fullAddress = custAddress;
+
+                                String province = fullAddress.substring(fullAddress.lastIndexOf(",") + 1).trim();
+                                if (province.startsWith("Tỉnh")) {
+                                    province = province.replace("Tỉnh", "").trim();
+                                } else if (province.startsWith("tỉnh")) {
+                                    province = province.replace("tỉnh", "").trim();
+                                }
+
+                                double wei = koi.getWeight();
+                                int quan = tourBookingDetail.getQuantity();
+                                double distance = koiDAO.getDistance(province);
+                                double shippingFee = koiDAO.calculateShippingFee(quan, wei, distance);
+
+                                koiDto.setCostShipping(shippingFee);
                                 int koiOrderID = koiDAO.insertKoiOrder(koiDto);
-                                
+
                                 koiOrderDetailDTO.setKoiOrderID(koiOrderID);  // Set KoiOrderID vừa tạo
                                 koiOrderDetailDTO.setKoiID(koi.getKoiID());
                                 koiOrderDetailDTO.setFarmID(generateRandomFarmID());
@@ -191,7 +208,7 @@ public class VNPayCallBackController extends HttpServlet {
                                 System.out.println(koi.getPrice());
                                 koiOrderDetailDTO.setTotalPrice(koi.getPrice() * quantity);
                                 koiOrderDetailDTO.setKoiTypeID(koiDAO.getKoiTypeIDByKoiID(koi.getKoiID()));
-                                
+
                                 koiOrderDAO.createKoiOrderDetail(koiOrderDetailDTO);
                             }
                         }
@@ -228,7 +245,7 @@ public class VNPayCallBackController extends HttpServlet {
             response.sendRedirect(url);
         }
     }
-    
+
     public static int generateRandomFarmID() {
         Random random = new Random();
         return random.nextInt(10) + 1; // Số ngẫu nhiên từ 1 đến 10
@@ -322,7 +339,7 @@ public class VNPayCallBackController extends HttpServlet {
                     // Xóa cookie
                     Cookie updatedCartCookie = new Cookie(cookieName, encodeCartToCookie(cart));
                     updatedCartCookie.setMaxAge(0); // Xóa cookie
-                    updatedCartCookie.setPath("/"); 
+                    updatedCartCookie.setPath("/");
                     response.addCookie(updatedCartCookie); // Ghi cookie đã cập nhật trở lại trình duyệt
                     break;
                 }

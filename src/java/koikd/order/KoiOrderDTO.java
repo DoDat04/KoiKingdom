@@ -22,10 +22,26 @@ public class KoiOrderDTO implements Serializable {
     private String type;
     private int deliveryBy;
     private int createBy;
-
+    private double costShipping;
+    private String shippingAddress;
+    
     public KoiOrderDTO() {
     }
 
+    public KoiOrderDTO(int koiOrderID, int customerID, String fullName, Date deliveryDate, boolean status, Date estimatedDelivery, String type, int deliveryBy, int createBy, double costShipping, String shippingAddress) {
+        this.koiOrderID = koiOrderID;
+        this.customerID = customerID;
+        this.fullName = fullName;
+        this.deliveryDate = deliveryDate;
+        this.status = status;
+        this.estimatedDelivery = estimatedDelivery;
+        this.type = type;
+        this.deliveryBy = deliveryBy;
+        this.createBy = createBy;
+        this.costShipping = costShipping;
+        this.shippingAddress = shippingAddress;
+    }
+  
     public KoiOrderDTO(int koiOrderID, int customerID, Date deliveryDate, boolean status, Date estimatedDelivery, String type) {
         this.koiOrderID = koiOrderID;
         this.customerID = customerID;
@@ -63,6 +79,33 @@ public class KoiOrderDTO implements Serializable {
         this.estimatedDelivery = estimatedDelivery;
     }
 
+    public KoiOrderDTO(int koiOrderID, int customerID, Date deliveryDate, boolean status, Date estimatedDelivery, String type, double costShipping, String shippingAddress) {
+        this.koiOrderID = koiOrderID;
+        this.customerID = customerID;
+        this.deliveryDate = deliveryDate;
+        this.status = status;
+        this.estimatedDelivery = estimatedDelivery;
+        this.type = type;
+        this.costShipping = costShipping;
+        this.shippingAddress = shippingAddress;
+    }
+
+    public double getCostShipping() {
+        return costShipping;
+    }
+
+    public void setCostShipping(double costShipping) {
+        this.costShipping = costShipping;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+    
     public String getFullName() {
         return fullName;
     }

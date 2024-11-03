@@ -35,6 +35,7 @@
                             <c:forEach var="koiOrderListByOrderList" items="${requestScope.koiOrderListByOrderList}" varStatus="koiOrderID">
                                 <span style="padding-right: 19px;">Order date: ${koiOrderListByOrderList.deliveryDate}</span>
                                 <span>Estimated delivery: ${koiOrderListByOrderList.estimatedDelivery}</span>
+                                <div>Type: ${koiOrderListByOrderList.type}</div>
                             </c:forEach>
                         </div>
                         <div>Address: ${requestScope.customer.address}</div>
@@ -60,6 +61,7 @@
                                             <div>Age: ${requestScope.koiNames[koiOrderID.index].age} years</div>
                                             <div>Length: ${requestScope.koiNames[koiOrderID.index].length} cm</div>
                                             <div>Weight: ${requestScope.koiNames[koiOrderID.index].weight} kg</div>
+                                             <div>Weight: ${requestScope.koiNames[koiOrderID.index].price} price</div>
                                         </div>
                                     </div>
                                     <div>
@@ -88,12 +90,22 @@
                         <c:set var="totalPriceSum" value="0" /> <!-- Khởi tạo biến tổng giá -->
                         <c:forEach var="koiOrderDetails" items="${requestScope.koiOrderDetails}" varStatus="koiOrderID">
                             <c:set var="totalPriceSum" value="${totalPriceSum + koiOrderDetails.totalPrice}" />
+                            <c:set var="costShipping" value="${requestScope.koiOrderListByOrderList[koiOrderID.index].costShipping}" />
+
+                            <c:if test="${requestScope.koiOrderListByOrderList[koiOrderID.index].type == 'Online'}">
+                                <c:set var="paidAmount" value="${totalPriceSum * 0.3}" /> <!-- 30% for Online -->
+                                <c:set var="priceKoi" value="${requestScope.koiNames[koiOrderID.index].price}" />
+                                <c:set var="remainingAmount" value="${priceKoi - paidAmount + costShipping}" />
+                            </c:if>
+
+                            <c:if test="${requestScope.koiOrderListByOrderList[koiOrderID.index].type == 'Offline'}">
+                                <c:set var="paidAmount" value="${totalPriceSum * 0.3}" /> <!-- 30% for Offline -->
+                                <c:set var="remainingAmount" value="${totalPriceSum - paidAmount + costShipping}" />
+                            </c:if>
                         </c:forEach>
 
-                        <c:set var="paidAmount" value="${totalPriceSum * 0.3}" />
-                        <c:set var="remainingAmount" value="${totalPriceSum - paidAmount}" />
-
                         <h3>Paid Amount: <span class="price"><fmt:formatNumber type="currency" currencySymbol="$" value="${paidAmount}"/></span></h3>
+                        <h3>Cost Shipping: <span class="price"><fmt:formatNumber type="currency" currencySymbol="$" value="${costShipping}"/></span></h3>                 
                         <h3>Remaining Amount: <span class="price"><fmt:formatNumber type="currency" currencySymbol="$" value="${remainingAmount}"/></span></h3>
                     </div>
 

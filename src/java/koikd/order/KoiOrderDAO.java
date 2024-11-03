@@ -16,6 +16,8 @@ import koikd.customer.CustomerDTO;
 import java.sql.Timestamp;
 import koikd.farm.FarmDTO;
 import koikd.koi.KoiDTO;
+import koikd.koitype.KoiTypeDAO;
+import koikd.koitype.KoiTypeDTO;
 import koikd.utils.DBUtils;
 
 /**
@@ -117,28 +119,6 @@ public class KoiOrderDAO implements Serializable {
         return list; // Return the list outside of the finally block
     }
 
-//    public static void main(String[] args) {
-//        KoiOrderDAO koiOrderDAO = new KoiOrderDAO(); // Replace with the actual class name that contains the method
-//        String searchData = "Minh"; // Replace with a customer name to search
-//        int index = 1; // The page index you want to retrieve
-//        int employeeId = 5; // Replace with a specific employee ID if needed
-//
-//        try {
-//            ArrayList<KoiOrderDTO> orders = koiOrderDAO.getKoiOrderListByNameCustomer(searchData, index, employeeId);
-//            if (orders.isEmpty()) {
-//                System.out.println("No orders found for the given criteria.");
-//            } else {
-//                // Print retrieved orders for testing purposes
-//                for (KoiOrderDTO order : orders) {
-//                    System.out.println(order); // Make sure KoiOrderDTO has a meaningful toString() implementation
-//                }
-//            }
-//        } catch (SQLException e) {
-//            System.err.println("SQL error occurred: " + e.getMessage());
-//        } catch (Exception e) {
-//            System.err.println("An error occurred: " + e.getMessage());
-//        }
-//    }
     /**
      * Get Customer By CustomerID
      *
@@ -496,6 +476,7 @@ public class KoiOrderDAO implements Serializable {
         return detail;
     }
 
+    
     /**
      * GetKoiOrderListByOrderID
      *
@@ -519,7 +500,9 @@ public class KoiOrderDAO implements Serializable {
                         + "    O.DeliveryDate, \n"
                         + "    O.Status, \n"
                         + "    O.EstimatedDelivery, \n"
-                        + "    O.Type \n"
+                        + "    O.Type, \n"
+                        + "    O.[CostShipping], \n"
+                        + "     O.[ShippingAddress]"
                         + "FROM \n"
                         + "    [dbo].[KOIORDER] O\n"
                         + "INNER JOIN \n"
@@ -541,8 +524,11 @@ public class KoiOrderDAO implements Serializable {
 
                     Date estimatedDelivery = rs.getDate("EstimatedDelivery");
                     String type = rs.getString("Type");
+                    int costShipping = rs.getInt("CostShipping");
+                    String shippingAddress = rs.getString("ShippingAddress");
+                    
                     KoiOrderDTO dao = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery,
-                            type);
+                            type, costShipping, shippingAddress);
                     list.add(dao);
                 }
             }
@@ -617,22 +603,6 @@ public class KoiOrderDAO implements Serializable {
         return koiOrderID; // Trả về KoiOrderID hoặc -1 nếu có lỗi
     }
 
-    // public static void main(String[] args) {
-    // KoiOrderDTO koiOrderDTO = new KoiOrderDTO();
-    // koiOrderDTO.setCustomerID(1);
-    // koiOrderDTO.setDeliveryDate(new Date());
-    // koiOrderDTO.setEstimatedDelivery(new Date(System.currentTimeMillis() + 7 * 24
-    // * 60 * 60 * 1000)); / Ngày dự kiến sau 7 ngày
-    // koiOrderDTO.setStatus(true);
-    // KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
-    // boolean result = koiOrderDAO.createKoiOrder(koiOrderDTO);
-    // if (result) {
-    // System.out.println("Success.");
-    // } else {  
-    // 
-    // System.out.println("Fail.");
-    // }
-    // }
     /**
      *
      * @param koiOrderDetail O //
@@ -748,23 +718,6 @@ public class KoiOrderDAO implements Serializable {
             }
         }
         return countPage;
-    }
-
-    public static void main(String[] args) {
-        KoiOrderDAO koiOrderDAO = new KoiOrderDAO(); // Replace with the actual class name that contains the method
-        String nameCustomer = "Minh"; // Replace with a customer name to search
-        int deliveryBy = 5; // Replace with a specific deliveryBy ID if needed
-
-        try {
-            int numberOfPages = koiOrderDAO.getNumberPage(nameCustomer, deliveryBy);
-            System.out.println("Number of pages: " + numberOfPages);
-        } catch (SQLException e) {
-            System.err.println("SQL error occurred: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            System.err.println("Class not found: " + e.getMessage());
-        } catch (Exception e) {
-            System.err.println("An error occurred: " + e.getMessage());
-        }
     }
 
     /**
@@ -1226,15 +1179,6 @@ public class KoiOrderDAO implements Serializable {
         return unitPrice;
     }
 
-    // public static void main(String[] args) throws SQLException {
-    // KoiOrderDAO services = new KoiOrderDAO();
-    // ArrayList<KoiDTO> list = services.getListKoi("");
-    // for (KoiDTO koiDTO : list) {
-    // if (koiDTO != null) {
-    // System.out.println(koiDTO);
-    // }
-    // }
-    // }
     /**
      * Filter Koi Order List
      *
@@ -1268,9 +1212,9 @@ public class KoiOrderDAO implements Serializable {
                         + "WHERE O.CustomerID = ? ";
 
                 // Append date filter only if dateDelivery is provided
-                if (dateDelivery != null && !dateDelivery.isEmpty()) {
-                    sql += " AND O.DeliveryDate = ? ";
-                }
+                 if (dateDelivery != null && !dateDelivery.isEmpty()) {
+                sql += " AND CAST(O.DeliveryDate AS DATE) = ? "; // Filter by date only
+            }
 
                 sql += "ORDER BY O.DeliveryDate DESC";
 
@@ -1314,7 +1258,7 @@ public class KoiOrderDAO implements Serializable {
         }
         return list;
     }
-
+    
     /**
      *
      *
@@ -1374,10 +1318,10 @@ public class KoiOrderDAO implements Serializable {
                         + "ko.CreatedBy "
                         + "FROM KOIORDER ko "
                         + "INNER JOIN CUSTOMER c ON ko.CustomerID = c.CustomerID "
-                        + "WHERE ko.CreatedBy = ? AND ko.Type = 'Offline' ";  
+                        + "WHERE ko.CreatedBy = ? AND ko.Type = 'Offline' ";
 
                 stm = con.prepareStatement(sql);
-                stm.setInt(1, consultingID);  
+                stm.setInt(1, consultingID);
 
                 rs = stm.executeQuery();
                 while (rs.next()) {
@@ -1406,7 +1350,7 @@ public class KoiOrderDAO implements Serializable {
         }
         return koiOrderList;
     }
-    
+
     public List<KoiOrderDTO> getKoiBookingForConsulting() throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -1421,7 +1365,7 @@ public class KoiOrderDAO implements Serializable {
                         + "ko.CreatedBy "
                         + "FROM KOIORDER ko "
                         + "INNER JOIN CUSTOMER c ON ko.CustomerID = c.CustomerID "
-                        + "WHERE ko.Type = 'Online' ";  
+                        + "WHERE ko.Type = 'Online' ";
 
                 stm = con.prepareStatement(sql);
 
@@ -1452,7 +1396,7 @@ public class KoiOrderDAO implements Serializable {
         }
         return koiOrderList;
     }
-    
+
     public void updateEstimatedDate(int koiOrderID, Timestamp estimatedDelivery) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;

@@ -53,8 +53,6 @@ public class GetMyOrder extends HttpServlet {
         String customerIDStr = request.getParameter("customerID");
         String dateDelivery = request.getParameter("dateDelivery");
         
-        System.out.println(dateDelivery);
-        
         if (customerIDStr != null || dateDelivery != null) {
             int customerID = 0;
             try {
@@ -74,7 +72,6 @@ public class GetMyOrder extends HttpServlet {
             ArrayList<FarmDTO> farmCollection = new ArrayList<>();
             ArrayList<KoiDTO> koiFishCollection = new ArrayList<>();
             ArrayList<KoiOrderDetailDTO> koiOrderDetailCollection = new ArrayList<>();
-            ArrayList<KoiOrderDTO> koiOrderListByOrderList = new ArrayList<>();
             ArrayList<KoiTypeDTO> koiTypeListByOrderList = new ArrayList<>();
             
             if (koiOrderList != null && !koiOrderList.isEmpty()) {

@@ -71,18 +71,23 @@
 
                                                 <th scope="col">Quantity</th>
                                                 <th scope="col">Unit Price</th>
+                                                <th scope="col">Paid Amount</th>
+                                                <th scope="col">Cost Shipping </th>
                                                 <th scope="col">Total Price</th>
 
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <c:forEach var="details" items="${requestScope.koiOrderDetails}" varStatus="koiOrderID">
-                                                <tr>
-                                                    <td> <fmt:formatNumber type="currency" currencySymbol="$" value="${details.quantity}"/></td>
-                                                    <td>  <fmt:formatNumber type="currency" currencySymbol="$" value="${details.unitPrice}"/></td>
-                                                    <td> <fmt:formatNumber type="currency" currencySymbol="$" value="${details.totalPrice}"/></td>
-                                                </tr>
-                                            </c:forEach>
+                                            <p></p>
+                                            <tr>
+                                                <td> <fmt:formatNumber type="currency" currencySymbol="$" value="${details.quantity}"/></td>
+                                                <td>  <fmt:formatNumber type="currency" currencySymbol="$" value="${details.unitPrice}"/></td>
+                                                <td> <fmt:formatNumber type="currency" currencySymbol="$" value="${details.totalPrice - (details.totalPrice* 0.3)} "/></td>
+                                                <td>  <fmt:formatNumber type="currency" currencySymbol="$" value="${requestScope.koiOrderListByOrderList[koiOrderID.index].costShipping}"/></td>        
+                                                <td> <fmt:formatNumber type="currency" currencySymbol="$" value="${details.totalPrice}"/></td>
+                                            </tr>
+                                        </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>

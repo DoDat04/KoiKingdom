@@ -10,7 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import koikd.order.KoiOrderDTO;
 import koikd.utils.DBUtils;
 
@@ -254,14 +256,16 @@ public class KoiDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "INSERT INTO [dbo].[KOIORDER]([CustomerID], [DeliveryDate], [Status], [EstimatedDelivery], [Type]) "
-                        + "VALUES(?, ?, ?, NULL, ?)";
+                String sql = "INSERT INTO [dbo].[KOIORDER]([CustomerID], [DeliveryDate], [Status], [EstimatedDelivery], [Type], [CostShipping], [ShippingAddress]) "
+                        + "VALUES(?, ?, ?, NULL, ?, ?, ?)";
                 pst = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); // Lấy giá trị khóa tự động
 
                 pst.setInt(1, koiOrderDTO.getCustomerID());
-                pst.setTimestamp(2, new java.sql.Timestamp(koiOrderDTO.getDeliveryDate().getTime()));
+                pst.setTimestamp(2, new java.sql.Timestamp(System.currentTimeMillis()));
                 pst.setBoolean(3, koiOrderDTO.isStatus());
                 pst.setString(4, koiOrderDTO.getType());
+                pst.setDouble(5, koiOrderDTO.getCostShipping());
+                pst.setString(6, koiOrderDTO.getShippingAddress());
 
                 int affectedRows = pst.executeUpdate();
                 if (affectedRows > 0) {
@@ -319,5 +323,105 @@ public class KoiDAO implements Serializable {
             }
         }
         return koiTypeID;
+    }
+
+    public double getDistance(String province) {
+        Map<String, Double> distanceMap = new HashMap<>();
+        distanceMap.put("Hà Nội", 1690.0);
+        distanceMap.put("Hà Giang", 1949.0);
+        distanceMap.put("Cao Bằng", 1957.0);
+        distanceMap.put("Bắc Kạn", 1840.0);
+        distanceMap.put("Tuyên Quang", 1796.0);
+        distanceMap.put("Lào Cai", 1949.0);
+        distanceMap.put("Điện Biên", 1971.0);
+        distanceMap.put("Lai Châu", 2004.0);
+        distanceMap.put("Sơn La", 1818.0);
+        distanceMap.put("Yên Bái", 1801.0);
+        distanceMap.put("Hòa Bình", 1640.0);
+        distanceMap.put("Thái Nguyên", 1665.0);
+        distanceMap.put("Lạng Sơn", 1832.0);
+        distanceMap.put("Quảng Ninh", 1823.0);
+        distanceMap.put("Bắc Giang", 1733.0);
+        distanceMap.put("Phú Thọ", 1729.0);
+        distanceMap.put("Vĩnh Phúc", 1729.0);
+        distanceMap.put("Bắc Ninh", 1710.0);
+        distanceMap.put("Hải Dương", 1683.0);
+        distanceMap.put("Hải Phòng", 1708.0);
+        distanceMap.put("Hưng Yên", 1640.0);
+        distanceMap.put("Thái Bình", 1665.0);
+        distanceMap.put("Hà Nam", 1632.0);
+        distanceMap.put("Nam Định", 1619.0);
+        distanceMap.put("Ninh Bình", 1586.0);
+        distanceMap.put("Thanh Hóa", 1531.0);
+        distanceMap.put("Nghệ An", 1513.0);
+        distanceMap.put("Hà Tĩnh", 1333.0);
+        distanceMap.put("Quảng Bình", 1239.0);
+        distanceMap.put("Quảng Trị", 1113.0);
+        distanceMap.put("Thừa Thiên Huế", 1024.0);
+        distanceMap.put("Đà Nẵng", 924.0);
+        distanceMap.put("Quảng Nam", 973.0);
+        distanceMap.put("Quảng Ngãi", 780.0);
+        distanceMap.put("Bình Định", 623.0);
+        distanceMap.put("Phú Yên", 538.0);
+        distanceMap.put("Khánh Hòa", 387.0);
+        distanceMap.put("Ninh Thuận", 317.0);
+        distanceMap.put("Bình Thuận", 184.0);
+        distanceMap.put("Kon Tum", 559.0);
+        distanceMap.put("Gia Lai", 654.0);
+        distanceMap.put("Đắk Lắk", 358.0);
+        distanceMap.put("Đắk Nông", 311.0);
+        distanceMap.put("Lâm Đồng", 273.0);
+        distanceMap.put("Bình Phước", 123.0);
+        distanceMap.put("Tây Ninh", 88.0);
+        distanceMap.put("Bình Dương", 42.0);
+        distanceMap.put("Đồng Nai", 101.0);
+        distanceMap.put("Bà Rịa - Vũng Tàu", 93.0);
+        distanceMap.put("Hồ Chí Minh", 0.0); // mốc, nên chi phí là 0
+        distanceMap.put("Long An", 60.0);
+        distanceMap.put("Tiền Giang", 66.0);
+        distanceMap.put("Bến Tre", 88.0);
+        distanceMap.put("Trà Vinh", 128.0);
+        distanceMap.put("Vĩnh Long", 127.0);
+        distanceMap.put("Đồng Tháp", 147.0);
+        distanceMap.put("An Giang", 232.0);
+        distanceMap.put("Kiên Giang", 243.0);
+        distanceMap.put("Cần Thơ", 193.0);
+        distanceMap.put("Hậu Giang", 188.0);
+        distanceMap.put("Sóc Trăng", 209.0);
+        distanceMap.put("Bạc Liêu", 254.0);
+        distanceMap.put("Cà Mau", 193.0);
+
+        // Lấy khoảng cách cho tỉnh đã cho, nếu không tìm thấy trả về 0
+        return distanceMap.getOrDefault(province, 0.0);
+    }
+
+    // Hàm tính cước phí vận chuyển
+    public double calculateShippingFee(int quantity, double weightPerFish, double distance) {
+        double BASE_FEE_PER_KG = 5000; // VND per kg
+        double DISTANCE_FEE_PER_KM = 1000; // VND per km
+        double EXCHANGE_RATE_VND_TO_USD = 23000.0; // VND to USD
+
+        // Calculate the fee in VND
+        double feeInVND = (quantity * weightPerFish * BASE_FEE_PER_KG) + (distance * DISTANCE_FEE_PER_KM);
+
+        // Convert the fee to USD and round to 2 decimal places
+        double feeInUSD = feeInVND / EXCHANGE_RATE_VND_TO_USD;
+        return Math.round(feeInUSD * 100.0) / 100.0;
+    }
+
+    public static void main(String[] args) {
+        KoiDAO calculator = new KoiDAO(); // Tạo đối tượng ShippingCalculator
+
+        // Thay đổi thông số đầu vào
+        int quantity = 15; // Số lượng cá
+        double weightPerFish = 1.5; // Cân nặng mỗi con cá (kg)
+        String destinationProvinceCode = "Hải Phòng"; // Mã tỉnh đích (ví dụ: Bình Dương)
+
+        double distance = calculator.getDistance(destinationProvinceCode); // Lấy khoảng cách thực tế
+
+        double shippingFee = calculator.calculateShippingFee(quantity, weightPerFish, distance);
+
+        System.out.println("Khoảng cách: " + distance + " km");
+        System.out.println("Cước phí vận chuyển là: " + shippingFee + " VND");
     }
 }
