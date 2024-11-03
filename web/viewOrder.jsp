@@ -131,7 +131,7 @@
                                             $<fmt:formatNumber value="${entry.value.tour.tourPrice * entry.value.numberOfPeople}" type="number" maxFractionDigits="2" minFractionDigits="2" />
                                         </c:when>
                                         <c:when test="${not empty entry.value.koi}">
-                                            $<fmt:formatNumber value="${entry.value.koi.price * 0.3 * entry.value.quantity}" type="number" maxFractionDigits="2" minFractionDigits="2" />
+                                            $<fmt:formatNumber value="${entry.value.koi.price * entry.value.quantity}" type="number" maxFractionDigits="2" minFractionDigits="2" />
                                         </c:when>
                                     </c:choose>
                                 </td>

@@ -408,20 +408,4 @@ public class KoiDAO implements Serializable {
         double feeInUSD = feeInVND / EXCHANGE_RATE_VND_TO_USD;
         return Math.round(feeInUSD * 100.0) / 100.0;
     }
-
-    public static void main(String[] args) {
-        KoiDAO calculator = new KoiDAO(); // Tạo đối tượng ShippingCalculator
-
-        // Thay đổi thông số đầu vào
-        int quantity = 15; // Số lượng cá
-        double weightPerFish = 1.5; // Cân nặng mỗi con cá (kg)
-        String destinationProvinceCode = "Hải Phòng"; // Mã tỉnh đích (ví dụ: Bình Dương)
-
-        double distance = calculator.getDistance(destinationProvinceCode); // Lấy khoảng cách thực tế
-
-        double shippingFee = calculator.calculateShippingFee(quantity, weightPerFish, distance);
-
-        System.out.println("Khoảng cách: " + distance + " km");
-        System.out.println("Cước phí vận chuyển là: " + shippingFee + " VND");
-    }
 }

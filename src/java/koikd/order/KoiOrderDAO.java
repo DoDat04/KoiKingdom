@@ -318,9 +318,9 @@ public class KoiOrderDAO implements Serializable {
                     String koiName = rs.getString("KoiName");
                     int koiTypeID = rs.getInt("KoiTypeID");
                     int age = rs.getInt("Age");
-                    int length = rs.getInt("Length");
-                    int weight = rs.getInt("Weight");
-                    int price = rs.getInt("Price");
+                    double length = rs.getDouble("Length");
+                    double weight = rs.getDouble("Weight");
+                    double price = rs.getDouble("Price");
                     String image = rs.getString("Image");
                     detail = new KoiDTO(KoiID, koiName, koiTypeID, age, length, weight, price, image);
                 }
@@ -476,7 +476,6 @@ public class KoiOrderDAO implements Serializable {
         return detail;
     }
 
-    
     /**
      * GetKoiOrderListByOrderID
      *
@@ -501,8 +500,8 @@ public class KoiOrderDAO implements Serializable {
                         + "    O.Status, \n"
                         + "    O.EstimatedDelivery, \n"
                         + "    O.Type, \n"
-                        + "    O.[CostShipping], \n"
-                        + "     O.[ShippingAddress]"
+                        + "    O.CostShipping, \n"
+                        + "     O.ShippingAddress\n"
                         + "FROM \n"
                         + "    [dbo].[KOIORDER] O\n"
                         + "INNER JOIN \n"
@@ -524,9 +523,9 @@ public class KoiOrderDAO implements Serializable {
 
                     Date estimatedDelivery = rs.getDate("EstimatedDelivery");
                     String type = rs.getString("Type");
-                    int costShipping = rs.getInt("CostShipping");
+                    double costShipping = rs.getDouble("CostShipping");
                     String shippingAddress = rs.getString("ShippingAddress");
-                    
+
                     KoiOrderDTO dao = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery,
                             type, costShipping, shippingAddress);
                     list.add(dao);
@@ -1212,9 +1211,9 @@ public class KoiOrderDAO implements Serializable {
                         + "WHERE O.CustomerID = ? ";
 
                 // Append date filter only if dateDelivery is provided
-                 if (dateDelivery != null && !dateDelivery.isEmpty()) {
-                sql += " AND CAST(O.DeliveryDate AS DATE) = ? "; // Filter by date only
-            }
+                if (dateDelivery != null && !dateDelivery.isEmpty()) {
+                    sql += " AND CAST(O.DeliveryDate AS DATE) = ? "; // Filter by date only
+                }
 
                 sql += "ORDER BY O.DeliveryDate DESC";
 
@@ -1258,7 +1257,7 @@ public class KoiOrderDAO implements Serializable {
         }
         return list;
     }
-    
+
     /**
      *
      *

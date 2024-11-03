@@ -119,7 +119,7 @@
                                                         $${entry.value.totalPrice}
                                                     </c:when>
                                                     <c:when test="${not empty entry.value.koi}">
-                                                        $${entry.value.totalPrice * 0.3}
+                                                        $${entry.value.totalPrice}
                                                     </c:when>
                                                 </c:choose>
                                             </td>
@@ -151,8 +151,8 @@
                                     <c:set var="total" value="${total + entry.value.tour.tourPrice * entry.value.numberOfPeople}" />
                                 </c:when>
                                 <c:when test="${not empty entry.value.koi}">
-                                    <c:set var="subtotal" value="${subtotal + entry.value.koi.price * 0.3 * entry.value.quantity}" />
-                                    <c:set var="total" value="${total + entry.value.koi.price * 0.3 * entry.value.quantity}" />
+                                    <c:set var="subtotal" value="${subtotal + entry.value.koi.price * 0.3 * entry.value.quantity}" /> 
+                                    <c:set var="total" value="${total + entry.value.koi.price * entry.value.quantity}" />
                                 </c:when>
                             </c:choose>
                         </c:forEach>
