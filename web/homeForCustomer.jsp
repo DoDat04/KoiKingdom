@@ -115,10 +115,18 @@
         <div id="singleImageCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
             <div class="carousel-inner">
                 <div class="carousel-item banner active">
-                    <img src="img/1.jpg" class="d-block w-100" alt="Slide 1">
+                    <form action="koi-list-order">
+                        <button type="submit" class="d-block w-100" style="border: none; background: none; padding: 0;">
+                            <img src="img/1.jpg" class="d-block w-100" alt="Slide 1">
+                        </button>
+                    </form>
                 </div>
                 <div class="carousel-item banner">
-                    <img src="img/2.jpg" class="d-block w-100" alt="Slide 2">
+                    <form action="listkoitype">
+                        <button type="submit" class="d-block w-100" style="border: none; background: none; padding: 0;">
+                            <img src="img/2.jpg" class="d-block w-100" alt="Slide 2">
+                        </button>
+                    </form>
                 </div>
                 <div class="carousel-item banner">
                     <img src="img/koibanner.gif" class="d-block w-100" alt="Slide 3">
@@ -147,12 +155,16 @@
                     </h2>
                 </div>
                 <div class="koifarm-image col-md-6">
-                    <img src="img/koi-farm.jpg">
+                    <form action="listfarm">
+                        <button type="submit" class="d-block w-100" style="border: none; background: none; padding: 0;">
+                            <img src="img/koi-farm.jpg">
+                        </button>
+                    </form>
                 </div>
             </div>
 
             <!-- Where do you want to go? -->
-            <h1><strong class="welcome-text">Where do you want to go?</strong></h1>
+            <h1><strong class="welcome-text">Top highest rating tour for you!</strong></h1>
             <!-- Available Tours -->
             <section class="slider_container">
                 <div class="container">
