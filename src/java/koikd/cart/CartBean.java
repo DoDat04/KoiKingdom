@@ -64,7 +64,7 @@ public class CartBean implements Serializable {
 
         if (this.items.containsKey(requestID)) {
             CartItem existingItem = this.items.get(requestID);
-            existingItem.setNumberOfPeople(existingItem.getNumberOfPeople() + numberOfPeople);
+            //existingItem.setNumberOfPeople(existingItem.getNumberOfPeople() + numberOfPeople);
         } else {
             this.items.put(requestID, new CartItem(customTour, numberOfPeople));
         }
@@ -78,6 +78,17 @@ public class CartBean implements Serializable {
         int tourID = tour.getTourID();
         if (this.items.containsKey(tourID)) {
             this.items.remove(tourID);
+        }
+    }
+    
+    public void removeCustomTourFromCart(CustomTourDTO customTour, int numberOfPeople) {
+        if (customTour == null || numberOfPeople <= 0) {
+            return;
+        }
+
+        int requestID = customTour.getRequestID();
+        if (this.items.containsKey(requestID)) {
+            this.items.remove(requestID);
         }
     }
     

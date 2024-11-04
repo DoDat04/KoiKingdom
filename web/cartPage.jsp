@@ -63,6 +63,9 @@
                                                     <c:when test="${not empty entry.value.tour}">
                                                         <img class="tour-img" src="${entry.value.tour.tourImage}" alt="${entry.value.tour.tourName}">
                                                     </c:when>
+                                                    <c:when test="${not empty entry.value.customTour}">
+                                                        <img class="tour-img" src="${entry.value.customTour.image}" alt="Custom tour">
+                                                    </c:when>
                                                     <c:when test="${not empty entry.value.koi}">
                                                         <img class="koi-img" src="${entry.value.koi.image}" alt="${entry.value.koi.koiName}">
                                                     </c:when>
@@ -77,6 +80,16 @@
                                                                 <span>Start Date: <fmt:formatDate value="${entry.value.tour.startDate}" pattern="dd-MM-yyyy" /></span>
                                                                 <span>End Date: <fmt:formatDate value="${entry.value.tour.endDate}" pattern="dd-MM-yyyy" /></span>
                                                                 <span>Departure Location: ${entry.value.tour.tourDepartLoca}</span>
+                                                            </div>
+                                                        </div>
+                                                    </c:when>
+                                                    <c:when test="${not empty entry.value.customTour}">
+                                                        <div class="tour-info">
+                                                            <div class="tour-name">Custom Tour</div>
+                                                            <div class="tour-dates">
+                                                                <span>Start Date: <fmt:formatDate value="${entry.value.customTour.startDate}" pattern="dd-MM-yyyy" /></span>
+                                                                <span>End Date: <fmt:formatDate value="${entry.value.customTour.endDate}" pattern="dd-MM-yyyy" /></span>
+                                                                <span>Departure Location: ${entry.value.customTour.departureLocation}</span>
                                                             </div>
                                                         </div>
                                                     </c:when>
@@ -98,6 +111,9 @@
                                                     <c:when test="${not empty entry.value.tour}">
                                                         ${entry.value.numberOfPeople}
                                                     </c:when>
+                                                    <c:when test="${not empty entry.value.customTour}">
+                                                        ${entry.value.numberOfPeople}
+                                                    </c:when>
                                                     <c:when test="${not empty entry.value.koi}">
                                                         ${entry.value.quantity}
                                                     </c:when>
@@ -107,6 +123,9 @@
                                                 <c:choose>
                                                     <c:when test="${not empty entry.value.tour}">
                                                         $${entry.value.tour.tourPrice}
+                                                    </c:when>
+                                                    <c:when test="${not empty entry.value.customTour}">
+                                                        $${entry.value.customTour.quotationPrice}
                                                     </c:when>
                                                     <c:when test="${not empty entry.value.koi}">
                                                         $${entry.value.koi.price}
@@ -118,6 +137,9 @@
                                                     <c:when test="${not empty entry.value.tour}">
                                                         $${entry.value.totalPrice}
                                                     </c:when>
+                                                    <c:when test="${not empty entry.value.customTour}">
+                                                        $${entry.value.customTour.quotationPrice * entry.value.numberOfPeople}
+                                                    </c:when>
                                                     <c:when test="${not empty entry.value.koi}">
                                                         $${entry.value.totalPrice}
                                                     </c:when>
@@ -125,8 +147,8 @@
                                             </td>
                                             <td>
                                                 <form action="RemoveItemController" method="post">
-                                                    <input type="hidden" name="itemID" value="${entry.value.tour != null ? entry.value.tour.tourID : entry.value.koi.koiID}">
-                                                    <input type="hidden" name="itemType" value="${entry.value.tour != null ? 'tour' : 'koi'}">
+                                                    <input type="hidden" name="itemID" value="${entry.value.tour != null ? entry.value.tour.tourID : (entry.value.koi != null ? entry.value.koi.koiID : entry.value.customTour.requestID)}">
+                                                    <input type="hidden" name="itemType" value="${entry.value.tour != null ? 'tour' : (entry.value.koi != null ? 'koi' : 'custom')}">
                                                     <button type="submit" class="btn-remove">Remove</button>
                                                 </form>
                                             </td>
@@ -149,6 +171,10 @@
                                 <c:when test="${not empty entry.value.tour}">
                                     <c:set var="subtotal" value="${subtotal + entry.value.tour.tourPrice * entry.value.numberOfPeople}" />
                                     <c:set var="total" value="${total + entry.value.tour.tourPrice * entry.value.numberOfPeople}" />
+                                </c:when>
+                                <c:when test="${not empty entry.value.customTour}">
+                                    <c:set var="subtotal" value="${subtotal + entry.value.customTour.quotationPrice * entry.value.numberOfPeople}" />
+                                    <c:set var="total" value="${total + entry.value.customTour.quotationPrice * entry.value.numberOfPeople}" />
                                 </c:when>
                                 <c:when test="${not empty entry.value.koi}">
                                     <c:set var="subtotal" value="${subtotal + entry.value.koi.price * 0.3 * entry.value.quantity}" /> 

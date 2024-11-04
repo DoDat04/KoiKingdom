@@ -27,7 +27,7 @@ import koikd.employees.EmployeesDTO;
  */
 @WebServlet(name = "GetListEmployee", urlPatterns = {"/manageemployee"})
 public class GetListEmployeeController extends HttpServlet {
-    private static String MANAGE_EMPLOYEE = "manageEmployee.jsp";
+    private static final String MANAGE_EMPLOYEE = "manageEmployee.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

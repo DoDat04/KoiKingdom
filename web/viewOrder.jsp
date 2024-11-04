@@ -130,6 +130,9 @@
                                         <c:when test="${not empty entry.value.tour}">
                                             $<fmt:formatNumber value="${entry.value.tour.tourPrice * entry.value.numberOfPeople}" type="number" maxFractionDigits="2" minFractionDigits="2" />
                                         </c:when>
+                                        <c:when test="${not empty entry.value.customTour}">
+                                            $<fmt:formatNumber value="${entry.value.customTour.quotationPrice * entry.value.numberOfPeople}" type="number" maxFractionDigits="2" minFractionDigits="2" />
+                                        </c:when>
                                         <c:when test="${not empty entry.value.koi}">
                                             $<fmt:formatNumber value="${entry.value.koi.price * entry.value.quantity}" type="number" maxFractionDigits="2" minFractionDigits="2" />
                                         </c:when>
@@ -145,6 +148,9 @@
                                 <c:choose>
                                     <c:when test="${not empty entry.value.tour}">
                                         <c:set var="subtotal" value="${subtotal + entry.value.tour.tourPrice * entry.value.numberOfPeople}" />
+                                    </c:when>
+                                    <c:when test="${not empty entry.value.customTour}">
+                                        <c:set var="subtotal" value="${subtotal + entry.value.customTour.quotationPrice * entry.value.numberOfPeople}" />
                                     </c:when>
                                     <c:when test="${not empty entry.value.koi}">
                                         <c:set var="subtotal" value="${subtotal + entry.value.koi.price * 0.3 * entry.value.quantity}" />

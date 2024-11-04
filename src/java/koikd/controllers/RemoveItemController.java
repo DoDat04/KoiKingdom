@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.Base64;
 import koikd.cart.CartBean;
 import koikd.cart.CartItem;
+import koikd.customtour.CustomTourDTO;
 import koikd.koi.KoiDTO;
 import koikd.tour.TourDTO;
 
@@ -74,6 +75,18 @@ public class RemoveItemController extends HttpServlet {
                     }
                     if (koiToRemove != null) {
                         cart.removeKoiFromCart(koiToRemove, 1);
+                    }
+                } else if ("custom".equals(itemType)) {
+                    CustomTourDTO customToRemove = null;
+                    for (CartItem item : cart.getItems().values()) {
+                        CustomTourDTO tour = item.getCustomTour();
+                        if (tour != null && tour.getRequestID() == itemID) {
+                            customToRemove = tour;
+                            break;
+                        }
+                    }
+                    if (customToRemove != null) {
+                        cart.removeCustomTourFromCart(customToRemove, 1);
                     }
                 }
 
