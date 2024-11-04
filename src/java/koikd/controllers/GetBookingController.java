@@ -51,6 +51,7 @@ public class GetBookingController extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             String url = ORDERBOOKING_PAGE;
             String customerID = request.getParameter("customerID");
+            System.out.println("check" + customerID);
             TourBookingDetailDAO bookingDetailDao = new TourBookingDetailDAO();
             //CustomTourDAO dao = new CustomTourDAO();
             TourDAO tourDAO = new TourDAO();

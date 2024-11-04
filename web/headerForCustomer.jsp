@@ -121,37 +121,62 @@
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal"><i class="fa-solid fa-key"></i> Change Password</a></li>
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
                                         <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
-                                        <li><a class="dropdown-item" href="MyOrder?customerID=${sessionScope.LOGIN_USER.customerID}"><i class="fa fa-history"></i> My Order KOI</a></li>
-                                        <li><a class="dropdown-item" href="get-booking?customerID=${sessionScope.LOGIN_USER.customerID}"><i class="fa fa-history"></i> My Order Booking </a></li>
                                         <li>
-                                            <a class="dropdown-item" href="my-custom-tour?customerID=${sessionScope.LOGIN_USER.customerID}">
-                                                <i class="fa fa-history"></i> My Custom Tour
-                                            </a>
+                                            <form action="MyOrder" method="post" style="display: inline;">
+                                                <input type="hidden" name="customerID" value="${sessionScope.LOGIN_USER.customerID}" />
+                                                <input type="hidden" name="dateDelivery" value="" />
+                                                <button type="submit" class="dropdown-item">
+                                                    <i class="fa fa-history"></i> My Order KOI
+                                                </button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form action="get-booking" method="post">
+                                                <input type="hidden" name="customerID" value="${sessionScope.LOGIN_USER.customerID}" />
+                                                <button type="submit" class="dropdown-item"><i class="fa fa-history"></i> My Order Booking</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form action="my-custom-tour" method="post">
+                                                <input type="hidden" name="customerID" value="${sessionScope.LOGIN_USER.customerID}" />
+                                                <button type="submit" class="dropdown-item">
+                                                    <i class="fa fa-history"></i> My Custom Tour
+                                                </button>
+                                            </form>
                                         </li>
                                         <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>      
                                         </c:when>
                                         <c:otherwise>                                       
-                                            <li><a class="dropdown-item" href="faq"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
-                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
-                                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
-                                            <li>
-                                                <a class="dropdown-item" href="MyOrder?customerID=${sessionScope.custID}&&dateDelivery=">
+                                        <li><a class="dropdown-item" href="faq"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
+                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
+                                        <li>
+                                            <form action="MyOrder" method="post" style="display: inline;">
+                                                <input type="hidden" name="customerID" value="${sessionScope.custID}" />
+                                                <input type="hidden" name="dateDelivery" value="" />
+                                                <button type="submit" class="dropdown-item">
                                                     <i class="fa fa-history"></i> My Order KOI
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="get-booking?customerID=${sessionScope.custID}">
-                                                    <i class="fa fa-history"></i> My Order Booking
-                                                </a>
-                                            </li>
+                                                </button>
+                                            </form>
 
-                                            <li>
-                                                <a class="dropdown-item" href="my-custom-tour?customerID=${sessionScope.custID}">
+                                        </li>
+                                        <li>
+                                            <form action="get-booking" method="post">
+                                                <input type="hidden" name="customerID" value="${sessionScope.custID}" />
+                                                <button type="submit" class="dropdown-item"><i class="fa fa-history"></i> My Order Booking</button>
+                                            </form>
+                                        </li>
+
+                                        <li>
+                                            <form action="my-custom-tour" method="post">
+                                                <input type="hidden" name="customerID" value="${sessionScope.custID}" />
+                                                <button type="submit" class="dropdown-item">
                                                     <i class="fa fa-history"></i> My Custom Tour
-                                                </a>
-                                            </li>
+                                                </button>
+                                            </form>
+                                        </li>
 
-                                            <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
+                                        <li><a class="dropdown-item" href="home?action=Logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
                                         </c:otherwise>
                                     </c:choose>
                             </ul>

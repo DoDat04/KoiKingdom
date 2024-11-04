@@ -48,11 +48,11 @@ public class KoiOrderDAO implements Serializable {
                         + "    [dbo].[KOIORDER] O \n"
                         + "INNER JOIN \n"
                         + "    [dbo].[CUSTOMER] C ON O.CustomerID = C.CustomerID \n"
-                        + "WHERE 1=1 \n";
+                        + "WHERE \n";
 
                 // Add condition for employeeId if it's provided
                 if (employeeId != 0) {
-                    sql += "AND O.DeliveryBy = ? \n";
+                    sql += "O.DeliveryBy = ? \n";
                 }
 
                 // Add condition for customer name if it's provided
