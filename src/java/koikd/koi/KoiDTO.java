@@ -46,6 +46,12 @@ public class KoiDTO implements Serializable {
         this.image = image;
     }
 
+    KoiDTO(int koiID, String koiName, String image) {
+        this.koiID = koiID;
+        this.koiName = koiName;
+        this.image = image;
+    }
+
     public String getKoiTypeName() {
         return koiTypeName;
     }

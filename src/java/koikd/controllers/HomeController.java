@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,10 +22,13 @@ import java.util.logging.Logger;
 import koikd.cart.CartBean;
 import koikd.farm.FarmDAO;
 import koikd.farm.FarmDTO;
+import koikd.koi.KoiDAO;
 import koikd.koi.KoiDTO;
 import koikd.koitype.KoiTypeDAO;
 import koikd.koitype.KoiTypeDTO;
 import koikd.order.KoiOrderDAO;
+import koikd.tour.TourDAO;
+import koikd.tour.TourDTO;
 
 /**
  *
@@ -95,7 +99,31 @@ public class HomeController extends HttpServlet {
             }
             String action = request.getParameter("action");
             if (action == null) {
+                TourDAO services1 = new TourDAO();
+                ArrayList<TourDTO> trendingTours = services1.getTrendingTour();
+                if (trendingTours != null && !trendingTours.isEmpty()) {
+                    request.setAttribute("TRENDING_TOURS", trendingTours);
+                } else {
+                    request.setAttribute("ERROR", "Cannot find trending tour");
+                }
+                
+                KoiDAO services2 = new KoiDAO();
+                ArrayList<KoiDTO> list = services2.koiOrderTrending();
+                if (list != null && !list.isEmpty()) {
+                    request.setAttribute("KOI_TRENDING", list);
+                } else {
+                    request.setAttribute("ERROR", "Cannot display.");
+                }
+                
+                TourDAO services3 = new TourDAO();
+                ArrayList<TourDTO> highestTourRating = services3.TopHighestRatingTour();
+                if(highestTourRating!=null && !highestTourRating.isEmpty()){
+                    request.setAttribute("HIGHEST_RATING_TOUR", highestTourRating);
+                } else{
+                    request.setAttribute("ERROR", "Cannot list.");
+                }
                 url = HOME_PAGE;
+
             } else if (action.equals("Logout")) {
                 url = LOGOUT_CONTROLLER;
             } else if (action.equals("Delivery")) {
@@ -126,7 +154,7 @@ public class HomeController extends HttpServlet {
         Cookie[] cookies = request.getCookies();
         String cookieName = null;
         HttpSession session = request.getSession();
-        int cartItemCount = 0; 
+        int cartItemCount = 0;
 
         if (session.getAttribute("LOGIN_USER") != null) {
             String userId = (String) session.getAttribute("userId");
@@ -142,9 +170,9 @@ public class HomeController extends HttpServlet {
                     try {
                         byte[] cartBytes = Base64.getDecoder().decode(cookie.getValue());
                         CartBean cart = objectMapper.readValue(cartBytes, CartBean.class);
-                        cartItemCount = cart.getTotalQuantity(); 
-                        session.setAttribute("cartItemCount", cartItemCount); 
-                        return cart; 
+                        cartItemCount = cart.getTotalQuantity();
+                        session.setAttribute("cartItemCount", cartItemCount);
+                        return cart;
                     } catch (IOException e) {
                         Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, e);
                     }
@@ -152,7 +180,7 @@ public class HomeController extends HttpServlet {
             }
         }
 
-        session.setAttribute("cartItemCount", cartItemCount); 
+        session.setAttribute("cartItemCount", cartItemCount);
         return null;
     }
 

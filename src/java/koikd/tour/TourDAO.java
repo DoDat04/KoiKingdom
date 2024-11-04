@@ -19,6 +19,7 @@ import koikd.utils.DBUtils;
  * @author Do Dat
  */
 public class TourDAO implements Serializable {
+
     public List<TourDTO> getTourList() throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -269,7 +270,7 @@ public class TourDAO implements Serializable {
         }
         return result;
     }
-    
+
     public List<TourDTO> searchTourName(String searchValue, int index) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -338,7 +339,7 @@ public class TourDAO implements Serializable {
         }
         return result;
     }
-    
+
     public int getNumberPageInManagePage() throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement stm = null;
@@ -350,7 +351,7 @@ public class TourDAO implements Serializable {
                 String sql = "SELECT COUNT(*) "
                         + "FROM TOUR ";
                 stm = conn.prepareStatement(sql);
-                
+
                 rs = stm.executeQuery();
                 if (rs.next()) {
                     int total = rs.getInt(1);
@@ -435,6 +436,7 @@ public class TourDAO implements Serializable {
         }
         return countPage; // Trả về số trang
     }
+
     /**
      *
      * @param id
@@ -477,7 +479,7 @@ public class TourDAO implements Serializable {
         }
         return false;
     }
-    
+
     public boolean createTour(String tourName, String duration, String description, double tourPrice,
             Timestamp startDate, Timestamp endDate, String imagePath,
             String[] selectedFarms, String[] selectedKoiTypes, String departureLocation, int consultingID) throws SQLException, ClassNotFoundException {
@@ -498,7 +500,7 @@ public class TourDAO implements Serializable {
                 stm.setTimestamp(5, startDate);
                 stm.setTimestamp(6, endDate);
                 stm.setString(7, imagePath);
-                stm.setBoolean(8, true); 
+                stm.setBoolean(8, true);
                 stm.setString(9, departureLocation);
                 stm.setInt(10, consultingID);
                 int affectedRows = stm.executeUpdate();
@@ -536,11 +538,11 @@ public class TourDAO implements Serializable {
         }
         return result;
     }
-    
+
     private void insertTourFarm(int tourID, int farmID) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
-        
+
         try {
             con = DBUtils.getConnection();
             if (con != null) {
@@ -558,13 +560,13 @@ public class TourDAO implements Serializable {
             if (con != null) {
                 con.close();
             }
-        }              
+        }
     }
-    
+
     private void insertTourKoiType(int tourID, int koiTypeID) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
-        
+
         try {
             con = DBUtils.getConnection();
             if (con != null) {
@@ -582,9 +584,9 @@ public class TourDAO implements Serializable {
             if (con != null) {
                 con.close();
             }
-        }              
-    } 
-    
+        }
+    }
+
     public boolean updateTour(int tourID, String tourName, String duration, String description, double tourPrice,
             Timestamp startDate, Timestamp endDate, String departureLocation, int consultingID) throws SQLException {
         Connection con = null;
@@ -608,7 +610,7 @@ public class TourDAO implements Serializable {
                 stm.setString(7, departureLocation);     // Set departure location
                 stm.setInt(8, consultingID);
                 stm.setInt(9, tourID);                // Set the tour ID for the WHERE clause
-                
+
                 int rowsUpdated = stm.executeUpdate();
                 result = rowsUpdated > 0;  // Kiểm tra nếu có hàng nào được cập nhật
             }
@@ -625,5 +627,122 @@ public class TourDAO implements Serializable {
         }
         return result;
     }
-    
+
+    public ArrayList<TourDTO> getTrendingTour() {
+        ArrayList<TourDTO> trendingTours = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DBUtils.getConnection();
+            if (connection != null) {
+                String sql = "SELECT TOP 8 b.TourID, b.TourName, b.Duration, "
+                        + " b.TourPrice, b.StartDate, b.EndDate, b.Image, b.Status, "
+                        + " COUNT(a.TourID) AS BookingCount "
+                        + " FROM [dbo].[BOOKING] a "
+                        + " INNER JOIN [dbo].[TOUR] b ON a.TourID = b.TourID "
+                        + " WHERE b.Status = 1 "
+                        + " GROUP BY b.TourID, b.TourName, b.Duration, "
+                        + " b.TourPrice, b.StartDate, b.EndDate, b.Image, b.Status "
+                        + " ORDER BY BookingCount DESC;";
+                preparedStatement = connection.prepareStatement(sql);
+                resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    int tourID = resultSet.getInt("TourID");
+                    String tourName = resultSet.getString("TourName");
+                    String duration = resultSet.getString("Duration");
+                    double tourPrice = resultSet.getDouble("TourPrice");
+                    Timestamp startDate = resultSet.getTimestamp("StartDate");
+                    Timestamp endDate = resultSet.getTimestamp("EndDate");
+                    String tourImage = resultSet.getString("Image");
+                    boolean status = resultSet.getBoolean("Status");
+
+                    TourDTO tour = new TourDTO(tourID, tourName, duration, tourPrice,
+                            startDate, endDate, tourImage, status);
+                    trendingTours.add(tour);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (resultSet != null) try {
+                resultSet.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (preparedStatement != null) try {
+                preparedStatement.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (connection != null) try {
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return trendingTours;
+    }
+
+//    public static void main(String[] args) {
+//        TourDAO services = new TourDAO();
+//        ArrayList<TourDTO> trendingTours = services.getTrendingTour();
+//        for (TourDTO trendingTour : trendingTours) {
+//            if (trendingTour != null) {
+//                System.out.println(trendingTour);
+//            }
+//        }
+//    }
+    public ArrayList<TourDTO> TopHighestRatingTour() throws SQLException {
+        ArrayList<TourDTO> listHighestRatingTour = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT TOP 8 a.TourID, a.TourName, a.Image, AVG(b.Rating) AS AverageRating "
+                        + " FROM [dbo].[TOUR] a "
+                        + " INNER JOIN [dbo].[FEEDBACK] b ON a.TourID = b.TourID "
+                        + " GROUP BY a.TourID, a.TourName, a.Image "
+                        + " ORDER BY AverageRating DESC ";
+                pst = conn.prepareStatement(sql);
+                rs = pst.executeQuery();
+                if (rs != null) {
+                    while (rs.next()) {
+                        int tourID = rs.getInt("TourID");
+                        String tourName = rs.getString("TourName");
+                        String image = rs.getString("Image");
+                        TourDTO dto = new TourDTO(tourID, tourName, image);
+                        listHighestRatingTour.add(dto);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return listHighestRatingTour;
+    }
+
+    public static void main(String[] args) throws SQLException {
+        TourDAO services = new TourDAO();
+        ArrayList<TourDTO> list = services.TopHighestRatingTour();
+        for (TourDTO tourDTO : list) {
+            if (tourDTO != null) {
+                System.out.println(tourDTO);
+            }
+        }
+    }
 }

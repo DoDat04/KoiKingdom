@@ -408,4 +408,55 @@ public class KoiDAO implements Serializable {
         double feeInUSD = feeInVND / EXCHANGE_RATE_VND_TO_USD;
         return Math.round(feeInUSD * 100.0) / 100.0;
     }
+
+    public ArrayList<KoiDTO> koiOrderTrending() throws SQLException {
+        ArrayList<KoiDTO> koiOrderTrending = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT TOP 8 b.KoiID, b.KoiName, b.Image, COUNT(a.KoiID) as KoiOrderTrending "
+                        + " FROM [dbo].[KOIORDERDETAIL] a "
+                        + " INNER JOIN [dbo].[KOI] b ON a.KoiID = b.KoiID "
+                        + " GROUP BY b.KoiID, b.KoiName, b.Image "
+                        + " ORDER BY KoiOrderTrending DESC;";
+                pst = conn.prepareStatement(sql);
+                rs = pst.executeQuery();
+                if (rs != null) {
+                    while (rs.next()) {
+                        int koiID = rs.getInt("koiID");
+                        String koiName = rs.getString("koiName");
+                        String image = rs.getString("image");
+                        KoiDTO dto = new KoiDTO(koiID, koiName, image);
+                        koiOrderTrending.add(dto);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return koiOrderTrending;
+    }
+    
+    public static void main(String[] args) throws SQLException {
+        KoiDAO services = new KoiDAO();
+        ArrayList<KoiDTO> list = services.koiOrderTrending();
+        for (KoiDTO koiDTO : list) {
+            if(koiDTO!=null){
+                System.out.println(koiDTO);
+            }
+        }
+    }
 }

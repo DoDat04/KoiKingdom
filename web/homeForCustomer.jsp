@@ -28,26 +28,83 @@
         <script src="js/login.js"></script>     
         <script src="js/load.js"></script>
         <style type="text/css">
-            .img_box img{
-                max-width: 100%;
-                border-radius: 20px;
-            }
-            .slider_container .container{
-                padding: 0 15px;
-                max-width: 1230px;
-                margin: 0 auto;
-            }
-            .card_slider{
-                padding: 50px;
-            }
-            .slider_container .img_box img {
-                width: 100%; /* Hoặc bạn có thể chọn một kích thước cố định, ví dụ: 300px */
-                height: auto; /* Đảm bảo giữ tỷ lệ ảnh */
-                max-width: 300px; /* Đặt kích thước tối đa nếu cần thu nhỏ ảnh */
-                max-height: 200px; /* Giới hạn chiều cao tối đa cho ảnh */
-                object-fit: cover; /* Cắt ảnh nếu vượt quá kích thước */
+            .slider_container {
+                padding: 30px 0; /* Vertical padding for the section */
+                background-color: #f9f9f9; /* Light background for contrast */
             }
 
+            .slider_container .container {
+                max-width: 1230px;
+                margin: 0 auto; /* Center the container */
+                padding: 0 15px; /* Horizontal padding */
+            }
+
+            .card_slider {
+                padding: 50px 0; /* Adjust top/bottom padding */
+            }
+
+            .swiper-slide {
+                display: flex;
+                justify-content: center; /* Center slide contents horizontally */
+                align-items: center; /* Center slide contents vertically */
+                flex-direction: column; /* Stack image and text */
+                text-align: center; /* Center text alignment */
+            }
+
+            .img_box {
+                position: relative;
+                overflow: hidden; /* Prevent overflow */
+                border-radius: 20px; /* Rounded corners for images */
+            }
+
+            .img_box img {
+                width: 100%; /* Responsive width */
+                height: auto; /* Maintain aspect ratio */
+                object-fit: cover; /* Cover to maintain aspect ratio */
+                border-radius: 20px; /* Rounded corners for images */
+            }
+
+            .tour-info {
+                position: absolute; /* Overlay on the image */
+                bottom: 10%; /* Position it at the bottom */
+                left: 50%;
+                transform: translateX(-50%); /* Center it horizontally */
+                background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+                color: #ffffff; /* White text */
+                padding: 10px 15px; /* Add padding */
+                border-radius: 10px; /* Rounded corners for text box */
+                transition: opacity 0.3s; /* Smooth transition for hover effect */
+            }
+
+            .img_box:hover .tour-info {
+                opacity: 1; /* Show text overlay on hover */
+            }
+
+            .swiper-button-next,
+            .swiper-button-prev {
+                color: #ffffff; /* White arrows */
+                background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+                border-radius: 50%; /* Round buttons */
+                width: 40px; /* Fixed width */
+                height: 40px; /* Fixed height */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10; /* Ensure buttons are above other elements */
+            }
+
+            .swiper-pagination {
+                bottom: 10px; /* Position pagination */
+            }
+
+            .swiper-pagination-bullet {
+                background: #007bff; /* Blue bullets */
+                opacity: 0.8; /* Semi-transparent */
+            }
+
+            .swiper-pagination-bullet-active {
+                background: #0056b3; /* Darker blue for active bullet */
+            }
         </style>
     </head>
     <body>
@@ -101,37 +158,21 @@
                 <div class="container">
                     <div class="swiper card_slider">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/hiroshima.jpg">
+                            <c:forEach var="tour" items="${requestScope.HIGHEST_RATING_TOUR}">
+                                <div class="swiper-slide">
+                                    <div class="img_box">
+                                        <form action="tour-detail" method="get">
+                                            <input type="hidden" name="tourID" value="${tour.tourID}" />
+                                            <button type="submit" class="btn btn-link p-0" style="text-decoration: none; color: inherit;">
+                                                <img src="${tour.tourImage}" alt="${tour.tourName}">
+                                                <div class="tour-info">
+                                                    <h3 class="welcome-text">${tour.tourName}</h3>
+                                                </div>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/kyoto.jpg">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/kyushu.jpg">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/nagoya.jpg">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/osaka.jpg">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/tokyo.jpg">
-                                </div>
-                            </div>
+                            </c:forEach>
                         </div>
                         <div class="swiper-button-next"></div>
                         <div class="swiper-button-prev"></div>
@@ -140,44 +181,27 @@
                 </div>
             </section>
 
-            <!-- Popular Tour -->
-            <h1><strong class="welcome-text" id="popularTour">Popular Tour</strong></h1>
+            <h1><strong class="welcome-text" id="popularTour">Popular Tours</strong></h1>
             <!-- Popular Tours -->
             <section class="slider_container">
                 <div class="container">
                     <div class="swiper card_slider">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/hiroshima.jpg">
+                            <c:forEach var="tour" items="${requestScope.TRENDING_TOURS}">
+                                <div class="swiper-slide">
+                                    <div class="img_box">
+                                        <form action="tour-detail" method="get">
+                                            <input type="hidden" name="tourID" value="${tour.tourID}" />
+                                            <button type="submit" class="btn btn-link p-0" style="text-decoration: none; color: inherit;">
+                                                <img src="${tour.tourImage}" alt="${tour.tourName}">
+                                                <div class="tour-info">
+                                                    <h3 class="welcome-text">${tour.tourName}</h3>
+                                                </div>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/kyoto.jpg">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/kyushu.jpg">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/nagoya.jpg">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/osaka.jpg">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/tokyo.jpg">
-                                </div>
-                            </div>
+                            </c:forEach>
                         </div>
                         <div class="swiper-button-next"></div>
                         <div class="swiper-button-prev"></div>
@@ -193,37 +217,16 @@
                 <div class="container">
                     <div class="swiper card_slider">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/Kohaku.jpg">
+                            <c:forEach var="koi" items="${requestScope.KOI_TRENDING}">
+                                <div class="swiper-slide">
+                                    <div class="img_box">
+                                        <img src="${koi.image}" alt="${koi.koiName}">
+                                        <div class="tour-info">
+                                            <h3 class="welcome-text">${koi.koiName}</h3>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/Kohaku.jpg">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/Kohaku.jpg">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/Kohaku.jpg">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/Kohaku.jpg">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="img_box">
-                                    <img src="img/Kohaku.jpg">
-                                </div>
-                            </div>
+                            </c:forEach>
                         </div>
                         <div class="swiper-button-next"></div>
                         <div class="swiper-button-prev"></div>
@@ -300,18 +303,17 @@
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
         <script type="text/javascript">
                 var swiper = new Swiper('.card_slider', {
-                    slidesPerView: 3, // Hiển thị 3 ảnh một lần
-                    spaceBetween: 30, // Khoảng cách giữa các ảnh (tuỳ chỉnh theo ý muốn)
-                    slidesPerGroup: 1, // Kéo 1 ảnh mỗi lần
-                    loop: true, // Đặt vòng lặp nếu muốn
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                    slidesPerGroup: 1,
+                    loop: true,
                     navigation: {
                         nextEl: '.swiper-button-next',
                         prevEl: '.swiper-button-prev',
-
                     },
                     autoplay: {
-                        delay: 3000, // Thời gian giữa các lần chuyển cảnh (tính bằng mili giây)
-                        disableOnInteraction: false, // Vẫn tiếp tục autoplay ngay cả khi người dùng tương tác
+                        delay: 3000,
+                        disableOnInteraction: false,
                     },
                     pagination: {
                         el: '.swiper-pagination',
