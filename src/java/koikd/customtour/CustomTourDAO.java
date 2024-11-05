@@ -564,11 +564,12 @@ public class CustomTourDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT [RequestID], [CustomerID], [FullName], [Duration], [StartDate],\n"
-                        + "[EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], \n"
-                        + " [KoiTypeName], [Quantity], [Image], [DetailRejected],[Checked] \n"
-                        + " FROM [dbo].[CUSTOMTOURREQUEST] \n"
-                        + " WHERE [CustomerID] = ? ";
+                String sql = "SELECT [RequestID], [CustomerID], [FullName], [Duration], [StartDate], "
+                        + " [EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], "
+                        + " [KoiTypeName], [Quantity], [Image], [DetailRejected],[Checked] "
+                        + " FROM [dbo].[CUSTOMTOURREQUEST] "
+                        + " WHERE [CustomerID] = ?"
+                        + " ORDER BY [RequestID] DESC";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, id);
                 rs = pst.executeQuery();
@@ -694,6 +695,48 @@ public class CustomTourDAO implements Serializable {
             if (conn != null) {
                 conn.close();
             }
+        }
+    }
+
+    public CustomTourDTO getBillCustomTour(int custID, int requestID) throws SQLException {
+        CustomTourDTO dto = null;
+        String sql = "SELECT [CustomerID], [FullName], [DepartureLocation], [Duration], [QuotationPrice], [StartDate], [EndDate], [Quantity] "
+                + " FROM [dbo].[CUSTOMTOURREQUEST] "
+                + " WHERE [CustomerID] = ? AND [RequestID] = ? "
+                + " AND [Status] = 'Approved' AND [ManagerApprovalStatus] = 'Approved' AND [Checked] = 1";
+
+        try (Connection connection = DBUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, custID);
+            preparedStatement.setInt(2, requestID);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    int customerID = resultSet.getInt("CustomerID");
+                    String fullName = resultSet.getString("FullName");
+                    String duration = resultSet.getString("Duration");
+                    double quotationPrice = resultSet.getDouble("QuotationPrice");
+                    Date startDate = resultSet.getDate("StartDate");
+                    Date endDate = resultSet.getDate("EndDate");
+                    int quantity = resultSet.getInt("Quantity");
+                    String departureLocation = resultSet.getString("DepartureLocation");
+                    dto = new CustomTourDTO(customerID, requestID, fullName, duration, quotationPrice, startDate, endDate, quantity, departureLocation);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return dto;
+    }
+
+    public static void main(String[] args) throws SQLException {
+        int custID = 1;
+        int requestID = 1;
+        CustomTourDAO services = new CustomTourDAO();
+        CustomTourDTO dto = services.getBillCustomTour(custID, requestID);
+        if (dto != null) {
+            System.out.println(dto);
         }
     }
 }

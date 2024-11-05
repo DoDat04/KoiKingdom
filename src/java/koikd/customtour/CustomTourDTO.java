@@ -70,6 +70,18 @@ public class CustomTourDTO implements Serializable{
         this.detailRejected = detailRejected;
     }
 
+    CustomTourDTO(int customerID, int requestID, String fullName, String duration, double quotationPrice, Date startDate, Date endDate, int quantity, String departureLocation) {
+        this.requestID = requestID;
+        this.customerID = customerID;
+        this.custName = fullName;
+        this.duration = duration;
+        this.quotationPrice = quotationPrice;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.quantity = quantity;
+        this.departureLocation = departureLocation;
+    }
+
     public boolean isChecked() {
         return checked;
     }

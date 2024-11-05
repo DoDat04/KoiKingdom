@@ -147,15 +147,15 @@
                 <label for="departureLocation">Departure Location</label>
                 <select class="form-select" aria-label="Default select example" id="departureLocation" name="departureLocation" required>
                     <option value="" selected>Choose Departure Location</option>
-                    <option value="Hà Nội">Hà Nội</option>
-                    <option value="Hồ Chí Minh">Hồ Chí Minh</option>
-                    <option value="Đà Nẵng">Đà Nẵng</option>
-                    <option value="Cam Ranh">Cam Ranh</option>
-                    <option value="Phú Quốc">Phú Quốc</option>
-                    <option value="Hải Phòng">Hải Phòng</option>
-                    <option value="Cần Thơ">Cần Thơ</option>
-                    <option value="Quảng Ninh">Quảng Ninh</option>
-                    <option value="Thanh Hóa">Thanh Hóa</option>
+                    <option value="Thủ đô Hà Nội">Thủ đô Hà Nội</option>
+                    <option value="Thành phố Hồ Chí Minh">Thành phố Hồ Chí Minh</option>
+                    <option value="Thành phố Đà Nẵng">Thành phố Đà Nẵng</option>
+                    <option value="Thành phố Cam Ranh">Thành phố Cam Ranh</option>
+                    <option value="Đảo Phú Quốc">Đảo Phú Quốc</option>
+                    <option value="Thành phố Hải Phòng">Thành phố Hải Phòng</option>
+                    <option value="Thành phố Cần Thơ">Thành phố Cần Thơ</option>
+                    <option value="Tỉnh Quảng Ninh">Tỉnh Quảng Ninh</option>
+                    <option value="Tỉnh Thanh Hóa">Tỉnh Thanh Hóa</option>
                 </select>
             </div>
             <div class="form-group checkbox-group">
