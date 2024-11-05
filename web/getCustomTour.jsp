@@ -66,7 +66,9 @@
                                     <td>${custom.departureLocation}</td>
                                     <td>${custom.farmName}</td>
                                     <td>${custom.koiTypeName}</td>
-                                    <td>${custom.detailRejected}</td>
+                                    <td>
+                                        ${custom.detailRejected != null ? custom.detailRejected : 'NULL'}
+                                    </td>
                                     <td>${custom.quantity}</td>
                                     <td><fmt:formatNumber value="${custom.quotationPrice}" type="currency" currencySymbol="$" /></td>                                    
                                     <td>
@@ -82,9 +84,18 @@
                                                 </button>
                                             </c:otherwise>
                                         </c:choose>
-                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#sendModal${custom.requestID}">
-                                            Send
-                                        </button>
+                                        <c:choose>
+                                            <c:when test="${custom.checked != 'TRUE'}">
+                                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#sendModal${custom.requestID}">
+                                                    Send
+                                                </button>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <button type="button" class="btn btn-secondary mb-2" disabled>
+                                                    Locked
+                                                </button>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </td>
 
 

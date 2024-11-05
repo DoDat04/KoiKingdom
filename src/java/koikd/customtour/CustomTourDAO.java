@@ -133,7 +133,8 @@ public class CustomTourDAO implements Serializable {
             if (conn != null) {
                 String sql = "SELECT [RequestID], [CustomerID], [FullName], [Duration], [StartDate], "
                         + " [EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], "
-                        + " [KoiTypeName], [Quantity], [Image], [DetailRejected],[Checked] FROM [dbo].[CUSTOMTOURREQUEST] ";
+                        + " [KoiTypeName], [Quantity], [Image], [DetailRejected],[Checked] FROM [dbo].[CUSTOMTOURREQUEST] "
+                        + " ORDER BY [RequestID] DESC ";
                 if (fullName != null && !fullName.isEmpty()) {
                     sql += " WHERE [FullName] LIKE ?";
                 }
@@ -674,7 +675,7 @@ public class CustomTourDAO implements Serializable {
         }
         return result;
     }
-    
+
     public void deleteCustomTour(int requestID) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement stm = null;
