@@ -66,7 +66,7 @@ public class CustomerDAO implements Serializable {
         }
         return customerList;
     }
-    
+
     public int getNumberPageInManagePage() throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement stm = null;
@@ -103,7 +103,7 @@ public class CustomerDAO implements Serializable {
         }
         return countPage;
     }
-    
+
     public List<CustomerDTO> searchCustomerName(String searchValue, int index) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -167,7 +167,7 @@ public class CustomerDAO implements Serializable {
         }
         return customerList;
     }
-    
+
     public int getNumberPageInSearchPage(String searchValue) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -228,7 +228,7 @@ public class CustomerDAO implements Serializable {
         }
         return countPage; // Trả về số trang
     }
-    
+
     public CustomerDTO checkLogin(String email, String password) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -240,22 +240,27 @@ public class CustomerDAO implements Serializable {
             if (con != null) {
                 String sql = "SELECT CustomerID, Password, LastName, FirstName, Address, AccountType, Status "
                         + "FROM CUSTOMER "
-                        + "WHERE LOWER(Email) = ? and Status = 1 and AccountType = 'default' ";
+                        + "WHERE LOWER(Email) = ? AND AccountType = 'default' ";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, email);
                 rs = stm.executeQuery();
+
                 if (rs.next()) {
+                    boolean status = rs.getBoolean("Status"); 
+
+                    if (!status) {
+                        return new CustomerDTO(0, email, "", "", "", "", "default", false);
+                    }
+
                     String hashedPassword = rs.getString("Password");
                     if (BCrypt.checkpw(password, hashedPassword)) {
-
                         int customerId = rs.getInt("CustomerID");
                         String lastName = rs.getString("LastName");
                         String firstName = rs.getString("FirstName");
                         String address = rs.getString("Address");
                         String accountType = rs.getString("AccountType");
-                        boolean status = rs.getBoolean("Status");
-                        result = new CustomerDTO(customerId, email, password, lastName, firstName, address, accountType, status);
 
+                        result = new CustomerDTO(customerId, email, password, lastName, firstName, address, accountType, true);
                     }
                 }
             }
@@ -666,7 +671,7 @@ public class CustomerDAO implements Serializable {
         }
         return result;
     }
-    
+
 //    public static void main(String[] args) throws SQLException {
 //        int id = 1;
 //        CustomerDAO dao = new CustomerDAO();

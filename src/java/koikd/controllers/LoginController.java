@@ -62,14 +62,18 @@ public class LoginController extends HttpServlet {
                 HttpSession session = request.getSession();
 
                 if (customerResult != null) {
-                    session.setAttribute("LOGIN_USER", customerResult);
-                    session.setAttribute("custID", customerResult.getCustomerID());
-                    session.setAttribute("email", customerResult.getEmail());
-                    String sanitizedUserId = getUserIdBeforeAt(customerResult.getEmail());
-                    session.setAttribute("userId", sanitizedUserId);
-                    session.setAttribute("SUCCESS", "Login Successfully!");
-                    setUserImage(session, email);
-                    url = HOME_PAGE;
+                    if (!customerResult.isStatus()) {
+                        request.setAttribute("ERROR", "Your account was banned!");
+                    } else {
+                        session.setAttribute("LOGIN_USER", customerResult);
+                        session.setAttribute("custID", customerResult.getCustomerID());
+                        session.setAttribute("email", customerResult.getEmail());
+                        String sanitizedUserId = getUserIdBeforeAt(customerResult.getEmail());
+                        session.setAttribute("userId", sanitizedUserId);
+                        session.setAttribute("SUCCESS", "Login Successfully!");
+                        setUserImage(session, email);
+                        url = HOME_PAGE;
+                    }
                 } else if (employeeResult != null) {
 
                     setUserImage(session, email);
@@ -91,7 +95,6 @@ public class LoginController extends HttpServlet {
                         session.setAttribute("LOGIN_CONSULTING", employeeResult);
                         session.setAttribute("consultingID", employeeResult.getEmployeeID());
 
-                        
                         url = CONSULTING_PAGE;
                     } else {
                         request.setAttribute("ERROR", "Invalid role for this employee!");

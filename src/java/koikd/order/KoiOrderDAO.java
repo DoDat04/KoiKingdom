@@ -42,26 +42,26 @@ public class KoiOrderDAO implements Serializable {
                         + "    O.DeliveryDate, \n"
                         + "    O.Status, \n"
                         + "    O.EstimatedDelivery, \n"
-                        + "    O.DeliveryBy, \n" // Added a comma here
+                        + "    O.DeliveryBy, \n"
                         + "    O.Type \n"
                         + "FROM \n"
                         + "    [dbo].[KOIORDER] O \n"
                         + "INNER JOIN \n"
-                        + "    [dbo].[CUSTOMER] C ON O.CustomerID = C.CustomerID \n"
-                        + "WHERE \n";
+                        + "    [dbo].[CUSTOMER] C ON O.CustomerID = C.CustomerID \n";
 
-                // Add condition for employeeId if it's provided
+                // Track if a condition has been added
+                boolean hasCondition = false;
+
                 if (employeeId != 0) {
-                    sql += "O.DeliveryBy = ? \n";
+                    sql += "WHERE O.DeliveryBy = ? \n";
+                    hasCondition = true;
                 }
 
-                // Add condition for customer name if it's provided
                 if (searchData != null && !searchData.isEmpty()) {
-                    sql += "AND (C.LastName + ' ' + C.FirstName LIKE ?) \n";
+                    sql += (hasCondition ? "AND " : "WHERE ") + "(C.LastName + ' ' + C.FirstName LIKE ?) \n";
                 }
 
-                // Add pagination
-                sql += "ORDER BY O.KoiOrderID DESC \n"
+                sql += "ORDER BY O.KoiOrderID ASC \n"
                         + "OFFSET ? ROWS \n"
                         + "FETCH NEXT 5 ROWS ONLY;";
 
