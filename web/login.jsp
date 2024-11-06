@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="css/login.css">  
         <!--=============== SWIPER CSS ===============-->
         <link rel="stylesheet" href="css/swiper-bundle.min.css">
-          <link href="css/toast.css" rel="stylesheet">
+        <link href="css/toast.css" rel="stylesheet">
         <!-- MAIN JS-->
         <script src="js/login.js"></script>
     </head>
@@ -102,6 +102,15 @@
                     };
                 </script>
             </c:if> 
+
+            <c:set var="success" value="${requestScope.VERIFY_SUCCESS}"/>
+            <c:if test="${not empty success and success != null}">
+                <script>
+                    window.onload = function () {
+                        showToast('${success}', 'success');
+                    };
+                </script>
+            </c:if>
             <div id="toastBox"></div>
             <script src="js/showToast.js"></script>
             <!-- SWIPER JS -->

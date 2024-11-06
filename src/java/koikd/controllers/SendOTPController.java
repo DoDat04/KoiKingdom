@@ -31,6 +31,15 @@ public class SendOTPController extends HttpServlet {
     private static final String OTP_VERIFICATION_PAGE = "otpVerification.jsp";
     private static final String VERIFY_ACCOUNT_PAGE = "verifyAccount.jsp";
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -46,10 +55,10 @@ public class SendOTPController extends HttpServlet {
                 if (dao.checkEmailExist(email)) {
                     String otp = dao.generateOTP();
                     if ("forgotPassword".equals(purpose)) {
-                        sendEmail(email, otp); 
+                        sendEmail(email, otp);
                         url = OTP_VERIFICATION_PAGE + "?resetTimer=true";
                     } else if ("register".equals(purpose)) {
-                        sendEmailForRegister(email, otp); 
+                        sendEmailForRegister(email, otp);
                         url = VERIFY_ACCOUNT_PAGE + "?resetTimer=true";
                     }
                     request.getSession().setAttribute("OTP", otp);

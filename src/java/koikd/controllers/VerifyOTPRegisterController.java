@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -18,6 +19,9 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "VerifyOTPRegisterController", urlPatterns = {"/otp-register-confirm"})
 public class VerifyOTPRegisterController extends HttpServlet {
+
+    private static final String VERIFY_ACCOUNT_PAGE = "verifyAccount.jsp";
+    private static final String LOGIN_PAGE = "login.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,18 +35,30 @@ public class VerifyOTPRegisterController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet VerifyOTPRegisterController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet VerifyOTPRegisterController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String url = VERIFY_ACCOUNT_PAGE;
+
+        String enteredOTP = request.getParameter("otp");
+        HttpSession session = request.getSession();
+        String sentOTP = (String) request.getSession().getAttribute("OTP");
+        try {
+            if (enteredOTP != null && enteredOTP.equals(sentOTP)) {
+                url = LOGIN_PAGE;
+                request.setAttribute("VERIFY_SUCCESS", "Your account has been created.");
+                session.removeAttribute("otpExpirationTimestamp");
+            } else {
+                session.setAttribute("VERIFY_FAIL", "Invalid OTP! Please enter again!");
+                request.getRequestDispatcher(VERIFY_ACCOUNT_PAGE).forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (url.equals(LOGIN_PAGE)) {
+                request.getRequestDispatcher(url).forward(request, response);
+            } else{
+                response.sendRedirect(url);
+            }
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

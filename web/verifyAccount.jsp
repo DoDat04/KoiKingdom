@@ -26,7 +26,7 @@
         <div class="container">
             <div class="login-form">
                 <h2>Verify OTP</h2>
-                <form action="login" method="post">
+                <form action="otp-register-confirm" method="post">
                     <label for="otp" class="otp">OTP</label>
                     <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
 
@@ -61,18 +61,14 @@
         </c:if>
 
         <!-- Show success message after successful OTP verification -->
-        <c:if test="${not empty sessionScope.verificationSuccessMessage}">
-            <script>
-                window.onload = function () {
-                    showToast('${sessionScope.verificationSuccessMessage}', 'success');
-                    // Redirect to another page after a short delay (e.g., user dashboard)
-                    setTimeout(function() {
-                        window.location.href = 'dashboard.jsp'; // or any other page
-                    }, 2000); // Redirect after 2 seconds
-                };
-            </script>
-            <c:remove var="verificationSuccessMessage" scope="session"/>
-        </c:if>
+        <c:set var="error" value="${requestScope.VERIFY_FAIL}"/>
+            <c:if test="${not empty error and error != null}">
+                <script>
+                    window.onload = function () {
+                        showToast('${error}', 'error');
+                    };
+                </script>
+            </c:if>
 
         <div id="toastBox"></div>
         <script src="js/showToast.js"></script>
