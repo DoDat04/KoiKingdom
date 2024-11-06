@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sign Up - Koi Kingdom</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
         <!--=============== FONT AWESOME ===============-->
@@ -47,8 +47,12 @@
                     <input type="email" id="email" name="email" value="${param.email}" placeholder="Enter email" required>
 
                     <div class="password-section position-relative">
-                        <label for="password">Password</label>
+                        <label for="password">Password
+                            <span class="info-icon" title="Password must include special characters, letters, and numbers, with a total length of more than 7 characters." style="color: red">*</span>
+                        </label>
                         <input type="password" id="password" name="password" placeholder="Enter password" required>
+
+                        <!-- Show/Hide Password Icon -->
                         <span class="toggle-password">
                             <i id="togglePasswordIcon" class="fa-regular fa-eye"></i>
                         </span>
@@ -141,7 +145,7 @@
             </div>
         </div>
 
-            <c:set var="success" value="${requestScope.CREATE_SUCCESS}" />
+        <c:set var="success" value="${requestScope.CREATE_SUCCESS}" />
         <c:set var="errors" value="${requestScope.CREATE_ERROR}"/>
         <c:choose>
             <c:when test="${not empty errors.emailIsExisted}">
@@ -203,7 +207,7 @@
         </c:choose>
 
 
-         <div id="toastBox"></div>
+        <div id="toastBox"></div>
         <!-- SWIPER JS -->
         <script src="js/showToast.js"></script>
 
@@ -212,13 +216,13 @@
         <!-- reCAPTCHA -->
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
-            document.getElementById('form').addEventListener('submit', function (event) {
-                var recaptchaResponse = grecaptcha.getResponse();
-                if (recaptchaResponse.length === 0) {
-                    event.preventDefault(); // Ngăn gửi biểu mẫu
-                    showModal('Please complete the reCAPTCHA.');
-                }
-            });
+                    document.getElementById('form').addEventListener('submit', function (event) {
+                        var recaptchaResponse = grecaptcha.getResponse();
+                        if (recaptchaResponse.length === 0) {
+                            event.preventDefault(); // Ngăn gửi biểu mẫu
+                            showModal('Please complete the reCAPTCHA.');
+                        }
+                    });
         </script>
     </body>
 </html>

@@ -75,7 +75,7 @@
         }
     </style>
     <body>
-
+        <div class="colorlib-loader"></div>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>
         <div class="faq-title" style="justify-items: center;">
             <h1>Frequently Asked Questions</h1>
