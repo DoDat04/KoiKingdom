@@ -39,6 +39,7 @@ public class KoiOrderDAO implements Serializable {
                 String sql = "SELECT \n"
                         + "    O.KoiOrderID, \n"
                         + "    C.CustomerID, \n"
+                        + "    C.PhoneNumber, \n"
                         + "    O.DeliveryDate, \n"
                         + "    O.Status, \n"
                         + "    O.EstimatedDelivery, \n"
@@ -135,7 +136,7 @@ public class KoiOrderDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
+                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status, PhoneNumber "
                         + "FROM CUSTOMER "
                         + "WHERE CustomerID = ?";
                 pst = conn.prepareStatement(sql);
@@ -148,10 +149,10 @@ public class KoiOrderDAO implements Serializable {
                     String firstName = rs.getString("FirstName");
                     String address = rs.getString("Address");
                     String accountType = rs.getString("AccountType");
+                    String phoneNumber = rs.getString("PhoneNumber");
                     boolean status = rs.getBoolean("Status");
                     // Fixed constructor call
-                    result = new CustomerDTO(customerID, email, lastName, lastName, firstName, address, accountType,
-                            status);
+                    result = new CustomerDTO(customerID, email, lastName, lastName, firstName, address, accountType, phoneNumber ,status);
                 }
             }
         } catch (Exception e) {

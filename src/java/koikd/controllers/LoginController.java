@@ -75,29 +75,32 @@ public class LoginController extends HttpServlet {
                         url = HOME_PAGE;
                     }
                 } else if (employeeResult != null) {
-
-                    setUserImage(session, email);
-
-                    String role = employeeResult.getRole();
-
-                    if ("Delivery".equals(role)) {
-                        session.setAttribute("LOGIN_DELIVERY", employeeResult);
-                        url = DELIVERY_PAGE;
-                    } else if ("Manager".equals(role)) {
-                        session.setAttribute("LOGIN_MANAGER", employeeResult);
-                        List<EmployeesDTO> dto = deliveryDao.getAllConsulting();
-                        session.setAttribute("CONSULTING", dto);
-                        url = MANAGER_PAGE;
-                    } else if ("Sales".equals(role)) {
-                        session.setAttribute("LOGIN_SALES", employeeResult);
-                        url = SALES_PAGE;
-                    } else if ("Consulting".equals(role)) {
-                        session.setAttribute("LOGIN_CONSULTING", employeeResult);
-                        session.setAttribute("consultingID", employeeResult.getEmployeeID());
-
-                        url = CONSULTING_PAGE;
+                    if (!employeeResult.isStatus()) {
+                        request.setAttribute("ERROR", "Your account was banned!");
                     } else {
-                        request.setAttribute("ERROR", "Invalid role for this employee!");
+                        setUserImage(session, email);
+
+                        String role = employeeResult.getRole();
+
+                        if ("Delivery".equals(role)) {
+                            session.setAttribute("LOGIN_DELIVERY", employeeResult);
+                            url = DELIVERY_PAGE;
+                        } else if ("Manager".equals(role)) {
+                            session.setAttribute("LOGIN_MANAGER", employeeResult);
+                            List<EmployeesDTO> dto = deliveryDao.getAllConsulting();
+                            session.setAttribute("CONSULTING", dto);
+                            url = MANAGER_PAGE;
+                        } else if ("Sales".equals(role)) {
+                            session.setAttribute("LOGIN_SALES", employeeResult);
+                            url = SALES_PAGE;
+                        } else if ("Consulting".equals(role)) {
+                            session.setAttribute("LOGIN_CONSULTING", employeeResult);
+                            session.setAttribute("consultingID", employeeResult.getEmployeeID());
+
+                            url = CONSULTING_PAGE;
+                        } else {
+                            request.setAttribute("ERROR", "Invalid role for this employee!");
+                        }
                     }
                 } else {
                     request.setAttribute("ERROR", "Your email or password is wrong!");

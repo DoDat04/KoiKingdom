@@ -171,21 +171,25 @@
                 <div class="form-row">
                     <c:choose>
                         <c:when test="${sessionScope.LOGIN_USER != null}">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="fullName"><strong>Full Name</strong></label>
                                 <input type="text" class="form-control" name="fullName" value="${sessionScope.LOGIN_USER.firstName} ${sessionScope.LOGIN_USER.lastName}" placeholder="Enter your full name" required>
                             </div>                
                         </c:when>
                         <c:otherwise>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="fullName"><strong>Full Name</strong></label>
                                 <input type="text" class="form-control" name="fullName" value="${sessionScope.lastName} ${sessionScope.firstName}" placeholder="Enter your full name" required>
                             </div>
                         </c:otherwise>
                     </c:choose> 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label for="email"><strong>Email Address</strong></label>
-                        <input type="email" class="form-control" name="email" value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.LOGIN_GMAIL.email : sessionScope.LOGIN_USER.email}" required readonly="">
+                        <input type="email" class="form-control" name="email" value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.LOGIN_GMAIL.email : sessionScope.LOGIN_USER.email}" required >
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="phone"><strong>Phone Number</strong></label>
+                        <input type="number" class="form-control" name="phoneNumber" value="" required>
                     </div>
                 </div>
 

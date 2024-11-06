@@ -18,6 +18,7 @@ public class CustomerDTO implements Serializable{
     private String firstName;
     private String address;
     private String accountType;
+    private String phoneNumber;
     private boolean status;
 
     public CustomerDTO() {
@@ -32,9 +33,8 @@ public class CustomerDTO implements Serializable{
         this.accountType = accountType;
         this.status = status;
     }
-
-    
-    public CustomerDTO(int customerID, String email, String password, String lastName, String firstName, String address, String accountType, boolean status) {
+   
+    public CustomerDTO(int customerID, String email, String password, String lastName, String firstName, String address, String accountType, String phoneNumber, boolean status) {
         this.customerID = customerID;
         this.email = email;
         this.password = password;
@@ -42,7 +42,16 @@ public class CustomerDTO implements Serializable{
         this.firstName = firstName;
         this.address = address;
         this.accountType = accountType;
+        this.phoneNumber = phoneNumber;
         this.status = status;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public int getCustomerID() {

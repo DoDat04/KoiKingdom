@@ -9,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.util.Date;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -180,7 +179,7 @@ public class FeedbackDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
+                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, PhoneNumber ,Status "
                         + "FROM CUSTOMER "
                         + "WHERE CustomerID = ?";
                 pst = conn.prepareStatement(sql);
@@ -193,8 +192,9 @@ public class FeedbackDAO implements Serializable {
                     String firstName = rs.getString("FirstName");
                     String address = rs.getString("Address");
                     String accountType = rs.getString("AccountType");
+                    String phoneNumber = rs.getString("PhoneNumber");
                     boolean status = rs.getBoolean("Status");
-                    result = new CustomerDTO(customerID, email, lastName, lastName, firstName, address, accountType, status);
+                    result = new CustomerDTO(customerID, email, lastName, lastName, firstName, address, accountType, phoneNumber ,status);
                 }
             }
         } catch (Exception e) {

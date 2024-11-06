@@ -39,11 +39,15 @@ public class EmployeesDAO {
             if (con != null) {
                 String sql = "SELECT [EmployeeID], [Email], [Password], [Role], [LastName], [FirstName], [Address], [Status]\n"
                         + "FROM DBO.EMPLOYEE\n"
-                        + "WHERE Email = ? and Status = 1;";
+                        + "WHERE Email = ? ";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, email);
                 rs = stm.executeQuery();
                 if (rs.next()) {
+                    boolean status = rs.getBoolean("Status");
+                    if (!status) {
+                        return new EmployeesDTO(0, email, "", "", "", "", "", false);
+                    }
                     String hashedPassword = rs.getString("Password");
                     if (BCrypt.checkpw(password, hashedPassword)) {
                         int id = rs.getInt("EmployeeID");
@@ -51,8 +55,8 @@ public class EmployeesDAO {
                         String lastName = rs.getString("LastName");
                         String firstName = rs.getString("FirstName");
                         String address = rs.getString("Address");
-                        boolean status = rs.getBoolean("Status");
-                        result = new EmployeesDTO(id, email, "", role, lastName, firstName, address, status);
+
+                        result = new EmployeesDTO(id, email, "", role, lastName, firstName, address, true);
 
                     }
                 }

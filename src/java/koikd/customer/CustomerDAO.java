@@ -22,6 +22,46 @@ import org.mindrot.jbcrypt.BCrypt;
  */
 public class CustomerDAO implements Serializable {
 
+    public boolean insertPhoneNumber(int customerID, String phoneNumber) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        boolean result = false;
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String checkSql = "SELECT PhoneNumber FROM CUSTOMER "
+                        + "WHERE CustomerID = ? ";
+                stm = con.prepareStatement(checkSql);
+                stm.setInt(1, customerID);
+                rs = stm.executeQuery();
+
+                if (rs.next()) {
+                    String updateSql = "UPDATE CUSTOMER SET PhoneNumber = ? WHERE CustomerID = ?";
+                    stm = con.prepareStatement(updateSql);
+                    stm.setString(1, phoneNumber);
+                    stm.setInt(2, customerID);
+                    int rowsUpdated = stm.executeUpdate();
+                    result = rowsUpdated > 0;
+                } else {
+                    result = true;
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
+
     public List<CustomerDTO> getAllCustomers(int index) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -31,7 +71,7 @@ public class CustomerDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
+                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, PhoneNumber, Status "
                         + "FROM CUSTOMER ";
                 // Add pagination
                 sql += "ORDER BY CustomerID \n"
@@ -47,9 +87,10 @@ public class CustomerDAO implements Serializable {
                     String firstName = rs.getString("FirstName");
                     String address = rs.getString("Address");
                     String accountType = rs.getString("AccountType");
+                    String phoneNumber = rs.getString("PhoneNumber");
                     boolean status = rs.getBoolean("Status");
 
-                    CustomerDTO customer = new CustomerDTO(customerID, email, "", lastName, firstName, address, accountType, status);
+                    CustomerDTO customer = new CustomerDTO(customerID, email, "", lastName, firstName, address, accountType, phoneNumber ,status);
                     customerList.add(customer);
                 }
             }
@@ -113,7 +154,7 @@ public class CustomerDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
+                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, PhoneNumber ,Status "
                         + "FROM CUSTOMER ";
                 // Xử lý điều kiện tìm kiếm theo TourName và TourID
                 boolean hasSearchValue = searchValue != null && !searchValue.trim().isEmpty();
@@ -148,9 +189,10 @@ public class CustomerDAO implements Serializable {
                     String firstName = rs.getString("FirstName");
                     String address = rs.getString("Address");
                     String accountType = rs.getString("AccountType");
+                    String phoneNumber = rs.getString("PhoneNumber");
                     boolean status = rs.getBoolean("Status");
 
-                    CustomerDTO customer = new CustomerDTO(customerID, email, "", lastName, firstName, address, accountType, status);
+                    CustomerDTO customer = new CustomerDTO(customerID, email, "", lastName, firstName, address, accountType, phoneNumber ,status);
                     customerList.add(customer);
                 }
             }
@@ -238,7 +280,7 @@ public class CustomerDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT CustomerID, Password, LastName, FirstName, Address, AccountType, Status "
+                String sql = "SELECT CustomerID, Password, LastName, FirstName, Address, AccountType, PhoneNumber ,Status "
                         + "FROM CUSTOMER "
                         + "WHERE LOWER(Email) = ? AND AccountType = 'default' ";
                 stm = con.prepareStatement(sql);
@@ -246,10 +288,10 @@ public class CustomerDAO implements Serializable {
                 rs = stm.executeQuery();
 
                 if (rs.next()) {
-                    boolean status = rs.getBoolean("Status"); 
+                    boolean status = rs.getBoolean("Status");
 
                     if (!status) {
-                        return new CustomerDTO(0, email, "", "", "", "", "default", false);
+                        return new CustomerDTO(0, email, "", "", "", "", "default", "" ,false);
                     }
 
                     String hashedPassword = rs.getString("Password");
@@ -259,8 +301,9 @@ public class CustomerDAO implements Serializable {
                         String firstName = rs.getString("FirstName");
                         String address = rs.getString("Address");
                         String accountType = rs.getString("AccountType");
+                        String phoneNumber = rs.getString("PhoneNumber");
 
-                        result = new CustomerDTO(customerId, email, password, lastName, firstName, address, accountType, true);
+                        result = new CustomerDTO(customerId, email, password, lastName, firstName, address, accountType, phoneNumber ,true);
                     }
                 }
             }
@@ -551,7 +594,7 @@ public class CustomerDAO implements Serializable {
             con = DBUtils.getConnection();
             if (con != null) {
                 // Cập nhật truy vấn SQL để lấy lastName và firstName
-                String sql = "SELECT customerID, Email, FirstName, LastName, AccountType, Address, Status "
+                String sql = "SELECT customerID, Email, FirstName, LastName, AccountType, Address, PhoneNumber ,Status "
                         + "FROM CUSTOMER "
                         + "WHERE Email = ? "
                         + "AND AccountType = ?";
@@ -567,9 +610,10 @@ public class CustomerDAO implements Serializable {
                     String lastName = rs.getString("LastName");
                     String accType = rs.getString("AccountType");
                     String address = rs.getString("Address");
+                    String phoneNumber = rs.getString("PhoneNumber");
                     boolean status = rs.getBoolean("Status");
 
-                    customer = new CustomerDTO(customerID, customerEmail, "", lastName, firstName, address, accType, status);
+                    customer = new CustomerDTO(customerID, customerEmail, "", lastName, firstName, address, accType, phoneNumber, status);
                 }
             }
         } finally {
@@ -638,7 +682,7 @@ public class CustomerDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, Status "
+                String sql = "SELECT CustomerID, Email, LastName, FirstName, Address, AccountType, PhoneNumber ,Status "
                         + "FROM CUSTOMER "
                         + "WHERE CustomerID = ?";
                 pst = conn.prepareStatement(sql);
@@ -651,9 +695,10 @@ public class CustomerDAO implements Serializable {
                     String firstName = rs.getString("FirstName");
                     String address = rs.getString("Address");
                     String accountType = rs.getString("AccountType");
+                    String phoneNumber = rs.getString("PhoneNumber");
                     boolean status = rs.getBoolean("Status");
                     // Fixed constructor call
-                    result = new CustomerDTO(customerID, email, lastName, lastName, firstName, address, accountType, status);
+                    result = new CustomerDTO(customerID, email, lastName, lastName, firstName, address, accountType, phoneNumber ,status);
                 }
             }
         } catch (Exception e) {

@@ -306,7 +306,8 @@ public class CustomTourDAO implements Serializable {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 String sql = "SELECT COUNT(*) "
-                        + "FROM CUSTOMTOURREQUEST ";
+                        + "FROM CUSTOMTOURREQUEST "
+                        + "WHERE Checked = 1";
                 stm = conn.prepareStatement(sql);
 
                 rs = stm.executeQuery();

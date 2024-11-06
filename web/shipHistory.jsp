@@ -66,26 +66,25 @@
                                 <div class="card-body">
                                     <table class="table">
                                         <thead>
-
                                             <tr>
-
                                                 <th scope="col">Quantity</th>
                                                 <th scope="col">Unit Price</th>
                                                 <th scope="col">Paid Amount</th>
                                                 <th scope="col">Cost Shipping </th>
                                                 <th scope="col">Total Price</th>
-
+                                                <th scope="col">Remaining</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <c:forEach var="details" items="${requestScope.koiOrderDetails}" varStatus="koiOrderID">
                                             <p></p>
                                             <tr>
-                                                <td> <fmt:formatNumber type="currency" currencySymbol="$" value="${details.quantity}"/></td>
+                                                <td>${details.quantity}</td>
                                                 <td>  <fmt:formatNumber type="currency" currencySymbol="$" value="${details.unitPrice}"/></td>
-                                                <td> <fmt:formatNumber type="currency" currencySymbol="$" value="${details.totalPrice - (details.totalPrice* 0.3)} "/></td>
+                                                <td> <fmt:formatNumber type="currency" currencySymbol="$" value="${details.totalPrice * 0.3} "/></td>
                                                 <td>  <fmt:formatNumber type="currency" currencySymbol="$" value="${requestScope.koiOrderListByOrderList[koiOrderID.index].costShipping}"/></td>        
-                                                <td> <fmt:formatNumber type="currency" currencySymbol="$" value="${details.totalPrice}"/></td>
+                                                <td> <fmt:formatNumber type="currency" currencySymbol="$" value="${details.totalPrice + requestScope.koiOrderListByOrderList[koiOrderID.index].costShipping}"/></td>
+                                                <td> <fmt:formatNumber type="currency" currencySymbol="$" value="${details.totalPrice - (details.totalPrice * 0.3) + requestScope.koiOrderListByOrderList[koiOrderID.index].costShipping}"/></td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -101,7 +100,7 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">Name Customer</th>
-                                            <th scope="col">Delivery Date</th>
+                                            <th scope="col">Order Date</th>
                                             <th scope="col">Status</th>
                                         </tr>
                                     </thead>

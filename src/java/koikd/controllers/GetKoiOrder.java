@@ -80,11 +80,13 @@ public class GetKoiOrder extends HttpServlet {
 
             ArrayList<KoiOrderDTO> koiList = koiOrderDAO.getKoiOrderListByNameCustomer(searchData, pageIndex, deliveryBy);
             ArrayList<String> customerNames = new ArrayList<>();
+            ArrayList<String> customerPhones = new ArrayList<>();
 
             // If list is not empty, populate customer names
             if (koiList != null && !koiList.isEmpty()) {
                 for (KoiOrderDTO koiOrderDTO : koiList) {
                     CustomerDTO customer = koiOrderDAO.getCustomerByCustomerID(koiOrderDTO.getCustomerID());
+                    customerPhones.add(customer.getPhoneNumber());
                     customerNames.add(customer.getLastName() + " " + customer.getFirstName());
                 }
                 System.out.println("employId đã chọn" + employeeId);
@@ -92,6 +94,7 @@ public class GetKoiOrder extends HttpServlet {
                 request.setAttribute("koiList", koiList);
                 request.setAttribute("pageIndex", pageIndex);
                 request.setAttribute("customerNames", customerNames);
+                request.setAttribute("customerPhones", customerPhones);
             } else {
                 // No orders found case
                 request.setAttribute("errorMessage", "No orders found.");

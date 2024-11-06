@@ -36,7 +36,8 @@
                         <th>KoiOrderID</th>
                         <th>CustomerID</th>
                         <th>Customer Name</th>
-                        <th>Delivery Date</th>
+                        <th>Phone Number</th>
+                        <th>Estimated Delivery</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -49,7 +50,8 @@
                                     <td>${order.koiOrderID}</td>
                                     <td>${order.customerID}</td>
                                     <td>${requestScope.customerNames[status.index]}</td>
-                                    <td>${order.deliveryDate}</td>
+                                    <td>${requestScope.customerPhones[status.index]}</td>
+                                    <td>${order.estimatedDelivery}</td>
                                     <td>
                                         <select id="orderStatus_${order.koiOrderID}" onchange="updateStatus(${order.koiOrderID}, this.value)">
                                             <option value="true" ${order.status ? 'selected' : ''}>Complete</option>
