@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import koikd.order.KoiOrderDTO;
+import koikd.order.KoiOrderDetailDTO;
 import koikd.utils.DBUtils;
 
 /**
@@ -449,14 +450,73 @@ public class KoiDAO implements Serializable {
         }
         return koiOrderTrending;
     }
-    
+
+//    public static void main(String[] args) throws SQLException {
+//        KoiDAO services = new KoiDAO();
+//        ArrayList<KoiDTO> list = services.koiOrderTrending();
+//        for (KoiDTO koiDTO : list) {
+//            if(koiDTO!=null){
+//                System.out.println(koiDTO);
+//            }
+//        }
+//    }
+    public KoiOrderDTO sendKoiOrderBillForCustomer(int koiOrderId, int custID) throws SQLException {
+        KoiOrderDTO dto = null;
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT a.KoiOrderID, a.CustomerID, a.ShippingAddress, c.KoiName, b.UnitPrice, "
+                        + "b.Quantity, b.TotalPrice, a.Type, a.CostShipping "
+                        + "FROM [dbo].[KOIORDER] a "
+                        + "INNER JOIN [dbo].[KOIORDERDETAIL] b ON a.KoiOrderID = b.KoiOrderID "
+                        + "INNER JOIN [dbo].[KOI] c ON b.KoiID = c.KoiID "
+                        + "WHERE a.KoiOrderID = ? AND a.CustomerID = ?;";
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, koiOrderId);
+                pst.setInt(2, custID);
+
+                rs = pst.executeQuery();
+                if (rs.next()) {
+                    int koiOrderID = rs.getInt("KoiOrderID");
+                    int customerID = rs.getInt("CustomerID");
+                    String shippingAddress = rs.getString("ShippingAddress");
+                    String koiName = rs.getString("KoiName");
+                    double unitPrice = rs.getDouble("UnitPrice");
+                    int quantity = rs.getInt("Quantity");
+                    double totalPrice = rs.getDouble("TotalPrice");
+                    String type = rs.getString("Type");
+                    double costShipping = rs.getDouble("CostShipping");
+                    KoiDTO koiDTO = new KoiDTO(koiName);
+                    KoiOrderDetailDTO koiOrderDetailDTO = new KoiOrderDetailDTO(unitPrice, quantity, totalPrice);
+
+                    dto = new KoiOrderDTO(koiOrderID, customerID, shippingAddress, type, koiDTO, koiOrderDetailDTO, costShipping);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return dto;
+    }
+
     public static void main(String[] args) throws SQLException {
         KoiDAO services = new KoiDAO();
-        ArrayList<KoiDTO> list = services.koiOrderTrending();
-        for (KoiDTO koiDTO : list) {
-            if(koiDTO!=null){
-                System.out.println(koiDTO);
-            }
+        KoiOrderDTO isMail = services.sendKoiOrderBillForCustomer(42, 20);
+        if(isMail!=null){
+            System.out.println(isMail);
         }
     }
 }

@@ -213,6 +213,7 @@ public class VNPayCallBackController extends HttpServlet {
                                 koiOrderDetailDTO.setKoiTypeID(koiDAO.getKoiTypeIDByKoiID(koi.getKoiID()));
 
                                 koiOrderDAO.createKoiOrderDetail(koiOrderDetailDTO);
+                                sendKoiOrderBillForCustomer(email, custID, fullName, custAddress, custEmail, koiOrderID, koi.getKoiName(),koi.getPrice() , quantity, koi.getPrice()*quantity+shippingFee, shippingFee);
                             }
                         }
 
@@ -415,6 +416,85 @@ public class VNPayCallBackController extends HttpServlet {
                     + "<tr>"
                     + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>End date:</td>"
                     + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + dto.getEndDate() + "</td>"
+                    + "</tr>"
+                    + "</table>"
+                    + "<p style='margin-top: 20px;'>If you have any questions, please contact us at <a href='mailto:koikingdomsystem@gmail.com' style='color: #4CAF50; text-decoration: none;'>koikingdomsystem@gmail.com</a></p>"
+                    + "<p style='font-size: 14px; color: #888; text-align: center;'>Thank you for choosing Koi Kingdom!</p>"
+                    + "</div>";
+
+            // Đặt nội dung của email
+            message.setContent(emailContent, "text/html; charset=UTF-8");
+
+            // Gửi email
+            Transport.send(message);
+        }
+    }
+    
+    private void sendKoiOrderBillForCustomer(String toEmail, int custID, String fullName, String custAddress, String custEmail, int koiOrderId, String koiName, double unitPrice, int quantity, double totalPrice, double costShipping) throws Exception {
+        String host = "smtp.gmail.com";
+        String port = "587";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", port);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+            @Override
+            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new javax.mail.PasswordAuthentication(GMAIL_USERNAME, GMAIL_APP_PASSWORD);
+            }
+        });
+
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(GMAIL_USERNAME));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+        message.setSubject("Your Bill Details from Koi Kingdom");
+
+        KoiDAO dao = new KoiDAO();
+        KoiOrderDTO dto = dao.sendKoiOrderBillForCustomer(koiOrderId, custID);
+        if (dto != null) {
+            String emailContent = "<div style='font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>"
+                    + "<h1 style='color: #4CAF50; text-align: center;'>Thank you for your purchase!</h1>"
+                    + "<p style='font-size: 16px;'>Here are your bill details:</p>"
+                    + "<table style='width: 100%; border-collapse: collapse;'>"
+                    + "<tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Fullname:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + fullName + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Email:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + custEmail + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Payment type:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + dto.getType()+ "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Koi name:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + koiName + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Unit Price:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>$" + unitPrice + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Quantity:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + quantity + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Cost shipping:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>$" + costShipping + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Total Price:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>$" + (unitPrice * quantity + costShipping) + "</td>"
+                    + "</tr>"
+
+                    + "<tr>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>Address:</td>"
+                    + "<td style='padding: 8px; border-bottom: 1px solid #ddd;'>" + custAddress + "</td>"
                     + "</tr>"
                     + "</table>"
                     + "<p style='margin-top: 20px;'>If you have any questions, please contact us at <a href='mailto:koikingdomsystem@gmail.com' style='color: #4CAF50; text-decoration: none;'>koikingdomsystem@gmail.com</a></p>"

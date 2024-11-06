@@ -6,6 +6,7 @@ package koikd.order;
 
 import java.io.Serializable;
 import java.util.Date;
+import koikd.koi.KoiDTO;
 
 /**
  *
@@ -24,6 +25,34 @@ public class KoiOrderDTO implements Serializable {
     private int createBy;
     private double costShipping;
     private String shippingAddress;
+    private KoiDTO koiDTO;
+    private KoiOrderDetailDTO koiOrderDetailDTO;
+
+    public KoiDTO getKoiDTO() {
+        return koiDTO;
+    }
+
+    public void setKoiDTO(KoiDTO koiDTO) {
+        this.koiDTO = koiDTO;
+    }
+
+    public KoiOrderDetailDTO getKoiOrderDetailDTO() {
+        return koiOrderDetailDTO;
+    }
+
+    public void setKoiOrderDetailDTO(KoiOrderDetailDTO koiOrderDetailDTO) {
+        this.koiOrderDetailDTO = koiOrderDetailDTO;
+    }
+
+    public KoiOrderDTO(int koiOrderID, int customerID, String shippingAddress, String type, KoiDTO koiDTO, KoiOrderDetailDTO koiOrderDetailDTO, double costShipping) {
+        this.koiOrderID = koiOrderID;
+        this.customerID = customerID;
+        this.shippingAddress = shippingAddress;
+        this.type = type;
+        this.koiDTO = koiDTO;
+        this.koiOrderDetailDTO = koiOrderDetailDTO;
+        this.costShipping = costShipping;
+    }
     
     public KoiOrderDTO() {
     }
@@ -180,7 +209,7 @@ public class KoiOrderDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "KoiOrderDTO{" + "koiOrderID=" + koiOrderID + ", customerID=" + customerID + ", deliveryDate=" + deliveryDate + ", status=" + status + '}';
+        return "KoiOrderDTO{" + "koiOrderID=" + koiOrderID + ", customerID=" + customerID + ", fullName=" + fullName + ", deliveryDate=" + deliveryDate + ", status=" + status + ", estimatedDelivery=" + estimatedDelivery + ", type=" + type + ", deliveryBy=" + deliveryBy + ", createBy=" + createBy + ", costShipping=" + costShipping + ", shippingAddress=" + shippingAddress + ", koiDTO=" + koiDTO + ", koiOrderDetailDTO=" + koiOrderDetailDTO + '}';
     }
 
 }

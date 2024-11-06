@@ -112,6 +112,8 @@
         <link href="css/homeForDelivery.css" rel="stylesheet">
         <title>Manager Dashboard</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
+        <link href="css/toast.css" rel="stylesheet">
+
         <!-- chart -->
         <script type="text/javascript">
             var pieChart, colChart;
@@ -357,18 +359,27 @@
                     </div>
                 </div>
             </div>
-
+            <c:set var="logoutSuccess" value="${requestScope.notiSuccess}"/>
+            <c:if test="${not empty logoutSuccess}">
+                <script>
+                    window.onload = function () {
+                        showToast('${logoutSuccess}', 'success');
+                    };
+                </script>
+            </c:if>
+            <div id="toastBox"></div>
+            <script src="js/showToast.js"></script>
 
             <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
             <script>
-                            // Hàm export
-                            function exportChart(containerId, fileName) {
-                                if (containerId == "pieChartContainer") {
-                                    pieChart.exportChart({format: "png", fileName: fileName});
-                                } else if (containerId == "colChartContainer") {
-                                    colChart.exportChart({format: "png", fileName: fileName});
-                                }
-                            }
+                    // Hàm export
+                    function exportChart(containerId, fileName) {
+                        if (containerId == "pieChartContainer") {
+                            pieChart.exportChart({format: "png", fileName: fileName});
+                        } else if (containerId == "colChartContainer") {
+                            colChart.exportChart({format: "png", fileName: fileName});
+                        }
+                    }
 
 
             </script>

@@ -34,6 +34,12 @@ public class KoiOrderDetailDTO implements Serializable {
         this.koiTypeID = koiTypeID;
     }
 
+    public KoiOrderDetailDTO(double unitPrice, int quantity, double totalPrice) {
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
+        this.totalPrice = totalPrice;
+    }
+
     public int getKoiTypeID() {
         return koiTypeID;
     }
