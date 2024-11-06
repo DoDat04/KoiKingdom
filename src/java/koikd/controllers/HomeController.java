@@ -65,6 +65,14 @@ public class HomeController extends HttpServlet {
             HttpSession session = request.getSession();
             CartBean guestCart = getCartFromCookie(request);
             session.setAttribute("cart", guestCart);
+            
+            TourDAO tourDao = new TourDAO();
+            List<TourDTO> tourDto = tourDao.getTourList();
+            if (tourDto != null && !tourDto.isEmpty()) {
+                session.setAttribute("LIST_TOUR", tourDto);
+            } else {
+                request.setAttribute("ERROR_NULL", "No Tour found.");
+            }
 
             KoiTypeDAO services = new KoiTypeDAO();
             KoiOrderDAO daoo = new KoiOrderDAO();

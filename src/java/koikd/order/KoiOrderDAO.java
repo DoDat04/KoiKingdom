@@ -16,8 +16,6 @@ import koikd.customer.CustomerDTO;
 import java.sql.Timestamp;
 import koikd.farm.FarmDTO;
 import koikd.koi.KoiDTO;
-import koikd.koitype.KoiTypeDAO;
-import koikd.koitype.KoiTypeDTO;
 import koikd.utils.DBUtils;
 
 /**

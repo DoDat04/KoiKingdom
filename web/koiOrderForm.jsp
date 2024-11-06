@@ -29,17 +29,23 @@
                         <label for="txtDelivery" style="font-weight: bold;">Order Date</label>
                         <input type="date" id="txtDelivery" name="txtDelivery" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
                     </div>
-                    <h3 style="text-align: center; color: #4CAF50;">Koi Order Details</h3>
+                    <h3 style="text-align: center; color: #4CAF50;"><strong>Koi Order Details</strong></h3>
                     <div id="orderDetails">
                         <div class="detailRow" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between;">
+                            <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
+                                <label for="txtTourIDs" style="font-weight: bold;">Select Tour</label>
+                                <select id="txtTourIDs" name="txtTourIDs" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;" onchange="updateFarmDropdown()">
+                                    <option value="">-- Select Tour --</option>
+                                    <c:forEach var="tour" items="${LIST_TOUR}">
+                                        <option value="${tour.tourID}">${tour.tourName}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
                             <!-- Select Farm -->
                             <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
                                 <label for="txtFarmIDs" style="font-weight: bold;">Select Farm</label>
                                 <select id="txtFarmIDs" name="txtFarmIDs" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;" onchange="updateKoiTypeDropdown()">
                                     <option value="">-- Select Farm --</option>
-                                    <c:forEach var="farm" items="${LIST_FARM}">
-                                        <option value="${farm.farmID}">${farm.farmName}</option>
-                                    </c:forEach>
                                 </select>
                             </div>
 
@@ -78,6 +84,25 @@
         </div>
 
         <script>
+            function updateFarmDropdown() {
+                var tourID = document.getElementById("txtTourIDs").value;
+                var farmSelect = document.getElementById("txtFarmIDs");
+                farmSelect.innerHTML = '<option value="">-- Select Farm --</option>'; // Reset options
+
+                if (tourID) {
+                    fetch('getKoiData?action=getFarmByTour&tourID=' + tourID)
+                            .then(response => response.json())
+                            .then(data => {
+                                data.forEach(farm => {
+                                    var option = document.createElement("option");
+                                    option.value = farm.farmID;
+                                    option.textContent = farm.farmName;
+                                    farmSelect.appendChild(option);
+                                });
+                            })
+                            .catch(error => console.error('Error fetching farm data:', error));
+                }
+            }
             function updateKoiTypeDropdown() {
                 var farmID = document.getElementById("txtFarmIDs").value;
                 var koiTypeSelect = document.getElementById("txtKoiTypeID");

@@ -12,8 +12,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import koikd.farm.FarmDTO;
 import koikd.koi.KoiDAO;
 import koikd.koi.KoiDTO;
+import koikd.tour.TourDAO;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -39,12 +41,25 @@ public class GetKoiByFarmIDController extends HttpServlet {
         String action = request.getParameter("action"); 
         String farmID = request.getParameter("farmID");
         String koiTypeID = request.getParameter("koiTypeID");
+        String tourID = request.getParameter("tourID");
         
         try (PrintWriter out = response.getWriter()) {
             KoiDAO dao = new KoiDAO();
+            TourDAO tourDao = new TourDAO();
             JSONArray jsonArray = new JSONArray();
-
-            if ("getKoiTypeByFarm".equals(action)) {
+            
+            if ("getFarmByTour".equals(action)) {
+                List<FarmDTO> farmList = tourDao.getFarmByTour(tourID);
+                if (farmList != null && !farmList.isEmpty()) {
+                    for (FarmDTO farm : farmList) {
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("farmID", farm.getFarmID());
+                        jsonObject.put("farmName", farm.getFarmName());
+                        jsonArray.put(jsonObject);
+                    }
+                }
+            
+            } else if ("getKoiTypeByFarm".equals(action)) {
                 List<KoiDTO> koiTypeList = dao.getKoiTypeByFarm(farmID);
                 if (koiTypeList != null && !koiTypeList.isEmpty()) {
                     for (KoiDTO koiType : koiTypeList) {

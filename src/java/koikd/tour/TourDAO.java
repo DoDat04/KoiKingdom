@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import koikd.farm.FarmDTO;
+import koikd.koi.KoiDTO;
 import koikd.utils.DBUtils;
 
 /**
@@ -19,6 +21,46 @@ import koikd.utils.DBUtils;
  * @author Do Dat
  */
 public class TourDAO implements Serializable {
+    public List<FarmDTO> getFarmByTour(String tourID) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<FarmDTO> farmList = new ArrayList<>();
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT f.FarmID, f.FarmName "
+                        + "FROM TOUR t "
+                        + "INNER JOIN TOUR_FARM tf ON t.TourID = tf.TourID "
+                        + "INNER JOIN FARM f ON tf.FarmID = f.FarmID "
+                        + "WHERE t.TourID = ?";
+
+                stm = con.prepareStatement(sql);
+                stm.setString(1, tourID);
+
+                rs = stm.executeQuery();
+
+                while (rs.next()) {
+                    FarmDTO farm = new FarmDTO();
+                    farm.setFarmID(rs.getInt("FarmID"));
+                    farm.setFarmName(rs.getString("FarmName"));
+                    farmList.add(farm);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return farmList;
+    }
 
     public List<TourDTO> getTourList() throws SQLException, ClassNotFoundException {
         Connection con = null;
