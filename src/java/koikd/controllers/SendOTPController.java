@@ -22,40 +22,40 @@ import koikd.customer.CustomerDAO;
  *
  * @author Do Dat
  */
-@WebServlet(name = "SendOTPController", urlPatterns = {"/forgot-password"})
+@WebServlet(name = "SendOTPController", urlPatterns = {"/send-OTP"})
 public class SendOTPController extends HttpServlet {
-    private static final String GMAIL_USERNAME = "koikingdomsystem@gmail.com"; 
-    private static final String GMAIL_APP_PASSWORD = "srzw mrnk kkhj ipcx"; 
+
+    private static final String GMAIL_USERNAME = "koikingdomsystem@gmail.com";
+    private static final String GMAIL_APP_PASSWORD = "srzw mrnk kkhj ipcx";
     private static final String FORGOT_PASSWORD_PAGE = "forgotPassword.jsp";
     private static final String OTP_VERIFICATION_PAGE = "otpVerification.jsp";
+    private static final String VERIFY_ACCOUNT_PAGE = "verifyAccount.jsp";
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String email = request.getParameter("email");
+        String purpose = request.getParameter("purpose"); // New parameter for OTP purpose
         CustomerDAO dao = new CustomerDAO();
         String url = FORGOT_PASSWORD_PAGE;
+
         try {
             if (email == null || email.trim().isEmpty()) {
+                // Handle case where email is empty
             } else {
                 if (dao.checkEmailExist(email)) {
                     String otp = dao.generateOTP();
-                    sendEmail(email, otp);
+                    if ("forgotPassword".equals(purpose)) {
+                        sendEmail(email, otp); 
+                        url = OTP_VERIFICATION_PAGE + "?resetTimer=true";
+                    } else if ("register".equals(purpose)) {
+                        sendEmailForRegister(email, otp); 
+                        url = VERIFY_ACCOUNT_PAGE + "?resetTimer=true";
+                    }
                     request.getSession().setAttribute("OTP", otp);
                     request.getSession().setAttribute("email", email);
                     request.getSession().setAttribute("otpGeneratedTime", System.currentTimeMillis());
-                    url = OTP_VERIFICATION_PAGE + "?resetTimer=true";
                 } else {
-                    // Handle case where email does not exist
                     request.setAttribute("errorMessage", "Email does not exist!");
                 }
             }
@@ -71,6 +71,14 @@ public class SendOTPController extends HttpServlet {
     }
 
     private void sendEmail(String toEmail, String otp) throws Exception {
+        sendOTPEmail(toEmail, otp, "Your OTP Code For Password Reset");
+    }
+
+    void sendEmailForRegister(String toEmail, String otp) throws Exception {
+        sendOTPEmail(toEmail, otp, "Your OTP Code For Account Verification");
+    }
+
+    private void sendOTPEmail(String toEmail, String otp, String subject) throws Exception {
         String host = "smtp.gmail.com";
         String port = "587";
 
@@ -90,7 +98,7 @@ public class SendOTPController extends HttpServlet {
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(GMAIL_USERNAME));
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
-        message.setSubject("Your OTP Code For Password Reset");
+        message.setSubject(subject);
         message.setText("Your OTP code is: " + otp);
 
         Transport.send(message);

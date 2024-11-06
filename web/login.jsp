@@ -42,7 +42,7 @@
                     <div class="remember_forgot">
                         <input type="checkbox" id="remember" name="remember">
                         <label for="remember" class="remember">Remember me</label>
-                        <a href="forgot-password" class="forgot-password">Forgot password?</a>
+                        <a href="send-OTP" class="forgot-password">Forgot password?</a>
                     </div>
 
                     <button type="submit" class="btn" name="action">Sign in</button>

@@ -26,16 +26,8 @@ import org.mindrot.jbcrypt.BCrypt;
 public class SignUpController extends HttpServlet {
 
     private static final String SIGN_UP_PAGE = "signUp.jsp";
+    private static final String SEND_OTP_CONTROLLER = "send-OTP";  // URL mapping for SendOTPController
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -48,11 +40,12 @@ public class SignUpController extends HttpServlet {
         boolean foundErr = false;
         RegistrationCreateError errors = new RegistrationCreateError();
         String passwordPattern = "^(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d]).{8,50}$";
-        String namePattern = "^[\\p{L}\\s]+$"; // Cho phép tất cả các ký tự chữ cái và dấu cách
+        String namePattern = "^[\\p{L}\\s]+$"; // Allows all letter characters and spaces
         String accountType = "default";
+
         try {
             if (firstName != null && lastName != null && password != null && confirmPassword != null) {
-                // Kiểm tra password
+                // Validate password
                 if (!password.trim().matches(passwordPattern)) {
                     foundErr = true;
                     errors.setPasswordLengthErr("Password must be 8 to 50 characters, include at least one uppercase letter, one digit, and one special character.");
@@ -61,27 +54,27 @@ public class SignUpController extends HttpServlet {
                     errors.setConfirmNotMacthed("Confirm password does not match the password.");
                 }
 
-                // Kiểm tra ký tự đặc biệt cho firstName và lastName
+                // Validate firstName and lastName for special characters
                 if (!firstName.trim().matches(namePattern)) {
                     foundErr = true;
-                    errors.setFirstNameInvalidErr("First name is not allowed to contain special characters.");
+                    errors.setFirstNameInvalidErr("First name cannot contain special characters.");
                 }
                 if (!lastName.trim().matches(namePattern)) {
                     foundErr = true;
-                    errors.setLastNameInvalidErr("Last name is not allowed to contain special characters.");
+                    errors.setLastNameInvalidErr("Last name cannot contain special characters.");
                 }
 
-                // Kiểm tra độ dài firstName và lastName
+                // Check length of firstName and lastName
                 if (firstName.trim().length() < 2 || firstName.trim().length() > 50) {
                     foundErr = true;
-                    errors.setFirstNameLengthErr("First name is required to be between 2 and 50 characters.");
+                    errors.setFirstNameLengthErr("First name must be between 2 and 50 characters.");
                 }
                 if (lastName.trim().length() < 2 || lastName.trim().length() > 50) {
                     foundErr = true;
-                    errors.setLastNameLengthErr("Last name is required to be between 2 and 50 characters.");
+                    errors.setLastNameLengthErr("Last name must be between 2 and 50 characters.");
                 }
 
-                // Kiểm tra xem email đã tồn tại chưa
+                // Check if email already exists
                 CustomerDAO dao = new CustomerDAO();
                 CustomerDTO existingUser = dao.findCustomerByEmailAndAccountType(email, accountType);
                 if (existingUser != null) {
@@ -89,26 +82,31 @@ public class SignUpController extends HttpServlet {
                     errors.setEmailIsExisted(email + " is already registered.");
                 }
 
-                if (foundErr) { // Nếu có lỗi
+                if (foundErr) { // If there are errors
                     request.setAttribute("CREATE_ERROR", errors);
                 } else {
+                    // Create account and generate hashed password
                     String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
                     CustomerDTO dto = new CustomerDTO(email, hashedPassword, lastName, firstName, "", accountType, true);
                     boolean result = dao.createCustomerAccount(dto);
                     if (result) {
-                        url = SIGN_UP_PAGE;
-                        request.setAttribute("CREATE_SUCCESS", "Your account was created successfully.");
+                        // Redirect to SendOTPController to generate and send OTP
+                        url = SEND_OTP_CONTROLLER + "?email=" + email + "&purpose=register";
+                    } else {
+                        request.setAttribute("CREATE_ERROR", "Account creation failed. Please try again.");
                     }
                 }
             } else {
                 url = SIGN_UP_PAGE;
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);           
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            if (foundErr) {
+                request.getRequestDispatcher(url).forward(request, response);
+            } else {
+                request.getRequestDispatcher(url).forward(request, response);
+            }
         }
     }
 

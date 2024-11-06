@@ -32,6 +32,7 @@
             <div class="login-form">
                 <h2>Sign Up</h2>
                 <form action="signup" method="post" id="form">
+                    <input type="hidden" name="purpose" value="register"> 
                     <div class="name-section">
                         <div class="first-name-wrapper">
                             <label for="fullName">First Name</label>
