@@ -31,7 +31,7 @@
                 text-align: center;
                 margin: 20px 0;
             }
-            form {
+             #custom-form{
                 max-width: 600px;
                 margin: auto;
                 padding: 30px;
@@ -111,7 +111,7 @@
         <script src="js/showToast.js"></script>
 
 
-        <form action="create-customtour" method="post">
+        <form action="create-customtour" method="post" id="custom-form">
             <div class="form-group">
                 <label for="duration">Full Name</label>
                 <input type="text" id="fullName" name="fullName" class="form-control" required>

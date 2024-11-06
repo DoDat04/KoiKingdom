@@ -39,7 +39,11 @@
             </c:when>
             <c:otherwise>  
                 <div class="text-end my-4 backToTour">
-                    <a href="my-custom-tour?customerID=${sessionScope.custID}" class="btn btn-link">&lt; Back to Custom Tour List</a>
+                    <form action="my-custom-tour" method="post">
+                        <input type="hidden" name="customerID" value="${sessionScope.custID}" />
+                        <button type="submit" class="dropdown-item">&lt; Back to Custom Tour List
+                        </button>
+                    </form>
                 </div>
             </c:otherwise>
         </c:choose>

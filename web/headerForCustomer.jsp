@@ -122,7 +122,7 @@
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
                                         <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
                                         <li>
-                                            <form action="MyOrder" method="post" style="display: inline;">
+                                            <form action="MyOrder" method="post">
                                                 <input type="hidden" name="customerID" value="${sessionScope.LOGIN_USER.customerID}" />
                                                 <input type="hidden" name="dateDelivery" value="" />
                                                 <button type="submit" class="dropdown-item">
@@ -168,7 +168,7 @@
                                         </li>
 
                                         <li>
-                                            <form action="my-custom-tour" method="post">
+                                            <form action="my-custom-tour" method="post" >
                                                 <input type="hidden" name="customerID" value="${sessionScope.custID}" />
                                                 <button type="submit" class="dropdown-item">
                                                     <i class="fa fa-history"></i> My Custom Tour

@@ -80,14 +80,31 @@
                                         </c:otherwise>
                                     </c:choose>
 
-                                    <td><a href="my-detail-custom-tour?requestid=${customerTourList.requestID}">Detail</a></td>
+                                    <td>
+                                        <form action="my-detail-custom-tour" method="post">
+                                            <input type="hidden" name="requestid" value="${customerTourList.requestID}" />
+                                            <button type="submit" class="dropdown-item">
+                                                Detail
+                                            </button>
+                                        </form>
+                                    </td>
 
                                     <td>
                                         <c:if test="${customerTourList.status == 'Approved' && customerTourList.managerApprovalStatus == 'Approved'}">
                                             <p style="color: red; font-weight: bold; font-size: 17px">Time left to decide: <span class="decision-timer">30</span></p>
                                             <div class="decision-buttons">
-                                                <a href="checkout?requestid=${customerTourList.requestID}&numberofpeople=${customerTourList.quantity}" class="btn btn-success mb-2 d-block">Check Out</a>
-                                                <a href="reject-tour?requestid=${customerTourList.requestID}" class="btn btn-danger d-block">Reject</a>
+                                                <form action="checkout" method="post">
+                                                    <input type="hidden" name="requestid" value="${customerTourList.requestID}" />
+                                                    <input type="hidden" name="numberofpeople" value="${customerTourList.quantity}" />
+                                                    <button type="submit" class=" btn btn-success mb-2 d-block" style="
+                                                            width: 100%;">Check Out
+                                                    </button>
+                                                </form>
+                                                <form action="reject-tour" method="post">
+                                                    <input type="hidden" name="requestid" value="${customerTourList.requestID}" />
+                                                    <button type="submit" class=" btn btn-danger d-block" style="
+                                                            width: 100%;">Reject</button>
+                                                </form>
                                             </div>
                                         </c:if>
                                     </td>
