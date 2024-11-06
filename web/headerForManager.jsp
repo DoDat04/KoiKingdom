@@ -86,7 +86,7 @@
                             <a href="GetKoiOrder?userType=manage" style="color: black"><i class="fas fa-user-plus" style='font-size:24px'></i>Manage Order Koi</a>
                         </li>
                         <li class="menu-item">
-                            <a href="custom-tour" style="color: black"><i class="fas fa-suitcase" style='font-size:24px'></i>Custom Tour</a>
+                            <a href="custom-tour" style="color: black"><i class="fas fa-suitcase" style='font-size:24px'></i>Custom Tour Request</a>
                         </li>
                         <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
                                 <i style='font-size:24px' class='fas'>&#xf406;</i>Profile</a></li>

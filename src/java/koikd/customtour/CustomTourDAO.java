@@ -238,7 +238,7 @@ public class CustomTourDAO implements Serializable {
         return listCustomTour;
     }
 
-    public List<CustomTourDTO> getListCustomTourForManager() throws SQLException, ClassNotFoundException {
+    public List<CustomTourDTO> getListCustomTourForManager(int index) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
@@ -252,7 +252,12 @@ public class CustomTourDAO implements Serializable {
                         + "[KoiTypeName], [Quantity], [Image] "
                         + "FROM [dbo].[CUSTOMTOURREQUEST] "
                         + "WHERE Checked = 1";
+                // Add pagination
+                sql += "ORDER BY RequestID DESC \n"
+                        + "OFFSET ? ROWS \n"
+                        + "FETCH NEXT 5 ROWS ONLY;";
                 pst = conn.prepareStatement(sql);
+                pst.setInt(1, (index - 1) * 5);
                 rs = pst.executeQuery();
 
                 if (rs != null) {
@@ -291,6 +296,44 @@ public class CustomTourDAO implements Serializable {
 
         return listCustomTour;
     }
+    
+    public int getNumberPageForCustomTourRequestInManager() throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int countPage = 0;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT COUNT(*) "
+                        + "FROM CUSTOMTOURREQUEST ";
+                stm = conn.prepareStatement(sql);
+
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    int total = rs.getInt(1);
+                    countPage = total / 5;
+
+                    if (total % 5 != 0) {
+                        countPage++;
+                    }
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return countPage;
+    }
+
 
     public List<CustomTourDTO> getListCustomTourForConsulting() throws SQLException, ClassNotFoundException {
         Connection conn = null;

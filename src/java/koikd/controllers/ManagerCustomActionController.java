@@ -45,9 +45,19 @@ public class ManagerCustomActionController extends HttpServlet {
         String action = request.getParameter("action");
 
         try {
+            String index = request.getParameter("index");
+            // Default to 1 if no index is provided
+            if (index == null || index.isEmpty()) {
+                index = "1";
+            }
+            // Parse index as an integer
+            int pageIndex = Integer.parseInt(index);
             if (requestIDParam != null && !requestIDParam.isEmpty()) {
                 int requestID = Integer.parseInt(requestIDParam);
                 CustomTourDAO dao = new CustomTourDAO();
+                int numberOfPages = dao.getNumberPageForCustomTourRequestInManager();
+                request.setAttribute("numberOfPages", numberOfPages);
+                request.setAttribute("pageIndex", pageIndex);
 
                 String message = "";
                 if ("approve".equals(action)) {
@@ -61,11 +71,11 @@ public class ManagerCustomActionController extends HttpServlet {
                     boolean updated = dao.updateQuotationAndRejectionDetails(requestID, newPrice, rejectReason);
                     message = updated ? "Request rejected successfully with updated details." : "Failed to reject request.";
                 }
-                
+
                 HttpSession session = request.getSession();
                 session.setAttribute("MESSAGE", message);
-                
-                List<CustomTourDTO> listCustomTour = dao.getListCustomTourForManager();
+
+                List<CustomTourDTO> listCustomTour = dao.getListCustomTourForManager(pageIndex);
                 session.setAttribute("CUSTOM_LIST", listCustomTour);
             }
         } catch (NumberFormatException e) {

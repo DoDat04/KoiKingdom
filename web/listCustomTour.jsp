@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Get Custom Tour</title>
+        <title>Custom Tour Request</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <!-- Font Awesome for Icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -20,13 +20,44 @@
         <link href="css/toast.css" rel="stylesheet">
         <link href="css/headerForSales.css" rel="stylesheet">
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
+        <style>
+            /* Pagination */
+            .pagination {
+                justify-content: center; /* Canh giữa */
+                margin-top: 20px; /* Khoảng cách phía trên */
+            }
+
+            .pagination .page-item {
+                margin: 0 5px; /* Khoảng cách giữa các ô */
+            }
+
+            .pagination .page-link {
+                padding: 10px 15px; /* Padding cho các ô phân trang */
+                border: 1px solid #04AA6D; /* Viền cho các ô */
+                border-radius: 5px; /* Bo tròn các góc */
+                background-color: #f4f4f9; /* Màu nền cho các ô */
+                color: #333; /* Màu chữ */
+                transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+            }
+
+            .pagination .page-link:hover {
+                background-color: #04AA6D; /* Màu nền khi hover */
+                color: white; /* Màu chữ khi hover */
+            }
+
+            .pagination .active .page-link {
+                background-color: #04AA6D; /* Màu nền cho ô đang hoạt động */
+                color: white; /* Màu chữ cho ô đang hoạt động */
+                border: 1px solid #04AA6D; /* Viền cho ô đang hoạt động */
+            }
+        </style>
     </head>
     <body>
         <jsp:include page="headerForManager.jsp" flush="true"/>
         <div style="    margin-top: 25vh;
              margin-left: 17%;
              margin-right: 6%;" class="main-content">  
-            <h1 style="text-align: center">Custom Tour Management</h1>
+            <h1 style="text-align: center">Custom Tour Request</h1>
             <table id="content" class="styled-table">
                 <thead>
                     <tr>
@@ -117,6 +148,35 @@
                 </c:choose>
                 </tbody>
             </table>
+            <!-- phân trang -->
+                <jsp:useBean id="a" class="koikd.customtour.CustomTourDAO" scope="request"></jsp:useBean>
+                    <nav>
+                        <ul class="pagination pagination-lg">
+                        <c:set var="prevPage" value="${pageIndex - 1}" />
+                        <c:set var="nextPage" value="${pageIndex + 1}" />
+
+                        <!-- Nút Back -->
+                        <c:if test="${pageIndex > 1}">
+                            <li class="page-item">
+                                <a class="page-link" href="custom-tour?index=${prevPage}">Back</a>
+                            </li>
+                        </c:if>
+
+                        <!-- Các trang phân trang -->
+                        <c:forEach begin="1" end="${numberOfPages}" var="i">
+                            <li class="page-item ${pageIndex == i ? 'active' : ''}">
+                                <a class="page-link" href="custom-tour?index=${i}">${i}</a>
+                            </li>
+                        </c:forEach>
+
+                        <!-- Nút Next -->
+                        <c:if test="${pageIndex < numberOfPages}">
+                            <li class="page-item">
+                                <a class="page-link" href="custom-tour?index=${nextPage}">Next</a>
+                            </li>
+                        </c:if>
+                    </ul>
+                </nav>
         </div>
 
         <c:if test="${not empty sessionScope.MESSAGE}">

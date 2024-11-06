@@ -39,9 +39,19 @@ public class GetListCustomTourManagerController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = CUSTOMTOUR_LIST;
         try {
+            String index = request.getParameter("index");
+            // Default to 1 if no index is provided
+            if (index == null || index.isEmpty()) {
+                index = "1";
+            }
+            // Parse index as an integer
+            int pageIndex = Integer.parseInt(index);
             CustomTourDAO dao = new CustomTourDAO();
             HttpSession session = request.getSession();
-            List<CustomTourDTO> listCustomTour = dao.getListCustomTourForManager();
+            int numberOfPages = dao.getNumberPageForCustomTourRequestInManager();
+            request.setAttribute("numberOfPages", numberOfPages);
+            request.setAttribute("pageIndex", pageIndex);
+            List<CustomTourDTO> listCustomTour = dao.getListCustomTourForManager(pageIndex);
             session.setAttribute("CUSTOM_LIST", listCustomTour);
         } catch (SQLException ex) {
             Logger.getLogger(GetListCustomTourManagerController.class.getName()).log(Level.SEVERE, null, ex);
