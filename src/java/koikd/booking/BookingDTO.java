@@ -118,4 +118,10 @@ public class BookingDTO implements Serializable{
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "BookingDTO{" + "bookingID=" + bookingID + ", customerID=" + customerID + ", tourID=" + tourID + ", custName=" + custName + ", custEmail=" + custEmail + ", bookingDate=" + bookingDate + ", shippingAddress=" + shippingAddress + ", quantity=" + quantity + ", status=" + status + ", tourType=" + tourType + '}';
+    }
+    
 }

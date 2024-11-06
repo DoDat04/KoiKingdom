@@ -71,7 +71,7 @@ public class BookingDAO implements Serializable {
         return bookingID;
     }
 
-    public List<BookingDTO> getAllBooking() throws SQLException, ClassNotFoundException {
+    public List<BookingDTO> getAllBooking(String searchBooking) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -81,8 +81,16 @@ public class BookingDAO implements Serializable {
             con = DBUtils.getConnection();
             if (con != null) {
                 String sql = "SELECT BookingID, CustomerID, TourID, Name, Email, BookingDate, ShippingAddress, Quantity, Status, TourType "
-                        + "FROM BOOKING";
+                        + "FROM BOOKING ";
+                if (searchBooking != null && !searchBooking.isEmpty()) {
+                    sql += " WHERE Name LIKE ? ";
+                }
+                sql += " ORDER BY BookingDate DESC ";
                 stm = con.prepareStatement(sql);
+                if (searchBooking != null && !searchBooking.isEmpty()) {
+                    stm.setString(1, "%" + searchBooking + "%");
+                }
+
                 rs = stm.executeQuery();
                 while (rs.next()) {
                     int bookingID = rs.getInt("BookingID");
@@ -113,6 +121,15 @@ public class BookingDAO implements Serializable {
         }
         return listBooking;
     }
+//    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+//        String searchBooking = "Phuong Anh Do";
+//        BookingDAO services = new BookingDAO();
+//        ArrayList<BookingDTO> searchListBooking = (ArrayList<BookingDTO>) services.getAllBooking(searchBooking);
+//        if(searchListBooking!=null){
+//            System.out.println(searchListBooking);
+//        }
+//    }
+
     public int countBooking(String startDate, String endDate) {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -122,7 +139,7 @@ public class BookingDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                if(startDate != null && endDate != null) {
+                if (startDate != null && endDate != null) {
                     String sql = "SELECT COUNT([BookingID]) FROM [dbo].[BOOKING] "
                             + "WHERE CAST(BookingDate AS DATE) BETWEEN ? AND ? ";
                     pst = conn.prepareStatement(sql);
@@ -132,8 +149,7 @@ public class BookingDAO implements Serializable {
                     String sql = "SELECT COUNT([BookingID]) FROM [dbo].[BOOKING]";
                     pst = conn.prepareStatement(sql);
                 }
-                
-                
+
                 rs = pst.executeQuery();
 
                 if (rs.next()) {
@@ -159,7 +175,7 @@ public class BookingDAO implements Serializable {
         }
         return bookingCount;
     }
-    
+
     public int countCustomer(String startDate, String endDate) {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -180,7 +196,7 @@ public class BookingDAO implements Serializable {
                     sql = "SELECT COUNT(DISTINCT [CustomerID]) FROM [dbo].[BOOKING]";
                     pst = conn.prepareStatement(sql);
                 }
-               rs = pst.executeQuery();
+                rs = pst.executeQuery();
 
                 if (rs.next()) {
                     customerCount = rs.getInt(1); // ta phải lấy ở cột đầu tiên của result set mặc dù nó chỉ có đúng 1 cột
@@ -205,7 +221,7 @@ public class BookingDAO implements Serializable {
         }
         return customerCount;
     }
-    
+
     public int countAvailableTour(String startDate, String endDate) {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -215,7 +231,7 @@ public class BookingDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                if(startDate != null && endDate != null) {
+                if (startDate != null && endDate != null) {
                     String sql = "SELECT COUNT([BookingID]) FROM [dbo].[BOOKING] "
                             + "WHERE TourType = 'Available' AND CAST(BookingDate AS DATE) BETWEEN ? AND ? ";
                     pst = conn.prepareStatement(sql);
@@ -226,8 +242,7 @@ public class BookingDAO implements Serializable {
                             + "WHERE TourType = 'Available' ";
                     pst = conn.prepareStatement(sql);
                 }
-                
-                
+
                 rs = pst.executeQuery();
 
                 if (rs.next()) {
@@ -253,7 +268,7 @@ public class BookingDAO implements Serializable {
         }
         return avaiTour;
     }
-    
+
     public int countCustomTour(String startDate, String endDate) {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -263,7 +278,7 @@ public class BookingDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                if(startDate != null && endDate != null) {
+                if (startDate != null && endDate != null) {
                     String sql = "SELECT COUNT([BookingID]) FROM [dbo].[BOOKING] "
                             + "WHERE TourType = 'Custom' AND CAST(BookingDate AS DATE) BETWEEN ? AND ? ";
                     pst = conn.prepareStatement(sql);
@@ -274,8 +289,7 @@ public class BookingDAO implements Serializable {
                             + "WHERE TourType = 'Custom' ";
                     pst = conn.prepareStatement(sql);
                 }
-                
-                
+
                 rs = pst.executeQuery();
 
                 if (rs.next()) {

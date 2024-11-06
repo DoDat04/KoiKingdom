@@ -36,10 +36,11 @@ public class GetListBookingController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String search = request.getParameter("txtNameCustomer");
         String url = BOOKING_LIST_PAGE;
         try {
             BookingDAO dao = new BookingDAO();
-            List<BookingDTO> listBooking = dao.getAllBooking();
+            List<BookingDTO> listBooking = dao.getAllBooking(search);
             request.setAttribute("BOOKING_LIST", listBooking);
         } catch (SQLException ex) {
             Logger.getLogger(GetListBookingController.class.getName()).log(Level.SEVERE, null, ex);

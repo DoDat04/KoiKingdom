@@ -45,6 +45,7 @@ public class SendTourDetailController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = BOOKING_LIST_PAGE;
+        String fullName = request.getParameter("txtNameCustomer");
         int bookingID = Integer.parseInt(request.getParameter("txtBookingID"));
         String customerEmail = request.getParameter("txtCustomerEmail");
         String tourDetails = request.getParameter("txtTourDetails");
@@ -54,7 +55,7 @@ public class SendTourDetailController extends HttpServlet {
             // Thông báo gửi thành công
             request.setAttribute("SEND_SUCCESS", "Tour details have been successfully sent to " + customerEmail);
             BookingDAO dao = new BookingDAO();
-            List<BookingDTO> listBooking = dao.getAllBooking();
+            List<BookingDTO> listBooking = dao.getAllBooking(fullName);
             request.setAttribute("BOOKING_LIST", listBooking);
 
         } catch (Exception e) {

@@ -30,7 +30,7 @@
                 <div class="menu-center">
                     <ul class="nav justify-content-center">
                         <form action="list-customTour" method="get" class="search--box"> 
-                            <input oninput="searchByName(this)" type="text" name="txtFullName" placeholder="Search name customer" style=" border: none;"/>
+                            <input type="text" name="txtFullName" placeholder="Search name customer" style=" border: none;"/>
                             <button type="submit" style="border: none; border-radius: 4px;">  <i class="fa-solid fa-search"></i> </button>
                         </form>
                     </ul>
@@ -137,63 +137,6 @@
         </div>   
         <script src="js/headerForDelivery.js"></script>
 
-        <script>
-                                    document.querySelector('.toggle-btn').addEventListener('click', function () {
-                                        const sidebar = document.querySelector('.sidebar');
-                                        const mainFrame = document.querySelector('.main-frame');
-                                        // Ensure 'main-content' exists in your HTML or adjust the selector
-                                        const mainContent = document.querySelector('.main-content');
-                                        const toggleIcon = this; // 'this' refers to the clicked '.toggle-btn' element
-
-                                        sidebar.classList.toggle('collapsed');
-
-                                        if (sidebar.classList.contains('collapsed')) {
-                                            mainFrame.style.marginLeft = '-143px';
-                                            if (mainContent)
-                                                mainContent.style.marginLeft = '10%';
-                                            toggleIcon.classList.remove('fa-angles-left');
-                                            toggleIcon.classList.add('fa-angles-right');
-                                        } else {
-                                            mainFrame.style.marginLeft = '-0.2%';
-                                            if (mainContent)
-                                                mainContent.style.marginLeft = '20%';
-                                            toggleIcon.classList.remove('fa-angles-right');
-                                            toggleIcon.classList.add('fa-angles-left');
-                                        }
-                                    });
-
-                                    function searchByName(param) {
-                                        var txtSearch = param.value;
-                                        $.ajax({
-                                            url: "/KoiKingdom/GetCustomTourController",
-                                            type: "GET",
-                                            data: {
-                                                txtFullName: txtSearch
-                                            },
-                                            success: function (data) {
-                                                var row = document.getElementById("content");
-                                                row.innerHTML = data;
-
-                                                // Re-attach the click event to handle "Detail" button clicks
-                                                row.addEventListener("click", function (event) {
-                                                    if (event.target && event.target.classList.contains("btn-detail")) {
-                                                        // Prevent the default form submission
-                                                        event.preventDefault();
-                                                        // Find the closest form element and submit it
-                                                        var form = event.target.closest("form");
-                                                        if (form) {
-                                                            form.submit();
-                                                        }
-                                                    }
-                                                });
-                                            },
-                                            error: function (xhr) {
-                                                console.error("Error occurred while fetching data:", xhr);
-                                            }
-                                        });
-                                    }
-
-        </script>
     </body>
 
 </html>
