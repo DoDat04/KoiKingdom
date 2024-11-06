@@ -36,7 +36,8 @@
                             <div class="card-body">
 
                                 <c:if test="${orders.tourType == 'Available'}">
-                                    <a href="tour-detail?tourID=${requestScope.tours[tourBookingDetailID.index].tourID}" style="text-decoration: none; color: black;">
+                                    <form action="tour-detail" method="post" id="tourForm" onclick="submitForm(event, this)">
+                                        <input type="hidden" name="tourID" value="${requestScope.tours[tourBookingDetailID.index].tourID}" />
                                     </c:if>
                                     <div style="font-size: 16px; font-weight: 500; color: #ff6f61; margin-top: 5px;" >${orders.tourType}</div>
                                     <div class="d-flex align-items-center justify-content-between mb-3">
@@ -78,7 +79,9 @@
                                                         Xin vui lòng đánh giá dịch vụ của chúng tôi.
                                                         <c:if test="${orders.feedbackStatus == 'false'}">
                                                             <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reviewTour"
-                                                               data-tourid="${orders.tourID}" data-customerid="${orders.customerID}"  data-bookingid="${orders.bookingID}" id="review">Review</a>
+                                                               data-tourid="${orders.tourID}" data-customerid="${orders.customerID}" data-bookingid="${orders.bookingID}" 
+                                                               id="review">Review</a>
+
                                                         </c:if>
                                                         <c:if test="${orders.feedbackStatus == 'true'}">
 
@@ -96,7 +99,20 @@
                                         </div>
                                     </div>
                                     <c:if test="${orders.tourType == 'Available'}">
-                                    </a>
+                                        <script>
+                                            function submitForm(event, form) {
+                                                var tourIDInput = form.querySelector('input[name="tourID"]');
+                                                if (event.target.id === 'review' || event.target.id === 'editReview') {
+                                                    event.preventDefault();
+                                                    return;
+                                                }
+
+                                                var inputName = tourIDInput.name;
+                                                var inputValue = tourIDInput.value;
+                                                form.submit();
+                                            }
+                                        </script>
+                                    </form>
                                 </c:if>
                             </div>
                         </div>
@@ -246,9 +262,9 @@
                         <div class="modal-body">
                             <form action="/KoiKingdom/update_feedback" method="post" enctype="multipart/form-data" id="editReviewForm">
 
-                                <input type="" name="customerID" value="">
-                                <input type="" name="tourID" value="">
-                                <input type="" name="bookingID" value="">
+                                <input type="hidden" name="customerID" value="">
+                                <input type="hidden" name="tourID" value="">
+                                <input type="hidden" name="bookingID" value="">
                                 <div class="mb-3">
                                     <label for="feedback" class="form-label">Phản hồi của bạn</label>
                                     <textarea class="form-control" id="feedback" name="feedback" rows="3" required></textarea>
@@ -327,7 +343,7 @@
                     return false;
                 }
             </script>
-            
+
             <c:if test="${not empty requestScope.Successfully}">
                 <script>
                     window.onload = function () {

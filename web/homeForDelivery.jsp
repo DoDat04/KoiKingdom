@@ -14,11 +14,41 @@
         <link href="css/toast.css" rel="stylesheet">
         <title>Delivery Home</title>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
+        <style>
+            .pagination {
+                justify-content: center; /* Canh giữa */
+                margin-top: 20px; /* Khoảng cách phía trên */
+            }
+
+            .pagination .page-item {
+                margin: 0 5px; /* Khoảng cách giữa các ô */
+            }
+
+            .pagination .page-link {
+                padding: 10px 15px; /* Padding cho các ô phân trang */
+                border: 1px solid #04AA6D; /* Viền cho các ô */
+                border-radius: 5px; /* Bo tròn các góc */
+                background-color: #f4f4f9; /* Màu nền cho các ô */
+                color: #333; /* Màu chữ */
+                transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+            }
+
+            .pagination .page-link:hover {
+                background-color: #04AA6D; /* Màu nền khi hover */
+                color: white; /* Màu chữ khi hover */
+            }
+
+            .pagination .active .page-link {
+                background-color: #04AA6D; /* Màu nền cho ô đang hoạt động */
+                color: white; /* Màu chữ cho ô đang hoạt động */
+                border: 1px solid #04AA6D; /* Viền cho ô đang hoạt động */
+            }
+        </style>
     </head>
 
     <body>
         <jsp:include page="headerForDelivery.jsp" flush="true"/>
-        
+
         <c:if test="${not empty sessionScope.updateSuccessDelivery}">
             <script>
                 window.onload = function () {
@@ -27,7 +57,7 @@
             </script>
             <c:set var="updateSuccessDelivery" value="${null}" scope="session"/>
         </c:if>
-        
+
         <div style="margin-top: 25vh; margin-left: 17%; margin-right: 6%;" class="main-content">         
 
             <table id="content" class="styled-table">
@@ -59,7 +89,7 @@
                                         </select>
                                     </td>
                                     <td style="padding-left: 4%;">
-                                        <form action="GetKoiOrderDetail" method="GET" style="display:inline;">
+                                        <form action="GetKoiOrderDetail" method="POST" style="display:inline;">
                                             <input type="hidden" name="orderID" value="${order.koiOrderID}">
                                             <input type="hidden" name="customerID" value="${order.customerID}">
                                             <button class="btn-detail" type="submit" style="border: none; background: none;">Detail</button>

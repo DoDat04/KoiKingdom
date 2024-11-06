@@ -16,6 +16,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <title>Ship History</title>
+        
     </head>
     <body>
         <c:choose>
@@ -30,7 +31,12 @@
              margin-left: 17%;
              margin-right: 6%;" class="main-content">   
             <c:if test="${not empty requestScope.koiOrderDetails}">
+                <div style="width: 100%;">
+                    <a href="home?action=Delivery" class="dropdown-item" style="text-align: right;">&lt; Back to Ship History</a>
+                </div>
+
                 <div class="container">
+
                     <div class="row">
                         <div class="col">
                             <h5 class="mb-3">Order Information</h5>
