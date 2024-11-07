@@ -177,9 +177,9 @@ public class VNPayCallBackController extends HttpServlet {
                                 tourBookingDetail.setStatus("Confirmed");
                                 tourBookingDetail.setFeedbackStatus(false);
                                 // Add the tour booking detail
-                                tourBookingDetailDAO.addTourBookingDetail(bookingID, tourBookingDetail, customTour);
+                                int tourBookingDetailID = tourBookingDetailDAO.addTourBookingDetail(bookingID, tourBookingDetail, customTour);
                                 // Send confirmation email for tour available
-                                sendBillForCustomer(email, custID, fullName, custAddress, custEmail);
+                                sendBillForCustomer(email, custID,tourBookingDetailID, fullName, custAddress, custEmail);
                             } else if (koi != null) {
                                 koiDto.setCustomerID(custID);
                                 koiDto.setStatus(false);
@@ -252,7 +252,7 @@ public class VNPayCallBackController extends HttpServlet {
         return random.nextInt(10) + 1; // Số ngẫu nhiên từ 1 đến 10
     }
 
-    private void sendBillForCustomer(String toEmail, int custID, String fullName, String custAddress, String custEmail) throws Exception {
+    private void sendBillForCustomer(String toEmail, int custID, int tourBookingDetailID, String fullName, String custAddress, String custEmail) throws Exception {
         String host = "smtp.gmail.com";
         String port = "587";
 
@@ -275,7 +275,7 @@ public class VNPayCallBackController extends HttpServlet {
         message.setSubject("Your Bill Details from Koi Kingdom");
 
         TourBookingDetailDAO dao = new TourBookingDetailDAO();
-        TourBookingDetailDTO dto = dao.getTourBookingDetailByCustomerID(custID);
+        TourBookingDetailDTO dto = dao.getTourBookingDetailByCustomerID(custID, tourBookingDetailID);
         if (dto != null) {
             String emailContent = "<div style='font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>"
                     + "<h1 style='color: #4CAF50; text-align: center;'>Thank you for your purchase!</h1>"

@@ -22,17 +22,18 @@ import koikd.customtour.CustomTourDTO;
  */
 public class TourBookingDetailDAO implements Serializable {
 
-    public boolean addTourBookingDetail(int bookingID, TourBookingDetailDTO tourBookingDetail, CustomTourDTO customTour) throws SQLException, ClassNotFoundException {
+    public int addTourBookingDetail(int bookingID, TourBookingDetailDTO tourBookingDetail, CustomTourDTO customTour) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
-        boolean result = false;
+        ResultSet rs = null;
+        int tourBookingDetailID = -1;
 
         try {
             con = DBUtils.getConnection();
             if (con != null) {
                 String sql = "INSERT INTO TOURBOOKINGDETAIL (BookingID, CustomerID, TourID, Quantity, UnitPrice, TotalPrice, Status, TourType, FeedbackStatus) "
                         + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                stm = con.prepareStatement(sql);
+                stm = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
                 stm.setInt(1, bookingID);  // Sử dụng bookingID được truyền vào
                 stm.setInt(2, tourBookingDetail.getCustomerID());
 
@@ -50,10 +51,17 @@ public class TourBookingDetailDAO implements Serializable {
                 stm.setBoolean(9, tourBookingDetail.isFeedbackStatus());
                 int affectedRows = stm.executeUpdate();
                 if (affectedRows > 0) {
-                    result = true;
+                    rs = stm.getGeneratedKeys();
+                    
+                    if (rs.next()) {
+                        tourBookingDetailID = rs.getInt(1);
+                    }
                 }
             }
         } finally {
+            if (rs != null) {
+                rs.close();
+            }
             if (stm != null) {
                 stm.close();
             }
@@ -61,7 +69,7 @@ public class TourBookingDetailDAO implements Serializable {
                 con.close();
             }
         }
-        return result;
+        return tourBookingDetailID;
     }
 
     /**
@@ -70,58 +78,49 @@ public class TourBookingDetailDAO implements Serializable {
      * @return tour booking bill.
      * @throws SQLException
      */
-    public TourBookingDetailDTO getTourBookingDetailByCustomerID(int custID) throws SQLException {
-        Connection conn = null;
-        PreparedStatement pst = null;
-        ResultSet rs = null;
+    public TourBookingDetailDTO getTourBookingDetailByCustomerID(int custID, int tourBookingDetailID) throws SQLException {
         TourBookingDetailDTO dto = null;
-        try {
-            conn = DBUtils.getConnection();
-            if (conn != null) {
-                String sql = "SELECT a.TourBookingDetail, a.TourID, a.CustomerID, a.Quantity, a.UnitPrice, a.TotalPrice, a.Status, b.TourName\n"
-                        + "FROM TOURBOOKINGDETAIL a\n"
-                        + "INNER JOIN TOUR b ON a.TourID = b.TourID\n"
-                        + "WHERE a.CustomerID = ?";
-                pst = conn.prepareStatement(sql);
-                pst.setInt(1, custID);
-                rs = pst.executeQuery();
-                if (rs.next()) {
-                    int tourBookingDetail = rs.getInt("tourBookingDetail");
-                    int customerID = rs.getInt("customerID");
-                    int tourID = rs.getInt("tourID");
-                    String tourName = rs.getString("tourName");
-                    int quantity = rs.getInt("quantity");
-                    double unitPrice = rs.getDouble("unitPrice");
-                    double totalPrice = rs.getDouble("totalPrice");
-                    String status = rs.getString("status");
-                    dto = new TourBookingDetailDTO(tourBookingDetail, customerID, tourID, tourName, quantity, unitPrice, totalPrice, status);
-                }
+        String sql = "SELECT a.TourBookingDetail, a.TourID, a.CustomerID, a.Quantity, a.UnitPrice, a.TotalPrice, a.Status, b.TourName "
+                + "FROM TOURBOOKINGDETAIL a "
+                + "INNER JOIN TOUR b ON a.TourID = b.TourID "
+                + "WHERE a.CustomerID = ? AND a.TourBookingDetail = ?";
 
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, custID);
+            pst.setInt(2, tourBookingDetailID);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    System.out.println("Record found for CustomerID: " + custID);
+                    int tourBookingDetail = rs.getInt("TourBookingDetail");
+                    int customerID = rs.getInt("CustomerID");
+                    int tourID = rs.getInt("TourID");
+                    String tourName = rs.getString("TourName");
+                    int quantity = rs.getInt("Quantity");
+                    double unitPrice = rs.getDouble("UnitPrice");
+                    double totalPrice = rs.getDouble("TotalPrice");
+                    String status = rs.getString("Status");
+
+                    System.out.println("CustomerID Retrieved: " + customerID);  // Debug statement
+                    dto = new TourBookingDetailDTO(tourBookingDetail, customerID, tourID, tourName, quantity, unitPrice, totalPrice, status);
+                } else {
+                    System.out.println("No record found for CustomerID: " + custID);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (pst != null) {
-                pst.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
         }
         return dto;
     }
 
-//    public static void main(String[] args) throws SQLException {
-//        int custID = 12;
-//        TourBookingDetailDAO dao = new TourBookingDetailDAO();
-//        TourBookingDetailDTO dto = dao.getTourBookingDetailByCustomerID(custID);
-//        if (dto != null) {
-//            System.out.println(dto);
-//        }
-//    }
+    public static void main(String[] args) throws SQLException {
+        int custID = 11;
+        TourBookingDetailDAO dao = new TourBookingDetailDAO();
+        TourBookingDetailDTO dto = dao.getTourBookingDetailByCustomerID(custID, 3);
+        if (dto != null) {
+            System.out.println(dto);
+        }
+    }
+
     public ArrayList<TourBookingDetailDTO> getTourBookingDetailListByCustomerID(int custID) throws SQLException {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -172,9 +171,10 @@ public class TourBookingDetailDAO implements Serializable {
 
     /**
      * Get Tour By ID
+     *
      * @param tourID
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
     public TourDTO getTourByID(int tourID) throws SQLException {
         Connection conn = null;
@@ -223,64 +223,67 @@ public class TourBookingDetailDAO implements Serializable {
 
     /**
      * Get All Tour Booking Detail
+     *
      * @return
      * @throws SQLException
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     public List<TourBookingDetailDTO> getAllTourBookingDetail(int consultingID) throws SQLException, ClassNotFoundException {
-    Connection con = null;
-    PreparedStatement stm = null;
-    ResultSet rs = null;
-    List<TourBookingDetailDTO> listTourBookingDetail = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<TourBookingDetailDTO> listTourBookingDetail = new ArrayList<>();
 
-    try {
-        con = DBUtils.getConnection();
-        if (con != null) {
-            String sql = "SELECT DISTINCT t.TourBookingDetail, t.CustomerID, b.Name, t.TourID, t.Quantity, t.UnitPrice, t.TotalPrice, t.Status, t.TourType " +
-                         "FROM TOURBOOKINGDETAIL t " +
-                         "INNER JOIN BOOKING b ON t.CustomerID = b.CustomerID " +
-                         "INNER JOIN TOUR tour ON t.TourID = tour.TourID " + // INNER JOIN với bảng TOUR
-                         "WHERE tour.Consulting= ?"; // Điều kiện lọc theo consultingID
-            
-            stm = con.prepareStatement(sql);
-            stm.setInt(1, consultingID); // Gán giá trị cho consultingID
-            rs = stm.executeQuery();
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT DISTINCT t.TourBookingDetail, t.CustomerID, b.Name, t.TourID, t.Quantity, t.UnitPrice, t.TotalPrice, t.Status, t.TourType "
+                        + "FROM TOURBOOKINGDETAIL t "
+                        + "INNER JOIN BOOKING b ON t.CustomerID = b.CustomerID "
+                        + "INNER JOIN TOUR tour ON t.TourID = tour.TourID "
+                        + // INNER JOIN với bảng TOUR
+                        "WHERE tour.Consulting= ?"; // Điều kiện lọc theo consultingID
 
-            while (rs.next()) {
-                int tourBookingDetailID = rs.getInt("TourBookingDetail");
-                int custID = rs.getInt("CustomerID");
-                String custName = rs.getString("Name");
-                int tourID = rs.getInt("TourID");
-                int quantity = rs.getInt("Quantity");
-                double unitPrice = rs.getDouble("UnitPrice");
-                double totalPrice = rs.getDouble("TotalPrice");
-                String status = rs.getString("Status");
-                String tourType = rs.getString("TourType");
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, consultingID); // Gán giá trị cho consultingID
+                rs = stm.executeQuery();
 
-                TourBookingDetailDTO listDTO = new TourBookingDetailDTO(tourBookingDetailID, custID, custName, tourID, tourType, quantity, unitPrice, totalPrice, status, tourType);
-                listTourBookingDetail.add(listDTO);
+                while (rs.next()) {
+                    int tourBookingDetailID = rs.getInt("TourBookingDetail");
+                    int custID = rs.getInt("CustomerID");
+                    String custName = rs.getString("Name");
+                    int tourID = rs.getInt("TourID");
+                    int quantity = rs.getInt("Quantity");
+                    double unitPrice = rs.getDouble("UnitPrice");
+                    double totalPrice = rs.getDouble("TotalPrice");
+                    String status = rs.getString("Status");
+                    String tourType = rs.getString("TourType");
+
+                    TourBookingDetailDTO listDTO = new TourBookingDetailDTO(tourBookingDetailID, custID, custName, tourID, tourType, quantity, unitPrice, totalPrice, status, tourType);
+                    listTourBookingDetail.add(listDTO);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
             }
         }
-    } finally {
-        if (rs != null) {
-            rs.close();
-        }
-        if (stm != null) {
-            stm.close();
-        }
-        if (con != null) {
-            con.close();
-        }
+        return listTourBookingDetail;
     }
-    return listTourBookingDetail;
-}
 
     /**
      * Update Tour Booking Detail Status
+     *
      * @param tourBookingDetailID
      * @param newStatus
      * @throws SQLException
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     public void updateTourBookingDetailStatus(int tourBookingDetailID, String newStatus) throws SQLException, ClassNotFoundException {
         Connection con = null;
@@ -306,12 +309,13 @@ public class TourBookingDetailDAO implements Serializable {
             }
         }
     }
-    
+
     /**
      * Cancel Tour Booking DetailByID
+     *
      * @param ID
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
     public TourBookingDetailDTO cancelTourBookingDetailByID(int ID) throws SQLException {
         Connection conn = null;
@@ -325,7 +329,7 @@ public class TourBookingDetailDAO implements Serializable {
                         + " WHERE TourBookingDetail = ?";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, ID);
-                int rowsUpdated = pst.executeUpdate(); 
+                int rowsUpdated = pst.executeUpdate();
 
                 if (rowsUpdated > 0) {
                     Timestamp cancelAt = new Timestamp(System.currentTimeMillis());
@@ -342,6 +346,6 @@ public class TourBookingDetailDAO implements Serializable {
                 conn.close();
             }
         }
-        return dto; 
+        return dto;
     }
 }
