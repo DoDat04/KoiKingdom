@@ -48,10 +48,10 @@
 
                             <td>
                                 <form action="GetKoiOrderDetail" method="POST" style="display:inline;">
-                                    <input type="" name="orderID" value="${farm.koiOrderID}">
-                                    <input type="" name="customerID" value="${farm.customerID}">
-                                     <input type="" name="userType" value="consulting">
-                                    <button class="btn-detail" type="submit" style="border: none; background: none;">Detail</button>
+                                    <input type="hidden" name="orderID" value="${farm.koiOrderID}">
+                                    <input type="hidden" name="customerID" value="${farm.customerID}">
+                                     <input type="hidden" name="userType" value="consulting">
+                                    <button class="btn btn-primary" type="submit" >Detail</button>
                                 </form>
                             </td>
                         </tr>

@@ -190,11 +190,14 @@
                                             <input type="hidden" name="orderID" value="${order.koiOrderID}">
                                             <input type="hidden" name="customerID" value="${order.customerID}">
                                             <input type="hidden" name="userType" value="manage">
-                                            <button class="btn-detail" type="submit" style="border: none; background: none;">Detail</button>
+                                            <button class="btn btn-primary" type="submit" style="
+                                                    position: relative;
+                                                    right: 51%;
+                                                    ">Detail</button>
                                         </form>
                                     </td>
                                     <td>
-                                        <button type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#assignModal" onclick="loadDeliveryEmployees(${order.koiOrderID}, ${order.deliveryBy})">
+                                        <button class="btn btn-primary" type="button" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#assignModal" onclick="loadDeliveryEmployees(${order.koiOrderID}, ${order.deliveryBy})">
                                             Assign to
                                         </button>
                                     </td>

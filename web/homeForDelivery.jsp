@@ -82,27 +82,51 @@
                                     <td>${requestScope.customerPhones[status.index]}</td>
                                     <td>${order.estimatedDelivery}</td>
                                     <td>
-                                        <select id="orderStatus_${order.koiOrderID}" onchange="updateStatus(${order.koiOrderID}, this.value)">
+                                        <select id="orderStatus_${order.koiOrderID}" 
+                                                onchange="checkStatusChange(${order.koiOrderID}, this.value)"
+                                                ${order.status ? 'disabled' : ''}>
                                             <option value="true" ${order.status ? 'selected' : ''}>Complete</option>
                                             <option value="false" ${!order.status ? 'selected' : ''}>On-going</option>
                                         </select>
                                     </td>
-                                    <td style="padding-left: 4%;">
-                                        <form action="GetKoiOrderDetail" method="POST" style="display:inline;">
-                                            <input type="hidden" name="orderID" value="${order.koiOrderID}">
-                                            <input type="hidden" name="customerID" value="${order.customerID}">
-                                            <button class="btn-detail" type="submit" style="border: none; background: none;">Detail</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </c:when>
-                        <c:otherwise>
-                            <tr>
-                                <td colspan="6" class="text-center alert alert-danger">No orders found.</td>
+
+                            <script>
+                                function checkStatusChange(orderID, newStatus) {
+                                    if (newStatus === 'true') {
+                                        alert("Are you sure you want to change the status to 'Complete'?");
+
+                                        // Delay page reload by 6 seconds (6000 milliseconds)
+                                        setTimeout(function () {
+                                            location.reload();
+                                        }, 6000);
+                                    }
+
+                                    // Update the status regardless of whether the page is reloaded or not
+                                    updateStatus(orderID, newStatus);
+                                }
+                            </script>
+
+
+
+                            <td style="padding-left: 4%;">
+                                <form action="GetKoiOrderDetail" method="POST" style="display:inline;">
+                                    <input type="hidden" name="orderID" value="${order.koiOrderID}">
+                                    <input type="hidden" name="customerID" value="${order.customerID}">
+                                    <button class="btn btn-primary" type="submit" style="
+                                            position: relative;
+                                            right: 53%;
+                                            ">Detail</button>
+                                </form>
+                            </td>
                             </tr>
-                        </c:otherwise>
-                    </c:choose>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <tr>
+                            <td colspan="6" class="text-center alert alert-danger">No orders found.</td>
+                        </tr>
+                    </c:otherwise>
+                </c:choose>
                 </tbody>
             </table>
 

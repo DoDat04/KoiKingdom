@@ -60,7 +60,7 @@ public class KoiOrderDAO implements Serializable {
                     sql += (hasCondition ? "AND " : "WHERE ") + "(C.LastName + ' ' + C.FirstName LIKE ?) \n";
                 }
 
-                sql += "ORDER BY O.KoiOrderID ASC \n"
+                sql += "ORDER BY O.KoiOrderID DESC \n"
                         + "OFFSET ? ROWS \n"
                         + "FETCH NEXT 5 ROWS ONLY;";
 
