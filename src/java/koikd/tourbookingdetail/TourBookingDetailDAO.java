@@ -133,7 +133,7 @@ public class TourBookingDetailDAO implements Serializable {
             if (conn != null) {
                 String sql = "SELECT [TourBookingDetail], [CustomerID], [TourID], [Quantity], [UnitPrice], [TotalPrice], [Status], [TourType] ,[FeedbackStatus], [bookingID] \n"
                         + "FROM [dbo].[TOURBOOKINGDETAIL]\n"
-                        + "WHERE [CustomerID] = ? AND ([Status] = 'Completed' OR [Status] = 'Confirmed')"
+                        + "WHERE [CustomerID] = ? AND ([Status] = 'Completed' OR [Status] = 'Confirmed' OR [Status] = 'Canceled')"
                         + "ORDER BY TourBookingDetail DESC";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, custID);

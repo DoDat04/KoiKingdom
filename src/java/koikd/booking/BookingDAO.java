@@ -81,11 +81,12 @@ public class BookingDAO implements Serializable {
             con = DBUtils.getConnection();
             if (con != null) {
                 String sql = "SELECT BookingID, CustomerID, TourID, Name, Email, BookingDate, ShippingAddress, Quantity, Status, TourType "
-                        + "FROM BOOKING ";
+                        + "FROM BOOKING "
+                        + "WHERE TourType = 'Custom' ";
                 if (searchBooking != null && !searchBooking.isEmpty()) {
-                    sql += " WHERE Name LIKE ? ";
+                    sql += "AND Name LIKE ? ";
                 }
-                sql += " ORDER BY BookingDate DESC ";
+                sql += "ORDER BY BookingDate DESC ";
                 stm = con.prepareStatement(sql);
                 if (searchBooking != null && !searchBooking.isEmpty()) {
                     stm.setString(1, "%" + searchBooking + "%");

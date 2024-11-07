@@ -29,25 +29,196 @@
         <div class="colorlib-loader"></div>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>       
         <div style=" margin: 20px;">  
+            <h2>Tour đã thanh toán</h2>
             <c:if test="${not empty requestScope.orders}">
-                <c:forEach var="orders" items="${requestScope.orders}" varStatus="tourBookingDetailID">                
-                    <div class="order_booking" style="display: flex; justify-content: center; margin-bottom: 20px;">
-                        <div class="order_booking-section card" style="width: 100%; max-width: 900px;">
-                            <div class="card-body">
+                <c:forEach var="orders" items="${requestScope.orders}" varStatus="tourBookingDetailID">
+                    <c:if test="${orders.status == 'Confirmed'}">               
+                        <div class="order_booking" style="display: flex; justify-content: center; margin-bottom: 20px;">
+                            <div class="order_booking-section card" style="width: 100%; max-width: 900px;">
+                                <div class="card-body">
 
-                                <c:if test="${orders.tourType == 'Available'}">
-                                    <form action="tour-detail" method="post" id="tourForm" onclick="submitForm(event, this)">
-                                        <input type="hidden" name="tourID" value="${requestScope.tours[tourBookingDetailID.index].tourID}" />
+                                    <c:if test="${orders.tourType == 'Available'}">
+                                        <form action="tour-detail" method="post" id="tourForm" onclick="submitForm(event, this)">
+                                            <input type="hidden" name="tourID" value="${requestScope.tours[tourBookingDetailID.index].tourID}" />
+                                        </c:if>
+                                        <div style="font-size: 16px; font-weight: 500; color: #ff6f61; margin-top: 5px;">${orders.tourType}</div>
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <div class="d-flex align-items-center">
+                                                <img src="img/TourImage/1.jpg" alt="Picture of TOUR" class="rounded" style="width: 80px; height: 80px; object-fit: cover; margin-right: 15px;"/>
+                                                <div class="order_booking-name" style="font-size: 18px; font-weight: 600; color: #333; margin-right: 20px;">
+                                                    <c:if test="${orders.tourType != 'Custom'}">
+                                                        ${requestScope.tours[tourBookingDetailID.index].tourName}
+                                                    </c:if>
+                                                    <!-- Display the number of people and price per person -->
+                                                    <div style="font-size: 16px; font-weight: 500; color: #666; margin-top: 5px;">
+                                                        <span style="font-weight: bold; color: #ff6f61;">
+                                                            ${orders.quantity} people x 
+                                                            <fmt:formatNumber type="currency" currencySymbol="$" value="${orders.unitPrice}"/>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div style="text-align: right;">
+                                                <div class="order_booking-price" style="font-size: 16px; font-weight: bold; color: #333;">
+                                                    Total: <fmt:formatNumber type="currency" currencySymbol="$" value="${orders.totalPrice}"/>
+                                                </div>
+
+                                                <!-- Order Status -->
+                                                <div class="order_booking-status" style="font-size: 16px; margin-top: 5px; padding: 5px; border-radius: 4px;">
+                                                    <span class="status-label">Status:</span> 
+                                                    <span class="status-value">${orders.status}</span>
+
+                                                    <c:if test="${orders.status != 'Completed'}">
+                                                        <div>
+                                                            <a href="cancel_booking?bookingid=${orders.tourBookingDetailID}&customerID=${orders.customerID}" class="btn btn-danger" onclick="return confirm('Are you sure?')">Cancel</a>
+                                                        </div>
+                                                    </c:if>
+                                                    <c:if test="${orders.status == 'Completed'}">
+                                                        <div class="thank-you-message" style="margin-top: 5px; color: green;">
+                                                            Cảm ơn bạn đã đặt dịch vụ!
+                                                            <br />
+                                                            Xin vui lòng đánh giá dịch vụ của chúng tôi.
+                                                            <c:if test="${orders.feedbackStatus == 'false'}">
+                                                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reviewTour"
+                                                                   data-tourid="${orders.tourID}" data-customerid="${orders.customerID}" data-bookingid="${orders.bookingID}" 
+                                                                   id="review">Review</a>
+                                                            </c:if>
+                                                            <c:if test="${orders.feedbackStatus == 'true'}">
+                                                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editReviewTour"
+                                                                   data-tourid="${orders.tourID}" data-customerid="${orders.customerID}" data-bookingid="${orders.bookingID}" id="review"
+                                                                   onclick="fetchFeedbackData(${orders.tourID}, ${orders.customerID}, ${orders.bookingID})">
+                                                                    Edit Review
+                                                                </a>
+                                                            </c:if>
+                                                        </div>
+                                                    </c:if>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <c:if test="${orders.tourType == 'Available'}">
+                                            <script>
+                                                function submitForm(event, form) {
+                                                    var tourIDInput = form.querySelector('input[name="tourID"]');
+                                                    if (event.target.id === 'review' || event.target.id === 'editReview') {
+                                                        event.preventDefault();
+                                                        return;
+                                                    }
+                                                    form.submit();
+                                                }
+                                            </script>
+                                        </form>
                                     </c:if>
-                                    <div style="font-size: 16px; font-weight: 500; color: #ff6f61; margin-top: 5px;" >${orders.tourType}</div>
+                                </div>
+                            </div>
+                        </div>                         
+                    </c:if>
+                </c:forEach>
+            </c:if>
+
+            <h2>Tour đã đi</h2>
+            <c:if test="${not empty requestScope.orders}">
+                <c:forEach var="orders" items="${requestScope.orders}" varStatus="tourBookingDetailID">
+                    <!-- Hiển thị các tour có trạng thái Canceled -->
+                    <c:if test="${orders.status == 'Completed'}">
+                        <div class="order_booking" style="display: flex; justify-content: center; margin-bottom: 20px;">
+                            <div class="order_booking-section card" style="width: 100%; max-width: 900px;">
+                                <div class="card-body">
+                                    <c:if test="${orders.tourType == 'Available'}">
+                                        <form action="tour-detail" method="post" id="tourForm" onclick="submitForm(event, this)">
+                                            <input type="hidden" name="tourID" value="${requestScope.tours[tourBookingDetailID.index].tourID}" />
+                                        </c:if>
+                                        <div style="font-size: 16px; font-weight: 500; color: #ff6f61; margin-top: 5px;">${orders.tourType}</div>
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <div class="d-flex align-items-center">
+                                                <img src="img/TourImage/1.jpg" alt="Picture of TOUR" class="rounded" style="width: 80px; height: 80px; object-fit: cover; margin-right: 15px;"/>
+                                                <div class="order_booking-name" style="font-size: 18px; font-weight: 600; color: #333; margin-right: 20px;">
+                                                    <c:if test="${orders.tourType != 'Custom'}">
+                                                        ${requestScope.tours[tourBookingDetailID.index].tourName}
+                                                    </c:if>
+                                                    <!-- Hiển thị số lượng người và giá mỗi người -->
+                                                    <div style="font-size: 16px; font-weight: 500; color: #666; margin-top: 5px;">
+                                                        <span style="font-weight: bold; color: #ff6f61;">
+                                                            ${orders.quantity} people x 
+                                                            <fmt:formatNumber type="currency" currencySymbol="$" value="${orders.unitPrice}"/>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div style="text-align: right;">
+                                                <div class="order_booking-price" style="font-size: 16px; font-weight: bold; color: #333;">
+                                                    Total: <fmt:formatNumber type="currency" currencySymbol="$" value="${orders.totalPrice}"/>
+                                                </div>
+
+                                                <!-- Trạng thái Đơn hàng -->
+                                                <div class="order_booking-status" style="font-size: 16px; margin-top: 5px; padding: 5px; border-radius: 4px;">
+                                                    <span class="status-label">Status:</span> 
+                                                    <span class="status-value">${orders.status}</span>
+
+                                                    <c:if test="${orders.status == 'Completed'}">
+                                                        <div class="thank-you-message" style="margin-top: 5px; color: green;">
+                                                            Cảm ơn bạn đã đặt dịch vụ!
+                                                            <br />
+                                                            Xin vui lòng đánh giá dịch vụ của chúng tôi.
+                                                            <c:if test="${orders.feedbackStatus == 'false'}">
+                                                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reviewTour"
+                                                                   data-tourid="${orders.tourID}" data-customerid="${orders.customerID}" data-bookingid="${orders.bookingID}" 
+                                                                   id="review">Review</a>
+
+                                                            </c:if>
+                                                            <c:if test="${orders.feedbackStatus == 'true'}">
+
+                                                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editReviewTour"
+                                                                   data-tourid="${orders.tourID}" data-customerid="${orders.customerID}"  data-bookingid="${orders.bookingID}" id="review"
+                                                                   onclick="fetchFeedbackData(${orders.tourID}, ${orders.customerID}, ${orders.bookingID})"
+                                                                   >
+                                                                    Edit Review
+                                                                </a>
+                                                            </c:if>
+
+                                                        </div>
+                                                    </c:if>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <c:if test="${orders.tourType == 'Available'}">
+                                            <script>
+                                                function submitForm(event, form) {
+                                                    var tourIDInput = form.querySelector('input[name="tourID"]');
+                                                    if (event.target.id === 'review' || event.target.id === 'editReview') {
+                                                        event.preventDefault();
+                                                        return;
+                                                    }
+
+                                                    var inputName = tourIDInput.name;
+                                                    var inputValue = tourIDInput.value;
+                                                    form.submit();
+                                                }
+                                            </script>
+                                        </form>
+                                    </c:if>
+                                </div>
+                            </div>
+                        </div>  
+                    </c:if>
+                </c:forEach>
+            </c:if>
+
+            <h2>Tour đã hủy</h2>
+            <c:if test="${not empty requestScope.orders}">
+                <c:forEach var="orders" items="${requestScope.orders}" varStatus="tourBookingDetailID">
+                    <c:if test="${orders.status == 'Canceled'}">               
+                        <div class="order_booking" style="display: flex; justify-content: center; margin-bottom: 20px;">
+                            <div class="order_booking-section card" style="width: 100%; max-width: 900px;">
+                                <div class="card-body">
+                                    <!-- Thông tin tour bị hủy -->
+                                    <div style="font-size: 16px; font-weight: 500; color: #ff6f61; margin-top: 5px;">${orders.tourType}</div>
                                     <div class="d-flex align-items-center justify-content-between mb-3">
                                         <div class="d-flex align-items-center">
                                             <img src="img/TourImage/1.jpg" alt="Picture of TOUR" class="rounded" style="width: 80px; height: 80px; object-fit: cover; margin-right: 15px;"/>
                                             <div class="order_booking-name" style="font-size: 18px; font-weight: 600; color: #333; margin-right: 20px;">
-                                                <c:if test="${orders.tourType != 'Custom'}">
-                                                    ${requestScope.tours[tourBookingDetailID.index].tourName}
-                                                </c:if>
-                                                <!-- Display the number of people and price per person -->
+                                                ${requestScope.tours[tourBookingDetailID.index].tourName}
                                                 <div style="font-size: 16px; font-weight: 500; color: #666; margin-top: 5px;">
                                                     <span style="font-weight: bold; color: #ff6f61;">
                                                         ${orders.quantity} people x 
@@ -56,67 +227,20 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div style="text-align: right;">
                                             <div class="order_booking-price" style="font-size: 16px; font-weight: bold; color: #333;">
                                                 Total: <fmt:formatNumber type="currency" currencySymbol="$" value="${orders.totalPrice}"/>
                                             </div>
-
-                                            <!-- Order Status -->
                                             <div class="order_booking-status" style="font-size: 16px; margin-top: 5px; padding: 5px; border-radius: 4px;">
                                                 <span class="status-label">Status:</span> 
-                                                <span class="status-value">${orders.status}</span>
-
-                                                <c:if test="${orders.status != 'Completed'}">
-                                                    <div>
-                                                        <a href="cancel_booking?bookingid=${orders.tourBookingDetailID}&customerID=${orders.customerID}" class="btn btn-danger" onclick="return confirm('Are you sure?')">Cancel</a>
-                                                    </div>
-                                                </c:if>
-                                                <c:if test="${orders.status == 'Completed'}">
-                                                    <div class="thank-you-message" style="margin-top: 5px; color: green;">
-                                                        Cảm ơn bạn đã đặt dịch vụ!
-                                                        <br />
-                                                        Xin vui lòng đánh giá dịch vụ của chúng tôi.
-                                                        <c:if test="${orders.feedbackStatus == 'false'}">
-                                                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reviewTour"
-                                                               data-tourid="${orders.tourID}" data-customerid="${orders.customerID}" data-bookingid="${orders.bookingID}" 
-                                                               id="review">Review</a>
-
-                                                        </c:if>
-                                                        <c:if test="${orders.feedbackStatus == 'true'}">
-
-                                                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editReviewTour"
-                                                               data-tourid="${orders.tourID}" data-customerid="${orders.customerID}"  data-bookingid="${orders.bookingID}" id="review"
-                                                               onclick="fetchFeedbackData(${orders.tourID}, ${orders.customerID}, ${orders.bookingID})"
-                                                               >
-                                                                Edit Review
-                                                            </a>
-                                                        </c:if>
-
-                                                    </div>
-                                                </c:if>
+                                                <span class="status-value" style="color: red">${orders.status}</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <c:if test="${orders.tourType == 'Available'}">
-                                        <script>
-                                            function submitForm(event, form) {
-                                                var tourIDInput = form.querySelector('input[name="tourID"]');
-                                                if (event.target.id === 'review' || event.target.id === 'editReview') {
-                                                    event.preventDefault();
-                                                    return;
-                                                }
-
-                                                var inputName = tourIDInput.name;
-                                                var inputValue = tourIDInput.value;
-                                                form.submit();
-                                            }
-                                        </script>
-                                    </form>
-                                </c:if>
+                                </div>
                             </div>
                         </div>
-                    </div>                         
+                    </c:if>
                 </c:forEach>
             </c:if>
 
