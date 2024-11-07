@@ -29,11 +29,11 @@
                 <h2>Sign in</h2>
                 <form id="login-form" action="login" method="post" onsubmit="return validateForm()">
                     <label for="email" class="email">Email</label>
-                    <input type="email" id="email" name="email" value="${param.email}" placeholder="Enter email">
+                    <input type="email" id="email" name="email" value="${param.email}" placeholder="Enter email" required="">
 
                     <label for="password" class="password">Password</label>
                     <div class="password-container">
-                        <input type="password" id="password" name="password" placeholder="Enter password">
+                        <input type="password" id="password" name="password" placeholder="Enter password" required="">
                         <span class="toggle-password">
                             <i id="togglePasswordIcon" class="fa-regular fa-eye"></i>
                         </span>

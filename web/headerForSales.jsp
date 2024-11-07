@@ -136,7 +136,29 @@
             </div>
         </div>   
         <script src="js/headerForDelivery.js"></script>
-
+        <script>
+                                    document.querySelector('.toggle-btn').addEventListener('click', function () {
+                                        const sidebar = document.querySelector('.sidebar');
+                                        const mainFrame = document.querySelector('.main-frame');
+                                        // Ensure 'main-content' exists in your HTML or adjust the selector
+                                        const mainContent = document.querySelector('.main-content');
+                                        const toggleIcon = this; // 'this' refers to the clicked '.toggle-btn' element
+                                        sidebar.classList.toggle('collapsed');
+                                        if (sidebar.classList.contains('collapsed')) {
+                                            mainFrame.style.marginLeft = '-143px';
+                                            if (mainContent)
+                                                mainContent.style.marginLeft = '10%';
+                                            toggleIcon.classList.remove('fa-angles-left');
+                                            toggleIcon.classList.add('fa-angles-right');
+                                        } else {
+                                            mainFrame.style.marginLeft = '-0.2%';
+                                            if (mainContent)
+                                                mainContent.style.marginLeft = '20%';
+                                            toggleIcon.classList.remove('fa-angles-right');
+                                            toggleIcon.classList.add('fa-angles-left');
+                                        }
+                                    });
+        </script>
     </body>
 
 </html>

@@ -13,10 +13,10 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <!-- Font Awesome for Icons -->
-              <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.25.1/ui/trumbowyg.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.25.1/trumbowyg.min.js"></script>
-        
+
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <link rel="stylesheet" href="css/headerForDelivery.css">
@@ -154,5 +154,28 @@
             </div>
         </div>   
         <script src="js/headerForDelivery.js"></script>
+        <script>
+                                    document.querySelector('.toggle-btn').addEventListener('click', function () {
+                                        const sidebar = document.querySelector('.sidebar');
+                                        const mainFrame = document.querySelector('.main-frame');
+                                        // Ensure 'main-content' exists in your HTML or adjust the selector
+                                        const mainContent = document.querySelector('.main-content');
+                                        const toggleIcon = this; // 'this' refers to the clicked '.toggle-btn' element
+                                        sidebar.classList.toggle('collapsed');
+                                        if (sidebar.classList.contains('collapsed')) {
+                                            mainFrame.style.marginLeft = '-143px';
+                                            if (mainContent)
+                                                mainContent.style.marginLeft = '10%';
+                                            toggleIcon.classList.remove('fa-angles-left');
+                                            toggleIcon.classList.add('fa-angles-right');
+                                        } else {
+                                            mainFrame.style.marginLeft = '-0.2%';
+                                            if (mainContent)
+                                                mainContent.style.marginLeft = '20%';
+                                            toggleIcon.classList.remove('fa-angles-right');
+                                            toggleIcon.classList.add('fa-angles-left');
+                                        }
+                                    });
+        </script>
     </body>
 </html>
