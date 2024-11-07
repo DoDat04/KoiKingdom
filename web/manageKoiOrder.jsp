@@ -177,11 +177,14 @@
                                     <td>${requestScope.customerNames[koiOrderID.index]}</td>
                                     <td>${order.deliveryDate}</td>
                                     <td>
-                                        <select id="orderStatus_${order.koiOrderID}" onchange="updateStatus(${order.koiOrderID}, this.value)">
-                                            <option value="true" ${order.status ? 'selected' : ''}>Complete</option>
-                                            <option value="false" ${!order.status ? 'selected' : ''}>On-going</option>
-                                        </select>
+                                        <c:if test="${order.status == true}">
+                                            Complete
+                                        </c:if>
+                                        <c:if test="${order.status == false}">
+                                            On Going
+                                        </c:if>
                                     </td>
+
                                     <td style="padding-left: 4%;">
                                         <form action="GetKoiOrderDetail" method="GET" style="display:inline;">
                                             <input type="hidden" name="orderID" value="${order.koiOrderID}">

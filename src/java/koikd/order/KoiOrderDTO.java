@@ -80,8 +80,9 @@ public class KoiOrderDTO implements Serializable {
         this.type = type;
     }
 
-    public KoiOrderDTO(int koiOrderID, String fullName, Date deliveryDate, boolean status, Date estimatedDelivery, String type, int createBy) {
+    public KoiOrderDTO(int koiOrderID,int customerID, String fullName, Date deliveryDate, boolean status, Date estimatedDelivery, String type, int createBy) {
         this.koiOrderID = koiOrderID;
+        this.customerID = customerID;
         this.fullName = fullName;
         this.deliveryDate = deliveryDate;
         this.status = status;

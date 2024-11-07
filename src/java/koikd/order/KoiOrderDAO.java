@@ -150,7 +150,7 @@ public class KoiOrderDAO implements Serializable {
                     String phoneNumber = rs.getString("PhoneNumber");
                     boolean status = rs.getBoolean("Status");
                     // Fixed constructor call
-                    result = new CustomerDTO(customerID, email, lastName, lastName, firstName, address, accountType, phoneNumber ,status);
+                    result = new CustomerDTO(customerID, email, lastName, lastName, firstName, address, accountType, phoneNumber, status);
                 }
             }
         } catch (Exception e) {
@@ -1311,7 +1311,7 @@ public class KoiOrderDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT ko.KoiOrderID, c.FirstName + ' ' + c.LastName AS FullName, "
+                String sql = "SELECT ko.KoiOrderID,c.CustomerID, c.FirstName + ' ' + c.LastName AS FullName, "
                         + "ko.DeliveryDate, ko.EstimatedDelivery, ko.Type, ko.Status, "
                         + "ko.CreatedBy "
                         + "FROM KOIORDER ko "
@@ -1330,8 +1330,8 @@ public class KoiOrderDAO implements Serializable {
                     Date estimatedDelivery = rs.getDate("EstimatedDelivery");
                     String type = rs.getString("Type");
                     int createBy = rs.getInt("CreatedBy");
-
-                    KoiOrderDTO koiOrder = new KoiOrderDTO(koiOrderID, fullName, deliveryDate, status, estimatedDelivery, type, createBy);
+                    int CustomerID = rs.getInt("CustomerID");
+                    KoiOrderDTO koiOrder = new KoiOrderDTO(koiOrderID, CustomerID, fullName, deliveryDate, status, estimatedDelivery, type, createBy);
                     koiOrderList.add(koiOrder);
                 }
             }
@@ -1358,7 +1358,7 @@ public class KoiOrderDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT ko.KoiOrderID, c.FirstName + ' ' + c.LastName AS FullName, "
+                String sql = "SELECT ko.KoiOrderID, c.CustomerID, c.FirstName + ' ' + c.LastName AS FullName, "
                         + "ko.DeliveryDate, ko.EstimatedDelivery, ko.Type, ko.Status, "
                         + "ko.CreatedBy "
                         + "FROM KOIORDER ko "
@@ -1376,8 +1376,8 @@ public class KoiOrderDAO implements Serializable {
                     Date estimatedDelivery = rs.getDate("EstimatedDelivery");
                     String type = rs.getString("Type");
                     int createBy = rs.getInt("CreatedBy");
-
-                    KoiOrderDTO koiOrder = new KoiOrderDTO(koiOrderID, fullName, deliveryDate, status, estimatedDelivery, type, createBy);
+                    int CustomerID = rs.getInt("CustomerID");
+                    KoiOrderDTO koiOrder = new KoiOrderDTO(koiOrderID, CustomerID, fullName, deliveryDate, status, estimatedDelivery, type, createBy);
                     koiOrderList.add(koiOrder);
                 }
             }

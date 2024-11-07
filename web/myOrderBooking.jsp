@@ -29,7 +29,8 @@
         <div class="colorlib-loader"></div>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>       
         <div style=" margin: 20px;">  
-            <h2>Tour đã thanh toán</h2>
+            <h2 style="
+                text-align: center;">Tour đã thanh toán</h2>
             <c:if test="${not empty requestScope.orders}">
                 <c:forEach var="orders" items="${requestScope.orders}" varStatus="tourBookingDetailID">
                     <c:if test="${orders.status == 'Confirmed'}">               
@@ -116,7 +117,8 @@
                 </c:forEach>
             </c:if>
 
-            <h2>Tour đã đi</h2>
+            <h2 style="
+                text-align: center;">Tour đã đi</h2>
             <c:if test="${not empty requestScope.orders}">
                 <c:forEach var="orders" items="${requestScope.orders}" varStatus="tourBookingDetailID">
                     <!-- Hiển thị các tour có trạng thái Canceled -->
@@ -205,7 +207,8 @@
                 </c:forEach>
             </c:if>
 
-            <h2>Tour đã hủy</h2>
+            <h2 style="
+                text-align: center;">Tour đã hủy</h2>
             <c:if test="${not empty requestScope.orders}">
                 <c:forEach var="orders" items="${requestScope.orders}" varStatus="tourBookingDetailID">
                     <c:if test="${orders.status == 'Canceled'}">               

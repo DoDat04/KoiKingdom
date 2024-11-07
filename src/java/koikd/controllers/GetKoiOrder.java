@@ -68,8 +68,6 @@ public class GetKoiOrder extends HttpServlet {
             } else {
                 searchData = nameOrder;
             }
-            System.out.println("ẻwe"+searchData);  
-            
             
             // Parse index as an integer
             int pageIndex = Integer.parseInt(index);

@@ -59,7 +59,6 @@
         </c:if>
 
         <div style="margin-top: 25vh; margin-left: 17%; margin-right: 6%;" class="main-content">         
-
             <table id="content" class="styled-table">
                 <thead>
                     <tr>

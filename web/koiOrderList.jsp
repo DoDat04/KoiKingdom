@@ -27,6 +27,7 @@
                         <th>Order Date</th>
                         <th>Estimated Date</th>
                         <th>Action</th>
+                        <th>Detail</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,6 +43,15 @@
                             </td>
                             <td>
                                 <button type="submit" class="btn btn-primary">Update</button>
+                                </form>
+                            </td>
+
+                            <td>
+                                <form action="GetKoiOrderDetail" method="POST" style="display:inline;">
+                                    <input type="" name="orderID" value="${farm.koiOrderID}">
+                                    <input type="" name="customerID" value="${farm.customerID}">
+                                     <input type="" name="userType" value="consulting">
+                                    <button class="btn-detail" type="submit" style="border: none; background: none;">Detail</button>
                                 </form>
                             </td>
                         </tr>
@@ -60,8 +70,8 @@
             <c:if test="${not empty requestScope.ERROR_NULL}">
                 <div class="error-message">${requestScope.ERROR_NULL}</div>
             </c:if>
-                <div id="toastBox"></div>
-        <script src="js/showToast.js"></script>
+            <div id="toastBox"></div>
+            <script src="js/showToast.js"></script>
         </div>
     </body>
 </html>

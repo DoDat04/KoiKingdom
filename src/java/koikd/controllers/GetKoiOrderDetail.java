@@ -81,7 +81,8 @@ public class GetKoiOrderDetail extends HttpServlet {
                 request.setAttribute("farmNames", farmCollection);
                 request.setAttribute("myOrders", koiOrderList);
             }
-           
+
+            request.setAttribute("errorMessage", "No koi order details available.");
 
             request.getRequestDispatcher(url).forward(request, response);
         } catch (SQLException ex) {
@@ -90,7 +91,7 @@ public class GetKoiOrderDetail extends HttpServlet {
             Logger.getLogger(GetKoiOrderDetail.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
