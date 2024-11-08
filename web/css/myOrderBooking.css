@@ -6,7 +6,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     Created on : Oct 3, 2024, 6:35:54 PM
     Author     : Minhngo
 */
+.menu-button {
+    font-size: 16px;
+    padding: 10px 20px;
+    margin: 0 5px;
+    background-color: #f0f0f0;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color 0.3s, border-color 0.3s;
+}
 
+.menu-button:hover {
+    color: #ff6f61;
+}
+
+.menu-button.active {
+    color: #ff6f61;
+    border-bottom: 2px solid #ff6f61;
+}  
 
 .order_booking {
     display: flex;
@@ -172,3 +190,4 @@ input#rate-edit-1:checked ~ .content::before {
 #review {
     cursor: pointer;
 }
+

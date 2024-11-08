@@ -24,13 +24,20 @@
         <link href="css/toast.css" rel="stylesheet">
         <link rel="stylesheet" href="css/myOrderBooking.css"/>
         <link rel="icon" href="img/logo-web.png" type="image/x-icon" sizes="any">
-    </head>
     <body>
         <div class="colorlib-loader"></div>
         <jsp:include page="headerForCustomer.jsp" flush="true"/>       
         <div style=" margin: 20px;">  
+
+        <div style="text-align: center; margin-bottom: 20px;">
+            <button onclick="showSection('paidTours', this)" class="menu-button">Paid Tours</button>
+            <button onclick="showSection('completedTours', this)" class="menu-button">Completed Tours</button>
+            <button onclick="showSection('canceledTours', this)" class="menu-button">Canceled Tours</button>
+        </div>
+        
+        <div id="paidTours" style="display: none;">
             <h2 style="
-                text-align: center;">Tour đã thanh toán</h2>
+                text-align: center;">Paid Tours</h2>
             <c:if test="${not empty requestScope.orders}">
                 <c:forEach var="orders" items="${requestScope.orders}" varStatus="tourBookingDetailID">
                     <c:if test="${orders.status == 'Confirmed'}">               
@@ -116,9 +123,11 @@
                     </c:if>
                 </c:forEach>
             </c:if>
-
+        </div>
+            
+        <div id="completedTours" style="display: none;">
             <h2 style="
-                text-align: center;">Tour đã đi</h2>
+                text-align: center;">Completed Tours<h2>
             <c:if test="${not empty requestScope.orders}">
                 <c:forEach var="orders" items="${requestScope.orders}" varStatus="tourBookingDetailID">
                     <!-- Hiển thị các tour có trạng thái Canceled -->
@@ -206,9 +215,11 @@
                     </c:if>
                 </c:forEach>
             </c:if>
-
+        </div>
+                    
+        <div id="canceledTours" style="display: none;">
             <h2 style="
-                text-align: center;">Tour đã hủy</h2>
+                text-align: center;">Canceled Tours</h2>
             <c:if test="${not empty requestScope.orders}">
                 <c:forEach var="orders" items="${requestScope.orders}" varStatus="tourBookingDetailID">
                     <c:if test="${orders.status == 'Canceled'}">               
@@ -246,6 +257,31 @@
                     </c:if>
                 </c:forEach>
             </c:if>
+        </div>
+
+            <script>
+                function showSection(sectionId, button) {
+                    // Ẩn tất cả các phần nội dung
+                    document.getElementById("paidTours").style.display = "none";
+                    document.getElementById("completedTours").style.display = "none";
+                    document.getElementById("canceledTours").style.display = "none";
+
+                    // Hiển thị phần nội dung được chọn
+                    document.getElementById(sectionId).style.display = "block";
+
+                    // Xóa lớp active khỏi tất cả các nút
+                    const buttons = document.querySelectorAll(".menu-button");
+                    buttons.forEach(btn => btn.classList.remove("active"));
+
+                    // Thêm lớp active cho nút được chọn
+                    button.classList.add("active");
+                }
+
+                // Hiển thị phần "Paid Tours" mặc định khi trang tải
+                document.addEventListener("DOMContentLoaded", function() {
+                    showSection("paidTours", document.querySelector(".menu-button"));
+                });
+        </script>
 
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
