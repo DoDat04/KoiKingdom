@@ -224,6 +224,7 @@ public class TourBookingDetailDAO implements Serializable {
     /**
      * Get All Tour Booking Detail
      *
+     * @param consultingID
      * @return
      * @throws SQLException
      * @throws ClassNotFoundException
@@ -241,8 +242,7 @@ public class TourBookingDetailDAO implements Serializable {
                         + "FROM TOURBOOKINGDETAIL t "
                         + "INNER JOIN BOOKING b ON t.CustomerID = b.CustomerID "
                         + "INNER JOIN TOUR tour ON t.TourID = tour.TourID "
-                        + // INNER JOIN với bảng TOUR
-                        "WHERE tour.Consulting= ?"; // Điều kiện lọc theo consultingID
+                        + "WHERE tour.Consulting = ? AND t.Status IN ('Confirmed', 'Completed')";
 
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, consultingID); // Gán giá trị cho consultingID

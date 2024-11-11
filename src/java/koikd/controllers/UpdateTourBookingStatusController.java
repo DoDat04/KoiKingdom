@@ -47,6 +47,7 @@ public class UpdateTourBookingStatusController extends HttpServlet {
             if (tourBookingDetailIDParam != null && !tourBookingDetailIDParam.isEmpty()) {
                 int tourBookingDetailID = Integer.parseInt(tourBookingDetailIDParam);
                 dao.updateTourBookingDetailStatus(tourBookingDetailID, newStatus);
+                request.setAttribute("UPDATE_STATUS_TOUR", "Status updated successfully!");
             }            
             
             List<TourBookingDetailDTO> listDTO = dao.getAllTourBookingDetail(consuID);

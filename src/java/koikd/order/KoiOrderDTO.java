@@ -25,8 +25,26 @@ public class KoiOrderDTO implements Serializable {
     private int createBy;
     private double costShipping;
     private String shippingAddress;
+    private String tempStatus;
+    private String payment;
     private KoiDTO koiDTO;
     private KoiOrderDetailDTO koiOrderDetailDTO;
+
+    public String getPayment() {
+        return payment;
+    }
+
+    public void setPayment(String payment) {
+        this.payment = payment;
+    }
+
+    public String getTempStatus() {
+        return tempStatus;
+    }
+
+    public void setTempStatus(String tempStatus) {
+        this.tempStatus = tempStatus;
+    }
 
     public KoiDTO getKoiDTO() {
         return koiDTO;
@@ -71,13 +89,14 @@ public class KoiOrderDTO implements Serializable {
         this.shippingAddress = shippingAddress;
     }
   
-    public KoiOrderDTO(int koiOrderID, int customerID, Date deliveryDate, boolean status, Date estimatedDelivery, String type) {
+    public KoiOrderDTO(int koiOrderID, int customerID, Date deliveryDate, boolean status, Date estimatedDelivery, String type, String tempStatus) {
         this.koiOrderID = koiOrderID;
         this.customerID = customerID;
         this.deliveryDate = deliveryDate;
         this.status = status;
         this.estimatedDelivery = estimatedDelivery;
         this.type = type;
+        this.tempStatus = tempStatus;
     }
 
     public KoiOrderDTO(int koiOrderID,int customerID, String fullName, Date deliveryDate, boolean status, Date estimatedDelivery, String type, int createBy) {
@@ -91,7 +110,7 @@ public class KoiOrderDTO implements Serializable {
         this.createBy = createBy;
     }
     
-    public KoiOrderDTO(int koiOrderID, int customerID, Date deliveryDate, boolean status, Date estimatedDelivery, String type, int deliveryBy) {
+    public KoiOrderDTO(int koiOrderID, int customerID, Date deliveryDate, boolean status, Date estimatedDelivery, String type, int deliveryBy, String tempStatus) {
         this.koiOrderID = koiOrderID;
         this.customerID = customerID;
         this.deliveryDate = deliveryDate;
@@ -99,6 +118,7 @@ public class KoiOrderDTO implements Serializable {
         this.estimatedDelivery = estimatedDelivery;
         this.type = type;
         this.deliveryBy = deliveryBy;
+        this.tempStatus = tempStatus;
     }
 
     public KoiOrderDTO(int koiOrderID, int customerID, Date deliveryDate, boolean status, Date estimatedDelivery) {

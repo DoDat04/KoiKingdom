@@ -41,7 +41,7 @@ public class UpdateStatusKoiOrder extends HttpServlet {
        String koiOrderID = request.getParameter("koiOrderID");
             String status = request.getParameter("status");
             KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
-            KoiOrderDTO updatedOrder = koiOrderDAO.updateStatusOrder(Integer.parseInt(koiOrderID), Boolean.parseBoolean(status));
+            KoiOrderDTO updatedOrder = koiOrderDAO.updateStatusOrder(Integer.parseInt(koiOrderID), status);
         } catch (SQLException ex) {
             Logger.getLogger(UpdateStatusKoiOrder.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {

@@ -68,6 +68,13 @@
                                 <label for="txtQuantity" style="font-weight: bold;">Quantity</label>
                                 <input type="number" id="txtQuantity" min="1" max="50" name="txtQuantity" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
                             </div>
+                            <div class="mb-3" style="flex: 1 1 calc(50% - 10px); margin-bottom: 15px;">
+                                <label for="paymentMethod" style="font-weight: bold;">Payment Method</label>
+                                <select id="paymentMethod" name="paymentMethod" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                                    <option value="cash">Cash</option>
+                                    <option value="credit">Credit Transfer</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 

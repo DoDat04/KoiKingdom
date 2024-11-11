@@ -38,6 +38,7 @@ public class CreateKoiOrderFormController extends HttpServlet {
             // Lấy thông tin đơn hàng từ form
             int custID = Integer.parseInt(request.getParameter("txtCustID"));
             String deliveryDateStr = request.getParameter("txtDelivery");
+            String paymentMethod = request.getParameter("paymentMethod");
 
             // Chuyển đổi chuỗi thành đối tượng Date
             Date deliveryDate = DATE_FORMAT.parse(deliveryDateStr);
@@ -49,6 +50,8 @@ public class CreateKoiOrderFormController extends HttpServlet {
             koiOrderDTO.setStatus(false);
             koiOrderDTO.setType("Offline");
             koiOrderDTO.setCreateBy(consultingID);
+            koiOrderDTO.setTempStatus("In Process");
+            koiOrderDTO.setPayment(paymentMethod);
 
             KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
             int koiOrderID = koiOrderDAO.createKoiOrder(koiOrderDTO);  // Lấy KoiOrderID sau khi tạo

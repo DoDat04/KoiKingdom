@@ -185,6 +185,8 @@ public class VNPayCallBackController extends HttpServlet {
                                 koiDto.setStatus(false);
                                 koiDto.setType("Online");
                                 koiDto.setShippingAddress(custAddress);
+                                koiDto.setTempStatus("In Process");
+                                koiDto.setPayment("credit");
 
                                 String fullAddress = custAddress;
 

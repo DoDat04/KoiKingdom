@@ -211,7 +211,7 @@ public class CustomTourDAO implements Serializable {
             if (conn != null) {
                 String sql = "SELECT [RequestID], [CustomerID], [FullName], [Duration], [StartDate], "
                         + "[EndDate], [QuotationPrice], [Status], [ManagerApprovalStatus], [DepartureLocation], [FarmName], "
-                        + "[KoiTypeName], [Quantity], [Image], [DetailRejected], [Checked] FROM [dbo].[CUSTOMTOURREQUEST] ";
+                        + "[KoiTypeName], [Quantity], [Image], [DetailRejected], [Checked] FROM [dbo].[CUSTOMTOURREQUEST] ORDER BY [RequestID] DESC ";
                 pst = conn.prepareStatement(sql);
                 rs = pst.executeQuery();
 

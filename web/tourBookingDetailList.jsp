@@ -22,7 +22,15 @@
     </head>
     <body>
         <jsp:include page="headerForConsulting.jsp" flush="true"/>
-
+        
+        <c:if test="${not empty requestScope.UPDATE_STATUS_TOUR}">
+            <script>
+                window.onload = function () {
+                    showToast('${requestScope.UPDATE_STATUS_TOUR}', 'success');
+                };
+            </script>   
+        </c:if>
+        
         <div style="margin-top: 25vh; margin-left: 17%;" class="main-content"> 
             <h1 style="text-align: center">Tour Detail Management</h1>
             <table id="content" class="styled-table">

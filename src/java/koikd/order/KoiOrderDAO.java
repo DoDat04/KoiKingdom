@@ -42,7 +42,8 @@ public class KoiOrderDAO implements Serializable {
                         + "    O.Status, \n"
                         + "    O.EstimatedDelivery, \n"
                         + "    O.DeliveryBy, \n"
-                        + "    O.Type \n"
+                        + "    O.Type, \n"
+                        + "    O.TempStatus \n"
                         + "FROM \n"
                         + "    [dbo].[KOIORDER] O \n"
                         + "INNER JOIN \n"
@@ -91,9 +92,10 @@ public class KoiOrderDAO implements Serializable {
                     Date estimatedDelivery = rs.getDate("EstimatedDelivery");
                     String type = rs.getString("Type");
                     int deliveryBy = rs.getInt("DeliveryBy");
+                    String tempStatus = rs.getString("TempStatus");
 
                     // Create the DTO and add to the list
-                    KoiOrderDTO orderDTO = new KoiOrderDTO(koiOrderID, customerID, deliveryDate, status, estimatedDelivery, type, deliveryBy);
+                    KoiOrderDTO orderDTO = new KoiOrderDTO(koiOrderID, customerID, deliveryDate, status, estimatedDelivery, type, deliveryBy, tempStatus);
                     list.add(orderDTO);
                 }
             }
@@ -362,7 +364,8 @@ public class KoiOrderDAO implements Serializable {
                         + "    C.CustomerID, \n"
                         + "    O.DeliveryDate, \n"
                         + "    O.Status, \n"
-                        + "    O.EstimatedDelivery, \n" // Thêm cột EstimatedDelivery
+                        + "    O.EstimatedDelivery, \n"
+                        + "    O.TempStatus, \n"
                         + "    O.Type \n"
                         + "FROM \n"
                         + "    [dbo].[KOIORDER] O\n"
@@ -382,9 +385,9 @@ public class KoiOrderDAO implements Serializable {
                     boolean status = rs.getBoolean("Status");
                     Date estimatedDelivery = rs.getDate("EstimatedDelivery");
                     String type = rs.getString("Type");
+                    String tempStatus = rs.getString("TempStatus");
                     // Tạo DTO từ dữ liệu lấy được
-                    KoiOrderDTO dao = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery,
-                            type);
+                    KoiOrderDTO dao = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery, type, tempStatus);
                     list.add(dao);
                 }
             }
@@ -561,8 +564,8 @@ public class KoiOrderDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "INSERT INTO [dbo].[KOIORDER]([CustomerID], [DeliveryDate], [Status], [EstimatedDelivery], [Type], [CreatedBy]) "
-                        + "VALUES(?, ?, ?, NULL, ?, ?)";
+                String sql = "INSERT INTO [dbo].[KOIORDER]([CustomerID], [DeliveryDate], [Status], [EstimatedDelivery], [Type], [CreatedBy], [TempStatus], [Payment]) "
+                        + "VALUES(?, ?, ?, NULL, ?, ?, ?, ?)";
                 pst = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); // Lấy giá trị khóa tự động
                 // sinh
                 pst.setInt(1, koiOrderDTO.getCustomerID());
@@ -570,6 +573,8 @@ public class KoiOrderDAO implements Serializable {
                 pst.setBoolean(3, koiOrderDTO.isStatus());
                 pst.setString(4, koiOrderDTO.getType());
                 pst.setInt(5, koiOrderDTO.getCreateBy());
+                pst.setString(6, koiOrderDTO.getTempStatus());
+                pst.setString(7, koiOrderDTO.getPayment());
 
                 int affectedRows = pst.executeUpdate();
                 if (affectedRows > 0) {
@@ -722,27 +727,27 @@ public class KoiOrderDAO implements Serializable {
      * Update Status Order
      *
      * @param koiOrderID
-     * @param status
+     * @param tempStatus
      * @return
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public KoiOrderDTO updateStatusOrder(int koiOrderID, boolean status) throws SQLException, ClassNotFoundException {
+    public KoiOrderDTO updateStatusOrder(int koiOrderID, String tempStatus) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement pst = null;
         KoiOrderDTO updatedOrder = new KoiOrderDTO();
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "UPDATE [dbo].[KOIORDER] SET [Status] = ? WHERE [KoiOrderID] = ?;";
+                String sql = "UPDATE [dbo].[KOIORDER] SET [TempStatus] = ? WHERE [KoiOrderID] = ?;";
                 pst = conn.prepareStatement(sql);
-                pst.setBoolean(1, status);
+                pst.setString(1, tempStatus);
                 pst.setInt(2, koiOrderID);
 
                 int affectedRows = pst.executeUpdate();
 
                 if (affectedRows > 0) {
-                    updatedOrder.setStatus(status);
+                    updatedOrder.setTempStatus(tempStatus);
 
                 }
             }
@@ -1202,6 +1207,7 @@ public class KoiOrderDAO implements Serializable {
                         + "    O.DeliveryDate, \n"
                         + "    O.Status, \n"
                         + "    O.EstimatedDelivery, \n"
+                        + "    O.TempStatus, \n"
                         + "    O.Type \n"
                         + "FROM \n"
                         + "    [dbo].[KOIORDER] O\n"
@@ -1234,9 +1240,10 @@ public class KoiOrderDAO implements Serializable {
                     boolean status = rs.getBoolean("Status");
                     Date estimatedDelivery = rs.getDate("EstimatedDelivery");
                     String type = rs.getString("Type");
+                    String tempStatus = rs.getString("TempStatus");
 
                     // Create DTO and add to the list
-                    KoiOrderDTO order = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery, type);
+                    KoiOrderDTO order = new KoiOrderDTO(KoiOrderID, customerId, deliveryDate, status, estimatedDelivery, type, tempStatus);
                     list.add(order);
                 }
             }
@@ -1417,5 +1424,3 @@ public class KoiOrderDAO implements Serializable {
     }
 }
 
-// 
-// 
