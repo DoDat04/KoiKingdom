@@ -1552,7 +1552,7 @@ public class KoiOrderDAO implements Serializable {
                         + " INNER JOIN [dbo].[CUSTOMER] b ON a.CustomerID = b.CustomerID "
                         + " INNER JOIN [dbo].[KOIORDERDETAIL] c ON a.KoiOrderID = c.KoiOrderID "
                         + " INNER JOIN [dbo].[KOI] d ON c.KoiID = d.KoiID "
-                        + " WHERE a.CancelAt IS NULL ";
+                        + " WHERE a.CancelAt IS NOT NULL ";
                 if (customerName != null && !customerName.isEmpty()) {
                     sql += " AND (b.FirstName LIKE ? OR b.LastName LIKE ?)";
                 }
