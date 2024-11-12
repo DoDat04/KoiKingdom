@@ -68,6 +68,9 @@
                             <a href="tour-booking-detail-list?employeeID=${sessionScope.consultingID}" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Tour Detail Management</a>
                         </li>
                         <li class="menu-item">
+                            <a href="GetTourCustomDetailListController" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Tour Custom Management</a>
+                        </li>
+                        <li class="menu-item">
                             <a href="home?action=koiOrderForm" style="color: black"><i style='font-size:24px' class='fas'>&#xF478;</i>Create Koi Order</a>
                         </li>
                         <li class="menu-item">

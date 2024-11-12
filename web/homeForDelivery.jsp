@@ -58,7 +58,8 @@
             <c:set var="updateSuccessDelivery" value="${null}" scope="session"/>
         </c:if>
 
-        <div style="margin-top: 25vh; margin-left: 17%; margin-right: 6%;" class="main-content">         
+        <div style="margin-top: 25vh; margin-left: 17%; margin-right: 6%;" class="main-content">    
+            <h1 style="text-align: center">Ship History</h1>
             <table id="content" class="styled-table">
                 <thead>
                     <tr>

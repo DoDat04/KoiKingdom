@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     rows.forEach(function(row) {
         var requestID = row.getAttribute("data-requestid");
-        var countdownTime = 30 * 1000; // 30 giây
+        var countdownTime = 300 * 1000; // 30 giây
         var currentTime = new Date().getTime();
         var countdownEndTimestamp = localStorage.getItem('countdownEndTimestamp_' + requestID);
         var expired = localStorage.getItem('expired_' + requestID);

@@ -173,19 +173,19 @@
                         <c:when test="${sessionScope.LOGIN_USER != null}">
                             <div class="form-group col-md-4">
                                 <label for="fullName"><strong>Full Name</strong></label>
-                                <input type="text" class="form-control" name="fullName" value="${sessionScope.LOGIN_USER.firstName} ${sessionScope.LOGIN_USER.lastName}" placeholder="Enter your full name" required>
+                                <input type="text" class="form-control" name="fullName" value="${sessionScope.LOGIN_USER.firstName} ${sessionScope.LOGIN_USER.lastName}" placeholder="Enter your full name" required readonly="">
                             </div>                
                         </c:when>
                         <c:otherwise>
                             <div class="form-group col-md-4">
                                 <label for="fullName"><strong>Full Name</strong></label>
-                                <input type="text" class="form-control" name="fullName" value="${sessionScope.lastName} ${sessionScope.firstName}" placeholder="Enter your full name" required>
+                                <input type="text" class="form-control" name="fullName" value="${sessionScope.lastName} ${sessionScope.firstName}" placeholder="Enter your full name" required readonly="">
                             </div>
                         </c:otherwise>
                     </c:choose> 
                     <div class="form-group col-md-4">
                         <label for="email"><strong>Email Address</strong></label>
-                        <input type="email" class="form-control" name="email" value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.LOGIN_GMAIL.email : sessionScope.LOGIN_USER.email}" required >
+                        <input type="email" class="form-control" name="email" value="${sessionScope.LOGIN_GMAIL != null ? sessionScope.LOGIN_GMAIL.email : sessionScope.LOGIN_USER.email}" required readonly="">
                     </div>
                     <div class="form-group col-md-4">
                         <label for="phone"><strong>Phone Number</strong></label>

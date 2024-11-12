@@ -269,6 +269,54 @@ public class TourBookingDetailDAO implements Serializable {
         return listTourBookingDetail;
     }
 
+    public List<TourBookingDetailDTO> getAllTourCustomBookingDetail() throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<TourBookingDetailDTO> listTourBookingDetail = new ArrayList<>();
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT DISTINCT t.TourBookingDetail, t.CustomerID, "
+                        + "b.LastName + ' ' + b.FirstName AS FullName, "
+                        + "t.TourID, t.Quantity, t.UnitPrice, t.TotalPrice, t.Status, t.TourType "
+                        + "FROM TOURBOOKINGDETAIL t "
+                        + "INNER JOIN CUSTOMER b ON t.CustomerID = b.CustomerID "
+                        + "WHERE t.TourType = 'Custom' AND t.Status IN ('Confirmed', 'Completed')";
+
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+
+                while (rs.next()) {
+                    int tourBookingDetailID = rs.getInt("TourBookingDetail");
+                    int custID = rs.getInt("CustomerID");
+                    String custName = rs.getString("FullName");  // Lấy giá trị từ cột FullName
+                    int tourID = rs.getInt("TourID");
+                    int quantity = rs.getInt("Quantity");
+                    double unitPrice = rs.getDouble("UnitPrice");
+                    double totalPrice = rs.getDouble("TotalPrice");
+                    String status = rs.getString("Status");
+                    String tourType = rs.getString("TourType");
+
+                    TourBookingDetailDTO listDTO = new TourBookingDetailDTO(tourBookingDetailID, custID, custName, tourID, tourType, quantity, unitPrice, totalPrice, status, tourType);
+                    listTourBookingDetail.add(listDTO);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return listTourBookingDetail;
+    }
+
     /**
      * Update Tour Booking Detail Status
      *
@@ -342,8 +390,7 @@ public class TourBookingDetailDAO implements Serializable {
         }
         return dto;
     }
-    
-    
+
     public ArrayList<TourBookingDetailDTO> getTourCancel() {
         ArrayList<TourBookingDetailDTO> result = new ArrayList<>();
         Connection connection = null;
@@ -368,12 +415,12 @@ public class TourBookingDetailDAO implements Serializable {
                         + " TOURBOOKINGDETAIL td "
                         + " INNER JOIN TOUR t ON td.tourID = t.tourID "
                         + " INNER JOIN CUSTOMER c ON td.customerID = c.customerID "
-                        + "WHERE td.status = 'Canceled' " 
+                        + "WHERE td.status = 'Canceled' "
                         + "ORDER BY td.TourBookingDetail";
 
                 stm = connection.prepareStatement(sql);
                 rs = stm.executeQuery();
-                
+
                 while (rs.next()) {
                     int tourBookingDetailID = rs.getInt("TourBookingDetail");
                     String lastName = rs.getString("lastName");
@@ -389,8 +436,8 @@ public class TourBookingDetailDAO implements Serializable {
                     // Tạo đối tượng DTO cho thông tin hủy tour
                     CustomerDTO customerDTO = new CustomerDTO(lastName, firstName, phoneNumber);
                     TourDTO tourDTO = new TourDTO(tourName, startDate, endDate);
-                    TourBookingDetailDTO dto = new TourBookingDetailDTO(tourBookingDetailID,totalPrice, cancelAt, customerDTO, tourDTO, reasonCancel);
-                    result.add(dto); 
+                    TourBookingDetailDTO dto = new TourBookingDetailDTO(tourBookingDetailID, totalPrice, cancelAt, customerDTO, tourDTO, reasonCancel);
+                    result.add(dto);
                 }
             }
         } catch (Exception e) {

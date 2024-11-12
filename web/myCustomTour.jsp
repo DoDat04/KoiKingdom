@@ -91,7 +91,7 @@
 
                                     <td>
                                         <c:if test="${customerTourList.status == 'Approved' && customerTourList.managerApprovalStatus == 'Approved'}">
-                                            <p style="color: red; font-weight: bold; font-size: 17px">Time left to decide: <span class="decision-timer">30</span></p>
+                                            <p style="color: red; font-weight: bold; font-size: 17px">Time left to decide: <span class="decision-timer">300</span></p>
                                             <div class="decision-buttons">
                                                 <form action="checkout" method="post">
                                                     <input type="hidden" name="requestid" value="${customerTourList.requestID}" />

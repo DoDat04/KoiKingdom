@@ -78,7 +78,7 @@ public class CreateFeedbackForCustomer extends HttpServlet {
             FeedbackDTO feedbackDTO = feedbackDAO.createFeedbackForCustomer(customerID, tourID, rating, feedback, bookingID);
             String jsonResponse;
             if (feedbackDTO != null) {
-                jsonResponse = "{\"success\": true, \"message\": \"Cảm ơn bạn đã đánh giá!\", \"feedbackID\": " + feedbackDTO.getFeedbackID() + "}";
+                jsonResponse = "{\"success\": true, \"message\": \"Thank you for your feedback!\", \"feedbackID\": " + feedbackDTO.getFeedbackID() + "}";
             } else {
                 jsonResponse = "{\"success\": false, \"message\": \"Đã xảy ra lỗi khi gửi đánh giá.\"}";
             }

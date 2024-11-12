@@ -154,7 +154,7 @@
         </jsp:include>
 
         <div style="margin-top: 25vh; margin-left: 17%; margin-right: 6%;" class="main-content">         
-
+            <h1>Koi Order Management</h1>
             <table id="content" class="styled-table">
                 <thead>
                     <tr>
