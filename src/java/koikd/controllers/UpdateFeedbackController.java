@@ -55,7 +55,7 @@ public class UpdateFeedbackController extends HttpServlet {
     System.out.println("rating: " + ratingStr);
 
             if (customerIDStr == null || tourIDStr == null || bookingIDStr == null || feedback == null || ratingStr == null) {
-                out.print("{\"success\": false, \"message\": \"Tất cả các trường đều là bắt buộc.\"}");
+                out.print("{\"success\": false, \"message\": \"All fields are compulsory.\"}");
                 return;
             }
 
@@ -67,7 +67,7 @@ public class UpdateFeedbackController extends HttpServlet {
                 bookingID = Integer.parseInt(bookingIDStr);
                 rating = Integer.parseInt(ratingStr);
             } catch (NumberFormatException e) {
-                out.print("{\"success\": false, \"message\": \"ID và đánh giá phải là số hợp lệ.\"}");
+                out.print("{\"success\": false, \"message\": \"IDs and reviews must be valid numbers.\"}");
                 return;
             }
 
@@ -75,15 +75,15 @@ public class UpdateFeedbackController extends HttpServlet {
             FeedbackDTO feedbackDTO = feedbackDAO.updateFeedbackForCustomer(customerID, tourID, rating, feedback, bookingID);
 
             if (feedbackDTO != null) {
-                String jsonResponse = "{\"success\": true, \"message\": \"Cảm ơn bạn đã đánh giá!\", \"feedbackID\": " + feedbackDTO.getFeedbackID() + "}";
+                String jsonResponse = "{\"success\": true, \"message\": \"Thank you for reviewing!\", \"feedbackID\": " + feedbackDTO.getFeedbackID() + "}";
                 out.print(jsonResponse);
             } else {
-                out.print("{\"success\": false, \"message\": \"Đã xảy ra lỗi khi gửi đánh giá.\"}");
+                out.print("{\"success\": false, \"message\": \"An error occurred when submitting a review.\"}");
             }
 
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(UpdateFeedbackController.class.getName()).log(Level.SEVERE, null, ex);
-            response.getWriter().print("{\"success\": false, \"message\": \"Đã xảy ra lỗi hệ thống.\"}");
+            response.getWriter().print("{\"success\": false, \"message\": \"A system error has occurred.\"}");
         }
     }
 

@@ -169,9 +169,9 @@
 
                                                                 <c:if test="${orders.status == 'Completed'}">
                                                                     <div class="thank-you-message" style="margin-top: 5px; color: green;">
-                                                                        Cảm ơn bạn đã đặt dịch vụ!
+                                                                        Thank you for booking!
                                                                         <br />
-                                                                        Xin vui lòng đánh giá dịch vụ của chúng tôi.
+                                                                       Please rate our services.
                                                                         <c:if test="${orders.feedbackStatus == 'false'}">
                                                                             <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reviewTour"
                                                                                data-tourid="${orders.tourID}" data-customerid="${orders.customerID}" data-bookingid="${orders.bookingID}" 
@@ -284,8 +284,8 @@
                                         </form>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                        <button type="button" class="btn btn-danger" onclick="submitCancelForm()">Xác nhận hủy</button>
+                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-danger" onclick="submitCancelForm()">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -364,7 +364,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Đánh Giá Dịch Vụ</h1>
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Service Review</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
 
@@ -375,7 +375,7 @@
                                             <input type="hidden" name="bookingID" value="">
 
                                             <div class="mb-3">
-                                                <label for="feedback" class="form-label">Phản hồi của bạn</label>
+                                                <label for="feedback" class="form-label">Your feedback</label>
                                                 <textarea class="form-control" id="feedback" name="feedback" rows="3" required></textarea>
                                             </div>
 
@@ -394,8 +394,8 @@
                                             </div>                                  
 
                                             <div class="modal-footer">
-                                                <button type="button" id="close" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                                <button type="submit" class="btn btn-primary" id="submitReview">Gửi Đánh Giá</button>
+                                                <button type="button" id="close" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary" id="submitReview">Submit Review</button>
                                             </div>
                                         </form>
                                     </div>
@@ -430,7 +430,7 @@
                                             }
                                         },
                                         error: function (xhr, status, error) {
-                                            showToast('Đánh giá của bạn đã được gửi thất bại!', 'error');
+                                            showToast('Your review has been submitted failed!', 'error');
                                         }
                                     });
                                 });
@@ -539,7 +539,7 @@
                                             }
                                         },
                                         error: function (xhr, status, error) {
-                                            showToast('Đánh giá của bạn đã được gửi thất bại!', 'error');
+                                            showToast('Your review has been submitted failed!', 'error');
                                         }
                                     });
                                 });
