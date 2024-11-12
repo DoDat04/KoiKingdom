@@ -113,8 +113,8 @@ public class VNPayCallBackController extends HttpServlet {
                     // Nếu thanh toán thành công mới sendEmail, createOrder, addOrderDetail và RemoveCookie
                     if ("00".equals(transactionStatus)) {
                         url = SUCCESS_VNPAY;
-                        message = "Giao dịch thành công!";
-                        mail_message = "Đơn xác nhận đã được gửi qua email. Vui lòng kiểm tra email!";
+                        message = "Transaction success!";
+                        mail_message = "The confirmation form has been sent via email. Please check the email!";
                         notificationSvg = "<svg viewBox='0 0 52 52'><path class='checkmark' fill='none' stroke='green' stroke-width='4' d='M14 27 L22 35 L38 19' /></svg>";
 
                         // Iterate through the cart items to insert each tour
@@ -245,7 +245,7 @@ public class VNPayCallBackController extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(VNPayCallBackController.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            response.sendRedirect(url);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 
