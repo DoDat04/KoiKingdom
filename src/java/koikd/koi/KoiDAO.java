@@ -513,6 +513,118 @@ public class KoiDAO implements Serializable {
         }
         return dto;
     }
+    
+    public List<KoiDTO> manageKoi(int index) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<KoiDTO> koiList = new ArrayList<>();
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT KoiID, KoiName, Age, Length, Weight, Price "
+                        + "FROM KOI ";
+                // Add pagination
+                sql += "ORDER BY KoiID \n"
+                        + "OFFSET ? ROWS \n"
+                        + "FETCH NEXT 8 ROWS ONLY;";
+
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, (index - 1) * 8);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    int koiID = rs.getInt("KoiID");
+                    String koiName = rs.getString("KoiName");
+                    int age = rs.getInt("Age");
+                    double length = rs.getDouble("Length");
+                    double weight = rs.getDouble("Weight");
+                    double price = rs.getDouble("Price");    
+                    KoiDTO koi = new KoiDTO(koiID, koiName, age, length, weight, price);
+                    koiList.add(koi);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return koiList;
+    }
+    
+    public int getNumberPageInManagePage() throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int countPage = 0;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT COUNT(*) "
+                        + "FROM KOI ";
+                stm = conn.prepareStatement(sql);
+
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    int total = rs.getInt(1);
+                    countPage = total / 8;
+
+                    if (total % 8 != 0) {
+                        countPage++;
+                    }
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return countPage;
+    }
+    
+    public boolean updatePrice(int koiID, double price) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        boolean result = false;
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "UPDATE KOI "
+                        + "SET Price = ? "
+                        + "WHERE KoiID = ? ";
+                stm = con.prepareStatement(sql);
+                stm.setDouble(1, price);               // Set the tour ID for the WHERE clause
+                stm.setInt(2, koiID);
+                int rowsUpdated = stm.executeUpdate();
+                result = rowsUpdated > 0;  // Kiểm tra nếu có hàng nào được cập nhật
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
 
     public static void main(String[] args) throws SQLException {
         KoiDAO services = new KoiDAO();

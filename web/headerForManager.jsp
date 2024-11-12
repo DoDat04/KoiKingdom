@@ -61,38 +61,49 @@
                                 </div>
                             </li>                 
                         </div>
-                        <li class="menu-item">
-                            <a href="count" style="color: black"><i class="fas fa-chart-simple" style='font-size:24px'></i>Statistic</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="managecustomer" style="color: black"><i class="fa-solid fa-users" style='font-size:24px'></i>Customer</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="manageemployee" style="color: black"><i class="fa-solid fa-user-group" style='font-size:24px'></i>Employee</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="managetour" style="color: black"><i class="fa-solid fa-list" style='font-size:24px'></i>Tour</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="createTour.jsp" style="color: black"><i class="fa-solid fa-plus" style='font-size:24px'></i>Add Tour</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="managefarm" style="color: black"><i class="fa-solid fa-tractor" style='font-size:24px'></i>Farm</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="addEmployee.jsp" style="color: black"><i class="fas fa-user-plus" style='font-size:24px'></i>Add Employee</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="GetKoiOrder?userType=manage" style="color: black"><i class="fas fa-user-plus" style='font-size:24px'></i>Manage Order Koi</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="custom-tour" style="color: black"><i class="fas fa-suitcase" style='font-size:24px'></i>Custom Tour Request</a>
-                        </li>
-                        <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
-                                <i style='font-size:24px' class='fas'>&#xf406;</i>Profile</a></li>
-                        <li class="menu-item">
-                            <a href="home?action=Logout" style="color: black"><i style="font-size:24px" class="fa">&#xf08b;</i>Sign out</a>
-                        </li>
+                        <div class="menu-list overflow-auto" style="max-height: 600px;">
+                            <li class="menu-item">
+                                <a href="count" style="color: black"><i class="fas fa-chart-simple" style='font-size:24px'></i>Statistic</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="managecustomer" style="color: black"><i class="fa-solid fa-users" style='font-size:24px'></i>Customer</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="manageemployee" style="color: black"><i class="fa-solid fa-user-group" style='font-size:24px'></i>Employee</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="managetour" style="color: black"><i class="fa-solid fa-plane" style='font-size:24px'></i>Tour</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="managekoi" style="color: black"><i class="fa-solid fa-fish"" style='font-size:24px'></i>Koi</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="createTour.jsp" style="color: black"><i class="fa-solid fa-plus" style='font-size:24px'></i>Add Tour</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="createTour.jsp" style="color: black"><i class="fa-solid fa-trash" style='font-size:24px'></i>Tour Canceled</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="createTour.jsp" style="color: black"><i class="fa-solid fa-trash" style='font-size:24px'></i>Koi Order Canceled</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="managefarm" style="color: black"><i class="fa-solid fa-tractor" style='font-size:24px'></i>Farm</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="addEmployee.jsp" style="color: black"><i class="fas fa-user-plus" style='font-size:24px'></i>Add Employee</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="GetKoiOrder?userType=manage" style="color: black"><i class="fa-solid fa-file" style='font-size:24px'></i>Manage Order Koi</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="custom-tour" style="color: black"><i class="fas fa-suitcase" style='font-size:24px'></i>Custom Tour Request</a>
+                            </li>
+                            <li class="menu-item"><a type="button" style="color: black" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal" href="home?action=Profile">
+                                    <i style='font-size:24px' class='fas'>&#xf406;</i>Profile</a></li>
+                            <li class="menu-item">
+                                <a href="home?action=Logout" style="color: black"><i style="font-size:24px" class="fa">&#xf08b;</i>Sign out</a>
+                            </li>
+                        </div>
                     </ul>
                 </c:when>
                 <c:otherwise>
