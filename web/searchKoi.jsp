@@ -1,6 +1,6 @@
 <%-- 
-    Document   : manageKoi
-    Created on : Nov 12, 2024, 7:24:24 PM
+    Document   : searchKoi
+    Created on : Nov 12, 2024, 8:47:34 PM
     Author     : Nguyen Huu Khoan
 --%>
 
@@ -185,22 +185,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="koi" items="${koi}">
+                        <c:forEach var="SEARCH_KOI" items="${SEARCH_KOI}">
                             <tr>
-                                <td>${koi.koiID}</td>
-                                <td>${koi.koiName}</td>
-                                <td>${koi.age}</td>
-                                <td>${koi.length}</td>
-                                <td>${koi.weight}</td>
-                                <td>${koi.price}</td>
+                                <td>${SEARCH_KOI.koiID}</td>
+                                <td>${SEARCH_KOI.koiName}</td>
+                                <td>${SEARCH_KOI.age}</td>
+                                <td>${SEARCH_KOI.length}</td>
+                                <td>${SEARCH_KOI.weight}</td>
+                                <td>${SEARCH_KOI.price}</td>
                                 <td>
-                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#updateModal${koi.koiID}">
+                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#updateModal${SEARCH_KOI.koiID}">
                                         Update
                                     </button>
 
                                 </td>
                                 <!-- modal update tour -->
-                        <div class="modal fade" id="updateModal${koi.koiID}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="updateModal${SEARCH_KOI.koiID}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -209,7 +209,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <!-- Form to update tour details -->
-                                        <form id="updateKoiForm${koi.koiID}" action="updatekoiprice" method="POST" onsubmit="return confirmUpdate();">
+                                        <form id="updateKoiForm${SEARCH_KOI.koiID}" action="updatekoiprice" method="POST" onsubmit="return confirmUpdate();">
                                             <!-- Thẻ label chỉ có tác dụng hiển thị văn bản và liên kết với cái input phía dưới nó thông qua for
                                             For của label khác với name của input
                                             For là trùng với id của input có tác dụng là
@@ -218,14 +218,14 @@
                                             -->
                                             <!-- Tour ID (Readonly) -->
                                             <div class="mb-3">
-                                                <label for="tourID${koi.koiID}" class="form-label">Tour ID</label>
-                                                <input type="text" class="form-control" id="koiID${koi.koiID}" name="koiID" value="${koi.koiID}" readonly>
+                                                <label for="tourID${SEARCH_KOI.koiID}" class="form-label">Tour ID</label>
+                                                <input type="text" class="form-control" id="koiID${SEARCH_KOI.koiID}" name="koiID" value="${SEARCH_KOI.koiID}" readonly>
                                             </div>
                                             
                                             <!-- Price -->
                                             <div class="mb-3">
-                                                <label for="koiPrice${koi.koiID}" class="form-label">Price</label>
-                                                <input type="number" class="form-control" id="koiPrice${koi.koiID}" name="price" value="${koi.price}">
+                                                <label for="koiPrice${SEARCH_KOI.koiID}" class="form-label">Price</label>
+                                                <input type="number" class="form-control" id="koiPrice${SEARCH_KOI.koiID}" name="price" value="${SEARCH_KOI.price}">
                                             </div>
                                             
 
@@ -255,30 +255,32 @@
                 </table>
 
                 <!-- phân trang -->
-                <jsp:useBean id="a" class="koikd.koi.KoiDAO" scope="request"></jsp:useBean>
+                <jsp:useBean id="a" class="koikd.tour.TourDAO" scope="request"></jsp:useBean>
+
                     <nav>
                         <ul class="pagination pagination-lg">
+                            <!-- Thiết lập trang trước và trang sau -->
                         <c:set var="prevPage" value="${pageIndex - 1}" />
                         <c:set var="nextPage" value="${pageIndex + 1}" />
 
-                        <!-- Nút Back -->
+                        <!-- Nút Back: chỉ hiển thị khi pageIndex > 1 -->
                         <c:if test="${pageIndex > 1}">
                             <li class="page-item">
-                                <a class="page-link" href="managekoi?index=${prevPage}">Back</a>
+                                <a class="page-link" href="searchkoi?index=${prevPage}&txtSearchValue=${param.txtSearchValue}">Back</a>
                             </li>
                         </c:if>
 
-                        <!-- Các trang phân trang -->
+                        <!-- Hiển thị các trang phân trang -->
                         <c:forEach begin="1" end="${numberOfPages}" var="i">
                             <li class="page-item ${pageIndex == i ? 'active' : ''}">
-                                <a class="page-link" href="managekoi?index=${i}">${i}</a>
+                                <a class="page-link" href="searchkoi?index=${i}&txtSearchValue=${param.txtSearchValue}">${i}</a>
                             </li>
                         </c:forEach>
 
-                        <!-- Nút Next -->
+                        <!-- Nút Next: chỉ hiển thị khi pageIndex < totalPage -->
                         <c:if test="${pageIndex < numberOfPages}">
                             <li class="page-item">
-                                <a class="page-link" href="managekoi?index=${nextPage}">Next</a>
+                                <a class="page-link" href="searchkoi?index=${nextPage}&txtSearchValue=${param.txtSearchValue}">Next</a>
                             </li>
                         </c:if>
                     </ul>
@@ -289,3 +291,4 @@
     </div>
 </body>
 </html>
+
