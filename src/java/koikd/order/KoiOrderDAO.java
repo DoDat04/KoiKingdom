@@ -171,7 +171,7 @@ public class KoiOrderDAO implements Serializable {
         }
         return result;
     }
-    
+
     public EmployeesDTO getEmployeeByEmployeeID(int employeeID) throws SQLException {
         Connection conn = null;
         PreparedStatement pst = null;
@@ -663,34 +663,32 @@ public class KoiOrderDAO implements Serializable {
         return koiOrderID; // Trả về KoiOrderID hoặc -1 nếu có lỗi
     }
 
-    
-      public static void main(String[] args) {
-        // Create a sample KoiOrderDTO object with test data
-        KoiOrderDTO koiOrderDTO = new KoiOrderDTO();
-        koiOrderDTO.setCustomerID(24);  // Example CustomerID
-        koiOrderDTO.setDeliveryDate(new Date());  // Current date for delivery
-        koiOrderDTO.setStatus(true);  // Set some sample status (true or false)
-        koiOrderDTO.setType("Standard");  // Example type
-        koiOrderDTO.setCreateBy(1);  // Example user who created the order
-        koiOrderDTO.setTempStatus("Pending");  // Example temporary status
-        koiOrderDTO.setPayment("Credit Card");  // Example payment method
-
-        // Now, call the createKoiOrder method to insert the order
-        try {
-            KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
-            int koiOrderID = koiOrderDAO.createKoiOrder(koiOrderDTO);
-
-            if (koiOrderID > 0) {
-                System.out.println("Successfully created KoiOrder with ID: " + koiOrderID);
-            } else {
-                System.out.println("Failed to create KoiOrder.");
-            }
-        } catch (SQLException e) {
-            System.out.println("Error occurred while creating KoiOrder: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-    
+//    public static void main(String[] args) {
+//        // Create a sample KoiOrderDTO object with test data
+//        KoiOrderDTO koiOrderDTO = new KoiOrderDTO();
+//        koiOrderDTO.setCustomerID(24);  // Example CustomerID
+//        koiOrderDTO.setDeliveryDate(new Date());  // Current date for delivery
+//        koiOrderDTO.setStatus(true);  // Set some sample status (true or false)
+//        koiOrderDTO.setType("Standard");  // Example type
+//        koiOrderDTO.setCreateBy(1);  // Example user who created the order
+//        koiOrderDTO.setTempStatus("Pending");  // Example temporary status
+//        koiOrderDTO.setPayment("Credit Card");  // Example payment method
+//
+//        // Now, call the createKoiOrder method to insert the order
+//        try {
+//            KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
+//            int koiOrderID = koiOrderDAO.createKoiOrder(koiOrderDTO);
+//
+//            if (koiOrderID > 0) {
+//                System.out.println("Successfully created KoiOrder with ID: " + koiOrderID);
+//            } else {
+//                System.out.println("Failed to create KoiOrder.");
+//            }
+//        } catch (SQLException e) {
+//            System.out.println("Error occurred while creating KoiOrder: " + e.getMessage());
+//            e.printStackTrace();
+//        }
+//    }
     /**
      *
      * @param koiOrderDetail O //
@@ -1540,4 +1538,77 @@ public class KoiOrderDAO implements Serializable {
         }
         return dto;
     }
+
+    public ArrayList<KoiOrderDTO> getCancelKoiOrder(String customerName) throws SQLException {
+        ArrayList<KoiOrderDTO> listCancel = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT b.FirstName, b.LastName, d.KoiName, a.CancelAt, a.ReasonCancel, a.CostShipping, a.Type "
+                        + " FROM [dbo].[KOIORDER] a "
+                        + " INNER JOIN [dbo].[CUSTOMER] b ON a.CustomerID = b.CustomerID "
+                        + " INNER JOIN [dbo].[KOIORDERDETAIL] c ON a.KoiOrderID = c.KoiOrderID "
+                        + " INNER JOIN [dbo].[KOI] d ON c.KoiID = d.KoiID "
+                        + " WHERE a.CancelAt IS NULL ";
+                if (customerName != null && !customerName.isEmpty()) {
+                    sql += " AND (b.FirstName LIKE ? OR b.LastName LIKE ?)";
+                }
+                pst = conn.prepareStatement(sql);
+                if (customerName != null && !customerName.isEmpty()) {
+                    pst.setString(1, "%" + customerName + "%");
+                    pst.setString(2, "%" + customerName + "%");
+                }
+                rs = pst.executeQuery();
+                if (rs != null) {
+                    int count = 0;
+                    while (rs.next()) {
+                        String firstName = rs.getString("FirstName");
+                        String lastName = rs.getString("LastName");
+                        String koiNameCancel = rs.getString("KoiName");
+                        Timestamp cancelAt = rs.getTimestamp("CancelAt");
+                        String reasonCancel = rs.getString("ReasonCancel");
+                        double costShipping = rs.getDouble("CostShipping");
+                        String type = rs.getString("Type");
+                        CustomerDTO customerDTO = new CustomerDTO(firstName, lastName);
+                        KoiDTO koiDTO = new KoiDTO(koiNameCancel);
+                        KoiOrderDTO koiOrderDTO = new KoiOrderDTO(customerDTO, koiDTO, cancelAt, reasonCancel, costShipping, type);
+                        listCancel.add(koiOrderDTO);
+                        count++;
+                    }
+                    System.out.println("Number of canceled orders: " + count); 
+                } else {
+                    System.out.println("Result set is null.");
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return listCancel;
+    }
+
+//    public static void main(String[] args) throws SQLException {
+//        KoiOrderDAO services = new KoiOrderDAO();
+//        ArrayList<KoiOrderDTO> koiCancelList = services.getCancelKoiOrder("");
+//        for (KoiOrderDTO koiOrderDTO : koiCancelList) {
+//            if (koiOrderDTO != null) {
+//                System.out.println(koiOrderDTO);
+//            } else {
+//                System.out.println("Null");
+//            }
+//        }
+//    }
 }

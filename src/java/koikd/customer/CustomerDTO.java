@@ -10,7 +10,8 @@ import java.io.Serializable;
  *
  * @author Do Dat
  */
-public class CustomerDTO implements Serializable{
+public class CustomerDTO implements Serializable {
+
     private int customerID;
     private String email;
     private String password;
@@ -33,7 +34,7 @@ public class CustomerDTO implements Serializable{
         this.accountType = accountType;
         this.status = status;
     }
-   
+
     public CustomerDTO(int customerID, String email, String password, String lastName, String firstName, String address, String accountType, String phoneNumber, boolean status) {
         this.customerID = customerID;
         this.email = email;
@@ -44,6 +45,11 @@ public class CustomerDTO implements Serializable{
         this.accountType = accountType;
         this.phoneNumber = phoneNumber;
         this.status = status;
+    }
+
+    public CustomerDTO(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public String getPhoneNumber() {
@@ -116,5 +122,5 @@ public class CustomerDTO implements Serializable{
 
     public void setStatus(boolean status) {
         this.status = status;
-    }   
+    }
 }

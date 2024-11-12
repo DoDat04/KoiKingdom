@@ -7,6 +7,7 @@ package koikd.order;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
+import koikd.customer.CustomerDTO;
 import koikd.koi.KoiDTO;
 
 /**
@@ -31,8 +32,26 @@ public class KoiOrderDTO implements Serializable {
     private String payment;
     private KoiDTO koiDTO;
     private KoiOrderDetailDTO koiOrderDetailDTO;
+    private CustomerDTO customerDTO;
+
+    public CustomerDTO getCustomerDTO() {
+        return customerDTO;
+    }
+
+    public void setCustomerDTO(CustomerDTO customerDTO) {
+        this.customerDTO = customerDTO;
+    }
     private Timestamp cancelAt;
     private String reasonCancel;
+
+    public KoiOrderDTO(CustomerDTO customerDTO, KoiDTO koiDTO, Timestamp cancelAt, String reasonCancel, double costShipping, String type) {
+        this.customerDTO = customerDTO;
+        this.koiDTO = koiDTO;
+        this.cancelAt = cancelAt;
+        this.reasonCancel = reasonCancel;
+        this.costShipping = costShipping;
+        this.type = type;
+    }
 
     public String getEmployeeFullName() {
         return employeeFullName;
@@ -63,7 +82,7 @@ public class KoiOrderDTO implements Serializable {
     public void setReasonCancel(String reasonCancel) {
         this.reasonCancel = reasonCancel;
     }
-    
+
     public String getPayment() {
         return payment;
     }
@@ -105,7 +124,7 @@ public class KoiOrderDTO implements Serializable {
         this.koiOrderDetailDTO = koiOrderDetailDTO;
         this.costShipping = costShipping;
     }
-    
+
     public KoiOrderDTO() {
     }
 
@@ -122,7 +141,7 @@ public class KoiOrderDTO implements Serializable {
         this.costShipping = costShipping;
         this.shippingAddress = shippingAddress;
     }
-  
+
     public KoiOrderDTO(int koiOrderID, int customerID, Date deliveryDate, boolean status, Date estimatedDelivery, String type, String tempStatus) {
         this.koiOrderID = koiOrderID;
         this.customerID = customerID;
@@ -133,7 +152,7 @@ public class KoiOrderDTO implements Serializable {
         this.tempStatus = tempStatus;
     }
 
-    public KoiOrderDTO(int koiOrderID,int customerID, String fullName, Date deliveryDate, boolean status, Date estimatedDelivery, String type, int createBy) {
+    public KoiOrderDTO(int koiOrderID, int customerID, String fullName, Date deliveryDate, boolean status, Date estimatedDelivery, String type, int createBy) {
         this.koiOrderID = koiOrderID;
         this.customerID = customerID;
         this.fullName = fullName;
@@ -143,7 +162,7 @@ public class KoiOrderDTO implements Serializable {
         this.type = type;
         this.createBy = createBy;
     }
-    
+
     public KoiOrderDTO(int koiOrderID, int customerID, Date deliveryDate, boolean status, Date estimatedDelivery, String type, int deliveryBy, String tempStatus) {
         this.koiOrderID = koiOrderID;
         this.customerID = customerID;
@@ -189,7 +208,7 @@ public class KoiOrderDTO implements Serializable {
     public void setShippingAddress(String shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
-    
+
     public String getFullName() {
         return fullName;
     }
@@ -264,7 +283,7 @@ public class KoiOrderDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "KoiOrderDTO{" + "koiOrderID=" + koiOrderID + ", customerID=" + customerID + ", fullName=" + fullName + ", deliveryDate=" + deliveryDate + ", status=" + status + ", estimatedDelivery=" + estimatedDelivery + ", type=" + type + ", deliveryBy=" + deliveryBy + ", createBy=" + createBy + ", costShipping=" + costShipping + ", shippingAddress=" + shippingAddress + ", koiDTO=" + koiDTO + ", koiOrderDetailDTO=" + koiOrderDetailDTO + '}';
+        return "KoiOrderDTO{" + "koiOrderID=" + koiOrderID + ", customerID=" + customerID + ", fullName=" + fullName + ", employeeFullName=" + employeeFullName + ", deliveryDate=" + deliveryDate + ", status=" + status + ", estimatedDelivery=" + estimatedDelivery + ", type=" + type + ", deliveryBy=" + deliveryBy + ", createBy=" + createBy + ", costShipping=" + costShipping + ", shippingAddress=" + shippingAddress + ", tempStatus=" + tempStatus + ", payment=" + payment + ", koiDTO=" + koiDTO + ", koiOrderDetailDTO=" + koiOrderDetailDTO + ", customerDTO=" + customerDTO + ", cancelAt=" + cancelAt + ", reasonCancel=" + reasonCancel + '}';
     }
 
 }
