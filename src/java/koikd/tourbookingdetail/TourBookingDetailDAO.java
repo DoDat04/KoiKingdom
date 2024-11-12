@@ -52,7 +52,7 @@ public class TourBookingDetailDAO implements Serializable {
                 int affectedRows = stm.executeUpdate();
                 if (affectedRows > 0) {
                     rs = stm.getGeneratedKeys();
-                    
+
                     if (rs.next()) {
                         tourBookingDetailID = rs.getInt(1);
                     }
@@ -110,15 +110,6 @@ public class TourBookingDetailDAO implements Serializable {
             e.printStackTrace();
         }
         return dto;
-    }
-
-    public static void main(String[] args) throws SQLException {
-        int custID = 11;
-        TourBookingDetailDAO dao = new TourBookingDetailDAO();
-        TourBookingDetailDTO dto = dao.getTourBookingDetailByCustomerID(custID, 3);
-        if (dto != null) {
-            System.out.println(dto);
-        }
     }
 
     public ArrayList<TourBookingDetailDTO> getTourBookingDetailListByCustomerID(int custID) throws SQLException {
@@ -314,10 +305,11 @@ public class TourBookingDetailDAO implements Serializable {
      * Cancel Tour Booking DetailByID
      *
      * @param ID
+     * @param reason
      * @return
      * @throws SQLException
      */
-    public TourBookingDetailDTO cancelTourBookingDetailByID(int ID) throws SQLException {
+    public TourBookingDetailDTO cancelTourBookingDetailByID(int ID, String reason) throws SQLException {
         Connection conn = null;
         PreparedStatement pst = null;
         TourBookingDetailDTO dto = null;
@@ -325,15 +317,16 @@ public class TourBookingDetailDAO implements Serializable {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 String sql = "UPDATE TOURBOOKINGDETAIL\n"
-                        + "SET Status = 'Canceled', CancelAt = GETDATE()\n"
+                        + "SET Status = 'Canceled', CancelAt = GETDATE(), ReasonCancel = ?\n"
                         + " WHERE TourBookingDetail = ?";
                 pst = conn.prepareStatement(sql);
-                pst.setInt(1, ID);
+                pst.setString(1, reason);  // Set the reason first
+                pst.setInt(2, ID);
                 int rowsUpdated = pst.executeUpdate();
 
                 if (rowsUpdated > 0) {
                     Timestamp cancelAt = new Timestamp(System.currentTimeMillis());
-                    dto = new TourBookingDetailDTO(rowsUpdated, sql, cancelAt);
+                    dto = new TourBookingDetailDTO(rowsUpdated, sql, cancelAt, reason);
                 }
             }
         } catch (Exception e) {

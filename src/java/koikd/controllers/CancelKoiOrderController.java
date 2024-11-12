@@ -14,17 +14,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import koikd.tourbookingdetail.TourBookingDetailDAO;
-import koikd.tourbookingdetail.TourBookingDetailDTO;
+import koikd.order.KoiOrderDAO;
+import koikd.order.KoiOrderDTO;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "CancelBookingController", urlPatterns = {"/cancel_booking"})
-public class CancelBookingController extends HttpServlet {
+@WebServlet(name = "CancelKoiOrderController", urlPatterns = {"/cancel_koi"})
+public class CancelKoiOrderController extends HttpServlet {
 
-    private static final String ORDERBOOKING_PAGE = "get-booking";
+    private static final String ORDERKOI_PAGE = "MyOrder";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,25 +39,29 @@ public class CancelBookingController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            String url = ORDERKOI_PAGE;
             /* TODO output your page here. You may use following sample code. */
-            String url = ORDERBOOKING_PAGE;
-            String bookingid = request.getParameter("bookingid");
+            String koiOrderID = request.getParameter("koiOrderID");
             String customerID = request.getParameter("customerID");
+            String dateDelivery = request.getParameter("");
             String reason = request.getParameter("reason");
-            
-            if (bookingid != null || !bookingid.isEmpty()) {
-                TourBookingDetailDAO bookingDetailDao = new TourBookingDetailDAO();
-                TourBookingDetailDTO bookingDetailDto = bookingDetailDao.cancelTourBookingDetailByID(Integer.parseInt(bookingid),reason);
+            System.out.println("koiOrderID" + koiOrderID);
+            System.out.println("customerID" + customerID);
+
+            if (koiOrderID != null || !koiOrderID.isEmpty()) {
+                KoiOrderDAO bookingDetailDao = new KoiOrderDAO();
+                KoiOrderDTO bookingDetailDto = bookingDetailDao.cancelTourBookingDetailByID(Integer.parseInt(koiOrderID), reason);
                 if (bookingDetailDto != null) {
                     request.setAttribute("Successfully", "Cancel successfully");
-                    request.setAttribute("customerID",customerID);
+                    request.setAttribute("customerID", customerID);
+                    request.setAttribute("dateDelivery", dateDelivery);
                 } else {
                     request.setAttribute("Error", "Cancel fail");
                 }
+                request.getRequestDispatcher(url).forward(request, response);
             }
-            request.getRequestDispatcher(url).forward(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(CancelBookingController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CancelKoiOrderController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

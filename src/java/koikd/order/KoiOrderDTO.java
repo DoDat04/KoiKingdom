@@ -5,6 +5,7 @@
 package koikd.order;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 import koikd.koi.KoiDTO;
 
@@ -30,6 +31,8 @@ public class KoiOrderDTO implements Serializable {
     private String payment;
     private KoiDTO koiDTO;
     private KoiOrderDetailDTO koiOrderDetailDTO;
+    private Timestamp cancelAt;
+    private String reasonCancel;
 
     public String getEmployeeFullName() {
         return employeeFullName;
@@ -39,6 +42,28 @@ public class KoiOrderDTO implements Serializable {
         this.employeeFullName = employeeFullName;
     }
 
+    public KoiOrderDTO(int koiOrderID, Timestamp cancelAt, String reasonCancel) {
+        this.koiOrderID = koiOrderID;
+        this.cancelAt = cancelAt;
+        this.reasonCancel = reasonCancel;
+    }
+
+    public Timestamp getCancelAt() {
+        return cancelAt;
+    }
+
+    public void setCancelAt(Timestamp cancelAt) {
+        this.cancelAt = cancelAt;
+    }
+
+    public String getReasonCancel() {
+        return reasonCancel;
+    }
+
+    public void setReasonCancel(String reasonCancel) {
+        this.reasonCancel = reasonCancel;
+    }
+    
     public String getPayment() {
         return payment;
     }

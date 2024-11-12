@@ -26,15 +26,18 @@ public class TourBookingDetailDTO implements Serializable {
     private int bookingID;
     private boolean feedbackStatus;
     private Timestamp cancelAt;
+    private String reasonCancel;
+    
 
     public TourBookingDetailDTO() {
     }
 
-    public TourBookingDetailDTO(int tourBookingDetailID, String status, Timestamp cancelAt) {
+    public TourBookingDetailDTO(int tourBookingDetailID, String status, Timestamp cancelAt, String reasonCancel) {
         this.tourBookingDetailID = tourBookingDetailID;
         this.status = status;
         this.cancelAt = cancelAt;
-    }   
+        this.reasonCancel = reasonCancel;
+    }  
     
     public TourBookingDetailDTO(int tourBookingDetailID, int customerID, int tourID, int quantity, double unitPrice, double totalPrice, String status, String tourType, int bookingID, boolean feedbackStatus) {
         this.tourBookingDetailID = tourBookingDetailID;
@@ -96,6 +99,14 @@ public class TourBookingDetailDTO implements Serializable {
         this.unitPrice = unitPrice;
         this.totalPrice = totalPrice;
         this.status = status;
+    } 
+
+    public String getReasonCancel() {
+        return reasonCancel;
+    }
+
+    public void setReasonCancel(String reasonCancel) {
+        this.reasonCancel = reasonCancel;
     }
 
     public Timestamp getCancelAt() {

@@ -74,7 +74,81 @@
                 <button onclick="showSection('completedKois', this)" class="menu-button">Completed Kois</button>
                 <button onclick="showSection('canceledKois', this)" class="menu-button">Canceled Kois</button>
             </div> 
-                        
+
+            <div id="canceledKois" style="display: none;">
+                <c:if test="${not empty requestScope.koiOrderDetails}">
+                    <!-- Biến để lưu trữ ngày giao hàng trước đó -->
+                    <c:set var="prevDeliveryDate" value="" />
+
+                    <!-- Duyệt qua danh sách đơn hàng -->
+                    <c:forEach var="koiOrderDetails" items="${requestScope.koiOrderDetails}" varStatus="koiOrderID">
+                        <c:if test="${requestScope.myOrder[koiOrderID.index].tempStatus == 'CancelAt'}">
+                            <!-- Xác định deliveryDate từ myOrder -->
+                            <c:set var="deliveryDate" value="${requestScope.myOrder[koiOrderID.index].deliveryDate}" />
+
+                            <!-- Kiểm tra nếu ngày giao hàng khác với ngày trước đó -->
+                            <c:if test="${deliveryDate != prevDeliveryDate}">
+                                <!-- Nếu có, in ra ngày giao hàng -->
+                                <div style="font-size: 20px; margin-bottom: 10px; margin-left: 30px; margin-top: 30px; color: #555; padding: 10px;">
+                                    Order Date: ${deliveryDate}
+                                </div>
+                                <!-- Cập nhật ngày giao hàng trước đó -->
+                                <c:set var="prevDeliveryDate" value="${deliveryDate}" />
+                            </c:if>
+
+                            <!-- Thông tin chi tiết đơn hàng -->
+                            <div class="order-details" style="display: flex; justify-content: center;">
+                                <div class="koi-section" style="padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 909px">
+                                    <!-- Hiển thị tên trang trại -->
+                                    <div style="font-size: 20px; margin-bottom: 17px;">
+                                        ${requestScope.farmNames[koiOrderID.index].farmName}
+                                    </div>
+                                    <form action="MyOrderDetail" method="post" id="orderForm" onclick="submitForm(event, this)">
+                                        <input type="hidden" name="koiOrderID" value="${koiOrderDetails.koiOrderID}" />
+                                        <input type="hidden" name="customerID" value="${requestScope.customerNames.customerID}" />
+                                        <div class="koi-item">
+                                            <div class="koi-row" style="display: flex; align-items: center;">
+                                                <!-- Image with proper spacing -->
+                                                <img src="${requestScope.koiNames[koiOrderID.index].image}" alt="Picture of KOI" style="width: 58px; margin-right: 10px;" />
+
+                                                <!-- Koi Name -->
+                                                <div class="koi-name" style="margin-top: 0;">
+                                                    ${requestScope.koiNames[koiOrderID.index].koiName}
+                                                    <div>
+                                                        <span style="font-weight: normal;">
+                                                            <!-- Hiển thị loại koi -->
+                                                            <c:set var="koiTypeDisplayed" value="false" />
+                                                            <c:forEach var="koiType" items="${requestScope.koiType}">
+                                                                <c:if test="${koiType.koiTypeID == requestScope.koiNames[koiOrderID.index].koiTypeID}">
+                                                                    <c:if test="${not koiTypeDisplayed}">
+                                                                        ${koiType.typeName}
+                                                                        <c:set var="koiTypeDisplayed" value="true" />
+                                                                    </c:if>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <div class="koi-price price">
+                                                        <fmt:formatNumber type="currency" currencySymbol="$" value="${requestScope.koiNames[koiOrderID.index].price}" />
+                                                    </div>
+                                                    <div class="item-koi">
+                                                        ${koiOrderDetails.quantity} items
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div> 
+                            </div> 
+                        </c:if>                       
+                    </c:forEach>
+                </c:if>
+            </div>
+
             <div id="inProcessKois" style="display: none;">
                 <c:if test="${not empty requestScope.koiOrderDetails}">
                     <!-- Biến để lưu trữ ngày giao hàng trước đó -->
@@ -103,12 +177,16 @@
                                     <div style="font-size: 20px; margin-bottom: 17px;">
                                         ${requestScope.farmNames[koiOrderID.index].farmName}
                                     </div>
-
-                                    <a href="MyOrderDetail?koiOrderID=${koiOrderDetails.koiOrderID}&customerID=${requestScope.customerNames.customerID}" style="text-decoration: none; color: black">
+                                    <form action="MyOrderDetail" method="post" id="orderForm" onclick="submitForm(event, this)">
+                                        <input type="hidden" name="koiOrderID" value="${koiOrderDetails.koiOrderID}" />
+                                        <input type="hidden" name="customerID" value="${requestScope.customerNames.customerID}" />
                                         <div class="koi-item">
                                             <div class="koi-row" style="display: flex; align-items: center;">
+                                                <!-- Image with proper spacing -->
                                                 <img src="${requestScope.koiNames[koiOrderID.index].image}" alt="Picture of KOI" style="width: 58px; margin-right: 10px;" />
-                                                <div class="koi-name"  style="position: relative; left: -111px;">
+
+                                                <!-- Koi Name -->
+                                                <div class="koi-name" style="margin-top: 0;">
                                                     ${requestScope.koiNames[koiOrderID.index].koiName}
                                                     <div>
                                                         <span style="font-weight: normal;">
@@ -133,17 +211,31 @@
                                                     <div class="item-koi">
                                                         ${koiOrderDetails.quantity} items
                                                     </div>
+                                                    <div>       
+                                                        <a class="btn btn-danger" id="cancel" onclick="showCancelModal('${requestScope.koiOrderListByOrderList[koiOrderID.index].customerID}', '${requestScope.koiOrderListByOrderList[koiOrderID.index].koiOrderID}')">Cancel</a>
+                                                    </div>
                                                 </div>
                                             </div>
+
                                         </div>
-                                    </a>
+                                    </form>
+
                                 </div> 
                             </div> 
                         </c:if>                       
                     </c:forEach>
                 </c:if>
             </div>
-                        
+            <script>
+                function submitForm(event, form) {
+                    if (event.target.id === 'cancel') {
+                        event.preventDefault();
+                        return;
+                    }
+
+                    form.submit();
+                }
+            </script>
             <div id="onGoingKois" style="display: none;">
                 <c:if test="${not empty requestScope.koiOrderDetails}">
                     <!-- Biến để lưu trữ ngày giao hàng trước đó -->
@@ -173,11 +265,16 @@
                                         ${requestScope.farmNames[koiOrderID.index].farmName}
                                     </div>
 
-                                    <a href="MyOrderDetail?koiOrderID=${koiOrderDetails.koiOrderID}&customerID=${requestScope.customerNames.customerID}" style="text-decoration: none; color: black">
+                                    <form action="MyOrderDetail" method="post" id="orderForm" onclick="submitForm(event, this)">
+                                        <input type="hidden" name="koiOrderID" value="${koiOrderDetails.koiOrderID}" />
+                                        <input type="hidden" name="customerID" value="${requestScope.customerNames.customerID}" />
                                         <div class="koi-item">
                                             <div class="koi-row" style="display: flex; align-items: center;">
+                                                <!-- Image with proper spacing -->
                                                 <img src="${requestScope.koiNames[koiOrderID.index].image}" alt="Picture of KOI" style="width: 58px; margin-right: 10px;" />
-                                                <div class="koi-name"  style="position: relative; left: -111px;">
+
+                                                <!-- Koi Name -->
+                                                <div class="koi-name" style="margin-top: 0;">
                                                     ${requestScope.koiNames[koiOrderID.index].koiName}
                                                     <div>
                                                         <span style="font-weight: normal;">
@@ -205,7 +302,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </a>
+                                    </form>
                                 </div> 
                             </div> 
                         </c:if>                       
@@ -242,11 +339,15 @@
                                         ${requestScope.farmNames[koiOrderID.index].farmName}
                                     </div>
 
-                                    <a href="MyOrderDetail?koiOrderID=${koiOrderDetails.koiOrderID}&customerID=${requestScope.customerNames.customerID}" style="text-decoration: none; color: black">
-                                        <div class="koi-item">
+                                    <form action="MyOrderDetail" method="post" id="orderForm" onclick="submitForm(event, this)">
+                                        <input type="hidden" name="koiOrderID" value="${koiOrderDetails.koiOrderID}" />
+                                        <input type="hidden" name="customerID" value="${requestScope.customerNames.customerID}" />      <div class="koi-item">
                                             <div class="koi-row" style="display: flex; align-items: center;">
+                                                <!-- Image with proper spacing -->
                                                 <img src="${requestScope.koiNames[koiOrderID.index].image}" alt="Picture of KOI" style="width: 58px; margin-right: 10px;" />
-                                                <div class="koi-name"  style="position: relative; left: -111px;">
+
+                                                <!-- Koi Name -->
+                                                <div class="koi-name" style="margin-top: 0;">
                                                     ${requestScope.koiNames[koiOrderID.index].koiName}
                                                     <div>
                                                         <span style="font-weight: normal;">
@@ -274,13 +375,71 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </a>
+                                    </form>
                                 </div> 
                             </div> 
                         </c:if>                       
                     </c:forEach>
                 </c:if>
             </div>                                  
+
+
+            <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cancelModalLabel">Lý do hủy đặt chỗ</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="cancelForm">
+                                <input type="hidden" id="customerId" name="customerId">
+                                <input type="hidden" id="koiOrderID" name="koiOrderID">
+
+                                <div class="form-group">
+                                    <label for="reason">Chọn lý do hủy:</label>
+                                    <select class="form-control" id="reason" name="reason" required>
+                                        <option value="personal">Lý do cá nhân</option>
+                                        <option value="health">Lý do sức khỏe</option>
+                                        <option value="schedule">Thay đổi lịch trình</option>
+                                        <option value="other">Khác</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-danger" onclick="submitCancelForm()">Xác nhận hủy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                // Hiển thị modal và thiết lập các giá trị cần thiết
+                function showCancelModal(customerId, koiOrderID) {
+                    document.getElementById('customerId').value = customerId;
+                    document.getElementById('koiOrderID').value = koiOrderID;
+                    $('#cancelModal').modal('show');
+                }
+
+                // Gửi form hủy đặt chỗ
+                function submitCancelForm() {
+                    const form = document.getElementById('cancelForm');
+                    const reason = document.getElementById('reason').value;
+
+                    if (reason) {
+                        const customerId = document.getElementById('customerId').value;
+                        const koiOrderID = document.getElementById('koiOrderID').value;
+
+                        // Điều hướng đến servlet với lý do hủy
+                        window.location.href = "cancel_koi?customerID=" + customerId + "&koiOrderID=" + koiOrderID + "&reason=" + reason;
+
+                    }
+                }
+            </script>            
 
             <div id="canceledKois" style="display: none;">
                 <!-- Nội dung của Canceled Kois -->

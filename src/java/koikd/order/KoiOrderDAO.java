@@ -604,12 +604,24 @@ public class KoiOrderDAO implements Serializable {
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
+        ResultSet addressRs = null;
         int koiOrderID = -1; // -1 để chỉ ra rằng chưa có giá trị KoiOrderID được lấy
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "INSERT INTO [dbo].[KOIORDER]([CustomerID], [DeliveryDate], [Status], [EstimatedDelivery], [Type], [CreatedBy], [TempStatus], [Payment]) "
-                        + "VALUES(?, ?, ?, NULL, ?, ?, ?, ?)";
+
+                String addressSql = "SELECT [ShippingAddress] FROM [dbo].[Booking] WHERE [CustomerID] = ?";
+                pst = conn.prepareStatement(addressSql);
+                pst.setInt(1, koiOrderDTO.getCustomerID());
+                addressRs = pst.executeQuery();
+
+                String shippingAddress = null;
+                if (addressRs.next()) {
+                    shippingAddress = addressRs.getString("ShippingAddress");
+                }
+
+                String sql = "INSERT INTO [dbo].[KOIORDER]([CustomerID], [DeliveryDate], [Status], [EstimatedDelivery], [Type], [CreatedBy], [ShippingAddress], [TempStatus], [Payment]) "
+                        + "VALUES(?, ?, ?, NULL, ?, ?, ?, ?, ?)";
                 pst = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); // Lấy giá trị khóa tự động
                 // sinh
                 pst.setInt(1, koiOrderDTO.getCustomerID());
@@ -617,8 +629,9 @@ public class KoiOrderDAO implements Serializable {
                 pst.setBoolean(3, koiOrderDTO.isStatus());
                 pst.setString(4, koiOrderDTO.getType());
                 pst.setInt(5, koiOrderDTO.getCreateBy());
-                pst.setString(6, koiOrderDTO.getTempStatus());
-                pst.setString(7, koiOrderDTO.getPayment());
+                pst.setString(6, shippingAddress);
+                pst.setString(7, koiOrderDTO.getTempStatus());
+                pst.setString(8, koiOrderDTO.getPayment());
 
                 int affectedRows = pst.executeUpdate();
                 if (affectedRows > 0) {
@@ -650,6 +663,34 @@ public class KoiOrderDAO implements Serializable {
         return koiOrderID; // Trả về KoiOrderID hoặc -1 nếu có lỗi
     }
 
+    
+      public static void main(String[] args) {
+        // Create a sample KoiOrderDTO object with test data
+        KoiOrderDTO koiOrderDTO = new KoiOrderDTO();
+        koiOrderDTO.setCustomerID(24);  // Example CustomerID
+        koiOrderDTO.setDeliveryDate(new Date());  // Current date for delivery
+        koiOrderDTO.setStatus(true);  // Set some sample status (true or false)
+        koiOrderDTO.setType("Standard");  // Example type
+        koiOrderDTO.setCreateBy(1);  // Example user who created the order
+        koiOrderDTO.setTempStatus("Pending");  // Example temporary status
+        koiOrderDTO.setPayment("Credit Card");  // Example payment method
+
+        // Now, call the createKoiOrder method to insert the order
+        try {
+            KoiOrderDAO koiOrderDAO = new KoiOrderDAO();
+            int koiOrderID = koiOrderDAO.createKoiOrder(koiOrderDTO);
+
+            if (koiOrderID > 0) {
+                System.out.println("Successfully created KoiOrder with ID: " + koiOrderID);
+            } else {
+                System.out.println("Failed to create KoiOrder.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while creating KoiOrder: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
     /**
      *
      * @param koiOrderDetail O //
@@ -1466,5 +1507,37 @@ public class KoiOrderDAO implements Serializable {
             }
         }
     }
-}
 
+    public KoiOrderDTO cancelTourBookingDetailByID(int ID, String reason) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        KoiOrderDTO dto = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "UPDATE KOIORDER\n"
+                        + "SET TempStatus = 'CancelAt', CancelAt = GETDATE(), ReasonCancel = ?\n"
+                        + " WHERE KoiOrderID = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setString(1, reason);  // Set the reason first
+                pst.setInt(2, ID);
+                int rowsUpdated = pst.executeUpdate();
+
+                if (rowsUpdated > 0) {
+                    Timestamp cancelAt = new Timestamp(System.currentTimeMillis());
+                    dto = new KoiOrderDTO(rowsUpdated, cancelAt, reason);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return dto;
+    }
+}
