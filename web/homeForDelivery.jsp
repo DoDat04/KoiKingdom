@@ -84,29 +84,30 @@
                                     <td>
                                         <select id="orderStatus_${order.koiOrderID}" 
                                                 onchange="checkStatusChange(${order.koiOrderID}, this.value)"
-                                                ${order.status ? 'disabled' : ''}>
-                                            <option value="true" ${order.status ? 'selected' : ''}>Complete</option>
-                                            <option value="false" ${!order.status ? 'selected' : ''}>On-going</option>
+                                                ${order.tempStatus == 'Complete' ? 'disabled' : ''}>
+                                            <option value="In Process" ${order.tempStatus == 'In Process'}>In Process</option>
+                                            <option value="On-going" ${order.tempStatus == 'On-going' ? 'selected' : ''}>On-going</option>
+                                            <option value="Complete" ${order.tempStatus == 'Complete' ? 'selected' : ''}>Complete</option>                                            
                                         </select>
                                     </td>
 
                             <script>
                                 function checkStatusChange(orderID, newStatus) {
-                                    if (newStatus === 'true') {
-                                        alert("Are you sure you want to change the status to 'Complete'?");
+                                    if (confirm("Are you sure you want to change the status to '" + newStatus + "'?")) {
+                                        updateStatus(orderID, newStatus);
 
-                                        // Delay page reload by 6 seconds (6000 milliseconds)
-                                        setTimeout(function () {
-                                            location.reload();
-                                        }, 6000);
+                                        // Delay page reload by 6 seconds only if the status is changed to 'Complete'
+                                        if (newStatus === 'Complete') {
+                                            setTimeout(function () {
+                                                location.reload();
+                                            }, 6000);
+                                        }
+                                    } else {
+                                        // Revert to the previous status if the user cancels the action
+                                        document.getElementById("orderStatus_" + orderID).value = '${order.tempStatus}';
                                     }
-
-                                    // Update the status regardless of whether the page is reloaded or not
-                                    updateStatus(orderID, newStatus);
                                 }
                             </script>
-
-
 
                             <td style="padding-left: 4%;">
                                 <form action="GetKoiOrderDetail" method="POST" style="display:inline;">

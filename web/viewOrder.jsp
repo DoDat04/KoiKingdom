@@ -41,10 +41,10 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Tour Image</th>
-                            <th>Tour Details</th>
-                            <th>Number of People</th>
-                            <th>Tour Price</th>
+                            <th>Image</th>
+                            <th>Details</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
                             <th>Total</th>
                         </tr>
                     </thead>
@@ -157,7 +157,7 @@
                                     </c:when>
                                 </c:choose>
                             </c:forEach>
-                            <td colspan="4" class="text-end fw-bold">Subtotal:</td>
+                            <td colspan="4" class="text-end fw-bold">Total Price:</td>
                             <td>
                                 $<fmt:formatNumber value="${subtotal}" type="number" maxFractionDigits="2" minFractionDigits="2" />
                             </td>

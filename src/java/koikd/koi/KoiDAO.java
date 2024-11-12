@@ -257,8 +257,8 @@ public class KoiDAO implements Serializable {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "INSERT INTO [dbo].[KOIORDER]([CustomerID], [DeliveryDate], [Status], [EstimatedDelivery], [Type], [CostShipping], [ShippingAddress]) "
-                        + "VALUES(?, ?, ?, NULL, ?, ?, ?)";
+                String sql = "INSERT INTO [dbo].[KOIORDER]([CustomerID], [DeliveryDate], [Status], [EstimatedDelivery], [Type], [CostShipping], [ShippingAddress], [TempStatus], [Payment]) "
+                        + "VALUES(?, ?, ?, NULL, ?, ?, ?, ?, ?)";
                 pst = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); // Lấy giá trị khóa tự động
 
                 pst.setInt(1, koiOrderDTO.getCustomerID());
@@ -267,6 +267,8 @@ public class KoiDAO implements Serializable {
                 pst.setString(4, koiOrderDTO.getType());
                 pst.setDouble(5, koiOrderDTO.getCostShipping());
                 pst.setString(6, koiOrderDTO.getShippingAddress());
+                pst.setString(7, koiOrderDTO.getTempStatus());
+                pst.setString(8, koiOrderDTO.getPayment());
 
                 int affectedRows = pst.executeUpdate();
                 if (affectedRows > 0) {

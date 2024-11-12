@@ -73,6 +73,7 @@ public class LoginGoogleController extends HttpServlet {
                             session.setAttribute("custID", customerID);
                             session.setAttribute("email", googlePojo.getEmail());
                             session.setAttribute("address", dto.getAddress());
+                            session.setAttribute("custID", dto.getCustomerID());
 
                             // Đặt các thuộc tính thành công và avatar
                             session.setAttribute("SUCCESS", "Login Successfully!");
