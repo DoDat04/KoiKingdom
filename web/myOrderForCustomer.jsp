@@ -372,6 +372,9 @@
                                                     <div class="item-koi">
                                                         ${koiOrderDetails.quantity} items
                                                     </div>
+                                                    <div>       
+                                                        <a class="btn btn-danger" id="cancel" onclick="showCancelModal('${requestScope.koiOrderListByOrderList[koiOrderID.index].customerID}', '${requestScope.koiOrderListByOrderList[koiOrderID.index].koiOrderID}')">Cancel</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -388,7 +391,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="cancelModalLabel">Lý do hủy đặt chỗ</h5>
+                            <h5 class="modal-title" id="cancelModalLabel">Reason for cancel koi</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -399,19 +402,19 @@
                                 <input type="hidden" id="koiOrderID" name="koiOrderID">
 
                                 <div class="form-group">
-                                    <label for="reason">Chọn lý do hủy:</label>
+                                    <label for="reason">Choose Reasons Cancel Koi:</label>
                                     <select class="form-control" id="reason" name="reason" required>
-                                        <option value="personal">Lý do cá nhân</option>
-                                        <option value="health">Lý do sức khỏe</option>
-                                        <option value="schedule">Thay đổi lịch trình</option>
-                                        <option value="other">Khác</option>
+                                        <option value="Personal Reasons">Personal Reasons</option>
+                                        <option value="Health Reasons">Health Reasons</option>
+                                        <option value="Financial Problems">Financial Problems</option>
+                                        <option value="Does not meet aquarium hygiene and maintenance requirements">Does not meet aquarium hygiene and maintenance requirements</option>
                                     </select>
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                            <button type="button" class="btn btn-danger" onclick="submitCancelForm()">Xác nhận hủy</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger" onclick="submitCancelForm()">Confirm Cancel</button>
                         </div>
                     </div>
                 </div>

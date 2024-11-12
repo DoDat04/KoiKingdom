@@ -98,11 +98,11 @@
                                                 <c:when test="${custom.managerApprovalStatus != 'Approved' && custom.managerApprovalStatus != 'Rejected'}">
                                                     <button type="submit" name="action" value="approve" class="btn btn-success" style="margin-bottom: 10px;">Approve</button>
                                                     <!-- Nút Reject hiển thị modal -->
-                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#updateModal${custom.requestID}">Reject</button>
+                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#updateModal${custom.requestID}">Adjust</button>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <button type="submit" name="action" value="approve" class="btn btn-success" disabled style="margin-bottom: 10px;">Approve</button>
-                                                    <button type="submit" name="action" value="reject" class="btn btn-danger" disabled>Reject</button>
+                                                    <button type="submit" name="action" value="reject" class="btn btn-danger" disabled>Adjust</button>
                                                 </c:otherwise>
                                             </c:choose>
                                         </form>

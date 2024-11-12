@@ -78,8 +78,6 @@
                                                         <span class="status-value">${orders.status}</span>
 
                                                         <c:if test="${orders.status != 'Completed'}">
-                                                            ${orders.tourBookingDetailID}
-                                                            ${orders.customerID}
                                                             <div>
                                                                 <a class="btn btn-danger" id="cancel" onclick="showCancelModal('${orders.tourBookingDetailID}', '${orders.customerID}')">Cancel</a>
                                                             </div>
@@ -264,7 +262,7 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="cancelModalLabel">Lý do hủy đặt chỗ</h5>
+                                        <h5 class="modal-title" id="cancelModalLabel">Reason for cancel tour</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -275,12 +273,12 @@
                                             <input type="hidden" id="customerID" name="customerID">
 
                                             <div class="form-group">
-                                                <label for="reason">Chọn lý do hủy:</label>
+                                                <label for="reason">Choose Reason Cancel Tour:</label>
                                                 <select class="form-control" id="reason" name="reason" required>
-                                                    <option value="personal">Lý do cá nhân</option>
-                                                    <option value="health">Lý do sức khỏe</option>
-                                                    <option value="schedule">Thay đổi lịch trình</option>
-                                                    <option value="other">Khác</option>
+                                                    <option value="Personal Reasons">Personal Reasons</option>
+                                                    <option value="Health Reasons">Health Reasons</option>
+                                                    <option value="Schedule Change">Schedule Change</option>
+                                                    <option value="Weather Condition">Weather Condition</option>
                                                 </select>
                                             </div>
                                         </form>

@@ -120,7 +120,6 @@
                                         <li><a class="dropdown-item" href="faq"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal"><i class="fa-solid fa-key"></i> Change Password</a></li>
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
-                                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
                                         <li>
                                             <form action="MyOrder" method="post">
                                                 <input type="hidden" name="customerID" value="${sessionScope.LOGIN_USER.customerID}" />
@@ -149,7 +148,6 @@
                                     <c:otherwise>                                       
                                         <li><a class="dropdown-item" href="faq"><i class="adm_icon fas fa-question-circle"></i> FAQS</a></li>
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateProfileModal"><i class="fa-solid fa-user-pen"></i> Update Profile</a></li>
-                                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a></li>
                                         <li>
                                             <form action="MyOrder" method="post" style="display: inline;">
                                                 <input type="hidden" name="customerID" value="${sessionScope.custID}" />

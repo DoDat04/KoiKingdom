@@ -582,7 +582,7 @@ public class CustomTourDAO implements Serializable {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 String sql = "UPDATE [dbo].[CUSTOMTOURREQUEST] "
-                        + "SET [QuotationPrice] = ?, [ManagerApprovalStatus] = 'Rejected', [DetailRejected] = ? "
+                        + "SET [QuotationPrice] = ?, [ManagerApprovalStatus] = 'Approved', [DetailRejected] = ? "
                         + "WHERE [RequestID] = ?";
                 pst = conn.prepareStatement(sql);
                 pst.setDouble(1, newPrice);

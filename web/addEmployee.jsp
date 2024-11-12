@@ -39,11 +39,11 @@
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="text" id="password" name="Password" class="form-control" required>
+                        <input type="password" id="password" name="Password" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="cfpassword">Confirm password</label>
-                        <input type="text" id="cfpassword" name="ConfirmPassword" class="form-control" required>
+                        <input type="password" id="cfpassword" name="ConfirmPassword" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="lastname">Last Name</label>

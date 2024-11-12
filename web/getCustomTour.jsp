@@ -121,8 +121,7 @@
                                                     <label for="status${custom.requestID}" class="form-label">Status</label>
                                                     <select class="form-control" id="status${custom.requestID}" name="txtStatus" required>
                                                         <option value="Pending">Pending</option>
-                                                        <option value="Approved">Approved</option>
-                                                        <option value="Rejected">Rejected</option>
+                                                        <option value="Approved">Approved</option>                                                        
                                                     </select>
                                                 </div>
                                                 <!-- Hidden input to pass the request ID -->

@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -23,7 +24,7 @@
     <body>
         <jsp:include page="headerForConsulting.jsp" flush="true"/>
         <div style="margin-top: 25vh; margin-left: 17%;" class="main-content">   
-            <h1 style="text-align: center">Booking Management</h1>
+            <h1 style="text-align: center">Custom Booking Management</h1>
             <table id="content" class="styled-table">
                 <thead>
                     <tr>
@@ -46,7 +47,9 @@
                                     <td>${custom.customerID}</td>
                                     <td>${custom.custName}</td>
                                     <td>${custom.custEmail}</td>                                   
-                                    <td>${custom.bookingDate}</td>
+                                    <td>
+                                        <fmt:formatDate value="${custom.bookingDate}" pattern="dd/MM/yyyy HH:mm:ss" />
+                                    </td>
                                     <td>${custom.status}</td>
                                     <td>${custom.tourType}</td>
                                     <td>

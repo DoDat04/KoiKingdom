@@ -53,6 +53,8 @@ public class AssignToDeliveryController extends HttpServlet {
 
                 if (!result) {
                     request.setAttribute("errorMessage", "Failed to assign employee to delivery.");
+                } else {
+                    request.setAttribute("successAssign", "Assign Delivery Successfully!");
                 }
             } else {
                 request.setAttribute("errorMessage", "Invalid parameters for employee or order ID.");

@@ -62,7 +62,7 @@
                             </li>
                         </div>
                         <li class="menu-item">
-                            <a href="booking-list" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Manage Booking</a>
+                            <a href="booking-list" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Manage Custom Booking</a>
                         </li>
                         <li class="menu-item">
                             <a href="tour-booking-detail-list?employeeID=${sessionScope.consultingID}" style="color: black"><i style='font-size:24px' class='fas'>&#xf0d1;</i>Tour Detail Management</a>

@@ -335,5 +335,13 @@
             </nav>
 
         </div>
+                
+        <c:if test="${not empty successAssign}">
+            <script>
+                window.onload = function () {
+                    showToast('${successAssign}', 'success');
+                };
+            </script>
+        </c:if>
     </body>
 </html>
