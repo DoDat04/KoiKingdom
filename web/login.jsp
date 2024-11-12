@@ -103,6 +103,17 @@
                 </script>
             </c:if> 
 
+            <c:set var="errorGoogle" value="${sessionScope.ERROR_GOOGLE}" />
+            <c:if test="${not empty errorGoogle}">
+                <script>
+                    window.onload = function () {
+                        showToast('${errorGoogle}', 'error');
+                    };
+                </script>
+                <c:remove var="ERROR_GOOGLE" scope="session" />
+            </c:if>
+
+
             <c:set var="success" value="${requestScope.VERIFY_SUCCESS}"/>
             <c:if test="${not empty success and success != null}">
                 <script>

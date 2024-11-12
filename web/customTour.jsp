@@ -191,6 +191,15 @@
                     } 
                 });
             </script>
+            
+            <script>
+                // Lấy ngày hiện tại theo định dạng yyyy-mm-dd
+                const today = new Date().toISOString().split("T")[0];
+
+                // Đặt ngày hiện tại làm giá trị tối thiểu cho các trường chọn ngày
+                document.getElementById("startDate").setAttribute("min", today);
+                document.getElementById("endDate").setAttribute("min", today);
+            </script>
         </form>
         <button id="backToTop" class="btn btn-primary" style="display: none;">
             <i class="fas fa-angle-up"></i>

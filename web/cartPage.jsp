@@ -190,20 +190,20 @@
                             <c:when test="${cart.totalQuantity == null || cart.totalQuantity == 0}">
                                 <button type="button" class="btn btn-danger w-100" 
                                         onclick="alert('Please add something to the cart!')">
-                                    Proceed to checkout
+                                    Proceed to payment
                                 </button>
                             </c:when>
 
                             <c:when test="${cart.totalQuantity > 0 && sessionScope.LOGIN_USER == null && sessionScope.LOGIN_GMAIL == null}">
                                 <button type="button" class="btn btn-danger w-100" 
                                         onclick="alert('You need to login to checkout!')">
-                                    Proceed to checkout
+                                    Proceed to payment
                                 </button>
                             </c:when>
 
                             <c:otherwise>
                                 <a href="checkout" class="btn btn-danger w-100">
-                                    Proceed to checkout
+                                    Proceed to payment
                                 </a>
                             </c:otherwise>
                         </c:choose>

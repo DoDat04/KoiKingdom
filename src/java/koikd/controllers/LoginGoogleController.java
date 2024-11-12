@@ -46,49 +46,61 @@ public class LoginGoogleController extends HttpServlet {
             if (code == null || code.isEmpty()) {
                 url = LOGIN_PAGE;
             } else {
-                // Get access token from Google
+                // Lấy access token từ Google
                 String accessToken = GoogleUtils.getToken(code);
                 GooglePojo googlePojo = GoogleUtils.getUserInfo(accessToken);
 
                 if (googlePojo != null) {
-                    url = HOME_PAGE;
                     CustomerDAO dao = new CustomerDAO();
                     HttpSession session = request.getSession();
-                    session.removeAttribute("LOGIN_USER"); // Clear regular login user info
-                    session.setAttribute("SUCCESS", "Login Successfully!");
-                    String emailPrefix = getUserIdBeforeAt(googlePojo.getEmail());
-                    System.out.println(emailPrefix + " huhu");
-                    session.setAttribute("emailPrefix", emailPrefix);
+                    session.removeAttribute("LOGIN_USER");
 
-                    //Kiểm tra trong database có tài khoản google đó chưa
+                    // Kiểm tra trong cơ sở dữ liệu xem có tài khoản Google đó chưa
                     CustomerDTO dto = dao.findCustomerByEmailAndAccountType(googlePojo.getEmail(), "google");
+
                     if (dto != null) {
-                        int customerID = dto.getCustomerID();
-                        String firstName = dto.getFirstName();
-                        String lastName = dto.getLastName();
-                        session.setAttribute("firstName", firstName);
-                        session.setAttribute("lastName", lastName);
-                        session.setAttribute("custID", customerID);
-                        session.setAttribute("email", googlePojo.getEmail());
-                        // sau khi login lấy address từ db bỏ vào attribute
-                        session.setAttribute("address", dto.getAddress());
+                        if (!dto.isStatus()) {
+                            // Nếu tài khoản bị ban, chuyển hướng lại trang đăng nhập
+                            session.setAttribute("ERROR_GOOGLE", "Your account was banned!");
+                            url = LOGIN_PAGE;
+                        } else {
+                            // Nếu tài khoản không bị ban, tiếp tục đăng nhập
+                            int customerID = dto.getCustomerID();
+                            String firstName = dto.getFirstName();
+                            String lastName = dto.getLastName();
+                            session.setAttribute("firstName", firstName);
+                            session.setAttribute("lastName", lastName);
+                            session.setAttribute("custID", customerID);
+                            session.setAttribute("email", googlePojo.getEmail());
+                            session.setAttribute("address", dto.getAddress());
+
+                            // Đặt các thuộc tính thành công và avatar
+                            session.setAttribute("SUCCESS", "Login Successfully!");
+                            session.setAttribute("LOGIN_GMAIL", googlePojo);
+                            String emailPrefix = getUserIdBeforeAt(googlePojo.getEmail());
+                            session.setAttribute("emailPrefix", emailPrefix);
+
+                            // Kiểm tra và thiết lập avatar
+                            String avatarUrl = googlePojo.getPicture();
+                            String uploadPath = getServletContext().getRealPath("/images");
+                            String userImageFileName = emailPrefix + "gmail_picture.png";
+                            File userImageFile = new File(uploadPath + File.separator + userImageFileName);
+
+                            if (userImageFile.exists()) {
+                                session.setAttribute("AVATAR", "images/" + userImageFileName);
+                            } else {
+                                session.setAttribute("AVATAR", avatarUrl);
+                            }
+
+                            url = HOME_PAGE; 
+                        }
                     } else {
+                        // Nếu tài khoản Google chưa tồn tại, tạo tài khoản mới
                         session.setAttribute("firstName", googlePojo.getFamily_name());
                         session.setAttribute("lastName", googlePojo.getGiven_name());
-                    }
-                    session.setAttribute("LOGIN_GMAIL", googlePojo);
-
-                    String avatarUrl = googlePojo.getPicture();
-                    dao.createEmailUser(googlePojo, accessToken);
-
-                    String uploadPath = getServletContext().getRealPath("/images");
-                    String userImageFileName = emailPrefix + "gmail_picture.png";
-                    File userImageFile = new File(uploadPath + File.separator + userImageFileName);
-
-                    if (userImageFile.exists()) {
-                        session.setAttribute("AVATAR", "images/" + userImageFileName);
-                    } else {
-                        session.setAttribute("AVATAR", avatarUrl);
+                        session.setAttribute("LOGIN_GMAIL", googlePojo);
+                        dao.createEmailUser(googlePojo, accessToken);
+                        url = HOME_PAGE;
                     }
                 }
             }

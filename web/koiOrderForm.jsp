@@ -89,7 +89,15 @@
                 </form>
             </div>
         </div>
+        
+        <script>
+            // Lấy ngày hiện tại theo định dạng yyyy-mm-dd
+            const today = new Date().toISOString().split("T")[0];
 
+            // Đặt ngày hiện tại làm giá trị tối thiểu cho các trường chọn ngày
+            document.getElementById("txtDelivery").setAttribute("min", today);
+        </script>
+        
         <script>
             function updateFarmDropdown() {
                 var tourID = document.getElementById("txtTourIDs").value;
