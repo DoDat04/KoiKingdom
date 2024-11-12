@@ -13,6 +13,10 @@ import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import koikd.booking.BookingDAO;
+import koikd.booking.BookingDTO;
+import koikd.koi.KoiDAO;
+import koikd.koi.KoiDTO;
 import koikd.order.KoiOrderDAO;
 import koikd.order.KoiOrderDTO;
 import koikd.order.KoiOrderDetailDTO;
@@ -62,7 +66,15 @@ public class CreateKoiOrderFormController extends HttpServlet {
                 String[] koiIDs = request.getParameterValues("txtKoiIDs");
                 String[] koiTypeIDs = request.getParameterValues("txtKoiTypeID");
                 String[] quantities = request.getParameterValues("txtQuantity");
-
+                BookingDAO bookingDAO = new BookingDAO();
+                BookingDTO bookingDTO = bookingDAO.getBooking(koiOrderDTO.getCustomerID());
+                String fullAddress = bookingDTO.getShippingAddress();
+                String province = extractProvinceFromAddress(fullAddress);
+                System.out.println(province);
+                // Lấy khoảng cách và phí vận chuyển của tỉnh
+                KoiDAO koiDAO = new KoiDAO();
+                double distance = koiDAO.getDistance(province);
+                double totalShippingFee = 0.0;
                 // Duyệt qua các mảng và lưu chi tiết đơn hàng
                 for (int i = 0; i < farmIDs.length; i++) {
                     int koiID = Integer.parseInt(koiIDs[i]);
@@ -82,6 +94,13 @@ public class CreateKoiOrderFormController extends HttpServlet {
                     koiOrderDetailDTO.setTotalPrice(totalPrice);
                     koiOrderDetailDTO.setKoiTypeID(koiTypeID);
 
+                    KoiDTO koiDTO = koiDAO.getKoiByID(koiID);
+                    double wei = koiDTO.getWeight();
+
+                    // Tính phí vận chuyển
+                    double shippingFee = koiDAO.calculateShippingFee(quantity, wei, distance);
+                    koiOrderDTO.setCostShipping(shippingFee);
+                    totalShippingFee += shippingFee;
                     koiOrderDAO.createKoiOrderDetail(koiOrderDetailDTO);
                 }
 
@@ -98,6 +117,16 @@ public class CreateKoiOrderFormController extends HttpServlet {
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
+    }
+
+    private String extractProvinceFromAddress(String fullAddress) {
+        String province = fullAddress.substring(fullAddress.lastIndexOf(",") + 1).trim();
+        if (province.startsWith("Tỉnh")) {
+            province = province.replace("Tỉnh", "").trim();
+        } else if (province.startsWith("tỉnh")) {
+            province = province.replace("tỉnh", "").trim();
+        }
+        return province;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -316,6 +316,54 @@ public class BookingDAO implements Serializable {
         }
         return cusTour;
     }
+    
+      public BookingDTO getBooking(int cusID) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        BookingDTO booking = null;
+
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                // Query to select a booking based only on CustomerID
+                String sql = "SELECT BookingID, CustomerID, TourID, Name, Email, BookingDate, ShippingAddress, Quantity, Status, TourType "
+                        + "FROM BOOKING "
+                        + "WHERE CustomerID = ? " ;  // Get the latest booking (if any)
+
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, cusID);  // Set the CustomerID parameter
+
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    int bookingID = rs.getInt("BookingID");
+                    int customerID = rs.getInt("CustomerID");
+                    int tourID = rs.getInt("TourID");
+                    String custName = rs.getString("Name");
+                    String custEmail = rs.getString("Email");
+                    Timestamp bookingDate = rs.getTimestamp("BookingDate");
+                    String shipAddress = rs.getString("ShippingAddress");
+                    int quantity = rs.getInt("Quantity");
+                    String status = rs.getString("Status");
+                    String tourType = rs.getString("TourType");
+
+                    // Create a BookingDTO object with the retrieved data
+                    booking = new BookingDTO(bookingID, customerID, tourID, custName, custEmail, bookingDate, shipAddress, quantity, status, tourType);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return booking; // Return the single BookingDTO object or null if not found
+    }
 //    public static void main(String[] args) {
 //        BookingDAO mainApp = new BookingDAO();
 //        

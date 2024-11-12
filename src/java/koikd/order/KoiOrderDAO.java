@@ -1599,6 +1599,35 @@ public class KoiOrderDAO implements Serializable {
         }
         return listCancel;
     }
+    
+    public void updateKoiOrderShippingCost(int koiOrderID, double totalShippingFee) throws SQLException {
+    Connection conn = null;
+    PreparedStatement pst = null;
+
+    try {
+        conn = DBUtils.getConnection();
+        if (conn != null) {
+            String sql = "UPDATE KOIORDER SET costShipping = ? WHERE KoiOrderID = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setDouble(1, totalShippingFee);  // Set the costShipping
+            pst.setInt(2, koiOrderID);           // Set the koiOrderID
+
+            int rowsUpdated = pst.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Shipping cost updated successfully for KoiOrderID: " + koiOrderID);
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        if (pst != null) {
+            pst.close();
+        }
+        if (conn != null) {
+            conn.close();
+        }
+    }
+}
 
 //    public static void main(String[] args) throws SQLException {
 //        KoiOrderDAO services = new KoiOrderDAO();
