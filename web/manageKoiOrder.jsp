@@ -164,6 +164,7 @@
                         <th>Delivery Date</th>
                         <th>Status</th>
                         <th>Actions</th>
+                        <th>Delivery</th>
                         <th>Assign</th>
                     </tr>
                 </thead>
@@ -176,14 +177,7 @@
                                     <td>${order.customerID}</td>
                                     <td>${requestScope.customerNames[koiOrderID.index]}</td>
                                     <td>${order.deliveryDate}</td>
-                                    <td>
-                                        <c:if test="${order.status == true}">
-                                            Complete
-                                        </c:if>
-                                        <c:if test="${order.status == false}">
-                                            On Going
-                                        </c:if>
-                                    </td>
+                                    <td>${order.tempStatus}</td>
 
                                     <td style="padding-left: 4%;">
                                         <form action="GetKoiOrderDetail" method="GET" style="display:inline;">
@@ -196,6 +190,7 @@
                                                     ">Detail</button>
                                         </form>
                                     </td>
+                                    <td>${requestScope.employeeNames[koiOrderID.index]}</td>
                                     <td>
                                         <button class="btn btn-primary" type="button" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#assignModal" onclick="loadDeliveryEmployees(${order.koiOrderID}, ${order.deliveryBy})">
                                             Assign to

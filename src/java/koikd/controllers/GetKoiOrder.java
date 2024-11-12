@@ -68,7 +68,7 @@ public class GetKoiOrder extends HttpServlet {
             } else {
                 searchData = nameOrder;
             }
-            
+
             // Parse index as an integer
             int pageIndex = Integer.parseInt(index);
             // Call DAO to get order list
@@ -79,6 +79,7 @@ public class GetKoiOrder extends HttpServlet {
             ArrayList<KoiOrderDTO> koiList = koiOrderDAO.getKoiOrderListByNameCustomer(searchData, pageIndex, deliveryBy);
             ArrayList<String> customerNames = new ArrayList<>();
             ArrayList<String> customerPhones = new ArrayList<>();
+            ArrayList<String> employeeNames = new ArrayList<>();
 
             // If list is not empty, populate customer names
             if (koiList != null && !koiList.isEmpty()) {
@@ -86,13 +87,23 @@ public class GetKoiOrder extends HttpServlet {
                     CustomerDTO customer = koiOrderDAO.getCustomerByCustomerID(koiOrderDTO.getCustomerID());
                     customerPhones.add(customer.getPhoneNumber());
                     customerNames.add(customer.getLastName() + " " + customer.getFirstName());
+
+                    // Check if deliveryBy is valid
+                    int deliveryById = koiOrderDTO.getDeliveryBy();
+                    EmployeesDTO employee = (deliveryById != 0) ? koiOrderDAO.getEmployeeByEmployeeID(deliveryById) : null;
+
+                    if (employee != null) {
+                        employeeNames.add(employee.getLastName() + " " + employee.getFirstName());
+                    } else {
+                        employeeNames.add("Not Assigned"); // Placeholder for missing delivery employee
+                    }
                 }
-                System.out.println("employId đã chọn" + employeeId);
                 request.setAttribute("employeeId", employeeId);
                 request.setAttribute("koiList", koiList);
                 request.setAttribute("pageIndex", pageIndex);
                 request.setAttribute("customerNames", customerNames);
                 request.setAttribute("customerPhones", customerPhones);
+                request.setAttribute("employeeNames", employeeNames);
             } else {
                 // No orders found case
                 request.setAttribute("errorMessage", "No orders found.");

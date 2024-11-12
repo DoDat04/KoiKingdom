@@ -17,6 +17,7 @@ public class KoiOrderDTO implements Serializable {
     private int koiOrderID;
     private int customerID;
     private String fullName;
+    private String employeeFullName;
     private Date deliveryDate;
     private boolean status;
     private Date estimatedDelivery;
@@ -29,6 +30,14 @@ public class KoiOrderDTO implements Serializable {
     private String payment;
     private KoiDTO koiDTO;
     private KoiOrderDetailDTO koiOrderDetailDTO;
+
+    public String getEmployeeFullName() {
+        return employeeFullName;
+    }
+
+    public void setEmployeeFullName(String employeeFullName) {
+        this.employeeFullName = employeeFullName;
+    }
 
     public String getPayment() {
         return payment;

@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import koikd.customer.CustomerDTO;
 import java.sql.Timestamp;
+import koikd.employees.EmployeesDTO;
 import koikd.farm.FarmDTO;
 import koikd.koi.KoiDTO;
 import koikd.utils.DBUtils;
@@ -153,6 +154,49 @@ public class KoiOrderDAO implements Serializable {
                     boolean status = rs.getBoolean("Status");
                     // Fixed constructor call
                     result = new CustomerDTO(customerID, email, lastName, lastName, firstName, address, accountType, phoneNumber, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return result;
+    }
+    
+    public EmployeesDTO getEmployeeByEmployeeID(int employeeID) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        EmployeesDTO result = null;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT EmployeeID, Email, Role, LastName, FirstName, Address, Status "
+                        + "FROM EMPLOYEE "
+                        + "WHERE EmployeeID = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, employeeID);
+                rs = pst.executeQuery();
+                if (rs.next()) {
+                    int id = rs.getInt("EmployeeID");
+                    String email = rs.getString("Email");
+                    String role = rs.getString("Role");
+                    String lastName = rs.getString("LastName");
+                    String firstName = rs.getString("FirstName");
+                    String address = rs.getString("Address");
+                    boolean status = rs.getBoolean("Status");
+
+                    result = new EmployeesDTO(id, email, role, lastName, firstName, address, status);
                 }
             }
         } catch (Exception e) {

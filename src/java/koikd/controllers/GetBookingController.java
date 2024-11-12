@@ -50,38 +50,48 @@ public class GetBookingController extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             String url = ORDERBOOKING_PAGE;
-            String customerID = request.getParameter("customerID");
-            System.out.println("check" + customerID);
-            TourBookingDetailDAO bookingDetailDao = new TourBookingDetailDAO();
-            //CustomTourDAO dao = new CustomTourDAO();
-            TourDAO tourDAO = new TourDAO();
-            CustomerDAO customerDAO = new CustomerDAO();
+            String customerIDStr = request.getParameter("customerID");
 
-            ArrayList<TourBookingDetailDTO> orders = bookingDetailDao.getTourBookingDetailListByCustomerID(Integer.parseInt(customerID));
-            ArrayList<TourDTO> tourList = new ArrayList<>();
-            ArrayList<CustomerDTO> customerList = new ArrayList<>();
-            TourDTO tour = new TourDTO();
-            CustomerDTO customer = new CustomerDTO();
-            if (orders != null && !orders.isEmpty()) {
-                for (TourBookingDetailDTO order : orders) {
-                    tour = bookingDetailDao.getTourByID(order.getTourID());
-                    if (tour != null) {
-                        tourList.add(tour);
+            if (customerIDStr != null) {
+                int customerID;
+                try {
+                    customerID = Integer.parseInt(customerIDStr);
+                } catch (NumberFormatException e) {
+                    request.setAttribute("Error", "No Orders Found.");
+                    request.getRequestDispatcher(url).forward(request, response);
+                    return;
+                }
+                TourBookingDetailDAO bookingDetailDao = new TourBookingDetailDAO();
+                //CustomTourDAO dao = new CustomTourDAO();
+                TourDAO tourDAO = new TourDAO();
+                CustomerDAO customerDAO = new CustomerDAO();
+
+                ArrayList<TourBookingDetailDTO> orders = bookingDetailDao.getTourBookingDetailListByCustomerID(customerID);
+                ArrayList<TourDTO> tourList = new ArrayList<>();
+                ArrayList<CustomerDTO> customerList = new ArrayList<>();
+                TourDTO tour = new TourDTO();
+                CustomerDTO customer = new CustomerDTO();
+                if (orders != null && !orders.isEmpty()) {
+                    for (TourBookingDetailDTO order : orders) {
+                        tour = bookingDetailDao.getTourByID(order.getTourID());
+                        if (tour != null) {
+                            tourList.add(tour);
+                        }
+                        customer = customerDAO.getCustomerByCustomerID(order.getCustomerID());
+                        if (customer != null) {
+                            customerList.add(customer);
+                        }
                     }
-                    customer = customerDAO.getCustomerByCustomerID(order.getCustomerID());
-                    if (customer != null) {
-                        customerList.add(customer);
-                    }
+
+                    request.setAttribute("customers", customerList);
+                    request.setAttribute("tours", tourList);
+                    request.setAttribute("orders", orders);
+                } else {
+                    request.setAttribute("Error", "No order booking");
                 }
 
-                request.setAttribute("customers", customerList);
-                request.setAttribute("tours", tourList);
-                request.setAttribute("orders", orders);
-            } else {
-                request.setAttribute("Error", "No order booking");
+                request.getRequestDispatcher(url).forward(request, response);
             }
-
-            request.getRequestDispatcher(url).forward(request, response);
 
         } catch (SQLException ex) {
             Logger.getLogger(GetBookingController.class.getName()).log(Level.SEVERE, null, ex);
