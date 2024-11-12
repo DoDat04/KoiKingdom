@@ -81,7 +81,7 @@
                                 <a href="createTour.jsp" style="color: black"><i class="fa-solid fa-plus" style='font-size:24px'></i>Add Tour</a>
                             </li>
                             <li class="menu-item">
-                                <a href="createTour.jsp" style="color: black"><i class="fa-solid fa-trash" style='font-size:24px'></i>Tour Canceled</a>
+                                <a href="canceledtour" style="color: black"><i class="fa-solid fa-trash" style='font-size:24px'></i>Tour Canceled</a>
                             </li>
                             <li class="menu-item">
                                 <a href="list-koi-cancel" style="color: black"><i class="fa-solid fa-trash" style='font-size:24px'></i>Koi Order Canceled</a>

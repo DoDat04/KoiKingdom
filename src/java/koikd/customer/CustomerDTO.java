@@ -46,6 +46,13 @@ public class CustomerDTO implements Serializable {
         this.phoneNumber = phoneNumber;
         this.status = status;
     }
+    
+    public CustomerDTO(String lastName, String firstName, String phoneNumber) {
+      
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.phoneNumber = phoneNumber;
+    }
 
     public CustomerDTO(String firstName, String lastName) {
         this.firstName = firstName;

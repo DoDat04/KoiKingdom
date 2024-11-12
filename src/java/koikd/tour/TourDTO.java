@@ -140,6 +140,12 @@ public class TourDTO implements Serializable{
         this.tourName = tourName;
         this.tourImage = image;
     }
+    
+    public TourDTO(String tourName, Timestamp startDate, Timestamp endDate) {
+        this.tourName = tourName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
          
     public String getTourDepartLoca() {
         return tourDepartLoca;

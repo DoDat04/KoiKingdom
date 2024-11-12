@@ -6,6 +6,8 @@ package koikd.tourbookingdetail;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import koikd.customer.CustomerDTO;
+import koikd.tour.TourDTO;
 
 /**
  *
@@ -27,7 +29,8 @@ public class TourBookingDetailDTO implements Serializable {
     private boolean feedbackStatus;
     private Timestamp cancelAt;
     private String reasonCancel;
-    
+    private CustomerDTO customerDTO;
+    private TourDTO tourDTO;
 
     public TourBookingDetailDTO() {
     }
@@ -100,6 +103,17 @@ public class TourBookingDetailDTO implements Serializable {
         this.totalPrice = totalPrice;
         this.status = status;
     } 
+    
+    
+    public TourBookingDetailDTO(int tourBookingDetailID, double totalPrice, Timestamp cancelAt, CustomerDTO customerDTO, TourDTO tourDTO, String reasonCancel) {
+        this.tourBookingDetailID = tourBookingDetailID;
+      
+        this.totalPrice = totalPrice;
+        this.cancelAt = cancelAt;
+        this.customerDTO = customerDTO;
+        this.tourDTO = tourDTO;
+        this.reasonCancel = reasonCancel;
+    }
 
     public String getReasonCancel() {
         return reasonCancel;
@@ -212,6 +226,24 @@ public class TourBookingDetailDTO implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public CustomerDTO getCustomerDTO() {
+        return customerDTO;
+    }
+
+    public void setCustomerDTO(CustomerDTO customerDTO) {
+        this.customerDTO = customerDTO;
+    }
+
+    public TourDTO getTourDTO() {
+        return tourDTO;
+    }
+
+    public void setTourDTO(TourDTO tourDTO) {
+        this.tourDTO = tourDTO;
+    }
+    
+    
 
     @Override
     public String toString() {

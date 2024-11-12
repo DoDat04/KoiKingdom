@@ -14,6 +14,7 @@ import koikd.tour.TourDTO;
 import koikd.utils.DBUtils;
 import java.sql.Timestamp;
 import java.util.List;
+import koikd.customer.CustomerDTO;
 import koikd.customtour.CustomTourDTO;
 
 /**
@@ -340,5 +341,76 @@ public class TourBookingDetailDAO implements Serializable {
             }
         }
         return dto;
+    }
+    
+    
+    public ArrayList<TourBookingDetailDTO> getTourCancel() {
+        ArrayList<TourBookingDetailDTO> result = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            connection = DBUtils.getConnection();
+            if (connection != null) {
+                String sql = "SELECT "
+                        + " td.TourBookingDetail, "
+                        + " c.lastName, "
+                        + " c.firstName, "
+                        + " c.phoneNumber, "
+                        + " t.tourName, "
+                        + " t.startDate, "
+                        + " t.endDate, "
+                        + " td.totalPrice, "
+                        + " td.cancelAt, "
+                        + " td.reasonCancel "
+                        + "FROM "
+                        + " TOURBOOKINGDETAIL td "
+                        + " INNER JOIN TOUR t ON td.tourID = t.tourID "
+                        + " INNER JOIN CUSTOMER c ON td.customerID = c.customerID "
+                        + "WHERE td.status = 'Canceled' " 
+                        + "ORDER BY td.TourBookingDetail";
+
+                stm = connection.prepareStatement(sql);
+                rs = stm.executeQuery();
+                
+                while (rs.next()) {
+                    int tourBookingDetailID = rs.getInt("TourBookingDetail");
+                    String lastName = rs.getString("lastName");
+                    String firstName = rs.getString("firstName");
+                    String phoneNumber = rs.getString("phoneNumber");
+                    String tourName = rs.getString("tourName");
+                    Timestamp startDate = rs.getTimestamp("startDate");
+                    Timestamp endDate = rs.getTimestamp("endDate");
+                    double totalPrice = rs.getDouble("totalPrice");
+                    Timestamp cancelAt = rs.getTimestamp("cancelAt");
+                    String reasonCancel = rs.getString("reasonCancel");
+
+                    // Tạo đối tượng DTO cho thông tin hủy tour
+                    CustomerDTO customerDTO = new CustomerDTO(lastName, firstName, phoneNumber);
+                    TourDTO tourDTO = new TourDTO(tourName, startDate, endDate);
+                    TourBookingDetailDTO dto = new TourBookingDetailDTO(tourBookingDetailID,totalPrice, cancelAt, customerDTO, tourDTO, reasonCancel);
+                    result.add(dto); 
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Đảm bảo đóng kết nối và các đối tượng
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stm != null) {
+                    stm.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 }
