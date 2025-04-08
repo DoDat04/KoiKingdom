@@ -58,7 +58,8 @@ Khách đặt dịch vụ → Nhân viên kinh doanh chốt lộ trình → Gử
 - **CSDL**: SQL Server
 - **Thư viện**: JDBC, JSTL
 - **Xác thực**: Đăng nhập với Google (OAuth2) + tài khoản riêng
-- **IDE**: NetBeans / IntelliJ / Eclipse
+- **IDE**: NetBeans
+- **Web Server**: Apache Tomcat
 - **Thanh toán**: Tích hợp cổng thanh toán điện tử **VNPAY** (redirect mode)
 
 ---
